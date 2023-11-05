@@ -3,7 +3,7 @@ name: Deploy Client and Server to Heroku
 on:
   push:
     branches:
-      - deployedBranch
+      - DeployedBranch
 
 jobs:
   deploy:
