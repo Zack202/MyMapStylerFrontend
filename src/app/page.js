@@ -4,6 +4,8 @@ import styles from './page.module.css'
 import { useState } from 'react'
 import api from './api'
 
+import { CreateAccountScreen } from './components'
+
 
 export default function Home() {
 
