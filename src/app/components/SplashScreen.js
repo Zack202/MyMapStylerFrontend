@@ -2,12 +2,22 @@ import styles from './SplashScreen.module.css'
 import { useState } from 'react'
 import React from 'react'
 import api from '../api'
+import Button  from '@mui/material/Button'
+import { Box, Typography } from '@mui/material'
 
-
-
+const backgroundStyle = {
+  backgroundImage: 'url("./hckgavj2l7871.webp")',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  height: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
 
 export default function SplashScreen (){
-
+/*
     const [names, setNames] = useState('')
     const [name, setName] = useState('')
   
@@ -30,21 +40,25 @@ export default function SplashScreen (){
       console.log(nameList)
       const namesWithCommas = nameList.join(', ');
       setNames(namesWithCommas)
-    }
+    }*/
 
     return(
-        <main className={styles.main}>
-      <div className={styles.center}>
-        MyMapStyler
-      </div>
-      <button className={styles.button}>Login</button>
-      <button className={styles.button}>Create Account</button>
-
-      <input id="nameinput" className={styles.input} onChange={(e) => setName(e.target.value)} type="text" placeholder="Enter Name"></input>
-      <button className={styles.button} onClick={handleAddName}>Submit Name</button>
-      <h2 className={styles.h2}>All names: {names}</h2>
-      <button className={styles.button} onClick={handleGetNames}>Refresh all names from db</button>
-
-    </main>
-    )
+      <div style={backgroundStyle}>
+      
+        <Typography className={styles.center} style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize:'110px' }}>
+          <b><u>My Map Styler</u></b>
+        </Typography>
+        <Box sx={{ height: 300, background: '#BE8585', textAlign: 'center', borderRadius: '10px' }}>
+        <Box sx={{ height: 100, width: 600, display: 'flex', flexDirection: 'column' }}>
+          <Box>
+            <Typography variant="h6" style={{color:'white', margin: '40px'}}>
+              Welcome to <b>My Map Styler</b>. Here you can upload and edit maps, which can be later shared and downloaded. See a map you like and want to talk about it? Simply start a thread and get to discussing. Let's get Started.
+            </Typography>
+            <Button variant="contained" className={styles.buttons} style={{background: 'maroon', margin: '10px'}}>Login</Button>
+            <Button variant="contained" className={styles.buttons} style={{background: 'maroon', margin: '10px'}}>Create an Account</Button>
+          </Box>
+        </Box>
+      </Box>
+    </div>
+  );
 }
