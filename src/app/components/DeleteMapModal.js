@@ -64,16 +64,15 @@ export default function TransitionsModal() {
             </Box>
             <Box sx={{ background: "lightgrey", margin: '30px', borderRadius: '10px', textAlign: 'center', border: "2px solid #000"}}>
             <Typography id="transition-modal-title" variant="h5" component="h7" className={styles.text}>
-            <b>Select which file type you would like to download:</b>
+            <b>Are you sure you would like to delete this map?</b>
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }} className={styles.text}>
-            Note: only JSON files can be directly re-uploaded to MMS
+            Note: This action cannot be undone. Maps are permanently deleted.
             </Typography>
             </Box>
-            <Box  sx = {{display: 'flex', justifyContent: 'center',  mt: 2}} >
-            <Button variant="contained" color="primary"  className={styles.button}>.PNG</Button>
-            <Button variant="contained" color="primary"  className={styles.button}>.JPG</Button>
-            <Button variant="contained" color="primary"  className={styles.button}>.JSON</Button>
+            <Box  sx = {{display: 'flex', justifyContent: 'center', padding: "70px", paddingTop: '20px'}} >
+            <Button variant="contained" color="primary"  className={styles.button}>Cancel</Button>
+            <Button variant="contained" color="primary"  className={styles.button}>Confirm</Button>
             </Box>
           </Box>
         </Fade>
