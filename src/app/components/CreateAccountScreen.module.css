@@ -1,0 +1,50 @@
+.text_color {
+    color: maroon;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.button_color {
+    background-color: maroon;
+}
+
+.rounded_box {
+    border-radius: 10px; 
+    padding: 20px; 
+    border: 1px solid #000000;
+  }
+
+
+
+.backgroundContainer {
+    background-image: url('/contour-lines.svg');
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    padding: 5%;
+    padding-top: 10%;
+    overflow: hidden;
+}
+
+.image-gallery {
+    position: relative;
+    height: 100vh;
+    overflow-y: auto;
+    animation: scrollGallery 10s linear infinite;
+    border: 5px solid red;
+  }
+  
+  .image-gallery img {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  @keyframes scrollGallery {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-100%);
+    }
+  }
+  

@@ -6,6 +6,8 @@ import {
 import { SplashScreen } from './components';
 import React from "react";
 
+import { CreateAccountScreen } from './components'
+
 
 /*          <Route path="/CreateAccount" component= {CreateAccountScreen}/>
           <Route path="/Login" component= {LoginScreen}/>
