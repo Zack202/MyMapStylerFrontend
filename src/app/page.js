@@ -3,7 +3,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { LoginScreen, SplashScreen, ProfileScreen, SpecificMapScreen, Leafletmap } from './components';
+import { LoginScreen, SplashScreen, ProfileScreen, SpecificMapScreen, Leafletmap,  } from './components';
 import React from "react";
 
 import { CreateAccountScreen } from './components'
