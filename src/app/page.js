@@ -7,6 +7,7 @@ import { LoginScreen, SplashScreen, ProfileScreen, SpecificMapScreen, Leafletmap
 import React from "react";
 
 import { CreateAccountScreen } from './components'
+import { MapEditingScreen } from './components'
 
 
   const router = createBrowserRouter([

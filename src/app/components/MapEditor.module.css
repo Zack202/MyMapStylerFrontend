@@ -1,0 +1,41 @@
+.rect_box {
+    padding: 10px; 
+    border: 1px solid #000000;
+    height: 80%;
+    width: 20%;/*Needs to go back to 20% */
+    background: #d4d4d4;
+    
+}
+.title_box {
+    padding: 10px;
+    height: 10%;
+    width: 100%;
+    background: #d4d4d4;
+    
+
+}
+
+  .text_color {
+    color: black;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.text_box {
+    background-color: white !important;
+    border-radius: 8%;
+}
+
+.item_box{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.color_box{
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    margin-left: 10px;
+
+}
