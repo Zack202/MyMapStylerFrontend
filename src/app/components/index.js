@@ -1,4 +1,3 @@
-import CreateAccountScreen from "./CreateAccountScreen";
 import MapEditor from "./MapEditor";
 import ImportMapDataModal from "./ImportMapDataModal";
 import UserHomeScreenMapBrowsingScreenWrapper from "./User-Home-Screen-Map-Browsing-Screen-Wrapper";
@@ -26,7 +25,6 @@ export {
     ExportMapModal,
     DeleteMapModal,
     CommentSection,
-    CreateAccountScreen,
     SplashScreen,
     ProfileScreen,
     LoginScreen,
