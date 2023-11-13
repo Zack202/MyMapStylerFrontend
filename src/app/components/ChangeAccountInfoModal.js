@@ -27,6 +27,9 @@ function Copyright(props) {
 
 const defaultTheme = createTheme({
   palette: {
+    background: {
+      paper: '#fff',
+    },
     primary: {
       main: '#990000'
     },
@@ -67,6 +70,8 @@ export default function changeAccountInfo() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              bgcolor: 'background.paper',
+              p:2
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
