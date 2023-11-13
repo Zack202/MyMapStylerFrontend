@@ -2,6 +2,7 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
+import TopAppBanner from './TopAppBanner';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HomeIcon from '@mui/icons-material/Home';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
@@ -33,22 +34,14 @@ const defaultTheme = createTheme({
 
 export default function specificMapScreen(){
     return(
+        <div>
+            <div>
+            <Grid item xs={12}>
+                <TopAppBanner />
+            </Grid>
+            </div>
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <AppBar position="relative" >
-                <Toolbar >
-                <IconButton aria-label="backarrow" disabled color="secondary"><ArrowBackIcon />
-</IconButton>
-                    
-                    <HomeIcon />
-                    <ManageSearchIcon />
-                    <Typography variant="h6">
-                        MyMapStyler
-
-                    </Typography>
-                    <AccountCircleIcon align='right' />
-                </Toolbar>
-            </AppBar>
             <Container maxwidth="sm" style={{ marginTop: '20px' }}>
             <Box
                             sx={{
@@ -94,6 +87,7 @@ export default function specificMapScreen(){
                         </Box>
             </Container>
             </ThemeProvider>
+            </div>
 
     );
 }

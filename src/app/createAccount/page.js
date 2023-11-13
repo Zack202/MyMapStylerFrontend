@@ -125,6 +125,7 @@ export default function CreateAccountScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
+                            href="/login"
                             sx={{ mt: 3, mb: 1, height: '40px'}}
                             >
                             Confirm Registration
