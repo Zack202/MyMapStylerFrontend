@@ -15,6 +15,7 @@ import CreateMapModal from './CreateMapModal';
 import MapCard from './MapCard';
 import EditToolbar from './EditToolbar';
 import MapEditingScreen from './MapEditingScreen';
+import SearchSortBar from "./SearchSortBar";
 
 
 
@@ -35,5 +36,6 @@ export {
     CreateMapModal,
     MapCard,
     EditToolbar,
-    MapEditingScreen
+    MapEditingScreen,
+    SearchSortBar
 }

@@ -221,7 +221,7 @@ function ListCard(props) {
 
             
             <div>
-            <img src={TestMap} alt="image" />    
+            <img src={'test_map.jpg'} alt="image" height={'100px'} style={{position:'absolute'}} />    
             </div>
 
             </Box>

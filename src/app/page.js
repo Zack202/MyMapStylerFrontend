@@ -3,7 +3,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { LoginScreen, SplashScreen, ProfileScreen, SpecificMapScreen, Leafletmap,  MapEditingScreen} from './components';
+import { LoginScreen, SplashScreen, ProfileScreen, SpecificMapScreen, Leafletmap,  MapEditingScreen, UserHomeScreenMapBrowsingScreenWrapper} from './components';
 import React from "react";
 
 import { CreateAccountScreen } from './components'
@@ -31,9 +31,13 @@ import { CreateAccountScreen } from './components'
       element: <SpecificMapScreen/>
     },
     {
-      path: "/",
+      path: "/b",
       element: <MapEditingScreen/>
-    }
+    },
+    {
+      path: "/",
+      element: <UserHomeScreenMapBrowsingScreenWrapper/>
+    },
   ]);
 
 export default function Home() {
