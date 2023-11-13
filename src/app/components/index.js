@@ -17,6 +17,7 @@ import EditToolbar from './EditToolbar';
 import MapEditingScreen from './MapEditingScreen';
 import SearchSortBar from "./SearchSortBar";
 import ChangeAccountInfoModal from "./ChangeAccountInfoModal";
+import EditMapDataModal from "./EditMapDataModal";
 
 
 
@@ -39,5 +40,6 @@ export {
     EditToolbar,
     MapEditingScreen,
     SearchSortBar,
-    ChangeAccountInfoModal
+    ChangeAccountInfoModal,
+    EditMapDataModal
 }
