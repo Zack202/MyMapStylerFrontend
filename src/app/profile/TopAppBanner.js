@@ -104,7 +104,7 @@ export default function TopAppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block'  }, zIndex: "2" }}                        
                     >
-                        <a href="home_browser"><img style={{height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <img style={{height: "40px", }} src={'/logo_maroon.png'} alt="logo" />
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}></Box>
                     <Box  sx={{ display: { xs: 'none', md: 'flex' }, zIndex: "2", right: '20px', position: 'absolute'}}>
