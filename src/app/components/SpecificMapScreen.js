@@ -15,6 +15,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
+import CommentSection from './CommentSection';
 import { MapContainer, TileLayer} from 'react-leaflet'
 //import "leaflet/dist/leaflet.css"
 
@@ -90,7 +91,7 @@ export default function specificMapScreen(){
       </MapContainer>}
                                 </Box>
                                 <Box sx={{ gridArea: 'comments', bgcolor: '#800000' }}>Comments
-                                    
+                                    <CommentSection />
                                 </Box>
                                 <Box sx={{ gridArea: 'describe', bgcolor: '#800000' }}>Description
                                     
