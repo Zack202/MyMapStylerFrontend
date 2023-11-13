@@ -14,7 +14,7 @@ import { DataGrid } from '@mui/x-data-grid';
 
 
 
-export default function () {
+export default function MapEditor() {
     init();
 
     const handleColorChange = (color) => {
