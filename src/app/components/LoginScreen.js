@@ -47,6 +47,9 @@ const style = {
 
 const defaultTheme = createTheme({
   palette: {
+    background: {
+      paper: '#fff',
+    },
     primary: {
       main: '#990000'
     },
@@ -145,13 +148,18 @@ export default function SignIn() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-<Modal
+      <Modal
         open={open}
         onClose={handleClose}>
         <Container component="main" maxWidth="xs" >
           <CssBaseline />
           <Box
-            sx={{ style }}
+            sx={{ marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              bgcolor: 'background.paper',
+              p:2 }}
 
           >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -187,10 +195,9 @@ export default function SignIn() {
               </Button>
             </Box>
           </Box>
-          <Copyright sx={{ mt: 5 }} />
         </Container>
       </Modal>
-      
+
     </ThemeProvider>
   );
 }
