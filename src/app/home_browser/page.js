@@ -1,10 +1,12 @@
 
 
 // Import dependencies
-
+'use client'
 import { Grid } from "@mui/material";
-import TopAppBanner from "./TopAppBanner";
-import { BottomAppBanner, MapCard, SearchSortBar } from ".";
+import TopAppBanner from './TopAppBanner';
+import BottomAppBanner from './BottomAppBanner';
+import SearchSortBar from './SearchSortBar';
+import MapCard from './MapCard';
 
 
 export default function UserHomeScreenMapBrowsingScreenWrapper() {

@@ -51,6 +51,11 @@ export default function Profile() {
                             Profile
 
                         </Typography>
+                        <Grid item='true'>
+                                                <Button href="/" variant="contained" color="primary">
+                                                    LOG OUT
+                                                </Button>
+                                            </Grid>
                         <Typography variant="h5" align="center" color="textSecondary" paragraph>
                             Hello everyone this is where account info is supposed to be hopefully it looks ok because idk
 
@@ -116,6 +121,7 @@ export default function Profile() {
                                                     Delete Profile
                                                 </Button>
                                             </Grid>
+                                            
 
                                         </Grid></div>
                                 </Box>

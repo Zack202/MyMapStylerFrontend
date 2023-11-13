@@ -1,3 +1,4 @@
+'use client'
 import { Edit } from '@mui/icons-material';
 import styles from './MapEditingScreen.module.css';
 import MapEditor from './MapEditor';
@@ -6,10 +7,6 @@ import BottomAppBanner from './BottomAppBanner';
 import EditToolbar from './EditToolbar';
 import Leafletmap from './Leafletmap';
 import { Grid } from '@mui/material';
-
-
-
-
 
 export default function MapEditingScreen() {
     return(

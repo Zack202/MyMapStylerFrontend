@@ -3,15 +3,15 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { LoginScreen, SplashScreen, ProfileScreen, SpecificMapScreen, Leafletmap,  MapEditingScreen, UserHomeScreenMapBrowsingScreenWrapper} from './components';
 import React from "react";
 
+import Link from "next/link"
 import { CreateAccountScreen } from './components'
 
-
+/*
   const router = createBrowserRouter([
     {
-      path: "/f",
+      path: "/",
       element: <SplashScreen/>
     },
     {
@@ -35,16 +35,23 @@ import { CreateAccountScreen } from './components'
       element: <MapEditingScreen/>
     },
     {
-      path: "/",
+      path: "/f",
       element: <UserHomeScreenMapBrowsingScreenWrapper/>
     },
   ]);
+  */
 
 export default function Home() {
   
   return (
-    <React.StrictMode>
-      <RouterProvider router={router}/>
-    </React.StrictMode>
+    <div>
+      <Link href="/login">login,</Link>
+      <Link href="/createAccount">     create account,</Link>
+      <Link href="/profile">     profile,</Link>
+      <Link href="/specificMap">     specfic map,</Link>
+      <Link href="/mapEditing">     map editing,</Link>
+      <Link href="/home_browser">     home/browser</Link>
+    </div>
+    
   )
 }

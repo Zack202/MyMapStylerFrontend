@@ -116,6 +116,7 @@ export default function TopAppBanner() {
                             aria-controls={menuId}
                             onClick={handleProfileMenuOpen}
                             color="inherit"
+                            href="/profile"
                             sx={{bgcolor: "black"}}
                         >
                             {/* { getAccountMenu(auth.loggedIn) } */}
