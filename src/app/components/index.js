@@ -13,7 +13,8 @@ import Leafletmap from './Leafletmap';
 import BottomAppBanner from './BottomAppBanner';
 import CreateMapModal from './CreateMapModal';
 import MapCard from './MapCard';
-import EditToolbar from '../EditToolbar';
+import EditToolbar from './EditToolbar';
+import MapEditingScreen from './MapEditingScreen';
 
 
 
@@ -33,5 +34,6 @@ export {
     BottomAppBanner,
     CreateMapModal,
     MapCard,
-    EditToolbar
+    EditToolbar,
+    MapEditingScreen
 }

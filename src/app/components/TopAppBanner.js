@@ -11,7 +11,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Logo from "public/logo_maroon.png";
 
 
 export default function TopAppBanner() {
@@ -105,7 +104,7 @@ export default function TopAppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block'  }, zIndex: "2" }}                        
                     >
-                        <img style={{height: "40px", }} src={Logo} alt="logo" />
+                        <img style={{height: "40px", }} src={'/logo_maroon.png'} alt="logo" />
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}></Box>
                     <Box  sx={{ display: { xs: 'none', md: 'flex' }, zIndex: "2", right: '20px', position: 'absolute'}}>

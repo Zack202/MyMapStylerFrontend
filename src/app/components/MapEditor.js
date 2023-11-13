@@ -62,7 +62,6 @@ export default function MapEditor() {
         ]
 
     return(
-      <div>
          <Grid container>
             <Box className = {styles.rect_box}>
                <Box className = {styles.title_box}>
@@ -186,6 +185,5 @@ export default function MapEditor() {
             </Box>
 
          </Grid>
-      </div>
     );
 }

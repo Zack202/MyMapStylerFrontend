@@ -3,11 +3,10 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { LoginScreen, SplashScreen, ProfileScreen, SpecificMapScreen, Leafletmap,  } from './components';
+import { LoginScreen, SplashScreen, ProfileScreen, SpecificMapScreen, Leafletmap,  MapEditingScreen} from './components';
 import React from "react";
 
 import { CreateAccountScreen } from './components'
-import { MapEditingScreen } from './components'
 
 
   const router = createBrowserRouter([
@@ -28,9 +27,13 @@ import { MapEditingScreen } from './components'
       element: <ProfileScreen/>
     },
     {
-      path: "/",
+      path: "/e",
       element: <SpecificMapScreen/>
     },
+    {
+      path: "/",
+      element: <MapEditingScreen/>
+    }
   ]);
 
 export default function Home() {
