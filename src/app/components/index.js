@@ -5,6 +5,7 @@ import SplashScreen from "./SplashScreen";
 import ProfileScreen from "./ProfileScreen";
 import LoginScreen from "./LoginScreen";
 import SpecificMapScreen from "./SpecificMapScreen";
+import Leafletmap from './Leafletmap';
 
 
 
@@ -15,4 +16,5 @@ export {
     ProfileScreen,
     LoginScreen,
     SpecificMapScreen,
+    Leafletmap
 }
