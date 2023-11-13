@@ -3,6 +3,8 @@ import { useContext } from 'react'
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import styles from './EditToolbar.module.css';
+
 
 const style = {
     position: 'absolute',
@@ -31,26 +33,26 @@ export default function CreateMapModal() {
     }
 
     return (
-        <Modal open={false}> {/* change it true or false for now*/}
+        <Modal open={true}> {/* change it true or false for now*/}
             <Box sx={style}>
-                <div className="modal-dialog">
-                <header className="dialog-header">
+                <div className={styles.modal-dialog}>
+                <header className={styles.dialog-header}>
                    Import a map in the format of GeoJSon, SHapefile or KML:
                 </header>
 
-                <div id="middle-container">
-                <input type="file" accept="" id="import-map-button"/>
+                <div id={styles.middle-container}>
+                <input type="file" accept="" id={styles.import-map-button}/>
                 </div>
 
-                <div id="confirm-cancel-container">
+                <div id={styles.confirm-cancel-container}>
                     <button
-                        id="dialog-yes-button"
-                        className="modal-button"
+                        id={styles.dialog-yes-button}
+                        className={styles.modal-button}
                         onClick={handleDeleteList}
                     >Create Map</button>
                     <button
-                        id="dialog-no-button"
-                        className="modal-button"
+                        id={styles.dialog-no-button}
+                        className={styles.modal-button}
                         onClick={handleCloseModal}
                     >Cancel</button>
                 </div>
