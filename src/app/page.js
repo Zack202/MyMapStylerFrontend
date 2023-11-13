@@ -5,6 +5,7 @@ import { useState } from 'react'
 import api from './api'
 
 import { CreateAccountScreen } from './components'
+import { MapEditingScreen } from './components'
 
 
 export default function Home() {
