@@ -1,9 +1,9 @@
 import CreateAccountScreen from "./CreateAccountScreen";
-import MapEditingScreen from "./MapEditingScreen";
+import MapEditor from "./MapEditor";
 
 
 
 export {
     CreateAccountScreen,
-    MapEditingScreen
+    MapEditor
 }
