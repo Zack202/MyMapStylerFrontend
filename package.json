@@ -9,10 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.16",
+    "@mui/material": "^5.14.17",
     "axios": "^1.6.0",
+    "leaflet": "^1.9.4",
+    "mapbox": "^1.0.0-beta10",
     "next": "14.0.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.18.0"
   },
   "devDependencies": {
     "cypress": "^13.4.0"

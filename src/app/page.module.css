@@ -110,3 +110,24 @@
 .button{
   width: 200px;
 }
+
+
+#splash-screen {
+  background-image: linear-gradient(to bottom, rgb(65, 163, 238), #6f78d7);
+  color: rgb(0, 0, 0);
+  text-align: center;
+  font-size: 5vw;
+  border-width: 0px;
+  border-style: solid;
+  padding-left: 10%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  padding-right: 10%;
+  height:75%;
+  vertical-align:center;
+}
+
+#button-bar{
+  margin-top: 5%;
+}
+
