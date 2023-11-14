@@ -66,6 +66,8 @@ export default function MapEditor() {
         ]
 
     return(
+      <Box item xs={12} sx={{position:"absolute", width: "25%", 
+            display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "85%",}}>
          <Grid container>
             <Box className = {styles.rect_box}>
                <Box className = {styles.title_box}>
@@ -189,6 +191,7 @@ export default function MapEditor() {
             </Box>
 
          </Grid>
+         </Box>
     );
                }else{
                      return null;
