@@ -22,6 +22,7 @@ const style = {
 export default function CreateMapModal(props) {
     // const { store } = useContext(GlobalStoreContext);
     let name = "Map";
+    const check = props.open;
     // if (store.listMarkedForDeletion) {
     //     name = store.listMarkedForDeletion.name;
     // }
@@ -33,7 +34,7 @@ export default function CreateMapModal(props) {
     }
 
     return (
-        <Modal open={props.open}> {/* change it true or false for now*/}
+        <Modal open={check}> {/* change it true or false for now*/}
             <Box sx={style}>
                 <div className={styles.modal_dialog}>
                 <header className={styles.dialog_header}>
