@@ -34,6 +34,7 @@ const defaultTheme = createTheme({
 
 
 export default function specificMapScreen(){
+    if (typeof window !== 'undefined') {
     return(   
         <div>
         <div>
@@ -90,5 +91,8 @@ export default function specificMapScreen(){
         </ThemeProvider>
         </div>
         )
-
+                        }
+                        else {
+                            return null
+                        }
                         };
