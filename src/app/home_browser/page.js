@@ -24,12 +24,13 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
             <Grid item xs={12}>
                 <SearchSortBar />
             </Grid>
-            <Grid item xs={12}>
+            <Box item xs={12} sx={{position:"absolute", width: "100%", 
+            display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"}}>
                 <MapCard />
                 <MapCard />
                 <MapCard />
                 <MapCard />
-            </Grid>
+            </Box>
             <Grid item xs={12}>
                 <BottomAppBanner />
             </Grid>
