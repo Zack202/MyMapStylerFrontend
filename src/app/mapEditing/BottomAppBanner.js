@@ -9,7 +9,7 @@ import { Typography } from '@mui/material';
 
 
 export default function BottomAppBanner() {
-
+    if (typeof window !== 'undefined') {
     return (
         <Box sx={{ flexGrow: 1, width: "100%", position:"absolute", bottom: 0}}>
             <AppBar position="static" sx={{bgcolor: "#800000", height:"48px"}}>
@@ -20,4 +20,7 @@ export default function BottomAppBanner() {
             </AppBar>
         </Box>
     );
+    }else{ 
+        return null;
+    }
 }

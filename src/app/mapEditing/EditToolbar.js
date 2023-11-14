@@ -5,10 +5,7 @@ import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import styles from './EditToolbar.module.css';
 
 function EditToolbar() {
-
-
-
-
+    if (typeof window !== 'undefined') {
     return(
         <div id={styles.edit-toolbar} >
             <div id={styles.editheader}>
@@ -29,4 +26,7 @@ function EditToolbar() {
         </div>
 
     );
+    }else{
+        return null
+    }
 } export default EditToolbar

@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 
 
 export default function TopAppBanner() {
-
+    if (typeof window !== 'undefined') {
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
@@ -130,4 +130,6 @@ export default function TopAppBanner() {
             }
         </Box>
     );
+        }else{  return null;
+        }
 }

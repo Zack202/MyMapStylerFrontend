@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import customA from './customA.geo.json'
 
 export default function Leafletmap() {
+  if (typeof window !== 'undefined') {
     const [geoJSONData, setGeoJSONData] = useState(null);
 
     useEffect(() => {
@@ -28,5 +29,8 @@ export default function Leafletmap() {
       </MapContainer>
     </div>
   );
+  }else{
+    return null
+  }
 }
 
