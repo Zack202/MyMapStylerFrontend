@@ -6,6 +6,7 @@ import api from './api.js'
 import Button  from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import Link from '@mui/material/Link';
+
 const backgroundStyle = {
   backgroundImage: 'url("./hckgavj2l7871.webp")',
   backgroundSize: 'cover',

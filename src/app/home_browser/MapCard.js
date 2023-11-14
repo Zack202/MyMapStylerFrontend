@@ -20,6 +20,7 @@ import {Modal, Button} from '@mui/material';
 import TestMap from "public/test_map.jpg"
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
+import ExportMapModal from '../components/ExportMapModal.js'
 
 
 function ListCard(props) {
@@ -170,8 +171,12 @@ function ListCard(props) {
         setEditActive(newActive);
     }
 
-    function handleLikePlaylis(event, idNamePair) {
-    }
+    const [exportModal, setExportModal] = useState(false);
+
+    const handleExportMapModal = (event) => {
+        event.preventDefault();
+        setExportModal(true);
+    console.log("clicked");}
 
     function handleDislikes(event, idNamePair) {
 
@@ -309,14 +314,15 @@ function ListCard(props) {
                 >
                 Fork
             </Button>
-            <Button 
+            {/* <Button 
                 // disabled={!store.canUndo()}
                 id='export-button'
                 variant="contained"
                 sx={{margin: 1, backgroundColor: "maroon"}}
                 >
                 Export
-            </Button>
+            </Button> */}
+            <ExportMapModal />
         <Box 
             sx={{display: 'inline-block',  p: 1,}}
             >

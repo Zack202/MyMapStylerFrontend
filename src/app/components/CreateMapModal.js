@@ -1,10 +1,10 @@
-import { useContext } from 'react'
+// import { useContext } from 'react'
 // import GlobalStoreContext from '../store';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import styles from './CreateMapModal.css';
-
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 const style = {
     position: 'absolute',
@@ -19,46 +19,57 @@ const style = {
     borderRadius: '10px',
 };
 
-export default function CreateMapModal(props) {
+export default function CreateMapModal() {
+
+    const [open, setOpen] = React.useState(false);
+
+    //code here for if user is on home screen or map browsing screen
+    const openCreateMapModal = () => {setOpen(true)};
     // const { store } = useContext(GlobalStoreContext);
-    let name = "Map";
-    const check = props.open;
+
     // if (store.listMarkedForDeletion) {
     //     name = store.listMarkedForDeletion.name;
     // }
-    function handleDeleteList(event) {
-        // store.deleteMarkedList();
-    }
-    function handleCloseModal(event) {
-        // store.hideModals();
-    }
+    const handleCloseModal = () => {setOpen(false)};
+
 
     return (
-        <Modal open={check}> {/* change it true or false for now*/}
+        <div>
+        <Fab 
+                color="black" 
+                aria-label="add"
+                id="add-list-button"
+                onClick={openCreateMapModal}
+                sx={{width: "95%", borderRadius: "5px", backgroundColor: "maroon", width: "20%", color:"white", fontWeight: "bolder"}}
+                >
+                    <AddIcon /> Create Map
+          </Fab>
+        <Modal open={open}> {/* change it true or false for now*/}
             <Box sx={style}>
-                <div className={styles.modal_dialog}>
-                <header className={styles.dialog_header}>
+                <div className="modal-dialog">
+                <header className="dialog-header">
                    Import a map in the format of GeoJSon, SHapefile or KML:
                 </header>
 
-                <div id={styles.middle_container}>
-                <input type="file" accept="" id={styles.import_map_button}/>
+                <div id="middle-container">
+                <input type="file" accept="" id="import-map-button"/>
                 </div>
 
-                <div id={styles.confirm_cancel_container}>
+                <div id="confirm-cancel-container">
                     <button
-                        id={styles.dialog_yes_button}
-                        className={styles.modal_button}
-                        onClick={handleDeleteList}
+                        id="dialog-yes-button"
+                        className="modal-button"
+                        // onClick={handleDeleteList}
                     >Create Map</button>
                     <button
-                        id={styles.dialog_no_button}
-                        className={styles.modal_button}
+                        id="dialog-no-button"
+                        className="modal-button"
                         onClick={handleCloseModal}
                     >Cancel</button>
                 </div>
             </div>
             </Box>
         </Modal>
+        </div>
     );
 }

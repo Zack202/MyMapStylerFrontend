@@ -11,7 +11,6 @@ import AddIcon from '@mui/icons-material/Add';
 import CreateMapModal from "src/app/components/CreateMapModal.js";
 import React, {useState} from 'react'
 
-
 const backgroundStyle = {
     backgroundImage: 'url("./topology_art.jpeg")',
     backgroundSize: 'cover',
@@ -44,7 +43,6 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                 <MapCard />
                 <MapCard />
             </Box>
-
             {/* <CreateMapModal open={open}/> */}
 
             <Grid item xs={12}>

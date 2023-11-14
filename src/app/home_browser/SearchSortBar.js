@@ -20,6 +20,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Filter2 } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CreateMapModal from '../components/CreateMapModal.js';
+import ExportMapModal from "src/app/components/ExportMapModal.js";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -67,14 +68,6 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const [open, setOpen] = React.useState(false);
-
-  //code here for if user is on home screen or map browsing screen
-  function handleCreateNewMap(event) {
-      setOpen(!open);
-  }
-
 
 
   const handleProfileMenuOpen = (event) => {
@@ -191,18 +184,7 @@ export default function PrimarySearchAppBar() {
               
             />
           </Search>
-          {/* Create Map Icon */}
-          <Fab 
-                color="black" 
-                aria-label="add"
-                id="add-list-button"
-                onClick={handleCreateNewMap}
-                sx={{width: "95%", borderRadius: "5px", backgroundColor: "maroon", width: "20%", color:"white", fontWeight: "bolder"}}
-                >
-                    <AddIcon /> Create Map
-          </Fab>
-          <CreateMapModal open={open} />
-
+          {/* <CreateMapModal /> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <Box style ={{color: "black", backgroundColor: "#F1F1F1", borderRadius: '20px',m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block'}}>        
