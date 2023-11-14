@@ -18,9 +18,14 @@ import CommentIcon from '@mui/icons-material/Comment';
 import {Modal, Button} from '@mui/material';
 // import EditToolbar from './EditToolbar';
 import TestMap from "public/test_map.jpg"
+import Link from '@mui/material/Link';
+import { useRouter } from 'next/navigation';
 
 
 function ListCard(props) {
+
+    const router = useRouter()
+
     // const { store } = useContext(GlobalStoreContext);
     // const {auth} = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
@@ -190,12 +195,14 @@ function ListCard(props) {
     // if (store.isListNameEditActive) {
     //     cardStatus = true;
     // }
-
+    function handelSwitchToEdit(event){
+        
+    }
 
 
     let cardElement =
     <div id='cards'>
-    <Card sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
+    <Card onClick={() => router.push('/mapEditing')} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
     >
         
     <CardContent sx={{p: 0}}/>
@@ -214,9 +221,10 @@ function ListCard(props) {
             //     handleLoadList(event, idNamePair._id)
             // }}  
             >
-            <div style={{top: 0, display: "flex", position: "absolute", fontWeight: "bolder"}}>
-                Map Card Name
-            </div>
+            <Link href="/specificMap" style={{top: 0, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            Map Card Name
+            </Link>
+            
             <Box sx={{flexGrow: 1, display: "inline-block", float:'left',}}>
 
             

@@ -78,11 +78,10 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    color: rgb(255, 255, 255);
-    font-size: 120pt;
+    color: maroon;
+    font-size: 60pt;
     padding: 4rem 0;
   }
-  
   
   .center::before {
     background: var(--secondary-glow);
@@ -108,9 +107,6 @@
     transform: translateZ(0);
   }
   
-  .buttons{
+  .button{
     width: 200px;
-    color: white;
-    background: maroon;
-
   }

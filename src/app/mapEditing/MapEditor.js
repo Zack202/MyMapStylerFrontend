@@ -6,20 +6,24 @@ import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import styles from './MapEditor.module.css';
 import Switch from '@mui/material/Switch';
-import "@melloware/coloris/dist/coloris.css";
-import { coloris, init } from "@melloware/coloris";
+// import "@melloware/coloris/dist/coloris.css";
+// import { coloris, init } from "@melloware/coloris";
 import InputAdornment from '@mui/material/InputAdornment';
 import { DataGrid } from '@mui/x-data-grid';
+import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 
 
-
+const DynamicColoris = dynamic(() => import('@melloware/coloris'), {
+   ssr: false, // Disable server-side rendering for this module
+   loading: () => null
+ });
 
 export default function MapEditor() {
-    init();
-
-    const handleColorChange = (color) => {
-        coloris({ el: "#coloris", color });
-    };
+   if (typeof window !== 'undefined') {
+      useEffect(() => {
+         const colorisModule = require('@melloware/coloris');
+       }, []);
 
     const customDataProperties = "Fizzy Drink Name: String"
 
@@ -186,4 +190,7 @@ export default function MapEditor() {
 
          </Grid>
     );
+               }else{
+                     return null;
+               }
 }

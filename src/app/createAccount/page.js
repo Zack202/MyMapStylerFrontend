@@ -1,3 +1,4 @@
+'use client'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -124,6 +125,7 @@ export default function CreateAccountScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
+                            href="/login"
                             sx={{ mt: 3, mb: 1, height: '40px'}}
                             >
                             Confirm Registration
