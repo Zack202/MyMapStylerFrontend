@@ -52,7 +52,7 @@ const CommentSection = () => {
   ];
 
   const getIndentation = (level) => {
-    const baseIndentation = 90; // Adjust for moree indentation need to fix right side indentation later or leave it
+    const baseIndentation = 30; // Adjust for moree indentation need to fix right side indentation later or leave it
     const indentation = baseIndentation * level;
     return `${indentation}px`;
   };
