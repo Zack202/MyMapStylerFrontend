@@ -2,8 +2,8 @@
 import { Edit } from '@mui/icons-material';
 import styles from './MapEditingScreen.module.css';
 import MapEditor from './MapEditor';
-import TopAppBanner from './TopAppBanner';
-import BottomAppBanner from './BottomAppBanner';
+import TopAppBanner from '../Utils/TopAppBanner';
+import BottomAppBanner from '../Utils/BottomAppBanner';
 import EditToolbar from './EditToolbar';
 import Leafletmap from './Leafletmap';
 import { Grid } from '@mui/material';

@@ -2,9 +2,9 @@
 
 // Import dependencies
 'use client'
-import { Grid, Box, Fab} from "@mui/material";
-import TopAppBanner from './TopAppBanner';
-import BottomAppBanner from './BottomAppBanner';
+import { Grid } from "@mui/material";
+import TopAppBanner from '../Utils/TopAppBanner';
+import BottomAppBanner from '../Utils/BottomAppBanner';
 import SearchSortBar from './SearchSortBar';
 import MapCard from './MapCard';
 import AddIcon from '@mui/icons-material/Add';

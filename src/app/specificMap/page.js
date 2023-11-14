@@ -2,7 +2,6 @@
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import TopAppBanner from './TopAppBanner';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HomeIcon from '@mui/icons-material/Home';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
@@ -15,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import CommentSection from './CommentSection';
+import TopAppBanner from '../Utils/TopAppBanner';
 import { MapContainer, TileLayer} from 'react-leaflet'
 import { useEffect } from 'react';
 //import "leaflet/dist/leaflet.css"
