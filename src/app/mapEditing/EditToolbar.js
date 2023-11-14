@@ -12,7 +12,7 @@ function EditToolbar() {
         <div id={styles.edit-toolbar} >
             <div id={styles.editheader}>
                 Map Editor
-            
+            </div>
             <IconButton>
             <ColorLensIcon sx={{fontSize: "40pt"}}/>
             </IconButton>
@@ -32,7 +32,6 @@ function EditToolbar() {
             <IconButton>
             <RedoIcon sx={{fontSize: "40pt"}}/>
             </IconButton>
-            </div>
         </div>
 
     );
