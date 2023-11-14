@@ -21,6 +21,8 @@ import TestMap from "public/test_map.jpg"
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
 import ExportMapModal from '../components/ExportMapModal.js'
+import DeleteMapModal from '../components/DeleteMapModal.js'
+
 
 
 function ListCard(props) {
@@ -178,6 +180,13 @@ function ListCard(props) {
         setExportModal(true);
     console.log("clicked");}
 
+    const [deleteModal, setdeleteModal] = useState(false);
+
+    const handleDeleteMapModal = (event) => {
+        event.preventDefault();
+        setdeleteModal(true);
+    console.log("clicked");}
+
     function handleDislikes(event, idNamePair) {
 
     }
@@ -298,14 +307,7 @@ function ListCard(props) {
                 >
                 Publish
             </Button> */}
-            <Button 
-                // disabled={!store.canRedo()}
-                id='delete-button'
-                variant="contained"
-                sx={{margin: 1, visibility: deleteCase, backgroundColor: "maroon"}}
-                >
-                Delete
-            </Button>
+            <DeleteMapModal />
             <Button 
                 // disabled={!store.canUndo()}
                 id='duplicate-button'

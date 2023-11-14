@@ -45,7 +45,7 @@ export default function TransitionsModal() {
 
   return (
     <div>
-      <Button onClick={handleOpen} sx={{margin: 1, backgroundColor: "maroon", color: "white"}}
+      <Button id="export-button" variant="contained" onClick={handleOpen} sx={{margin: 1, backgroundColor: "maroon", color: "white"}}
       >Export</Button>
       <Modal
         aria-labelledby="transition-modal-title"
