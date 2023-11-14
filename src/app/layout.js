@@ -11,6 +11,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&display=swap"></link>
+    </head>
       <body className={inter.className}>{children}</body>
     </html>
   )

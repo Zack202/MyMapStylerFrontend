@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 
 
 export default function TopAppBanner() {
-    if (typeof window !== 'undefined') {
+
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
@@ -95,7 +95,10 @@ export default function TopAppBanner() {
     }
 
     return (
-        <Box sx={{ flexGrow: 1, width: "100%"}}>
+        <Box flex
+        sx={{
+          width: '100%'
+          }}>
             <AppBar position="static" sx={{bgcolor: "#800000"}}>
                 <Toolbar variant='dense'>
                     <Typography                        
@@ -104,8 +107,20 @@ export default function TopAppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block'  }, zIndex: "2" }}                        
                     >
-                        <img style={{height: "40px", }} src={'/logo_maroon.png'} alt="logo" />
+                        <a href="home_browser"><img style={{height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
+                    <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+                        <Typography  style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize:'20px' }}>
+          <b><u>My Map Styler</u></b>
+        </Typography>
+        </Box>
                     <Box sx={{ flexGrow: 1 }}></Box>
                     <Box  sx={{ display: { xs: 'none', md: 'flex' }, zIndex: "2", right: '20px', position: 'absolute'}}>
                         <IconButton
@@ -115,8 +130,8 @@ export default function TopAppBanner() {
                             aria-label="account of current user"
                             aria-controls={menuId}
                             onClick={handleProfileMenuOpen}
-                            href="/profile"
                             color="inherit"
+                            href="profile"
                             sx={{bgcolor: "black"}}
                         >
                             {/* { getAccountMenu(auth.loggedIn) } */}
@@ -130,6 +145,4 @@ export default function TopAppBanner() {
             }
         </Box>
     );
-        }else{  return null;
-        }
 }

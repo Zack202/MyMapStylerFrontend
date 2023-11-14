@@ -95,7 +95,10 @@ export default function TopAppBanner() {
     }
 
     return (
-        <Box sx={{ flexGrow: 1, width: "100%"}}>
+        <Box flex
+        sx={{
+          width: '100%'
+          }}>
             <AppBar position="static" sx={{bgcolor: "#800000"}}>
                 <Toolbar variant='dense'>
                     <Typography                        
@@ -106,6 +109,18 @@ export default function TopAppBanner() {
                     >
                         <a href="home_browser"><img style={{height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
+                    <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+                        <Typography  style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize:'20px' }}>
+          <b><u>My Map Styler</u></b>
+        </Typography>
+        </Box>
                     <Box sx={{ flexGrow: 1 }}></Box>
                     <Box  sx={{ display: { xs: 'none', md: 'flex' }, zIndex: "2", right: '20px', position: 'absolute'}}>
                         <IconButton

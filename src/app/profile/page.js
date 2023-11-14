@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import BottomAppBanner from '../home_browser/BottomAppBanner';
 
 const defaultTheme = createTheme({
     palette: {
@@ -126,6 +127,7 @@ export default function Profile() {
                     </main>
                 </ThemeProvider>
             </div>
+            <BottomAppBanner/>
         </div>
     );
 }

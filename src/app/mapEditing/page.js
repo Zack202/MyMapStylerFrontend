@@ -16,10 +16,10 @@ export default function MapEditingScreen() {
                 <Grid item xs={12}>
                     <TopAppBanner />
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                     <MapEditor />
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item xs={9}>
                     <EditToolbar />
                     <Leafletmap />
                 </Grid>
