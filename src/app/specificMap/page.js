@@ -64,25 +64,26 @@ export default function specificMapScreen(){
                                 gridTemplateColumns: 'repeat(3, 1fr)',
                                 gridTemplateRows: 'auto',
                                 gap: 1,
-                                gridTemplateAreas: `"maphead maphead comhead"
+                                gridTemplateAreas: `"maphead maphead maphead"
     "map map comments"
     "map map comments"
-    "describe describe . "`,
+    "describe describe describe"`,
                             }}
                         >
-                            <Box sx={{ gridArea: 'maphead', bgcolor: '#a9a9a9' }}>My Map of Paris
+                            <Box sx={{ gridArea: 'maphead', bgcolor: '#a9a9a9' }}>My Map of Asia
                                 
                             </Box>
-                            <Box sx={{ gridArea: 'comhead', bgcolor: '#990000' }}>Comments
-                        
-                            </Box>
-                            <Box sx={{ gridArea: 'map', bgcolor: '#d49182' }}>Map
+
+                            <Box sx={{ gridArea: 'map', bgcolor: '#d49182' }}>
                              <Leafletmap />
                             </Box>
                             <Box sx={{ gridArea: 'comments', bgcolor: '#800000' }}>Comments
                                 <CommentSection />
                             </Box>
                             <Box sx={{ gridArea: 'describe', bgcolor: '#800000' }}>Description
+                            <Typography variant="h5" align="center" color="white" paragraph>
+                            This is the description for a map. Users can add a description to give other users a better idea of what the map is about.
+                            </Typography>
                                 
                             </Box>
                         </Box>

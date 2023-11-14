@@ -60,11 +60,7 @@ const CommentSection = () => {
   return (
 <Card>
    <CardContent>
-      <Box style ={{color: "white", backgroundColor: "#BE8585", borderRadius: '8px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block'}}>        
-      <Typography variant="h5" gutterBottom>
-         Comments
-      </Typography>
-      </Box>
+
       <List>
          {commentsData.map((comment) => (
          <React.Fragment key={comment.id}>
