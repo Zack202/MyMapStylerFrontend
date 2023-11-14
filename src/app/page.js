@@ -1,50 +1,41 @@
 'use client'
-import Image from 'next/image'
-import styles from './page.module.css'
+import styles from './SplashScreen.module.css'
 import { useState } from 'react'
-import api from './api'
+import React from 'react'
+import api from './api.js'
+import Button  from '@mui/material/Button'
+import { Box, Typography } from '@mui/material'
+import Link from '@mui/material/Link';
+const backgroundStyle = {
+  backgroundImage: 'url("./hckgavj2l7871.webp")',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  height: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
 
-
-export default function Home() {
-
-  const [names, setNames] = useState('')
-  const [name, setName] = useState('')
-
-  const handleAddName = async () => {
-    console.log("Handle add name", name)
-    if (name == '') {
-      return
-    }else{
-    const result = await api.createNewName(name)
-    console.log(result)
-    setName('')
-    document.getElementById("nameinput").value = "";
-    //handleGetNames()
-    }
-  }
-
-  const handleGetNames = async () => {
-    const result = await api.getNames()
-    const nameList = result.data.data.map(item => item.name);
-    console.log(nameList)
-    const namesWithCommas = nameList.join(', ');
-    setNames(namesWithCommas)
-  }
-
-  
-  return (
-    <main className={styles.main}>
-      <div className={styles.center}>
-        MyMapStyler
-      </div>
-      <button className={styles.button}>Login</button>
-      <button className={styles.button}>Create Account</button>
-
-      <input id="nameinput" className={styles.input} onChange={(e) => setName(e.target.value)} type="text" placeholder="Enter Name"></input>
-      <button className={styles.button} onClick={handleAddName}>Submit Name</button>
-      <h2 className={styles.h2}>All names: {names}</h2>
-      <button className={styles.button} onClick={handleGetNames}>Refresh all names from db</button>
-
-    </main>
-  )
+export default function SplashScreen (){
+    return(
+      <div style={backgroundStyle}>
+      
+        <Typography className={styles.center} style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize:'110px' }}>
+          <b><u>My Map Styler</u></b>
+        </Typography>
+        <Box sx={{ height: 250, background: '#BE8585', textAlign: 'center', borderRadius: '10px' }}>
+        <Box sx={{ height: 100, width: 800, display: 'flex', flexDirection: 'column' }}>
+          <Box>
+            <Typography variant="h6" style={{color:'white', margin: '40px'}}>
+              Welcome to <b>My Map Styler</b>. Here you can upload and edit maps, which can be later shared and downloaded. See a map you like and want to talk about it? Simply start a thread and get to discussing. Let's get Started.
+            </Typography>
+            <Button href="/login" variant="contained" className={styles.buttons} style={{background: 'maroon', margin: '10px'}}>Login</Button>
+            <Button href="/createAccount" variant="contained" className={styles.buttons} style={{background: 'maroon', margin: '10px'}}>Create an Account</Button>
+            <Button href="/home_browser" variant="contained" className={styles.buttons} style={{background: 'maroon', margin: '10px'}}>Continue As Guest</Button>
+          </Box>
+        </Box>
+      </Box>
+    </div>
+  );
 }

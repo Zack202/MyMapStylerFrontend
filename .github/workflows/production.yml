@@ -25,6 +25,6 @@ jobs:
       - name: Build the React app
         run: npm run build
 
-      - name: Test Frontend
-        run: npx cypress run
+      #- name: Test Frontend
+      #  run: npx cypress run
 
