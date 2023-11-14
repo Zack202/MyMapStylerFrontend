@@ -23,9 +23,6 @@ export default function MapEditor() {
    if (typeof window !== 'undefined') {
       useEffect(() => {
          const colorisModule = require('@melloware/coloris');
-         if (colorisModule && colorisModule.init) {
-           colorisModule.init();
-         }
        }, []);
 
     const customDataProperties = "Fizzy Drink Name: String"
