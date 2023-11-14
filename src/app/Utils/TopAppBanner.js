@@ -11,12 +11,35 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+// Modal
+import Modal from '@mui/material/Modal';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Button from '@mui/material/Button';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+const defaultTheme = createTheme({
+    palette: {
+      background: {
+        paper: '#fff',
+      },
+      primary: {
+        main: '#990000'
+      },
+      secondary: {
+        main: '#800000'
+      },
+    }
+  },);
 
 export default function TopAppBanner() {
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const [profileOpen, setProfileOpen] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
+
+    const handleProfileOpen = () => setProfileOpen(true);
+    const handleProfileClose = () => setProfileOpen(false);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -57,7 +80,7 @@ export default function TopAppBanner() {
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
         </Menu>
     );
-    const loggedInMenu = 
+    const loggedInMenu =
         <Menu
             anchorEl={anchorEl}
             anchorOrigin={{
@@ -74,7 +97,7 @@ export default function TopAppBanner() {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        </Menu>        
+        </Menu>
 
     // let editToolbar = "";
     // let menu = loggedOutMenu;
@@ -84,11 +107,11 @@ export default function TopAppBanner() {
     //     //     editToolbar = <EditToolbar />;
     //     // }
     // }
-    
+
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
         console.log("userInitials: " + userInitials);
-        if (loggedIn) 
+        if (loggedIn)
             return <div>{userInitials}</div>;
         else
             return <AccountCircle />;
@@ -96,48 +119,75 @@ export default function TopAppBanner() {
 
     return (
         <Box flex
-        sx={{
-          width: '100%'
-          }}>
-            <AppBar position="static" sx={{bgcolor: "#800000"}}>
+            sx={{
+                width: '100%'
+            }}>
+            <AppBar position="static" sx={{ bgcolor: "#800000" }}>
                 <Toolbar variant='dense'>
-                    <Typography                        
+                    <Typography
                         variant="h4"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block'  }, zIndex: "2" }}                        
+                        sx={{ display: { xs: 'none', sm: 'block' }, zIndex: "2" }}
                     >
-                        <a href="home_browser"><img style={{height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <a href="home_browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
                     <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
-                        <Typography  style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize:'20px' }}>
-          <b><u>My Map Styler</u></b>
-        </Typography>
-        </Box>
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: '100%',
+                        }}
+                    >
+                        <Typography style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '20px' }}>
+                            <b><u>My Map Styler</u></b>
+                        </Typography>
+                    </Box>
                     <Box sx={{ flexGrow: 1 }}></Box>
-                    <Box  sx={{ display: { xs: 'none', md: 'flex' }, zIndex: "2", right: '20px', position: 'absolute'}}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' }, zIndex: "2", right: '20px', position: 'absolute' }}>
                         <IconButton
                             size="medium"
                             edge="end"
                             aria-haspopup="true"
                             aria-label="account of current user"
                             aria-controls={menuId}
-                            onClick={handleProfileMenuOpen}
+                            onClick={handleProfileOpen}
                             color="inherit"
-                            href="profile"
-                            sx={{bgcolor: "black"}}
+                            sx={{ bgcolor: "black" }}
                         >
                             {/* { getAccountMenu(auth.loggedIn) } */}
                             <AccountCircle />
                         </IconButton>
                     </Box>
+                    <Modal
+                        open={profileOpen}
+                        onClose={handleProfileClose}
+                    >
+                        <Container component="main" maxWidth="xs">
+                        <ThemeProvider theme={defaultTheme}>
+                            <CssBaseline />
+                            <Box sx={{
+                            marginTop: 8,
+                            marginLeft: 80,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'right',
+                            width: 300,
+                            bgcolor: 'background.paper',
+                            p: 2
+                            }}
+                    >
+                            <Button href="/profile" variant="contained"  marginTop="4" color="primary">
+                                VIEW PROFILE
+                            </Button>
+                            <Button href="/" variant="contained" marginTop="4" color="primary">
+                                LOG OUT
+                            </Button>
+                            </Box>
+                            </ThemeProvider>
+                        </Container>
+                    </Modal>
                 </Toolbar>
             </AppBar>
             {
