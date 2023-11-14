@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import styles from './EditToolbar.module.css';
+import styles from './CreateMapModal.css';
 
 
 const style = {
@@ -19,7 +19,7 @@ const style = {
     borderRadius: '10px',
 };
 
-export default function CreateMapModal() {
+export default function CreateMapModal(props) {
     // const { store } = useContext(GlobalStoreContext);
     let name = "Map";
     // if (store.listMarkedForDeletion) {
@@ -33,26 +33,26 @@ export default function CreateMapModal() {
     }
 
     return (
-        <Modal open={true}> {/* change it true or false for now*/}
+        <Modal open={props.open}> {/* change it true or false for now*/}
             <Box sx={style}>
-                <div className={styles.modal-dialog}>
-                <header className={styles.dialog-header}>
+                <div className={styles.modal_dialog}>
+                <header className={styles.dialog_header}>
                    Import a map in the format of GeoJSon, SHapefile or KML:
                 </header>
 
-                <div id={styles.middle-container}>
-                <input type="file" accept="" id={styles.import-map-button}/>
+                <div id={styles.middle_container}>
+                <input type="file" accept="" id={styles.import_map_button}/>
                 </div>
 
-                <div id={styles.confirm-cancel-container}>
+                <div id={styles.confirm_cancel_container}>
                     <button
-                        id={styles.dialog-yes-button}
-                        className={styles.modal-button}
+                        id={styles.dialog_yes_button}
+                        className={styles.modal_button}
                         onClick={handleDeleteList}
                     >Create Map</button>
                     <button
-                        id={styles.dialog-no-button}
-                        className={styles.modal-button}
+                        id={styles.dialog_no_button}
+                        className={styles.modal_button}
                         onClick={handleCloseModal}
                     >Cancel</button>
                 </div>

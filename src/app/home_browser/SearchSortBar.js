@@ -2,8 +2,10 @@ import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
@@ -64,6 +66,15 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const [open, setOpen] = React.useState(false);
+
+  //code here for if user is on home screen or map browsing screen
+  function handleCreateNewMap() {
+      setOpen(!open);
+  }
+
+
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -179,6 +190,16 @@ export default function PrimarySearchAppBar() {
               
             />
           </Search>
+          {/* Create Map Icon */}
+          <Fab 
+                color="black" 
+                aria-label="add"
+                id="add-list-button"
+                onClick={handleCreateNewMap}
+                sx={{width: "95%", borderRadius: "5px", backgroundColor: "maroon", width: "20%", color:"white", fontWeight: "bolder"}}
+                >
+                    <AddIcon /> Create Map
+                </Fab>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <Box style ={{color: "black", backgroundColor: "#F1F1F1", borderRadius: '20px',m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block'}}>        
