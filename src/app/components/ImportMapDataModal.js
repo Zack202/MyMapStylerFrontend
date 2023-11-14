@@ -40,7 +40,9 @@ export default function ImportMapDataModal() {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Button className={styles.button} variant="contained" fullWidth style={{ backgroundColor: '#BE8585', color: 'white' }}
+      onClick={handleOpen}><b>Add Custom Properties</b></Button>
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

@@ -12,6 +12,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { DataGrid } from '@mui/x-data-grid';
 import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import ImportMapDataModal from '../components/ImportMapDataModal';
 
 
 const DynamicColoris = dynamic(() => import('@melloware/coloris'), {
@@ -66,6 +67,8 @@ export default function MapEditor() {
         ]
 
     return(
+      <Box item xs={12} sx={{position:"absolute", width: "25%", 
+            display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "85%",}}>
          <Grid container>
             <Box className = {styles.rect_box}>
                <Box className = {styles.title_box}>
@@ -146,7 +149,7 @@ export default function MapEditor() {
                </Typography>
                </Box>
                <div style={{ display: 'flex', justifyContent: 'center', padding: '10px'}}>
-               <Button className={styles.button} variant="contained" fullWidth style={{ backgroundColor: '#BE8585', color: 'white' }}><b>Add Custom Properties</b></Button>
+               <ImportMapDataModal />
                </div>
                <Typography className= {styles.text_color} component="h1" variant="h6"><b><u>Current Custom Properties</u></b></Typography>
                <div style={{ height: '100px', overflowY: 'auto' }}>
@@ -189,6 +192,7 @@ export default function MapEditor() {
             </Box>
 
          </Grid>
+         </Box>
     );
                }else{
                      return null;

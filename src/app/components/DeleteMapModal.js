@@ -13,8 +13,8 @@ const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '30%',
-  height: '30%',
+  width: '40%',
+  height: '40%',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
@@ -35,12 +35,26 @@ const backdropStyle = {
 
 export default function TransitionsModal() {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = (event) => {
+    event.stopPropagation();
+    setOpen(true);
+  }
+  const handleClose = (event) => {
+    event.stopPropagation();
+    setOpen(false);
+  }
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Button 
+                // disabled={!store.canRedo()}
+                id='delete-button'
+                variant="contained"
+                sx={{margin: 1, backgroundColor: "maroon"}}
+                onClick = {handleOpen}
+                >
+                Delete
+            </Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

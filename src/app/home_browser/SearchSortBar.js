@@ -2,8 +2,10 @@ import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
@@ -17,6 +19,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Filter2 } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import CreateMapModal from '../components/CreateMapModal.js';
+import ExportMapModal from "src/app/components/ExportMapModal.js";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -64,6 +68,7 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -179,6 +184,7 @@ export default function PrimarySearchAppBar() {
               
             />
           </Search>
+          {/* <CreateMapModal /> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <Box style ={{color: "black", backgroundColor: "#F1F1F1", borderRadius: '20px',m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block'}}>        
