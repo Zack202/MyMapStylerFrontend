@@ -16,6 +16,7 @@ import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import CommentSection from './CommentSection';
 import { MapContainer, TileLayer} from 'react-leaflet'
+import { useEffect } from 'react';
 //import "leaflet/dist/leaflet.css"
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
