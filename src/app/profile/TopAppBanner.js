@@ -104,7 +104,7 @@ export default function TopAppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block'  }, zIndex: "2" }}                        
                     >
-                        <a href="home_browser"><img style={{height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                       <a href="home_browser"><img style={{height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}></Box>
                     <Box  sx={{ display: { xs: 'none', md: 'flex' }, zIndex: "2", right: '20px', position: 'absolute'}}>
@@ -116,7 +116,7 @@ export default function TopAppBanner() {
                             aria-controls={menuId}
                             onClick={handleProfileMenuOpen}
                             color="inherit"
-                            href="profile"
+                            href="/profile"
                             sx={{bgcolor: "black"}}
                         >
                             {/* { getAccountMenu(auth.loggedIn) } */}
