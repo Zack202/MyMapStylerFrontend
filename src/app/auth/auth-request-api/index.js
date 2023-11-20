@@ -5,9 +5,9 @@ axios.defaults.withCredentials = true;
 let baseURL;
 
 if (process.env.NODE_ENV === 'development') {
-  baseURL = 'http://localhost:4000/api';
+  baseURL = 'http://localhost:4000/auth';
 } else if (process.env.NODE_ENV === 'production') {
-  baseURL = 'https://my-map-styler-backend-79df2eb36474.herokuapp.com/api';
+  baseURL = 'https://my-map-styler-backend-79df2eb36474.herokuapp.com/auth';
 }
 
 const api = axios.create({
@@ -17,7 +17,7 @@ const api = axios.create({
 
 export const getLoggedIn = () => api.get(`/loggedIn/`);
 export const loginUser = (email, password) => {
-    return api.post(`/login/`, {
+    return api.get(`/login/`, {
         email : email,
         password : password
     })

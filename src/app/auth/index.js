@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
 import api from './auth-request-api'
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 console.log("create AuthContext: " + AuthContext);
 
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR AUTH STATE THAT CAN BE PROCESSED
@@ -18,7 +18,7 @@ function AuthContextProvider(props) {
         user: null,
         loggedIn: false
     });
-//    const history = useRouter();
+    //const router = useRouter();
 
     useEffect(() => {
         auth.getLoggedIn();
@@ -70,7 +70,15 @@ function AuthContextProvider(props) {
     }
 
     auth.registerUser = async function(userName, firstName, lastName, email, password, confirmPassword) {
-        console.log(userName, firstName,lastName,email,password,confirmPassword)
+        console.log(
+            'Registering user...',
+            userName,
+            firstName,
+            lastName,
+            email,
+            password,
+            confirmPassword
+          );
         const response = await api.registerUser(userName, firstName, lastName, email, password, confirmPassword)
         // .catch((err) => {
         //     throw err;
@@ -82,7 +90,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            history.push("/login");
+            //router.push("/login");
         }
     }
 
@@ -95,7 +103,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            history.push("/");
+            //router.push("/home_browser");
         }
     }
 
@@ -106,7 +114,7 @@ function AuthContextProvider(props) {
                 type: AuthActionType.LOGOUT_USER,
                 payload: null
             })
-            history.push("/");
+            //router.push("/");
         }
     }
 

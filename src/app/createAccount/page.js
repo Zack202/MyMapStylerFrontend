@@ -11,8 +11,7 @@ import styles from './CreateAccountScreen.module.css';
 import InputLabel from '@mui/material/InputLabel';
 
 import React, { useContext, useState, useEffect } from 'react';
-import AuthContext, { AuthContextProvider } from '../auth'
-import {useRouter} from 'next/router'
+import AuthContext from '../auth'
 
 
 export default function CreateAccountScreen() {
@@ -41,18 +40,17 @@ export default function CreateAccountScreen() {
 
 
     const handleSubmit = (event) => {
-        console.log("testt", formData); // Check the form data in the console
-        auth.registerUser(
+        event.preventDefault();
+        event.stopPropagation();
+        console.log("Auth object:", auth);
+        this.auth.registerUser(
             formData.userName,
             formData.firstName,
             formData.lastName,
             formData.email,
             formData.password,
             formData.confirmPassword
-        ).catch((err) => {
-            setErrorMessage("wrong information");
-            setError(true);
-        });
+        )
     };
 
     useEffect(() => {
@@ -173,11 +171,11 @@ export default function CreateAccountScreen() {
                         <Grid item xs={12}>
                             <Button
                             className={styles.button_color}
-                            type="submit"
+                            type="button"
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 1, height: '40px'}}
-                            onSubmit={handleSubmit}
+                            onClick={handleSubmit}
                             >
                             Confirm Registration
                             </Button>
