@@ -1,14 +1,15 @@
 'use client'
 import React, { useContext, useState } from 'react'
 import GlobalStoreContext from '../store';
-//import * as React from 'react';
-import Box from '@mui/material/Box';
+import { Grid, Box } from "@mui/material";
 import * as tj from "@mapbox/togeojson";
 import { file } from '@babel/types';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem'; 
+import TopAppBanner from '../Utils/TopAppBanner';
+import BottomAppBanner from '../Utils/BottomAppBanner';
 
 const shp = require('shpjs');
 
@@ -17,12 +18,12 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 500,
-    height: 300,
+    width: 700,
+    height: 500,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    //border: '2px solid #000',
     boxShadow: 24,
-    borderRadius: '10px',
+    borderRadius: '5px'
 };
 
 export default function CreateMapModal() {
@@ -113,7 +114,8 @@ export default function CreateMapModal() {
 
     return (
         <div>
-            <Box sx={style}>
+            <TopAppBanner/>
+            <Grid container sx ={style} spacing={2}>
                 <div className="modal-dialog">
                     <header className="dialog-header">
                         Import a map in the format of GeoJSon, SHapefile or KML:
@@ -153,7 +155,8 @@ export default function CreateMapModal() {
                         >Cancel</button>
                     </div>
                 </div>
-            </Box>
+                </Grid>
+                <BottomAppBanner/>
         </div>
     );
 }
