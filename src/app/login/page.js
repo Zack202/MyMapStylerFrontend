@@ -63,18 +63,30 @@ const defaultTheme = createTheme({
 
 export default function SignIn() {
   
-  const auth = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+        ...formData,
+        [name]: value
+    });
+};
   
   const handleSubmit = (event) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    event.stopPropagation();
+    console.log("Auth object:", auth);
     auth.loginUser(
-        formData.get('email'),
-        formData.get('password')
+        formData.email,
+        formData.password,
     ).catch((err) => {
         setErrorMessage("wrong email or password");
         setError(true);
@@ -122,6 +134,7 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={handleInputChange}
             />
             <TextField
               margin="normal"
@@ -132,17 +145,18 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={handleInputChange}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
             <Button
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              href="/home_browser"
+              onClick={handleSubmit}
             >
               Sign In
             </Button>
