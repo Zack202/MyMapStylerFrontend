@@ -43,7 +43,7 @@ export default function CreateAccountScreen() {
         event.preventDefault();
         event.stopPropagation();
         console.log("Auth object:", auth);
-        this.auth.registerUser(
+        auth.registerUser(
             formData.userName,
             formData.firstName,
             formData.lastName,
