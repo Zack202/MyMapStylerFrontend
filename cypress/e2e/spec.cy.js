@@ -29,7 +29,8 @@ describe('Guest Component pathing Test', () => {
 
     cy.contains("Continue As Guest").click()
 
-    cy.contains("logo_maroon.png")
+    cy.contains("My Map Styler")
+    cy.contains("Filter")
 
   })
 })
