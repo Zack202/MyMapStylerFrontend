@@ -2,10 +2,10 @@
 import styles from './SplashScreen.module.css'
 import { useState } from 'react'
 import React from 'react'
-import api from './api.js'
-import Button from '@mui/material/Button'
+import Button  from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import Link from '@mui/material/Link';
+
 
 const backgroundStyle = {
   backgroundImage: 'url("./hckgavj2l7871.webp")',

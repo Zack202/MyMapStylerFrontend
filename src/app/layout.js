@@ -12,7 +12,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-     <head></head>
+      <head>
+        {/* Add Google Fonts link for Michroma font */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Michroma&display=swap"
+        />
+        {/* Use Inter font */}
+        <style>{inter.css}</style>
+      </head>
       <body className={inter.className}><Providers>{children}</Providers></body>
     </html>
   )
