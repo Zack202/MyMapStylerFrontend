@@ -10,11 +10,32 @@ import Typography from '@mui/material/Typography';
 import styles from './CreateAccountScreen.module.css';
 import InputLabel from '@mui/material/InputLabel';
 
-import React, { useEffect } from 'react';
-
+import React, { useContext, useState, useEffect } from 'react';
+import AuthContext from '../auth'
+import {useRouter} from 'next/router'
 
 
 export default function CreateAccountScreen() {
+
+    const auth  = useContext(AuthContext);
+    const[error, setError] = useState(false);
+    const[errorMessage, setErrorMessage] = useState("");
+
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        auth.registerUser(
+            formData.get('firstName'),
+            formData.get('lastName'),
+            formData.get('email'),
+            formData.get('password'),
+            formData.get('passwordVerify')
+        ).catch((err) =>{
+            setErrorMessage("wrong information");
+            setError(true);
+        });
+    };
 
     useEffect(() => {
         // Clean up the animation when the component is unmounted
@@ -127,6 +148,7 @@ export default function CreateAccountScreen() {
                             variant="contained"
                             href="/login"
                             sx={{ mt: 3, mb: 1, height: '40px'}}
+                            onSubmit={handleSubmit}
                             >
                             Confirm Registration
                             </Button>
@@ -134,7 +156,7 @@ export default function CreateAccountScreen() {
                         <Grid item xs={10}>
                             <Typography className= {styles.text_color} component="h1" variant="h6">
                             Already have an account or want to continue as a guest?{' '}
-                            <Link href="#" variant="h6" className={styles.text_color}>
+                            <Link href="/login" variant="h6" className={styles.text_color}>
                             Login Here
                             </Link>
                             </Typography>

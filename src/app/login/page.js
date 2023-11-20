@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Modal from '@mui/material/Modal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AuthContext from '../auth'
 
 function Copyright(props) {
   return (
@@ -60,14 +61,25 @@ const defaultTheme = createTheme({
 },);
 
 export default function SignIn() {
+  
+  const auth = useContext(AuthContext);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  
+  
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    const formData = new FormData(event.currentTarget);
+    auth.loginUser(
+        formData.get('email'),
+        formData.get('password')
+    ).catch((err) => {
+        setErrorMessage("wrong email or password");
+        setError(true);
     });
-  };
+
+};
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -140,7 +152,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/createAccount" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
