@@ -118,6 +118,7 @@ export default function TopAppBanner() {
     }
 
     return (
+        <div>
         <Box flex
             sx={{
                 width: '100%'
@@ -156,7 +157,6 @@ export default function TopAppBanner() {
                             color="inherit"
                             sx={{ bgcolor: "black" }}
                         >
-                            {/* { getAccountMenu(auth.loggedIn) } */}
                             <AccountCircle />
                         </IconButton>
                     </Box>
@@ -191,9 +191,7 @@ export default function TopAppBanner() {
                     </Modal>
                 </Toolbar>
             </AppBar>
-            {
-                // menu
-            }
         </Box>
+        </div>
     );
 }
