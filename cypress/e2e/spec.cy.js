@@ -1,12 +1,16 @@
 
 describe('Guest Component pathing Test', () => {
+  beforeEach(() => {
+    cy.viewport(1200, 750)
+    cy.visit("http://localhost:3000")
+  })
+
   Cypress.on('uncaught:exception', (err, runnable) => {
     // Prevent Cypress from failing the test
     return false;
   });
 
-  it('Cypress Test using Cypress Studio', ()=> {
-    cy.viewport(1200, 750)
+  it('Check Login', ()=> {
     cy.visit("http://localhost:3000/login")
     /* ==== Generated with Cypress Studio ==== */
     cy.get('#email').clear('E');
