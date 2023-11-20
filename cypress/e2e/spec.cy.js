@@ -1,9 +1,8 @@
-
+beforeEach(() => {
+  cy.viewport(1200, 750)
+  cy.visit("http://localhost:3000")
+})
 describe('Guest Component pathing Test', () => {
-  beforeEach(() => {
-    cy.viewport(1200, 750)
-    cy.visit("http://localhost:3000")
-  })
 
   Cypress.on('uncaught:exception', (err, runnable) => {
     // Prevent Cypress from failing the test
