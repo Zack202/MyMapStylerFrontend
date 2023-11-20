@@ -21,10 +21,16 @@ jobs:
 
       - name: Install client dependencies
         run: npm install
+        
+      - name: Build the app
+        run: npm run build  # Adjust this to your build script
 
-      - name: Cypress run
-        run: npx cypress run
-        with:
-          build: npm run build
-          start: npm start
+      - name: Start the app in the background
+        run: npm start &
+
+      - name: Wait for the app to start
+        run: sleep 20 
+
+      - name: Run Cypress tests
+        run: npm run cypress:run
 
