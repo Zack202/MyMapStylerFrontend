@@ -16,7 +16,7 @@ import AuthContext from '../auth'
 
 export default function CreateAccountScreen() {
 
-    const auth  = useContext(AuthContext);
+    const { auth }  = useContext(AuthContext);
 
     const [formData, setFormData] = useState({
         userName: '',
