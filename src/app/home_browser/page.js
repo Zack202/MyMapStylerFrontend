@@ -8,8 +8,10 @@ import BottomAppBanner from '../Utils/BottomAppBanner';
 import SearchSortBar from './SearchSortBar';
 import MapCard from './MapCard';
 import AddIcon from '@mui/icons-material/Add';
+import Link from '@mui/material/Link';
+import Button from '@mui/material/Button';
 import CreateMapModal from "src/app/components/CreateMapModal.js";
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 const backgroundStyle = {
     backgroundImage: 'url("./topology_art.jpeg")',
@@ -21,30 +23,40 @@ const backgroundStyle = {
     // alignItems: 'center',
     // justifyContent: 'center',
     width: '100%'
-  };
+};
 
 
 export default function UserHomeScreenMapBrowsingScreenWrapper() {
 
 
-    return(
+    return (
         <Grid container >
-            
+
             <Grid item xs={12}>
                 <TopAppBanner />
             </Grid>
             <Grid item xs={12}>
                 <SearchSortBar />
             </Grid>
-            <Box item xs={12} sx={{position:"absolute", width: "100%", 
-            display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"}} style={backgroundStyle}>
+
+            <Box item xs={12} sx={{
+                position: "absolute", width: "100%",
+                display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
+            }} style={backgroundStyle}>
+
                 <MapCard />
                 <MapCard />
                 <MapCard />
                 <MapCard />
             </Box>
             {/* <CreateMapModal open={open}/> */}
-
+            <Box item xs={12} sx={{
+                position: "absolute", width: "100%",
+}}>
+            <Button href="/createNewMap" variant = 'contained'>
+                Create New Map
+            </Button>
+            </Box>
             <Grid item xs={12}>
                 <BottomAppBanner />
             </Grid>
