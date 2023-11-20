@@ -1,6 +1,6 @@
 import api from './store-request-api'
 import { createContext, useContext, useState } from 'react'
-// import AuthContext from '../auth'
+import AuthContext from '../auth'
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -57,8 +57,7 @@ function GlobalStoreContextProvider(props) {
 
     });
 
-    //uncomment when auth is set up
-    //const {auth} = useContext(AuthContext);
+    const {auth} = useContext(AuthContext);
 
     const storeReducer = (action) => {
         const { type, payload } = action;
@@ -87,12 +86,12 @@ function GlobalStoreContextProvider(props) {
     }
 
     // create a new map
-    store.createNewMap = async function (name, mapData, mapType) { //input map data and map type
+    store.createNewMap = async function (mapname, mapData, mapType) { //input map data and map type
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
         let newMapName = "yello"
-        let userName = 'tester'
-        let ownerEmail = 'thisbetterwork@gmail.com'
+        let userName = auth.user.userName
+        let ownerEmail = auth.user.email
         const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
