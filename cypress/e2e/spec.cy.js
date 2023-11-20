@@ -1,34 +1,67 @@
-describe('Example front end test 1', () => {
-  beforeEach(()=> {
-    cy.visit("https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/")
+
+describe('Guest Component pathing Test', () => {
+
+  beforeEach(() => {
+    cy.viewport(1200, 750)
+    cy.visit("http://localhost:3000")
   })
-  
+
   it('passes', () => {
-    cy.get('#nameinput').should('contain.value', '')
 
-    cy.get('#nameinput').type('Super Cool Name')
+    cy.contains("Let's get started")
 
-    cy.get('#nameinput').should('contain.value', 'Super Cool Name')
+    cy.contains("Login").click()
 
-    cy.get(".page_main__GlU4n > :nth-child(5)").click()
+    cy.contains("Sign in")
 
-    cy.get('#nameinput').should('contain.value', '')
+    cy.contains("Don't have an account? Sign Up").click()
+
+    cy.contains("Sign up to start exploring and creating amazing maps!")
+
+    cy.contains("Login Here").click()
+
+    cy.contains("Sign in")
+
+    cy.contains("Back to Start Screen").click()
+
+    cy.contains("Let's get started")
+
+    cy.contains("Continue As Guest").click()
+
+    cy.contains("My Map Styler")
+
   })
 })
 
 
-describe('Example front end test 2', () => {
+/*
+describe('Login Account Test', () => {
   beforeEach(()=> {
-    cy.visit("https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/")
+    cy.visit("http://localhost:3000/")
   })
   
   it('passes', () => {
-    cy.get('.page_main__GlU4n > :nth-child(7)').should('contain.text', 'Refresh all names from db')
+    
+    cy.contains("Let's get started")
 
-    cy.get('h2').should('not.contain.text', 'All names: yo')
+    cy.contains("Login").click()
 
-    cy.get('.page_main__GlU4n > :nth-child(7)').click()
+    cy.get("#email").type("example@email.com")
 
-    cy.get('h2').should('contain.text', 'All names: yo')
+    cy.get("#password").type("examplePassword123")
+
+    cy.contains("Sign in").click()
+
+    cy.contains("My Map Styler")
+    cy.contains("Filter")
+
+    cy.get('.css-1n5dzhm > .MuiButtonBase-root').click()
+
+    cy.get('[href="/profile"]').click()
+
+    cy.contains("First Name: Jane")
+
   })
 })
+
+*/

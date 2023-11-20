@@ -14,6 +14,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Modal from '@mui/material/Modal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AuthContext from '../auth'
+import { useContext, useState } from 'react';
+import MUIErrorModal from '../components/MUIErrorModal';
 
 function Copyright(props) {
   return (
@@ -60,14 +63,37 @@ const defaultTheme = createTheme({
 },);
 
 export default function SignIn() {
+  
+  const { auth } = useContext(AuthContext);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+        ...formData,
+        [name]: value
+    });
+};
+  
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    event.stopPropagation();
+    console.log("Auth object:", auth);
+    auth.loginUser(
+        formData.email,
+        formData.password,
+    ).catch((err) => {
+        setErrorMessage("wrong email or password");
+        setError(true);
     });
-  };
+
+};
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -109,6 +135,7 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={handleInputChange}
             />
             <TextField
               margin="normal"
@@ -119,17 +146,18 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={handleInputChange}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
             <Button
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              href="/home_browser"
+              onClick={handleSubmit}
             >
               Sign In
             </Button>
@@ -140,8 +168,13 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/createAccount" variant="body2">
                   {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+              <Grid item >
+                <Link href="/" variant="body2">
+                  {"Back to Start Screen"}
                 </Link>
               </Grid>
             </Grid>
@@ -198,7 +231,7 @@ export default function SignIn() {
           </Box>
         </Container>
       </Modal>
-
+      <MUIErrorModal/>
     </ThemeProvider>
   );
 }
