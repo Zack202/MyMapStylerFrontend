@@ -134,7 +134,7 @@ export default function CreateAccountScreen() {
                         <Grid item xs={10}>
                             <Typography className= {styles.text_color} component="h1" variant="h6">
                             Already have an account or want to continue as a guest?{' '}
-                            <Link href="#" variant="h6" className={styles.text_color}>
+                            <Link href="/login" variant="h6" className={styles.text_color}>
                             Login Here
                             </Link>
                             </Typography>
