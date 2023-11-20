@@ -28,10 +28,10 @@ export default function CreateAccountScreen() {
 
 
     return (
-    <div className={`${styles.backgroundContainer}`}>
+    <div className={`${styles.backgroundContainer}`} >
     <CssBaseline />
-    <Grid container>
-        <Grid item xs={8}>
+    <Grid container align="center" >
+        <Grid item xs>
             <Box className={styles.rounded_box} bgcolor={'white'} maxWidth='md' padding='5%' >
                 <Container component="main" maxWidth="md">
                     <Box
@@ -145,11 +145,7 @@ export default function CreateAccountScreen() {
             </Container>
             </Box>
         </Grid>
-        <Grid item xs={4}>
-            <div id="image-gallery" className={styles.image_gallery}>
-                <img src='B&WTopology.jpg' alt="Gallery Image 1" />
-            </div>
-        </Grid>
+
     </Grid>
     </div>
     );

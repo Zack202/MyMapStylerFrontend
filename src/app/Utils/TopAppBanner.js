@@ -169,7 +169,8 @@ export default function TopAppBanner() {
                             <CssBaseline />
                             <Box sx={{
                             marginTop: 8,
-                            marginLeft: 80,
+                            right: '20px',
+                            position: 'absolute',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'right',

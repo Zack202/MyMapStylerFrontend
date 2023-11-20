@@ -2,14 +2,14 @@
 
 describe('Guest Component pathing Test', () => {
 
-  beforeEach(()=> {
+  beforeEach(() => {
     cy.viewport(1200, 750)
-    cy.visit("http://localhost:3000/")
+    cy.visit("http://localhost:3000")
   })
-  
+
   it('passes', () => {
 
-    cy.contains("Let's get Started")
+    cy.contains("Let's get started")
 
     cy.contains("Login").click()
 
@@ -25,41 +25,43 @@ describe('Guest Component pathing Test', () => {
 
     cy.contains("Back to Start Screen").click()
 
-    cy.contains("Let's get Started")
+    cy.contains("Let's get started")
 
     cy.contains("Continue As Guest").click()
 
     cy.contains("My Map Styler")
-    cy.contains("Filter")
 
   })
 })
 
 /*
-describe('Create Account Test', () => {
+describe('Login Account Test', () => {
   beforeEach(()=> {
     cy.visit("http://localhost:3000/")
   })
   
   it('passes', () => {
-    cy.contains("My Map Styler")
-
-    cy.contains("Create An Account").click()
-
-    cy.contains("Sign up to start exploring and creating amazing maps!")
-  })
-})
-
-
-describe('Continue As Guest Test', () => {
-  beforeEach(()=> {
-    cy.visit("http://localhost:3000/")
-  })
-  
-  it('passes', () => {
-    cy.contains("My Map Styler")
+    
+    cy.contains("Let's get started")
 
     cy.contains("Login").click()
+
+    cy.get("#email").type("example@email.com")
+
+    cy.get("#password").type("examplePassword123")
+
+    cy.contains("Sign in").click()
+
+    cy.contains("My Map Styler")
+    cy.contains("Filter")
+
+    cy.get('.css-1n5dzhm > .MuiButtonBase-root').click()
+
+    cy.get('[href="/profile"]').click()
+
+    cy.contains("First Name: Jane")
+
   })
 })
+
 */

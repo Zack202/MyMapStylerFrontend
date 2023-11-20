@@ -39,7 +39,7 @@ export default function SplashScreen() {
           <Box sx={{ height: 100, width: 800, display: 'flex', flexDirection: 'column' }}>
             <Box>
               <Typography variant="h6" style={{ color: 'white', margin: '40px' }}>
-                Welcome to <b>My Map Styler</b>. Here you can upload and edit maps, which can be later shared and downloaded. See a map you like and want to talk about it? Simply start a thread and get to discussing. Let's get Started.
+                Welcome to <b>My Map Styler</b>. Here you can upload and edit maps, which can be later shared and downloaded. See a map you like and want to talk about it? Simply start a thread and get to discussing. Let's get started.
               </Typography>
               <Button href="/login" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Login</Button>
               <Button href="/createAccount" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Create an Account</Button>
