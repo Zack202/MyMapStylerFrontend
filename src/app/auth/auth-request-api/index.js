@@ -17,7 +17,7 @@ const api = axios.create({
 
 export const getLoggedIn = () => api.get(`/loggedIn/`);
 export const loginUser = (email, password) => {
-    return api.get(`/login/`, {
+    return api.post(`/login/`, {
         email : email,
         password : password
     })

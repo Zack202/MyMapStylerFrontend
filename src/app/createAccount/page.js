@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import styles from './CreateAccountScreen.module.css';
 import InputLabel from '@mui/material/InputLabel';
+import MUIErrorModal from '../components/MUIErrorModal';
 
 import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../auth'
@@ -196,6 +197,7 @@ export default function CreateAccountScreen() {
         </Grid>
 
     </Grid>
+    <MUIErrorModal/>
     </div>
     );
 }

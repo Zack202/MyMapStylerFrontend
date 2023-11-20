@@ -16,6 +16,7 @@ import Modal from '@mui/material/Modal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContext from '../auth'
 import { useContext, useState } from 'react';
+import MUIErrorModal from '../components/MUIErrorModal';
 
 function Copyright(props) {
   return (
@@ -230,7 +231,7 @@ export default function SignIn() {
           </Box>
         </Container>
       </Modal>
-
+      <MUIErrorModal/>
     </ThemeProvider>
   );
 }
