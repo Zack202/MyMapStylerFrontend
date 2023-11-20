@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -11,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
+     <head>
         {/* Add Google Fonts link for Michroma font */}
         <link
           rel="stylesheet"
@@ -20,7 +21,7 @@ export default function RootLayout({ children }) {
         {/* Use Inter font */}
         <style>{inter.css}</style>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}><Providers>{children}</Providers></body>
     </html>
   )
 }
