@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HomeIcon from '@mui/icons-material/Home';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -17,7 +16,7 @@ import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import BottomAppBanner from '../Utils/BottomAppBanner';
-/////specifically from modal
+//specifically from modal
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
@@ -51,6 +50,15 @@ const defaultTheme = createTheme({
     },
   }
 },);
+
+let exampleUser= {
+  userName:"Mapy",
+  firstName: "Jane",
+  lastName: "Doe",
+  email: "jd@stonybrook.edu",
+  //comments?????
+  maps: ["21321321", "02103021", "921321321"] //NEED METHODS FOR GETTING THEIR DATA
+}
 
 export default function Profile() {
   //for modal
@@ -105,51 +113,51 @@ export default function Profile() {
                       gridTemplateRows: 'auto',
                       gap: 1,
                       gridTemplateAreas: `"profile account account"
-        "footer community community"
-        "footer community community"`,
+        "profile community community"
+        "profile community community"`,
                     }}
                   >
-                    <Box sx={{ gridArea: 'profile', bgcolor: '#a9a9a9' }}>Profile
-                      <Box><AccountCircleIcon>
-                      </AccountCircleIcon></Box>
+                    <Box sx={{ gridArea: 'profile', bgcolor: '#e8e8e8' }} align={"center"}>
+
+                      <Avatar sx={{ width: 175, height: 175 }} src={'/profile image.png'} alt="Profile Picture" />
+
+                      <Grid container spacing={1} align="center">
+                        <Grid item='true'>
+                          <Button onClick={handleOpen} variant="contained" color="primary">
+                            Edit Account Information
+                          </Button>
+                        </Grid>
+                        <Grid item='true'>
+                          <Button variant="contained" color="primary">
+                            Delete Profile
+                          </Button>
+                        </Grid>
+
+
+                      </Grid>
 
                     </Box>
-                    <Box sx={{ gridArea: 'account', bgcolor: '#990000' }}>Account Settings
-                      <Typography>First Name: Jane</Typography>
-                      <Typography>Last Name: Doe</Typography>
-                      <Typography>User Name: Mapy</Typography>
-                      <Typography>Email: jd@stonybrook.edu</Typography>
+                    <Box sx={{ gridArea: 'account', bgcolor: '#800000' }}>
+                      <Typography variant="h3"> Account Settings </Typography>
+                      <Typography>First Name: {exampleUser.firstName}</Typography>
+                      <Typography>Last Name: {exampleUser.lastName}</Typography>
+                      <Typography>User Name: {exampleUser.userName}</Typography>
+                      <Typography>Email: {exampleUser.email}</Typography>
 
 
 
 
                     </Box>
-                    <Box sx={{ gridArea: 'community', bgcolor: '#d49182' }}>Community Feedback
-                      <Typography>Total Likes on Maps: 50</Typography>
-                      <Typography>Total Likes on Comments: 0</Typography>
-                      <Typography>Total Maps Viewed: 100</Typography>
+                    <Box sx={{ gridArea: 'community', bgcolor: '#800000' }}>
+                      <Typography variant="h3"> Community Statistics </Typography>
                       <Typography>Total Maps Made: 5</Typography>
-                      <Typography>Total Dislikes on Maps: 6</Typography>
-                      <Typography>Total Dislikes on Comments: 0</Typography>
-                      <Typography>Total Dislikes on Maps: 6</Typography>
+                      <Typography>Total Map Views: 100</Typography>
+                      <Typography>Total Map Likes: 50</Typography>
+                      <Typography>Total Maps Dislikes: 6</Typography>
+                      <Typography>Total Comment Likes: 0</Typography>
+                      <Typography>Total Comment Dislikes: 0</Typography>
                     </Box>
-                    <Box sx={{ gridArea: 'footer', bgcolor: '#800000' }}>Footer
-                      <div>
-                        <Grid container spacing={5} align="center">
-                          <Grid item='true'>
-                            <Button onClick={handleOpen} variant="contained" color="primary">
-                              Edit Account Information
-                            </Button>
-                          </Grid>
-                          <Grid item='true'>
-                            <Button variant="contained" color="primary">
-                              Delete Profile
-                            </Button>
-                          </Grid>
 
-
-                        </Grid></div>
-                    </Box>
                   </Box>
                 </Box>
               </Container>
