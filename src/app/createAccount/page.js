@@ -11,27 +11,45 @@ import styles from './CreateAccountScreen.module.css';
 import InputLabel from '@mui/material/InputLabel';
 
 import React, { useContext, useState, useEffect } from 'react';
-import AuthContext from '../auth'
+import AuthContext, { AuthContextProvider } from '../auth'
 import {useRouter} from 'next/router'
 
 
 export default function CreateAccountScreen() {
 
     const auth  = useContext(AuthContext);
+
+    const [formData, setFormData] = useState({
+        userName: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
     const[error, setError] = useState(false);
     const[errorMessage, setErrorMessage] = useState("");
 
 
     const handleSubmit = (event) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
+        console.log("testt", formData); // Check the form data in the console
         auth.registerUser(
-            formData.get('firstName'),
-            formData.get('lastName'),
-            formData.get('email'),
-            formData.get('password'),
-            formData.get('passwordVerify')
-        ).catch((err) =>{
+            formData.userName,
+            formData.firstName,
+            formData.lastName,
+            formData.email,
+            formData.password,
+            formData.confirmPassword
+        ).catch((err) => {
             setErrorMessage("wrong information");
             setError(true);
         });
@@ -69,10 +87,10 @@ export default function CreateAccountScreen() {
                     <Typography className= {styles.text_color} component="h1" variant="h5">
                         Sign up to start exploring and creating amazing maps!
                     </Typography>
-                    <Box component="form" noValidate sx={{ mt: 3 }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            <InputLabel htmlFor="firstName" className={styles.text_color}>First Name</InputLabel>
+                            <InputLabel className={styles.text_color}>First Name</InputLabel>
                             <TextField
                             autoComplete="given-name"
                             name="firstName"
@@ -81,10 +99,12 @@ export default function CreateAccountScreen() {
                             id="firstName"
                             label="Enter Your First Name"
                             autoFocus
+                            onChange={handleInputChange}
+                            value={formData.firstName}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <InputLabel htmlFor="lastName" className={styles.text_color}>Last Name</InputLabel>
+                            <InputLabel className={styles.text_color}>Last Name</InputLabel>
                             <TextField
                             required
                             fullWidth
@@ -92,10 +112,12 @@ export default function CreateAccountScreen() {
                             label="Enter Your Last Name"
                             name="lastName"
                             autoComplete="family-name"
+                            onChange={handleInputChange}
+                            value={formData.lastName}
                             />
                         </Grid>
                         <Grid item xs={12} sm = {6}>
-                            <InputLabel htmlFor="userName" className={styles.text_color}>User Name</InputLabel>
+                            <InputLabel className={styles.text_color}>User Name</InputLabel>
                             <TextField
                             required
                             fullWidth
@@ -103,10 +125,12 @@ export default function CreateAccountScreen() {
                             label="Enter Your User Name"
                             name="userName"
                             autoComplete="user-name"
+                            value={formData.userName}
+                            onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm = {6}>
-                            <InputLabel htmlFor="email" className={styles.text_color}>Email Address</InputLabel>
+                            <InputLabel className={styles.text_color}>Email Address</InputLabel>
                             <TextField
                             required
                             fullWidth
@@ -114,10 +138,12 @@ export default function CreateAccountScreen() {
                             label="Enter Your Email Address"
                             name="email"
                             autoComplete="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm = {6}>
-                            <InputLabel htmlFor="password" className={styles.text_color}>Password</InputLabel>
+                            <InputLabel className={styles.text_color}>Password</InputLabel>
                             <TextField
                             required
                             fullWidth
@@ -126,18 +152,22 @@ export default function CreateAccountScreen() {
                             type="password"
                             id="password"
                             autoComplete="new-password"
+                            value={formData.password}
+                            onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm = {6}>
-                            <InputLabel htmlFor="confirmpassword" className={styles.text_color}>Confirm Password</InputLabel>
+                            <InputLabel className={styles.text_color}>Confirm Password</InputLabel>
                             <TextField
                             required
                             fullWidth
-                            name="confirmpassword"
+                            name="confirmPassword"
                             label="Re-Enter Your Password"
                             type="password"
-                            id="confirmpassword"
-                            autoComplete="confirmpassword"
+                            id="confirmPassword"
+                            autoComplete="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -146,7 +176,6 @@ export default function CreateAccountScreen() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            href="/login"
                             sx={{ mt: 3, mb: 1, height: '40px'}}
                             onSubmit={handleSubmit}
                             >

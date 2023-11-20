@@ -15,6 +15,7 @@ import Container from '@mui/material/Container';
 import Modal from '@mui/material/Modal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContext from '../auth'
+import { useContext, useState } from 'react';
 
 function Copyright(props) {
   return (

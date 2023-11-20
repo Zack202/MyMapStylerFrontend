@@ -18,7 +18,7 @@ function AuthContextProvider(props) {
         user: null,
         loggedIn: false
     });
-    const history = useRouter();
+//    const history = useRouter();
 
     useEffect(() => {
         auth.getLoggedIn();
@@ -69,8 +69,9 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
-        const response = await api.registerUser(firstName, lastName, email, password, passwordVerify)
+    auth.registerUser = async function(userName, firstName, lastName, email, password, confirmPassword) {
+        console.log(userName, firstName,lastName,email,password,confirmPassword)
+        const response = await api.registerUser(userName, firstName, lastName, email, password, confirmPassword)
         // .catch((err) => {
         //     throw err;
         // });      
@@ -81,7 +82,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            history.push("/");
+            history.push("/login");
         }
     }
 
