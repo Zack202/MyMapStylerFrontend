@@ -90,6 +90,7 @@ function GlobalStoreContextProvider(props) {
     store.createNewMap = async function (name, mapData, mapType) { //input map data and map type
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
+        //need to convert maptype into a number
         let newMapName = "yello"
         let userName = 'tester'
         let ownerEmail = 'thisbetterwork@gmail.com'
