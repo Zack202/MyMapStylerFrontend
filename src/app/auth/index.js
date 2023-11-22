@@ -123,6 +123,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
+            console.log(response.data.user)
             //router.push("/home_browser");
         }
     } catch(error) { 
