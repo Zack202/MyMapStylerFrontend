@@ -37,6 +37,10 @@ const CurrentModal = {
 }
 
 function GlobalStoreContextProvider(props) {
+
+    const authContext = useContext(AuthContext);
+    const { auth } = authContext;
+
     const [store, setStore] = useState({
         //what the store is going to manage
         // ie current modals, maps, current map etc
@@ -57,7 +61,6 @@ function GlobalStoreContextProvider(props) {
 
     });
 
-    const {auth} = useContext(AuthContext);
 
     const storeReducer = (action) => {
         const { type, payload } = action;
