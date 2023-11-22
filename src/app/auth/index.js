@@ -128,7 +128,10 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
+            
             console.log("succesfully logged in user")
+            console.log(response.data.user)
+            console.log(auth.user)
             router.push("/home_browser");
         }
     } catch(error) { 
