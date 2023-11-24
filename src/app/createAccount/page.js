@@ -11,6 +11,8 @@ import styles from './CreateAccountScreen.module.css';
 import InputLabel from '@mui/material/InputLabel';
 import MUIErrorModal from '../components/MUIErrorModal';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../auth'
 
@@ -18,6 +20,20 @@ import AuthContext from '../auth'
 export default function CreateAccountScreen() {
 
     const { auth }  = useContext(AuthContext);
+
+    const defaultTheme = createTheme({
+        palette: {
+          background: {
+            paper: '#fff',
+          },
+          primary: {
+            main: '#990000'
+          },
+          secondary: {
+            main: '#800000'
+          },
+        }
+      },);
 
     const [formData, setFormData] = useState({
         userName: '',
@@ -53,7 +69,7 @@ export default function CreateAccountScreen() {
             formData.confirmPassword
         )
     };
-
+    
     useEffect(() => {
         // Clean up the animation when the component is unmounted
         return () => {
@@ -66,6 +82,7 @@ export default function CreateAccountScreen() {
 
 
     return (
+        <ThemeProvider theme={defaultTheme}>
     <div className={`${styles.backgroundContainer}`} >
     <CssBaseline />
     <Grid container align="center" >
@@ -199,5 +216,6 @@ export default function CreateAccountScreen() {
     </Grid>
     <MUIErrorModal/>
     </div>
+    </ThemeProvider>
     );
 }

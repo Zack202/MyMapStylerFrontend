@@ -53,7 +53,7 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
             <Box item xs={12} sx={{
                 position: "absolute", width: "100%",
 }}>
-            <Button href="/createNewMap" variant = 'contained'>
+            <Button sx={{marginLeft: 15, marginTop:.75}} href="/createNewMap" variant = 'contained'>
                 Create New Map
             </Button>
             </Box>

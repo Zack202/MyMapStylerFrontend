@@ -63,7 +63,7 @@ const defaultTheme = createTheme({
 },);
 
 export default function SignIn() {
-  
+
   const { auth } = useContext(AuthContext);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -76,24 +76,24 @@ export default function SignIn() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
-        ...formData,
-        [name]: value
+      ...formData,
+      [name]: value
     });
-};
-  
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     event.stopPropagation();
     console.log("Auth object:", auth);
     auth.loginUser(
-        formData.email,
-        formData.password,
+      formData.email,
+      formData.password,
     ).catch((err) => {
-        setErrorMessage("wrong email or password");
-        setError(true);
+      setErrorMessage("wrong email or password");
+      setError(true);
     });
 
-};
+  };
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -163,37 +163,57 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link onClick={handleOpen} variant="body2">
+                <Link fontWeight="bold" onClick={handleOpen} variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/createAccount" variant="body2">
+                <Link fontWeight="bold" href="/createAccount" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-              <Grid item >
-                <Link href="/" variant="body2">
-                  {"Back to Start Screen"}
-                </Link>
+              <Grid item xs={6}>
+                <Button
+                  type="button"
+                  variant="contained"
+                  sx={{ fontSize:12, width: .95, mt: 3, mb: 2 }}
+                  color="secondary"
+                  href="/"
+                >
+                  {"<-"} Back to Start
+                </Button>
+              </Grid>
+              <Grid item xs={6} align="right">
+                <Button
+                  type="button"
+                  variant="contained"
+                  sx={{ fontSize:12, width: .95, margin_left: 50, mt: 3, mb: 2 }}
+                  color="secondary"
+                  href="/home_browser"
+                >
+                  Continue As Guest {"->"}
+                </Button>
               </Grid>
             </Grid>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+
       <Modal
         open={open}
         onClose={handleClose}>
         <Container component="main" maxWidth="xs" >
           <CssBaseline />
           <Box
-            sx={{ marginTop: 8,
+            sx={{
+              marginTop: 8,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               bgcolor: 'background.paper',
-              p:2 }}
+              p: 2
+            }}
 
           >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -231,7 +251,7 @@ export default function SignIn() {
           </Box>
         </Container>
       </Modal>
-      <MUIErrorModal/>
+      <MUIErrorModal />
     </ThemeProvider>
   );
 }
