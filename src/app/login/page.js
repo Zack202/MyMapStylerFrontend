@@ -181,7 +181,7 @@ export default function SignIn() {
                   color="secondary"
                   href="/"
                 >
-                  {"<-"} Back to Start
+                  {"<"} Back to Start
                 </Button>
               </Grid>
               <Grid item xs={6} align="right">
@@ -192,7 +192,7 @@ export default function SignIn() {
                   color="secondary"
                   href="/home_browser"
                 >
-                  Continue As Guest {"->"}
+                  Continue As Guest {">"}
                 </Button>
               </Grid>
             </Grid>

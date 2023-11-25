@@ -10,14 +10,99 @@ describe('Guest Component pathing Test', () => {
     return false;
   });
 
-  it('Guest User', function() {
+  it('Guest User Success', function() {
     cy.contains('CONTINUE AS GUEST', {matchCase: false}).click();
 
     cy.location('href').should('include', '/home_browser')
   });
 
-  it('Log In', function() {
+  it('Log In Success', function() {
     cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#email').type('exampleUser@gmail.com');
+    cy.get('#password').type('exampleUser');
+    cy.get('#signIn').click();
+
+    cy.location('href').should('include', '/home_browser')
+  });
+
+  it('Register', function() {
+    let ran = Math.random()
+
+    cy.contains('Create An Account', {matchCase: false}).click();
+
+    cy.get('#firstName').type('Clone');
+    cy.get('#lastName').type('Cloneson');
+    cy.get('#userName').type('Clone' + ran);
+    cy.get('#email').type('clone.cloneson' + ran + '@stonybrook.edu');
+    cy.get('#password').type('supersecretpassword');
+    cy.get('#confirmPassword').type('supersecretpassword');
+
+    cy.contains('Confirm Registration', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/login')
+
+  });
+
+  it('Fail Login empty both', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#signIn').click();
+    cy.contains("Error: Please enter all required fields.")
+  });
+
+  it('Fail Login empty user', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#password').type('exampleUser');
+    cy.get('#signIn').click();
+    cy.contains("Error: Please enter all required fields.")
+  });
+
+  it('Fail Login empty password', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#email').type('exampleUser');
+    cy.get('#signIn').click();
+    cy.contains("Error: Please enter all required fields.")
+  });
+
+  it('Fail Login wrong username', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#email').type('exampleUser854734t65274723');
+    cy.get('#password').type('exampleUser');
+    cy.get('#signIn').click();
+    cy.contains("Error: Wrong email or password provided.")
+  });
+
+  it('Fail Login wrong password', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#email').type('exampleUser');
+    cy.get('#password').type('exampleUser854734t65274723');
+    cy.get('#signIn').click();
+    cy.contains("Error: Wrong email or password provided.")
+  });
+
+  it('Fail Login wrong both', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#email').type('exampleUser854734t65274723');
+    cy.get('#password').type('exampleUser854734t65274723');
+    cy.get('#signIn').click();
+    cy.contains("Error: Wrong email or password provided.")
+  });
+
+  it('Fail Login then Log in', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#email').type('exampleUser854734t65274723');
+    cy.get('#password').type('exampleUser854734t65274723');
+    cy.get('#signIn').click();
+    cy.contains("Error: Wrong email or password provided.")
+
+    cy.contains('Close', {matchCase: false}).click()
 
     cy.get('#email').clear('E');
     cy.get('#email').type('exampleUser@gmail.com');
@@ -28,59 +113,38 @@ describe('Guest Component pathing Test', () => {
     cy.location('href').should('include', '/home_browser')
   });
 
+  it('Fail Register duplicate username', function() {
+    let ran = Math.random()
 
-  it('Fail Login empty user', function() {
-    cy.contains('Login', {matchCase: false}).click();
+    cy.contains('Create An Account', {matchCase: false}).click();
 
-    cy.get('#email').clear('E');
-    cy.get('#password').clear('P');
-    cy.get('#password').type('exampleUser');
-    cy.get('#signIn').click();
-    cy.contains("Error: Please enter all required fields.")
+    cy.get('#firstName').type('Clone');
+    cy.get('#lastName').type('Cloneson');
+    cy.get('#userName').type('CloneKing');
+    cy.get('#email').type('clone.cloneson' + ran + '@stonybrook.edu');
+    cy.get('#password').type('supersecretpassword');
+    cy.get('#confirmPassword').type('supersecretpassword');
+
+    cy.contains('Confirm Registration', {matchCase: false}).click();
+
+    cy.contains("Error: An account with this user name already exists.")
   });
 
-  it('Fail Login empty password', function() {
-    cy.contains('Login', {matchCase: false}).click();
+  it('Fail Register duplicate email', function() {
+    let ran = Math.random()
 
-    cy.get('#email').clear('E');
-    cy.get('#email').type('exampleUser');
-    cy.get('#password').clear('P');
-    cy.get('#signIn').click();
-    cy.contains("Error: Please enter all required fields.")
+    cy.contains('Create An Account', {matchCase: false}).click();
+
+    cy.get('#firstName').type('Clone');
+    cy.get('#lastName').type('Cloneson');
+    cy.get('#userName').type('CloneKing' + ran);
+    cy.get('#email').type('clone.cloneson@stonybrook.edu');
+    cy.get('#password').type('supersecretpassword');
+    cy.get('#confirmPassword').type('supersecretpassword');
+
+    cy.contains('Confirm Registration', {matchCase: false}).click();
+
+    cy.contains("Error: An account with this email address already exists.")
   });
 
-  /*
-  it('Check Login', ()=> {
-   
-    cy.get
-    cy.get('#email').clear('E');
-    cy.get('#email').type('Email');
-    cy.get('#password').clear('P');
-    cy.get('#password').type('Password');
-    cy.get('.PrivateSwitchBase-input').check();
-
-  })
-
-
-  it('Create Account', function() {
-    cy.visit('https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/createAccount');
-    cy.get('#firstName').clear();
-    cy.get('#firstName').type('First Name');
-    cy.get(':nth-child(2) > .MuiFormControl-root').click();
-    cy.get('#lastName').clear();
-    cy.get('#lastName').type('Last Name');
-    cy.get('#userName').clear('U');
-    cy.get('#userName').type('User Name');
-    cy.get('#email').clear('E');
-    cy.get('#email').type('Email');
-    cy.get('#password').clear('P');
-    cy.get('#password').type('Password');
-    cy.get('#confirmPassword').clear('P');
-    cy.get('#confirmPassword').type('Password');
-  });
-
-  it('Guest User', function() {
-    cy.get('.css-14j5k7k').click();
-  });
-  */
 });
