@@ -37,6 +37,10 @@ const CurrentModal = {
 }
 
 function GlobalStoreContextProvider(props) {
+
+    const authContext = useContext(AuthContext);
+    const { auth } = authContext;
+
     const [store, setStore] = useState({
         //what the store is going to manage
         // ie current modals, maps, current map etc
@@ -57,7 +61,6 @@ function GlobalStoreContextProvider(props) {
 
     });
 
-    const {auth} = useContext(AuthContext);
 
     const storeReducer = (action) => {
         const { type, payload } = action;
@@ -90,8 +93,8 @@ function GlobalStoreContextProvider(props) {
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
         let newMapName = "yello"
-        let userName = auth.user.userName
-        let ownerEmail = 'mango@gmail.com'//auth.user.email
+        let userName = auth.user.userName //MMM
+        let ownerEmail = auth.user.email //mango@gmail.com
         const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
         console.log("createNewList response: " + response);
         if (response.status === 201) {

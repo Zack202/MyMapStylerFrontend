@@ -76,7 +76,7 @@ function AuthContextProvider(props) {
         const response = await api.getLoggedIn();
         if (response.status === 200) {
             authReducer({
-                type: AuthActionType.SET_LOGGED_IN,
+                type: AuthActionType.GET_LOGGED_IN,
                 payload: {
                     loggedIn: response.data.loggedIn,
                     user: response.data.user
@@ -128,11 +128,8 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            
-            console.log("succesfully logged in user")
             console.log(response.data.user)
-            console.log(auth.user)
-            router.push("/home_browser");
+            //router.push("/home_browser");
         }
     } catch(error) { 
         authReducer({
