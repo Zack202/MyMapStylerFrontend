@@ -1,7 +1,8 @@
 beforeEach(() => {
   cy.viewport(1200, 750)
-  cy.visit("https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/")
+  cy.visit("http://localhost:3000/")
 })
+
 describe('Guest Component pathing Test', () => {
 
   Cypress.on('uncaught:exception', (err, runnable) => {
@@ -9,20 +10,59 @@ describe('Guest Component pathing Test', () => {
     return false;
   });
 
+  it('Guest User', function() {
+    cy.contains('CONTINUE AS GUEST', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/home_browser')
+  });
+
+  it('Log In', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#email').clear('E');
+    cy.get('#email').type('exampleUser@gmail.com');
+    cy.get('#password').clear('P');
+    cy.get('#password').type('exampleUser');
+    cy.get('#signIn').click();
+
+    cy.location('href').should('include', '/home_browser')
+  });
+
+
+  it('Fail Login empty user', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#email').clear('E');
+    cy.get('#password').clear('P');
+    cy.get('#password').type('exampleUser');
+    cy.get('#signIn').click();
+    cy.contains("Error: Please enter all required fields.")
+  });
+
+  it('Fail Login empty password', function() {
+    cy.contains('Login', {matchCase: false}).click();
+
+    cy.get('#email').clear('E');
+    cy.get('#email').type('exampleUser');
+    cy.get('#password').clear('P');
+    cy.get('#signIn').click();
+    cy.contains("Error: Please enter all required fields.")
+  });
+
+  /*
   it('Check Login', ()=> {
-    cy.visit("https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/login")
-    /* ==== Generated with Cypress Studio ==== */
+   
+    cy.get
     cy.get('#email').clear('E');
     cy.get('#email').type('Email');
     cy.get('#password').clear('P');
     cy.get('#password').type('Password');
     cy.get('.PrivateSwitchBase-input').check();
-    /* ==== End Cypress Studio ==== */
+
   })
 
-  /* ==== Test Created with Cypress Studio ==== */
+
   it('Create Account', function() {
-    /* ==== Generated with Cypress Studio ==== */
     cy.visit('https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/createAccount');
     cy.get('#firstName').clear();
     cy.get('#firstName').type('First Name');
@@ -37,15 +77,10 @@ describe('Guest Component pathing Test', () => {
     cy.get('#password').type('Password');
     cy.get('#confirmPassword').clear('P');
     cy.get('#confirmPassword').type('Password');
-    /* ==== End Cypress Studio ==== */
   });
 
-  /* ==== Test Created with Cypress Studio ==== */
   it('Guest User', function() {
-    /* ==== Generated with Cypress Studio ==== */
-    cy.visit('https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/');
-    cy.visit('https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/home_browser')
     cy.get('.css-14j5k7k').click();
-    /* ==== End Cypress Studio ==== */
   });
+  */
 });
