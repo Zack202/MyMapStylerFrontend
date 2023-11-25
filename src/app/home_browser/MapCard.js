@@ -1,5 +1,5 @@
 import { Fragment, useContext, useState } from 'react'
-// import { GlobalStoreContext } from '../store'
+import { GlobalStoreContext } from '../store'
 // import AuthContext from '../auth';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -29,7 +29,9 @@ function ListCard(props) {
 
     const router = useRouter()
 
-    // const { store } = useContext(GlobalStoreContext);
+    const { idNamePair, selected } = props;
+
+    const { store } = useContext(GlobalStoreContext);
     // const {auth} = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
@@ -236,7 +238,7 @@ function ListCard(props) {
             // }}  
             >
             <Link href="/specificMap" style={{top: 0, display: "flex", position: "absolute", fontWeight: "bolder"}}>
-            Map Card Name
+            Map Card Name: {idNamePair.name}
             </Link>
             
             <Box sx={{flexGrow: 1, display: "inline-block", float:'left',}}>

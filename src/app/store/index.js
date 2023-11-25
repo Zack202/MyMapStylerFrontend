@@ -83,6 +83,24 @@ function GlobalStoreContextProvider(props) {
                     currentMapType: -1
                 })
             }
+            case GlobalStoreActionType.LOAD_ID_NAME_PAIRS:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: payload,
+                    currentMap: null, //change
+                    currentMapFeatures: JSON,
+                    currentMapGeometry: JSON,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filters: [],
+                    currentEditColor: null,
+                    currentMapIndex: -1,
+                    currentMapType: -1
+                })
+            }
             default:
                 return store;
         }
@@ -131,7 +149,28 @@ function GlobalStoreContextProvider(props) {
         }
         asyncUpdateMapFeatures(id)
     
-    }    
+    }
+    
+    store.loadIdNamePairs = function () {
+        async function asyncLoadIdNamePairs() {
+            const response = await api.getMapPairs();
+            if (response.data.success) {
+                console.log(response.data.idNamePairs)
+                let pairsArray = response.data.idNamePairs;
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncLoadIdNamePairs();
+        console.log('outside async pair id function')
+        console.log(store.idNamePairs)
+    }
+
     ///MODAL STUFF
     store.showCreateMapModal = function () {
         storeReducer({

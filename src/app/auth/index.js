@@ -124,7 +124,7 @@ function AuthContextProvider(props) {
                 }
             })
             console.log(response.data.user)
-            //router.push("/home_browser");
+            router.push("/home_browser");
         }
     } catch(error) { 
         authReducer({
