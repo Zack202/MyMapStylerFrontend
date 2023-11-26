@@ -17,6 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContext from '../auth'
 import { useContext, useState } from 'react';
 import MUIErrorModal from '../components/MUIErrorModal';
+import NavBar from '../Utils/NavBar';
 
 function Copyright(props) {
   return (
@@ -70,7 +71,8 @@ export default function SignIn() {
 
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    emailForgot: ''
   });
 
   const handleInputChange = (event) => {
@@ -101,14 +103,20 @@ export default function SignIn() {
 
   const handleSubmitPassword = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
+    event.stopPropagation();
+    console.log("Auth object:", auth);
+    auth.forgotPassword(
+      formData.emailForgot,
+    ).catch((err) => {
+      setErrorMessage("wrong email");
+      setError(true);
     });
+    handleClose();
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <NavBar/>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -231,10 +239,11 @@ export default function SignIn() {
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
-                    id="email"
+                    id="emailForgot"
                     label="Email Address"
-                    name="email"
+                    name="emailForgot"
                     autoComplete="email"
+                    onChange={handleInputChange}
                   />
                 </Grid>
 

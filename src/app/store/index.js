@@ -37,6 +37,10 @@ const CurrentModal = {
 }
 
 function GlobalStoreContextProvider(props) {
+
+    const authContext = useContext(AuthContext);
+    const { auth } = authContext;
+
     const [store, setStore] = useState({
         //what the store is going to manage
         // ie current modals, maps, current map etc
@@ -57,7 +61,6 @@ function GlobalStoreContextProvider(props) {
 
     });
 
-    const {auth} = useContext(AuthContext);
 
     const storeReducer = (action) => {
         const { type, payload } = action;
@@ -66,6 +69,24 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.CREATE_MAP_MODAL,
                     idNamePairs: [],
+                    currentMap: null, //change
+                    currentMapFeatures: JSON,
+                    currentMapGeometry: JSON,
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filters: [],
+                    currentEditColor: null,
+                    currentMapIndex: -1,
+                    currentMapType: -1
+                })
+            }
+            case GlobalStoreActionType.LOAD_ID_NAME_PAIRS:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: payload,
                     currentMap: null, //change
                     currentMapFeatures: JSON,
                     currentMapGeometry: JSON,
@@ -89,9 +110,9 @@ function GlobalStoreContextProvider(props) {
     store.createNewMap = async function (mapname, mapData, mapType) { //input map data and map type
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
-        let newMapName = "yello"
-        let userName = auth.user.userName
-        let ownerEmail = auth.user.email
+        let newMapName = "Untitled" 
+        let userName = auth.user.userName //MMM
+        let ownerEmail = auth.user.email //mango@gmail.com
         const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
@@ -128,7 +149,28 @@ function GlobalStoreContextProvider(props) {
         }
         asyncUpdateMapFeatures(id)
     
-    }    
+    }
+    
+    store.loadIdNamePairs = function () {
+        async function asyncLoadIdNamePairs() {
+            const response = await api.getMapPairs();
+            if (response.data.success) {
+                console.log(response.data.idNamePairs)
+                let pairsArray = response.data.idNamePairs;
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncLoadIdNamePairs();
+        console.log('outside async pair id function')
+        console.log(store.idNamePairs)
+    }
+
     ///MODAL STUFF
     store.showCreateMapModal = function () {
         storeReducer({

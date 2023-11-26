@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import styles from './CreateAccountScreen.module.css';
 import InputLabel from '@mui/material/InputLabel';
 import MUIErrorModal from '../components/MUIErrorModal';
+import NavBar from '../Utils/NavBar';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -95,6 +96,7 @@ export default function CreateAccountScreen() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
+    <div><NavBar/>
     <div className={`${styles.backgroundContainer}`} >
     <CssBaseline />
     <Grid container align="center" >
@@ -229,5 +231,6 @@ export default function CreateAccountScreen() {
     <MUIErrorModal/>
     </div>
     </ThemeProvider>
+    </div>
     );
 }

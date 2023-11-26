@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation'
 import api from './auth-request-api'
+//changed auth
 
 export const AuthContext = createContext();
 console.log("create AuthContext: " + AuthContext);
@@ -76,7 +77,7 @@ function AuthContextProvider(props) {
         const response = await api.getLoggedIn();
         if (response.status === 200) {
             authReducer({
-                type: AuthActionType.SET_LOGGED_IN,
+                type: AuthActionType.GET_LOGGED_IN,
                 payload: {
                     loggedIn: response.data.loggedIn,
                     user: response.data.user
@@ -105,7 +106,7 @@ function AuthContextProvider(props) {
                 }
             })
             console.log("successfully registered user")
-            router.push("/login");
+            router.push("/home_browser");
         }
     } catch(error) { 
         authReducer({
@@ -128,7 +129,7 @@ function AuthContextProvider(props) {
                     user: response.data.user
                 }
             })
-            console.log("succesfully logged in user")
+            console.log(response.data.user)
             router.push("/home_browser");
         }
     } catch(error) { 
@@ -167,6 +168,53 @@ function AuthContextProvider(props) {
             payload: {}
             }
         );
+    }
+
+    auth.resetPassword = async function(token, password, passwordConfirm) {
+        try{
+            console.log("Resetting password...", token, password, passwordConfirm)
+            const response = await api.resetPassword(token, password, passwordConfirm);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                console.log("succesfully reset password")
+                router.push("/home_browser");
+            }
+        } catch(error) { 
+            authReducer({
+                type: AuthActionType.REGISTER_USER_ERROR,
+                payload: {
+                    errorMessage: error.response.data.errorMessage
+                }
+            })
+        }
+    }
+
+    auth.forgotPassword = async function(email) {
+        try{
+            console.log("Forgot password...", email)
+            const response = await api.forgotPassword(email);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.REGISTER_USER_ERROR,
+                    payload: {
+                        errorMessage: "Please check your email for a reset link"
+                    }
+                })
+                console.log("succesfully reset password")
+            }
+        } catch(error) { 
+            authReducer({
+                type: AuthActionType.REGISTER_USER_ERROR,
+                payload: {
+                    errorMessage: error.response.data.errorMessage
+                }
+            })
+        }
     }
 
     return (

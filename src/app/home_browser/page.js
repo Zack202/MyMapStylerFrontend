@@ -11,7 +11,9 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import CreateMapModal from "src/app/components/CreateMapModal.js";
-import React, { useState } from 'react'
+import React, { useState, useContext ,useEffect} from 'react'
+import { GlobalStoreContext } from '../store'
+import List from '@mui/material/List';
 
 const backgroundStyle = {
     backgroundImage: 'url("./topology_art.jpeg")',
@@ -27,7 +29,27 @@ const backgroundStyle = {
 
 
 export default function UserHomeScreenMapBrowsingScreenWrapper() {
+    const {store} = useContext(GlobalStoreContext);
 
+    useEffect(() => {
+        store.loadIdNamePairs();
+    }, []);
+
+    let mapCard = "";
+    if(store) {
+        mapCard = 
+        <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
+        {
+            store.idNamePairs.map((pair) => (
+                <MapCard
+                    key={pair._id}
+                    idNamePair={pair}
+                    selected={false}
+                />
+            ))
+        }
+        </List>;
+    }
 
     return (
         <Grid container >
@@ -44,10 +66,11 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                 display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
             }} style={backgroundStyle}>
 
+                {/*<MapCard />
                 <MapCard />
                 <MapCard />
-                <MapCard />
-                <MapCard />
+        <MapCard />*/}
+        {mapCard}
             </Box>
             {/* <CreateMapModal open={open}/> */}
             <Box item xs={12} sx={{
