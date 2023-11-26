@@ -17,6 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContext from '../auth'
 import { useContext, useState } from 'react';
 import MUIErrorModal from '../components/MUIErrorModal';
+import NavBar from '../Utils/NavBar';
 
 function Copyright(props) {
   return (
@@ -115,6 +116,7 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <NavBar/>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
