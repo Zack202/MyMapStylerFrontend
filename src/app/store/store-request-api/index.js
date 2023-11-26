@@ -43,11 +43,13 @@ export const updateMapById = (id, map) => {
       map : map
   })
 }
+export const getMapPairs = () => api.get(`/mapPairs/`)
 
 const apis = {
     createNewMap,
     getMapById,
-    updateMapById
+    updateMapById,
+    getMapPairs
 
 }
 

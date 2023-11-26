@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation'
 import api from './auth-request-api'
+//changed auth
 
 export const AuthContext = createContext();
 console.log("create AuthContext: " + AuthContext);
@@ -129,7 +130,7 @@ function AuthContextProvider(props) {
                 }
             })
             console.log(response.data.user)
-            //router.push("/home_browser");
+            router.push("/home_browser");
         }
     } catch(error) { 
         authReducer({
