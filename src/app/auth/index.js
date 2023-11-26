@@ -169,6 +169,53 @@ function AuthContextProvider(props) {
         );
     }
 
+    auth.resetPassword = async function(token, password, passwordConfirm) {
+        try{
+            console.log("Resetting password...", token, password, passwordConfirm)
+            const response = await api.resetPassword(token, password, passwordConfirm);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                console.log("succesfully reset password")
+                router.push("/home_browser");
+            }
+        } catch(error) { 
+            authReducer({
+                type: AuthActionType.REGISTER_USER_ERROR,
+                payload: {
+                    errorMessage: error.response.data.errorMessage
+                }
+            })
+        }
+    }
+
+    auth.forgotPassword = async function(email) {
+        try{
+            console.log("Forgot password...", email)
+            const response = await api.forgotPassword(email);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.REGISTER_USER_ERROR,
+                    payload: {
+                        errorMessage: "Please check your email for a reset link"
+                    }
+                })
+                console.log("succesfully reset password")
+            }
+        } catch(error) { 
+            authReducer({
+                type: AuthActionType.REGISTER_USER_ERROR,
+                payload: {
+                    errorMessage: error.response.data.errorMessage
+                }
+            })
+        }
+    }
+
     return (
         <AuthContext.Provider value={{
             auth
