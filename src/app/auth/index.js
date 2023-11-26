@@ -1,9 +1,12 @@
 import React, { createContext, useEffect, useState } from "react";
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import api from './auth-request-api'
+//changed auth
 
 export const AuthContext = createContext();
 console.log("create AuthContext: " + AuthContext);
+
+
 
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR AUTH STATE THAT CAN BE PROCESSED
 export const AuthActionType = {
@@ -15,6 +18,8 @@ export const AuthActionType = {
 }
 
 function AuthContextProvider(props) {
+    const router = useRouter()
+
     const [auth, setAuth] = useState({
         user: null,
         loggedIn: false,
@@ -93,14 +98,15 @@ function AuthContextProvider(props) {
             confirmPassword
           );
         const response = await api.registerUser(userName, firstName, lastName, email, password, confirmPassword)
-        if (response.status === 200) {
+        if (response.status === 201) {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
                 payload: {
                     user: response.data.user
                 }
             })
-            //router.push("/login");
+            console.log("successfully registered user")
+            router.push("/home_browser");
         }
     } catch(error) { 
         authReducer({
@@ -113,7 +119,7 @@ function AuthContextProvider(props) {
     }
 
     auth.loginUser = async function(email, password) {
-        console.log(email, password)
+        console.log("Logging in...", email, password)
         try{
         const response = await api.loginUser(email, password);
         if (response.status === 200) {

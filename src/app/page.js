@@ -1,10 +1,11 @@
 'use client'
 import styles from './SplashScreen.module.css'
-import { useState } from 'react'
 import React from 'react'
 import Button  from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import Link from '@mui/material/Link';
+import AuthContext from './auth'
+import { useContext, useState, useEffect } from 'react';
 
 
 const backgroundStyle = {
@@ -19,6 +20,17 @@ const backgroundStyle = {
 };
 
 export default function SplashScreen() {
+  const { auth }  = useContext(AuthContext);
+
+  const handleGuest = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    console.log("Auth object:", auth);
+    auth.loginUser(
+      "GUEST@GUEST.GUEST",
+      "GUESTGUEST",
+    )
+  }
   return (
     <div style={backgroundStyle}>
 
@@ -33,7 +45,7 @@ export default function SplashScreen() {
             </Typography>
             <Button href="/login" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Login</Button>
             <Button href="/createAccount" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Create an Account</Button>
-            <Button href="/home_browser" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Continue As Guest</Button>
+            <Button href="/home_browser" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }} onClick={handleGuest}>Continue As Guest</Button>
           </Box>
         </Box>
       </Box>

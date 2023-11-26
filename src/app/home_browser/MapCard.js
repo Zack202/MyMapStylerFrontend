@@ -301,7 +301,7 @@ function ListCard(props) {
         
     </CardActions>
     <div style={{width: "50%", float: 'right', position: "relative"}}>
-        <div style={{ float: 'right', position: "relative"}}>
+        <div style={{ float: 'right', position: "relative", display: "flex"}}>
             {/* <Button 
                 id='publish-button'
                 variant="contained"
