@@ -15,8 +15,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MUIErrorModal from '../../components/MUIErrorModal';
 import AuthContext from '../../auth';
 import React, { useContext } from 'react';
-import TopAppBanner from '@/app/Utils/TopAppBanner';
-import BottomAppBanner from '@/app/Utils/BottomAppBanner';
+import NavBar from '../../Utils/NavBar';
 
 const ResetPassword = () => {
 
@@ -53,7 +52,7 @@ const ResetPassword = () => {
 
   return (
     <div>
-    <TopAppBanner/>
+    <NavBar/>
     <div className={`${styles.backgroundContainer}`} >
     <CssBaseline />
     <Grid container align="center" >
@@ -126,7 +125,6 @@ const ResetPassword = () => {
     </Grid>
     <MUIErrorModal/>
     </div>
-    <BottomAppBanner/>
     </div>
   );
 };
