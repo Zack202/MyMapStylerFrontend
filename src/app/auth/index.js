@@ -106,7 +106,7 @@ function AuthContextProvider(props) {
                 }
             })
             console.log("successfully registered user")
-            router.push("/login");
+            router.push("/home_browser");
         }
     } catch(error) { 
         authReducer({
