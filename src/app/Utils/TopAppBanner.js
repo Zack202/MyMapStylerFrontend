@@ -155,6 +155,7 @@ export default function TopAppBanner() {
                             edge="end"
                             aria-haspopup="true"
                             aria-label="account of current user"
+                            id="profileButton"
                             aria-controls={menuId}
                             onClick={handleProfileOpen}
                             color="inherit"

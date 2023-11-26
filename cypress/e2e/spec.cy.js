@@ -1,9 +1,10 @@
-beforeEach(() => {
-  cy.viewport(1200, 750)
-  cy.visit("http://localhost:3000/")
-})
 
 describe('User Tests', () => {
+
+  beforeEach(() => {
+    cy.viewport(1200, 750)
+    cy.visit("http://localhost:3000/")
+  })
 
   Cypress.on('uncaught:exception', (err, runnable) => {
     // Prevent Cypress from failing the test
@@ -254,24 +255,50 @@ describe('User Tests', () => {
 
 });
 
-/*
+
 describe('Module Tests', () => {
+
+  beforeEach(() => {
+    cy.viewport(1200, 750)
+    cy.visit("http://localhost:3000/")
+
+    cy.contains('Login', {matchCase: false}).click();
+    cy.get('#email').type('exampleUser@gmail.com');
+    cy.get('#password').type('exampleUser');
+    cy.get('#signIn').click();
+    cy.location('href').should('include', '/home_browser')
+  })
+
   Cypress.on('uncaught:exception', (err, runnable) => {
     // Prevent Cypress from failing the test
     return false;
   });
 
-  it('Guest home browser', function() {
-    cy.contains('Continue as Guest', {matchCase: false}).click();
+  /*
+    After implementing guest functionality, have a bunch of guest tests here
+  */
 
-    cy.location('href').should('include', '/home_browser')
+  it('Logged Profile', function() {
+
+    cy.get('#profileButton').click();
+
+    cy.contains('View Profile', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/profile')
   });
 
-  it('Log in home browser', function() {
-    cy.contains('Continue as Guest', {matchCase: false}).click();
+  it('Logged Specific Map', function() { // TEMPORARY IMPLEMENTATION
 
-    cy.location('href').should('include', '/home_browser')
+    cy.contains('Map Card Name', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/specificMap')
+  });
+
+  it('Logged Map Editing', function() { // TEMPORARY IMPLEMENTATION
+
+    cy.contains('Fork', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/mapEditing')
   });
 
 });
-*/
