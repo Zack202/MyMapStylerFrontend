@@ -68,6 +68,18 @@ export default function CreateAccountScreen() {
             formData.password,
             formData.confirmPassword
         )
+        
+        /*
+        // backend controller/router stuff?
+        auth.loginUser(
+            formData.email,
+            formData.password,
+            ).catch((err) => {
+              setErrorMessage("wrong email or password");
+              setError(true);
+            });
+        */
+        
     };
     
     useEffect(() => {

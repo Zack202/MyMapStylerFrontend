@@ -3,7 +3,7 @@ beforeEach(() => {
   cy.visit("http://localhost:3000/")
 })
 
-describe('Guest Component pathing Test', () => {
+describe('User Tests', () => {
 
   Cypress.on('uncaught:exception', (err, runnable) => {
     // Prevent Cypress from failing the test
@@ -113,6 +113,60 @@ describe('Guest Component pathing Test', () => {
     cy.location('href').should('include', '/home_browser')
   });
 
+  
+  it('Fail Register blank name', function() {
+    let ran = Math.random()
+
+    cy.contains('Create An Account', {matchCase: false}).click();
+
+    cy.get('#lastName').type('Cloneson');
+    cy.get('#userName').type('Clone' + ran);
+    cy.get('#email').type('clone.cloneson' + ran + '@stonybrook.edu');
+    cy.get('#password').type('supersecretpassword');
+    cy.get('#confirmPassword').type('supersecretpassword');
+
+    cy.contains('Confirm Registration', {matchCase: false}).click();
+
+    cy.contains("Error: Please enter all required fields.")
+
+  });
+
+  it('Fail Register blank userName', function() {
+    let ran = Math.random()
+
+    cy.contains('Create An Account', {matchCase: false}).click();
+
+    cy.get('#firstName').type('Clone');
+    cy.get('#lastName').type('Cloneson');
+    cy.get('#email').type('clone.cloneson' + ran + '@stonybrook.edu');
+    cy.get('#password').type('supersecretpassword');
+    cy.get('#confirmPassword').type('supersecretpassword');
+
+    cy.contains('Confirm Registration', {matchCase: false}).click();
+
+    cy.contains("Error: Please enter all required fields.")
+
+  });
+
+  it('Fail Register blank password', function() {
+    let ran = Math.random()
+
+    cy.contains('Create An Account', {matchCase: false}).click();
+
+    cy.get('#firstName').type('Clone');
+    cy.get('#lastName').type('Cloneson');
+    cy.get('#userName').type('Clone' + ran);
+    cy.get('#email').type('clone.cloneson' + ran + '@stonybrook.edu');
+    cy.get('#confirmPassword').type('supersecretpassword');
+
+    cy.contains('Confirm Registration', {matchCase: false}).click();
+
+    cy.contains("Error: Please enter all required fields.")
+
+  });
+
+
+
   it('Fail Register duplicate username', function() {
     let ran = Math.random()
 
@@ -147,4 +201,77 @@ describe('Guest Component pathing Test', () => {
     cy.contains("Error: An account with this email address already exists.")
   });
 
+  it('Fail Register invalid email', function() {
+    let ran = Math.random()
+
+    cy.contains('Create An Account', {matchCase: false}).click();
+
+    cy.get('#firstName').type('Clone');
+    cy.get('#lastName').type('Cloneson');
+    cy.get('#userName').type('CloneKing' + ran);
+    cy.get('#email').type('clone.cloneson' + ran + '#stonybrook.edu');
+    cy.get('#password').type('supersecretpassword');
+    cy.get('#confirmPassword').type('supersecretpassword');
+
+    cy.contains('Confirm Registration', {matchCase: false}).click();
+
+    cy.contains("Error: Please enter a valid email.")
+  });
+
+  it('Fail Register invalid password', function() {
+    let ran = Math.random()
+
+    cy.contains('Create An Account', {matchCase: false}).click();
+
+    cy.get('#firstName').type('Clone');
+    cy.get('#lastName').type('Cloneson');
+    cy.get('#userName').type('CloneKing' + ran);
+    cy.get('#email').type('clone.cloneson' + ran + '#stonybrook.edu');
+    cy.get('#password').type('secret');
+    cy.get('#confirmPassword').type('secret');
+
+    cy.contains('Confirm Registration', {matchCase: false}).click();
+
+    cy.contains("Error: Please enter a password of at least 8 characters.")
+  });
+
+  it('Fail Register invalid confirmPassword', function() {
+    let ran = Math.random()
+
+    cy.contains('Create An Account', {matchCase: false}).click();
+
+    cy.get('#firstName').type('Clone');
+    cy.get('#lastName').type('Cloneson');
+    cy.get('#userName').type('CloneKing' + ran);
+    cy.get('#email').type('clone.cloneson' + ran + '#stonybrook.edu');
+    cy.get('#password').type('supersecretpassword');
+    cy.get('#confirmPassword').type('supersecretpassword2');
+
+    cy.contains('Confirm Registration', {matchCase: false}).click();
+
+    cy.contains("Error: Please enter the same password twice.")
+  });
+
 });
+
+/*
+describe('Module Tests', () => {
+  Cypress.on('uncaught:exception', (err, runnable) => {
+    // Prevent Cypress from failing the test
+    return false;
+  });
+
+  it('Guest home browser', function() {
+    cy.contains('Continue as Guest', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/home_browser')
+  });
+
+  it('Log in home browser', function() {
+    cy.contains('Continue as Guest', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/home_browser')
+  });
+
+});
+*/
