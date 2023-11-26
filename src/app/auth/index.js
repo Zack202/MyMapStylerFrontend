@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
 import api from './auth-request-api'
+//changed auth
 
 export const AuthContext = createContext();
 console.log("create AuthContext: " + AuthContext);
