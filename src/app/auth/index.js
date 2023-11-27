@@ -239,7 +239,7 @@ function AuthContextProvider(props) {
                 authReducer({
                     type: AuthActionType.UPDATE_USER_INFO,
                     payload: {
-                        errorMessage: "couldnt update info"
+                        user: response.data.user
                     }
                 })
                 console.log("succesfully updated info")
