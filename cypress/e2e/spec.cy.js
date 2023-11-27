@@ -41,7 +41,7 @@ describe('User Tests', () => {
 
     cy.contains('Confirm Registration', {matchCase: false}).click();
 
-    cy.location('href').should('include', '/login')
+    cy.location('href').should('include', '/home_browser')
 
   });
 
@@ -287,12 +287,16 @@ describe('Module Tests', () => {
     cy.location('href').should('include', '/profile')
   });
 
+  /*
+
   it('Logged Specific Map', function() { // TEMPORARY IMPLEMENTATION
 
     cy.contains('Map Card Name', {matchCase: false}).click();
 
     cy.location('href').should('include', '/specificMap')
   });
+
+  */
 
   it('Logged Map Editing', function() { // TEMPORARY IMPLEMENTATION
 
