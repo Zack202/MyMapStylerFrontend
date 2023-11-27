@@ -13,8 +13,6 @@
     border: 1px solid #000000;
   }
 
-
-
 .backgroundContainer {
     background-image: url('/contour-lines.svg');
     background-size: cover;

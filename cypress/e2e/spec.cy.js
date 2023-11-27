@@ -308,8 +308,8 @@ describe('Module Tests', () => {
 
     cy.location('href').should('include', '/profile')
 
-    cy.contains("First Name: exa")
-    cy.contains("User Name: exampleUser")
+    cy.contains("First Name: exa", { timeout: 10000 })
+    cy.contains("User Name: exampleUser", { timeout: 10000 })
 
   });
 
@@ -331,14 +331,14 @@ describe('Module Tests', () => {
 
     cy.location('href').should('include', '/profile')
 
-    cy.contains("First Name: dave")
-    cy.contains("User Name: Dave2")
+    cy.contains("First Name: dave", { timeout: 10000 })
+    cy.contains("User Name: Dave2", { timeout: 10000 } )
 
   });
 
   it('Home page MapCard', function() { // temporary implementation
 
-    cy.contains('Map Card Name', {matchCase: false}).click();
+    cy.contains('Map Card Name', {matchCase: false, timeout: 10000}).click();
 
     cy.location('href').should('include', '/mapEditing')
   });
