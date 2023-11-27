@@ -14,7 +14,8 @@ export const AuthActionType = {
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
-    REGISTER_USER_ERROR: "REGISTER_USER_ERROR"
+    REGISTER_USER_ERROR: "REGISTER_USER_ERROR",
+    UPDATE_USER_INFO: "UPDATE_USER_INFO"
 }
 
 function AuthContextProvider(props) {
@@ -65,6 +66,20 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: null,
                     loggedIn: false,
+                    errorFound: payload.errorMessage
+                })
+            }
+            case AuthActionType.UPDATE_USER_INFO: {
+                return setAuth({
+                    user: payload.user,
+                    loggedIn: true,
+                    errorFound: ""
+                })
+            }
+            case AuthActionType.UPDATE_INFO_ERROR: {
+                return setAuth({
+                    user: payload.user,
+                    loggedIn: true,
                     errorFound: payload.errorMessage
                 })
             }
@@ -210,6 +225,28 @@ function AuthContextProvider(props) {
         } catch(error) { 
             authReducer({
                 type: AuthActionType.REGISTER_USER_ERROR,
+                payload: {
+                    errorMessage: error.response.data.errorMessage
+                }
+            })
+        }
+    }
+
+    auth.updateUserInfo = async function(id, firstName, lastName){
+        try{
+            const response = await api.updateUserInfo(id, firstName, lastName);
+            if(response.status === 200){
+                authReducer({
+                    type: AuthActionType.UPDATE_USER_INFO,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                console.log("succesfully updated info")
+            }
+        }catch(error){
+            authReducer({
+                type: AuthActionType.UPDATE_INFO_ERROR,
                 payload: {
                     errorMessage: error.response.data.errorMessage
                 }

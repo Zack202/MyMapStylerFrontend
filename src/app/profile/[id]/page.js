@@ -2,8 +2,8 @@
 'use client'
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
-import TopAppBanner from '../Utils/TopAppBanner';
-import BottomAppBanner from '../Utils/BottomAppBanner';
+import TopAppBanner from '../../Utils/TopAppBanner';
+import BottomAppBanner from '../../Utils/BottomAppBanner';
 import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HomeIcon from '@mui/icons-material/Home';
@@ -22,10 +22,10 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Modal from '@mui/material/Modal';
-import AuthContext from '../auth';
+import AuthContext from '../../auth';
 import { useContext, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import GlobalStoreContext from '../store';
+import { useRouter, usePathname } from 'next/navigation';
+import GlobalStoreContext from '../../store';
 
 
 const defaultTheme = createTheme({
@@ -44,12 +44,13 @@ const defaultTheme = createTheme({
 
 
 let exampleUser = {
-  userName: "",//"Mapy",
-  firstName: "",//"Jane",
-  lastName: "", //"Doe",
-  email: "",//"jd@stonybrook.edu",
+  userName: "",
+  firstName: "",
+  lastName: "",
+  email: "",
   //comments?????
-  maps: ["21321321", "02103021", "921321321"] //NEED METHODS FOR GETTING THEIR DATA
+  maps: ["21321321", "02103021", "921321321"], //NEED METHODS FOR GETTING THEIR DATA
+  userId: "0",
 }
 
 
@@ -63,6 +64,7 @@ export default function Profile() {
     exampleUser.firstName = auth.user.firstName;
     exampleUser.lastName = auth.user.lastName;
     exampleUser.email = auth.user.email;
+    exampleUser.userId = auth.user._id;
   }
 
   //for modal
@@ -75,32 +77,32 @@ export default function Profile() {
   const handleCloseDelete = () => setOpenDelete(false);
 
 
-  const [formData, setFormData] = useState({
-    firstName: exampleUser.firstName,
-    lastName: exampleUser.lastName,
-  });
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
+  const pathname = usePathname();
+  const id = pathname.split('/')[2];
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    event.stopPropagation();
-    /*const data = new FormData(event.currentTarget);
+    const data = new FormData(event.currentTarget);
     console.log({
       firstName: data.get('firstName'),
       lastName: data.get('lastName'),
-    });*/
-    let data = {
-      firstName: formData.firstName,
-      lastName: formData.lastName}
+    });
 
-    auth.updateUserInfo(data);
+    let firstName = data.get('firstName');
+    let lastName = data.get('lastName');
+
+    //in case one of the fields is empty
+    if(data.get('firstName') === ""){
+      firstName = exampleUser.firstName
+    }
+
+    if(data.get('lastName') === ""){
+      lastName = exampleUser.lastName
+    }
+
+
+    auth.updateUserInfo(id, firstName, lastName);
     handleCloseEdit();
   };
 
@@ -162,9 +164,9 @@ export default function Profile() {
                         <Avatar sx={{ width: 175, height: 175 }} src={'/profile image.png'} alt="Profile Picture" />
 
 
-                        <Grid container spacing={1} align="center">
+                        <Grid container spacing={1} align="center" sx={{marginTop: "10px"}} >
                           <Grid item>
-                            <Button onClick={handleOpenEdit} variant="contained" color="primary" sx={{marginTop: 1}}>
+                            <Button onClick={handleOpenEdit} variant="contained" color="primary" >
                               Edit Account Information
                             </Button>
                           </Grid>
@@ -266,8 +268,7 @@ export default function Profile() {
                               fullWidth
                               id="firstName"
                               label="First Name"
-                              value={formData.firstName}
-                              onChange={handleInputChange}
+                              // value={exampleUser.firstName}
                               autoFocus
                             />
                           </Grid>
@@ -276,11 +277,10 @@ export default function Profile() {
                               required
                               fullWidth
                               id="lastName"
+                              placeholder={exampleUser.lasName}
                               label="Last Name"
                               name="lastName"
                               autoComplete="family-name"
-                              value={formData.lastName}
-                              onChange={handleInputChange}
                             />
                           </Grid>
                           {/* <Grid item xs={12}>
