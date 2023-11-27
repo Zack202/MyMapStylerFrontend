@@ -243,7 +243,7 @@ function ListCard(props) {
             //     handleLoadList(event, idNamePair._id)
             // }}  
             >
-            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
             Map Card Name: {idNamePair.name}
             </Link>
             
@@ -251,12 +251,12 @@ function ListCard(props) {
 
             
             <div>
-            <img src={'test_map.jpg'} alt="image" height={'100px'} style={{position:'absolute'}} />    
+            <img src={'test_map.jpg'} alt="image" height={'100px'} style={{marginTop: 10, position:'absolute'}} />    
             </div>
 
             </Box>
         
-        <Box sx={{ float:"left", display: "inline-block", width: "80%", marginTop: 5, height: "100%"}}>
+        <Box sx={{ float:"left", display: "inline-block", width: "80%", marginTop: 5, marginLeft: 10, height: "100%"}}>
         
             <div>
             <Typography sx={{top: 0, position: "absolute", width: "15%", height: "10%", display: "flex", fontWeight: "900"}}>
