@@ -26,6 +26,7 @@ import DeleteMapModal from '../components/DeleteMapModal.js'
 
 
 function ListCard(props) {
+    
 
     const router = useRouter()
 
@@ -217,7 +218,7 @@ function ListCard(props) {
 
     function handleClickForMapEdit(event){
         store.setCurrentMap(idNamePair._id)
-        router.push('/mapEditing')
+        router.push('/mapEditing/'+idNamePair._id)
     }
 
 
