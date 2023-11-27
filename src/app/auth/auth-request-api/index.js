@@ -1,3 +1,4 @@
+import { ApiTwoTone } from '@mui/icons-material';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
@@ -48,6 +49,8 @@ export const forgotPassword = (email) => {
 
 export const deleteUser = () => api.get(`/deleteUser/`)
 
+export const updateUserInfo = (id, data) => api.put(`/profile/${id}`, { data: data })
+
 const apis = {
     getLoggedIn,
     registerUser,
@@ -55,7 +58,8 @@ const apis = {
     logoutUser,
     resetPassword,
     forgotPassword,
-    deleteUser
+    deleteUser,
+    updateUserInfo,
 }
 
 export default apis

@@ -60,7 +60,12 @@ export default function TopAppBanner() {
     const homeclearTransactions = () => {
         store.clearTransactions();
     }
+    let profileLink = "/profile/"
 
+    if(auth.loggedIn){
+        profileLink = "/profile/" + auth.user.userName
+
+    }
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -185,7 +190,7 @@ export default function TopAppBanner() {
                             p: 2
                             }}
                     >
-                            <Button href="/profile" variant="contained"  marginTop="4" color="primary">
+                            <Button href={profileLink} variant="contained"  marginTop="4" color="primary">
                                 VIEW PROFILE
                             </Button>
                             <Button onClick={handleLogout} variant="contained" marginTop="4" color="primary">
