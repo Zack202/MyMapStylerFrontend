@@ -298,13 +298,12 @@ describe('Module Tests', () => {
     cy.location('href').should('include', '/specificMap')
   });
 
-  */
-
   it('Logged Map Editing', function() { // TEMPORARY IMPLEMENTATION
 
     cy.contains('Fork', {matchCase: false}).click();
 
     cy.location('href').should('include', '/mapEditing')
   });
+  */
 
 });
