@@ -88,7 +88,21 @@ export default function Profile() {
       firstName: data.get('firstName'),
       lastName: data.get('lastName'),
     });
-    auth.updateUserInfo(id, data.get('firstName'), data.get('lastName'));
+
+    let firstName = data.get('firstName');
+    let lastName = data.get('lastName');
+
+    //in case one of the fields is empty
+    if(data.get('firstName') === ""){
+      firstName = exampleUser.firstName
+    }
+
+    if(data.get('lastName') === ""){
+      lastName = exampleUser.lastName
+    }
+
+
+    auth.updateUserInfo(id, firstName, lastName);
     handleCloseEdit();
   };
 
@@ -263,10 +277,10 @@ export default function Profile() {
                               required
                               fullWidth
                               id="lastName"
+                              placeholder={exampleUser.lasName}
                               label="Last Name"
                               name="lastName"
                               autoComplete="family-name"
-                              // value={exampleUser.lastName}
                             />
                           </Grid>
                           {/* <Grid item xs={12}>
