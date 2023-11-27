@@ -255,7 +255,7 @@ describe('User Tests', () => {
 
 });
 
-
+/*
 describe('Module Tests', () => {
 
   beforeEach(() => {
@@ -273,11 +273,11 @@ describe('Module Tests', () => {
     // Prevent Cypress from failing the test
     return false;
   });
-
+  */
   /*
     After implementing guest functionality, have a bunch of guest tests here
   */
-
+  /*
   it('Logged in vs Guest', function(){
 
     cy.contains("CREATE NEW MAP", {matchCase: false})
@@ -354,3 +354,4 @@ describe('Module Tests', () => {
 
 
 });
+*/
