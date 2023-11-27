@@ -184,6 +184,7 @@ export default function SignIn() {
                       fullWidth
                       variant="contained"
                       sx={{ mt: 3, mb: 1, height: '40px' }}
+                      id="signIn"
                       onClick={handleSubmit}
                     >
                       Sign In

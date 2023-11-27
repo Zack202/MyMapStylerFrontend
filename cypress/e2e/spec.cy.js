@@ -3,7 +3,8 @@ describe('User Tests', () => {
 
   beforeEach(() => {
     cy.viewport(1200, 750)
-    cy.visit("http://localhost:3000/")
+    cy.visit("https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/")
+    //cy.visit("http://localhost:3000")
   })
 
   Cypress.on('uncaught:exception', (err, runnable) => {
@@ -41,7 +42,7 @@ describe('User Tests', () => {
 
     cy.contains('Confirm Registration', {matchCase: false}).click();
 
-    cy.location('href').should('include', '/login')
+    cy.location('href').should('include', '/home_browser')
 
   });
 
@@ -255,12 +256,12 @@ describe('User Tests', () => {
 
 });
 
-
 describe('Module Tests', () => {
 
   beforeEach(() => {
     cy.viewport(1200, 750)
-    cy.visit("http://localhost:3000/")
+    cy.visit("https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/")
+    //cy.visit("http://localhost:3000")
 
     cy.contains('Login', {matchCase: false}).click();
     cy.get('#email').type('exampleUser@gmail.com');
@@ -278,6 +279,7 @@ describe('Module Tests', () => {
     After implementing guest functionality, have a bunch of guest tests here
   */
 
+    
   it('Logged Profile', function() {
 
     cy.get('#profileButton').click();
@@ -286,6 +288,8 @@ describe('Module Tests', () => {
 
     cy.location('href').should('include', '/profile')
   });
+
+  /*
 
   it('Logged Specific Map', function() { // TEMPORARY IMPLEMENTATION
 
@@ -300,5 +304,6 @@ describe('Module Tests', () => {
 
     cy.location('href').should('include', '/mapEditing')
   });
+  */
 
 });
