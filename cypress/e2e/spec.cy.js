@@ -1,10 +1,10 @@
 
 describe('User Tests', () => {
 
+
   beforeEach(() => {
     cy.viewport(1200, 750)
-    cy.visit("https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/")
-    //cy.visit("http://localhost:3000")
+    cy.visit("http://localhost:3000")
   })
 
   Cypress.on('uncaught:exception', (err, runnable) => {
@@ -260,8 +260,7 @@ describe('Module Tests', () => {
 
   beforeEach(() => {
     cy.viewport(1200, 750)
-    cy.visit("https://my-map-styler-frontend-60bea3c51be3.herokuapp.com/")
-    //cy.visit("http://localhost:3000")
+    cy.visit("http://localhost:3000")
 
     cy.contains('Login', {matchCase: false}).click();
     cy.get('#email').type('exampleUser@gmail.com');
@@ -297,6 +296,7 @@ describe('Module Tests', () => {
 
     cy.location('href').should('include', '/specificMap')
   });
+  */
 
   it('Logged Map Editing', function() { // TEMPORARY IMPLEMENTATION
 
@@ -304,6 +304,5 @@ describe('Module Tests', () => {
 
     cy.location('href').should('include', '/mapEditing')
   });
-  */
 
 });
