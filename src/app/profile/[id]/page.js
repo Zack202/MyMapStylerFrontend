@@ -164,9 +164,9 @@ export default function Profile() {
                         <Avatar sx={{ width: 175, height: 175 }} src={'/profile image.png'} alt="Profile Picture" />
 
 
-                        <Grid container spacing={1} align="center">
+                        <Grid container spacing={1} align="center" sx={{marginTop: "10px"}} >
                           <Grid item>
-                            <Button onClick={handleOpenEdit} variant="contained" color="primary" sx={{marginTop: 1}}>
+                            <Button onClick={handleOpenEdit} variant="contained" color="primary" >
                               Edit Account Information
                             </Button>
                           </Grid>
