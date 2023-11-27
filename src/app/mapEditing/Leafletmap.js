@@ -5,13 +5,15 @@ import "leaflet/dist/leaflet.css"
 import "./Leafletmap.css"
 import { useEffect, useState } from 'react';
 import customA from './customA.geo.json'
+//import { GlobalStoreContext } from '../store'
 
-export default function Leafletmap() {
+export default function Leafletmap(props) {
+  const {mapGeo} = props;
   if (typeof window !== 'undefined') {
     const [geoJSONData, setGeoJSONData] = useState(null);
 
     useEffect(() => {
-      setGeoJSONData(customA);
+      setGeoJSONData(mapGeo);
     }, []);
 
   const countryStyle = {
