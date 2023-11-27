@@ -8,14 +8,16 @@ import EditToolbar from './EditToolbar';
 import Leafletmap from './Leafletmap';
 import { Grid } from '@mui/material';
 import AuthContext from '../auth';
+import { useContext } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function MapEditingScreen() {
-    const { auth } = useContext(AuthContext);
+    // const { auth } = useContext(AuthContext);
 
-    if (!auth.loggedIn) {
-        const router = useRouter();
-        router.push('/login');
-      }
+    // if (!auth.loggedIn) {
+    //     const router = useRouter();
+    //     router.push('/login');
+    //   }
 
     if (typeof window !== 'undefined') {
     return(
