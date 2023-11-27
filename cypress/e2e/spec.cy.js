@@ -255,7 +255,6 @@ describe('User Tests', () => {
 
 });
 
-
 describe('Module Tests', () => {
 
   beforeEach(() => {
@@ -278,6 +277,7 @@ describe('Module Tests', () => {
     After implementing guest functionality, have a bunch of guest tests here
   */
 
+    
   it('Logged Profile', function() {
 
     cy.get('#profileButton').click();
