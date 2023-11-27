@@ -7,11 +7,16 @@ import { file } from '@babel/types';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem'; 
+import MenuItem from '@mui/material/MenuItem';
 import TopAppBanner from '../Utils/TopAppBanner';
 import BottomAppBanner from '../Utils/BottomAppBanner';
 import AuthContext from '../auth';
 import { useRouter } from 'next/navigation';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import CssBaseline from '@mui/material/CssBaseline';
+import Button from '@mui/material/Button';
 
 const shp = require('shpjs');
 
@@ -28,14 +33,29 @@ const style = {
     borderRadius: '5px'
 };
 
+
+const defaultTheme = createTheme({
+    palette: {
+      background: {
+        paper: '#fff',
+      },
+      primary: {
+        main: '#990000'
+      },
+      secondary: {
+        main: '#800000'
+      },
+    }
+  },);
+
 export default function CreateMapModal() {
     const { auth } = useContext(AuthContext);
     if (typeof window !== 'undefined') {
-    // if (!auth.loggedIn) {
-    //     const router = useRouter();
-    //     router.push('/login');
-    //   }
-     }
+        // if (!auth.loggedIn) {
+        //     const router = useRouter();
+        //     router.push('/login');
+        //   }
+    }
 
     const [mapType, setMapType] = React.useState('');
     const handleChange = (event) => {
@@ -125,49 +145,87 @@ export default function CreateMapModal() {
 
     return (
         <div>
-            <TopAppBanner/>
-            <Grid container sx ={style} spacing={2}>
+            <Grid container>
+                
+            <Grid item xs={12}>
+                <TopAppBanner />
+            </Grid>
+
+            <ThemeProvider theme={defaultTheme}>
+                <CssBaseline />
+            <Grid item xs={12} >
+                <Grid container>
+                <Box sx={{width: 'auto', marginLeft: 'auto', marginRight: 'auto', marginTop: 4}}>
+
                 <div className="modal-dialog">
-                    <header className="dialog-header">
+                    <Grid item xs={12} align="center">
+                    <Typography variant="h5" align="center" color="textPrimary" gutterBottom>
                         Import a map in the format of GeoJSon, SHapefile or KML:
-                    </header>
+                     </Typography>
+                    </Grid>
 
-                    <div id="middle-container">
-                        <input type="file" accept="" id="import-map-button" onChange={handleFileChange} />
-                    </div>
-                    <Box sx={{ minWidth: 120, marginTop: 2 }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Map Type</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={mapType}
-                                    label="Age"
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value={0}>Color Categorized Map</MenuItem>
-                                    <MenuItem value={1}>Textual Map</MenuItem>
-                                    <MenuItem value={2}>Heat Map</MenuItem>
-                                    <MenuItem value={3}>Dot Map</MenuItem>
-                                    <MenuItem value={4}>Sized Dot Map</MenuItem>
-                                </Select>
-                            </FormControl>
+                    <Grid item xs={12}>
+                        <Box sx={{marginTop: 1, marginBottom: 5}}>
+                        <div id="middle-container">
+                            <input type="file" accept="" id="import-map-button" onChange={handleFileChange} />
+                        </div>
                         </Box>
-
+                    </Grid>
+                    
+                    <Grid item xs={12}>
+                        <Box sx={{marginTop: 5}}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Map Type</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={mapType}
+                                label="Age"
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={0}>Color Categorized Map</MenuItem>
+                                <MenuItem value={1}>Textual Map</MenuItem>
+                                <MenuItem value={2}>Heat Map</MenuItem>
+                                <MenuItem value={3}>Dot Map</MenuItem>
+                                <MenuItem value={4}>Sized Dot Map</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </Box>
+                    </Grid>
+                   
+                    <Grid item xs={12}>
                     <div id="confirm-cancel-container">
-                        <button
+                        <Button
                             id="dialog-yes-button"
                             className="modal-button"
+                            color="primary"
+                            variant="contained"
+                            sx={{marginRight: 1}}
                             onClick={handleCreateMap}
-                        >Create Map</button>
-                        <button
+                        >
+                            Create Map
+                            </Button>
+                        <Button
                             id="dialog-no-button"
+                            color="primary"
+                            variant="contained"
+                            sx={{marginRight: 5, marginLeft: 1}}
+                            href="home_browser"
                             className="modal-button"
-                        >Cancel</button>
+                        >Cancel</Button>
                     </div>
+                    </Grid>
                 </div>
+                </Box>
                 </Grid>
-                <BottomAppBanner/>
+                
+                </Grid>
+                </ThemeProvider>
+                <Grid item xs={12}>
+                    <BottomAppBanner />
+                </Grid>
+            </Grid>
         </div>
+
     );
 }
