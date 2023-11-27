@@ -31,11 +31,11 @@ const style = {
 export default function CreateMapModal() {
     const { auth } = useContext(AuthContext);
     if (typeof window !== 'undefined') {
-    if (!auth.loggedIn) {
-        const router = useRouter();
-        router.push('/login');
-      }
-    }
+    // if (!auth.loggedIn) {
+    //     const router = useRouter();
+    //     router.push('/login');
+    //   }
+     }
 
     const [mapType, setMapType] = React.useState('');
     const handleChange = (event) => {
