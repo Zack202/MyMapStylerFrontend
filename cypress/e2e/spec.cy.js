@@ -2,8 +2,8 @@
 describe('User Tests', () => {
 
   beforeEach(() => {
-    //cy.viewport(1200, 750)
-    //cy.visit("http://localhost:3000/")
+    cy.viewport(1200, 750)
+    cy.visit("http://localhost:3000/")
   })
 
   Cypress.on('uncaught:exception', (err, runnable) => {
@@ -258,8 +258,8 @@ describe('User Tests', () => {
 describe('Module Tests', () => {
 
   beforeEach(() => {
-    //cy.viewport(1200, 750)
-    //cy.visit("http://localhost:3000/")
+    cy.viewport(1200, 750)
+    cy.visit("http://localhost:3000/")
 
     cy.contains('Login', {matchCase: false}).click();
     cy.get('#email').type('exampleUser@gmail.com');
