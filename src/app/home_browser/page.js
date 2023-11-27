@@ -11,7 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import CreateMapModal from "src/app/components/CreateMapModal.js";
-import React, { useState, useContext ,useEffect} from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import List from '@mui/material/List';
 import AuthContext from "../auth";
@@ -31,37 +31,43 @@ const backgroundStyle = {
 
 
 export default function UserHomeScreenMapBrowsingScreenWrapper() {
-    
+
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
 
-    // if (typeof window !== 'undefined') {
-    // if (!auth.loggedIn) {
-    //     const router = useRouter();
-    //     router.push('/login');
-    //   }
-    // }
+    let isGuest = true;
+    if(auth.loggedIn){
+        if (auth.user.userName === "GUEST") {
+            isGuest = true;
+        }
+        else{
+            isGuest = false;
+        }
+    }
+
     console.log("store: ", store);
     console.log("auth: ", auth);
+
+
 
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
 
     let mapCard = "";
-    if(store) {
-        mapCard = 
-        <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
-        {
-            store.idNamePairs.map((pair) => (
-                <MapCard
-                    key={pair._id}
-                    idNamePair={pair}
-                    selected={false}
-                />
-            ))
-        }
-        </List>;
+    if (store) {
+        mapCard =
+            <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
+                {
+                    store.idNamePairs.map((pair) => (
+                        <MapCard
+                            key={pair._id}
+                            idNamePair={pair}
+                            selected={false}
+                        />
+                    ))
+                }
+            </List>;
     }
 
     return (
@@ -83,15 +89,20 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                 <MapCard />
                 <MapCard />
         <MapCard />*/}
-        {mapCard}
+                {mapCard}
             </Box>
             {/* <CreateMapModal open={open}/> */}
             <Box item xs={12} sx={{
                 position: "absolute", width: "100%",
-}}>
-            <Button sx={{marginLeft: 15, marginTop:.75}} href="/createNewMap" variant = 'contained'>
-                Create New Map
-            </Button>
+            }}>
+                <Button sx={{
+                    marginLeft: 15, marginTop: .75, display:
+                        isGuest
+                            ? "none"
+                            : "inline-block",
+                }} href="/createNewMap" variant='contained'>
+                    Create New Map
+                </Button>
             </Box>
             <Grid item xs={12}>
                 <BottomAppBanner />

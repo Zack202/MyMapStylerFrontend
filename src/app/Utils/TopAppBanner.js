@@ -61,6 +61,16 @@ export default function TopAppBanner() {
         store.clearTransactions();
     }
 
+    let isGuest = true;
+    if(auth.loggedIn){
+        if (auth.user.userName === "GUEST") {
+            isGuest = true;
+        }
+        else{
+            isGuest = false;
+        }
+    }
+
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -185,7 +195,11 @@ export default function TopAppBanner() {
                             p: 2
                             }}
                     >
-                            <Button href="/profile" variant="contained"  marginTop="4" color="primary">
+                            <Button href="/profile" variant="contained"  marginTop="4" color="primary"
+                            sx={{display:
+                                isGuest
+                                    ? "none"
+                                    : "default",}}>
                                 VIEW PROFILE
                             </Button>
                             <Button onClick={handleLogout} variant="contained" marginTop="4" color="primary">
