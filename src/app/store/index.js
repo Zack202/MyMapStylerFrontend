@@ -2,6 +2,7 @@ import api from './store-request-api'
 import { createContext, useContext, useState } from 'react'
 import AuthContext from '../auth'
 import { useRouter } from 'next/navigation';
+import jsondiffpatch from 'jsondiffpatch'
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -23,7 +24,8 @@ export const GlobalStoreActionType = {
     ADD_DATA_PROPS: 'ADD_DATA_PROPS',
     EXPORT_MAP: 'EXPORT_MAP',
     FILTER: 'FILTER',
-    CREATE_MAP_MODAL: 'CREATE_MAP_MODAL'
+    CREATE_MAP_MODAL: 'CREATE_MAP_MODAL',
+    UPDATE_MAP: 'UPDATE_MAP',
 
 }
 
@@ -139,6 +141,24 @@ function GlobalStoreContextProvider(props) {
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
                     currentMapType: payload.mapType
+                });
+            }
+            case GlobalStoreActionType.UPDATE_MAP:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: payload,
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filters: [],
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: store.currentMapType
                 });
             }
             default:
@@ -275,6 +295,23 @@ function GlobalStoreContextProvider(props) {
             store.loadIdNamePairs();
         }
         asyncDeleteMap(store.mapIdMarkedForDeletion);
+    }
+
+    store.updateMapName = (name) => {
+        //Create diff of current map and new map
+        let newMap = { ...store.currentMap };
+        newMap.name = name;
+        let diff = jsondiffpatch.diff(store.currentMap, newMap);
+        async function asyncUpdateMapName(nameDiff){
+            let response = await api.updateMapById(store.currentMap._id, diff);
+            if(response.data.success){
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: newMap
+                }) 
+            }
+        }
+        asyncUpdateMapName(diff);
     }
 
 
