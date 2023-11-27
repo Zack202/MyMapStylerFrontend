@@ -101,7 +101,6 @@ export default function Profile() {
       lastName = exampleUser.lastName
     }
 
-
     auth.updateUserInfo(id, firstName, lastName);
     handleCloseEdit();
   };
