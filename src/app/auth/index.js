@@ -232,9 +232,9 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.updateUserInfo = async function(id, data){
+    auth.updateUserInfo = async function(id, firstName, lastName){
         try{
-            const response = await api.updateUserInfo(id, data);
+            const response = await api.updateUserInfo(id, firstName, lastName);
             if(response.status === 200){
                 authReducer({
                     type: AuthActionType.UPDATE_USER_INFO,

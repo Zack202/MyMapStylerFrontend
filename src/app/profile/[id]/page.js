@@ -88,7 +88,7 @@ export default function Profile() {
       firstName: data.get('firstName'),
       lastName: data.get('lastName'),
     });
-    auth.updateUserInfo(id, data);
+    auth.updateUserInfo(id, data.get('firstName'), data.get('lastName'));
     handleCloseEdit();
   };
 

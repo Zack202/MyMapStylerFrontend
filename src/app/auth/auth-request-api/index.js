@@ -49,7 +49,10 @@ export const forgotPassword = (email) => {
 
 export const deleteUser = () => api.get(`/deleteUser/`)
 
-export const updateUserInfo = (id, data) => api.put(`/profile/${id}`, { data: data })
+export const updateUserInfo = (id, firstName, lastName) => api.put(`/profile/${id}`, { 
+    firstName: firstName,
+    lastName: lastName
+ })
 
 const apis = {
     getLoggedIn,
