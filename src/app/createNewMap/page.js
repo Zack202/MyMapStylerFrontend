@@ -10,6 +10,10 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem'; 
 import TopAppBanner from '../Utils/TopAppBanner';
 import BottomAppBanner from '../Utils/BottomAppBanner';
+<<<<<<< Updated upstream
+=======
+import AuthContext from '../auth';
+>>>>>>> Stashed changes
 
 const shp = require('shpjs');
 
@@ -110,9 +114,7 @@ export default function CreateMapModal() {
     const handleCreateMap = (event) => {
         console.log(mapType)
         store.createNewMap('name', mapData, mapType)
-        console.log('testing idpairs now')
-        store.loadIdNamePairs()
-        console.log('other side of store call')
+        store.loadIdNamePairs();
     };
 
     return (

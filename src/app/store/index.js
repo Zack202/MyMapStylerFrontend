@@ -1,6 +1,7 @@
 import api from './store-request-api'
 import { createContext, useContext, useState } from 'react'
 import AuthContext from '../auth'
+import { useRouter } from 'next/navigation';
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -40,6 +41,7 @@ function GlobalStoreContextProvider(props) {
 
     const authContext = useContext(AuthContext);
     const { auth } = authContext;
+    const router = useRouter()
 
     const [store, setStore] = useState({
         //what the store is going to manage
@@ -116,13 +118,14 @@ function GlobalStoreContextProvider(props) {
         const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
-            // response.data. map
-            //update store with reducer
-            
-            //);
             console.log('success')
-
+            storeReducer({
+                type: GlobalStoreActionType.SET_CURRENT_MAP,
+                payload: response.data.map
+            });
             // if success bring to map editing screen
+            router.push('/mapEditing/'+ response.data.map._id)
+            
         }
         else {
             console.log("API FAILED TO CREATE A NEW MAP");
