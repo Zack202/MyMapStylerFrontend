@@ -60,17 +60,12 @@ export default function TopAppBanner() {
     const homeclearTransactions = () => {
         store.clearTransactions();
     }
+    let profileLink = "/profile/"
 
-    let isGuest = true;
     if(auth.loggedIn){
-        if (auth.user.userName === "GUEST") {
-            isGuest = true;
-        }
-        else{
-            isGuest = false;
-        }
-    }
+        profileLink = "/profile/" + auth.user.userName
 
+    }
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -144,7 +139,7 @@ export default function TopAppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' }, zIndex: "2" }}
                     >
-                        <a href="/home_browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <a href="home_browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
                     </Box>
                     
@@ -195,11 +190,7 @@ export default function TopAppBanner() {
                             p: 2
                             }}
                     >
-                            <Button href="/profile" variant="contained"  marginTop="4" color="primary"
-                            sx={{display:
-                                isGuest
-                                    ? "none"
-                                    : "default",}}>
+                            <Button href={profileLink} variant="contained"  marginTop="4" color="primary">
                                 VIEW PROFILE
                             </Button>
                             <Button onClick={handleLogout} variant="contained" marginTop="4" color="primary">
