@@ -67,7 +67,7 @@ const defaultTheme = createTheme({
 },);
 
 export default function SignIn() {
-  
+
   const { auth } = useContext(AuthContext);
 
   if (auth.loggedIn) {
@@ -87,24 +87,24 @@ export default function SignIn() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
-        ...formData,
-        [name]: value
+      ...formData,
+      [name]: value
     });
-};
-  
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     event.stopPropagation();
     console.log("Auth object:", auth);
     auth.loginUser(
-        formData.email,
-        formData.password,
+      formData.email,
+      formData.password,
     ).catch((err) => {
-        setErrorMessage("wrong email or password");
-        setError(true);
+      setErrorMessage("wrong email or password");
+      setError(true);
     });
 
-};
+  };
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

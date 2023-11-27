@@ -13,6 +13,8 @@ import MUIErrorModal from '../components/MUIErrorModal';
 import NavBar from '../Utils/NavBar';
 import { useRouter } from 'next/navigation';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../auth'
 
@@ -25,6 +27,19 @@ export default function CreateAccountScreen() {
         router.push('/home_browser');
       }
 
+    const defaultTheme = createTheme({
+        palette: {
+          background: {
+            paper: '#fff',
+          },
+          primary: {
+            main: '#990000'
+          },
+          secondary: {
+            main: '#800000'
+          },
+        }
+      },);
 
     const [formData, setFormData] = useState({
         userName: '',
@@ -59,8 +74,20 @@ export default function CreateAccountScreen() {
             formData.password,
             formData.confirmPassword
         )
+        
+        /*
+        // backend controller/router stuff?
+        auth.loginUser(
+            formData.email,
+            formData.password,
+            ).catch((err) => {
+              setErrorMessage("wrong email or password");
+              setError(true);
+            });
+        */
+        
     };
-
+    
     useEffect(() => {
         // Clean up the animation when the component is unmounted
         return () => {
