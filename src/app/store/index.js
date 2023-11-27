@@ -101,6 +101,25 @@ function GlobalStoreContextProvider(props) {
                     currentMapType: -1
                 })
             }
+            //for now this is just for going to edit map screen, not updating a map
+            case GlobalStoreActionType.SET_CURRENT_MAP:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: payload,
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filters: [],
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: payload.mapType
+                });
+            }
             default:
                 return store;
         }
@@ -127,6 +146,23 @@ function GlobalStoreContextProvider(props) {
         else {
             console.log("API FAILED TO CREATE A NEW MAP");
         }
+    }
+
+    store.setCurrentMap = function (id) {
+        async function asyncSetCurrentMap(id) {
+            let response = await api.getMapById(id);
+            if(response.data.success){
+                let map = response.data.map;
+                //in playlister the equivilent function uses updateplaylistbyid as well to clear transaction stack 
+                //will leave that functionality out for now since we don't have a transaction stack
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_MAP,
+                    payload: map
+                });
+                //route to map editing screen
+            }
+        }
+        asyncSetCurrentMap(id)
     }
     
     store.updateMapFeatures = function (id, mapZoom, mapCenter) { //will add other features?
