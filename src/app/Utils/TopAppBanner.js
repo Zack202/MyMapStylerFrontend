@@ -17,6 +17,7 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AuthContext from '../auth'
 
 const defaultTheme = createTheme({
     palette: {
@@ -37,6 +38,7 @@ export default function TopAppBanner() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [profileOpen, setProfileOpen] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
+    const { auth } = useContext(AuthContext);
 
     const handleProfileOpen = () => setProfileOpen(true);
     const handleProfileClose = () => setProfileOpen(false);
@@ -51,7 +53,7 @@ export default function TopAppBanner() {
 
     const handleLogout = () => {
         handleMenuClose();
-        store.clearTransactions();
+        //store.clearTransactions();
         auth.logoutUser();
     }
 
@@ -125,14 +127,17 @@ export default function TopAppBanner() {
             }}>
             <AppBar position="static" sx={{ bgcolor: "#800000" }}>
                 <Toolbar variant='dense'>
+                    <Box bgcolor={'#e8e8e8'}>
                     <Typography
                         variant="h4"
                         noWrap
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' }, zIndex: "2" }}
                     >
-                        <a href="home_browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <a href="/home_browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
+                    </Box>
+                    
                     <Box
                         sx={{
                             display: 'flex',
@@ -152,6 +157,7 @@ export default function TopAppBanner() {
                             edge="end"
                             aria-haspopup="true"
                             aria-label="account of current user"
+                            id="profileButton"
                             aria-controls={menuId}
                             onClick={handleProfileOpen}
                             color="inherit"
@@ -182,7 +188,7 @@ export default function TopAppBanner() {
                             <Button href="/profile" variant="contained"  marginTop="4" color="primary">
                                 VIEW PROFILE
                             </Button>
-                            <Button href="/" variant="contained" marginTop="4" color="primary">
+                            <Button onClick={handleLogout} variant="contained" marginTop="4" color="primary">
                                 LOG OUT
                             </Button>
                             </Box>

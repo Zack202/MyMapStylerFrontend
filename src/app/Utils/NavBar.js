@@ -61,6 +61,7 @@ export default function TopAppBanner() {
             }}>
             <AppBar position="static" sx={{ bgcolor: "#800000" }}>
                 <Toolbar variant='dense'>
+                    <Box bgcolor={'#e8e8e8'}>
                     <Typography
                         variant="h4"
                         noWrap
@@ -69,6 +70,7 @@ export default function TopAppBanner() {
                     >
                         <img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" />
                     </Typography>
+                    </Box>
                     <Box
                         sx={{
                             display: 'flex',

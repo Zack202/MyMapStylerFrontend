@@ -12,7 +12,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { DataGrid } from '@mui/x-data-grid';
 import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import ImportMapDataModal from '../components/ImportMapDataModal';
+import ImportMapDataModal from '../../components/ImportMapDataModal';
 
 
 const DynamicColoris = dynamic(() => import('@melloware/coloris'), {

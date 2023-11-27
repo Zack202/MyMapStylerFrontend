@@ -17,6 +17,9 @@ import CommentSection from './CommentSection';
 import TopAppBanner from '../Utils/TopAppBanner';
 import { MapContainer, TileLayer} from 'react-leaflet'
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import AuthContext from '../auth'
+import { useContext } from 'react';
 //import "leaflet/dist/leaflet.css"
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -34,7 +37,16 @@ const defaultTheme = createTheme({
 
 
 export default function specificMapScreen(){
+
+
     if (typeof window !== 'undefined') {
+
+        // const { auth } = useContext(AuthContext);
+
+        // if (auth.loggedIn) {
+        //     const router = useRouter();
+        //     router.push('/login');
+        //   }
     return(   
         <div>
         <div>

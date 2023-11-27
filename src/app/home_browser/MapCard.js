@@ -26,6 +26,7 @@ import DeleteMapModal from '../components/DeleteMapModal.js'
 
 
 function ListCard(props) {
+    
 
     const router = useRouter()
 
@@ -61,7 +62,7 @@ function ListCard(props) {
         event.stopPropagation();
         let _id = event.target.id;
         _id = ("" + _id).substring("delete-list-".length);
-        // store.markListForDeletion(id);
+        store.markListForDeletion(id);
     }
 
     function handleLoadList(event, id) {
@@ -215,10 +216,15 @@ function ListCard(props) {
         
     }
 
+    function handleClickForMapEdit(event){
+        store.setCurrentMap(idNamePair._id)
+        router.push('/mapEditing/'+idNamePair._id)
+    }
+
 
     let cardElement =
     <div id='cards'>
-    <Card onClick={() => router.push('/mapEditing')} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
+    <Card onClick={() => handleClickForMapEdit()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
     >
         
     <CardContent sx={{p: 0}}/>
@@ -237,7 +243,7 @@ function ListCard(props) {
             //     handleLoadList(event, idNamePair._id)
             // }}  
             >
-            <Link href="/specificMap" style={{top: 0, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, display: "flex", position: "absolute", fontWeight: "bolder"}}>
             Map Card Name: {idNamePair.name}
             </Link>
             

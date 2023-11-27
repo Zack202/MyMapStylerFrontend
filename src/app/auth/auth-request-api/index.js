@@ -33,11 +33,29 @@ export const registerUser = (userName, firstName, lastName, email, password, con
         confirmPassword : confirmPassword
     })
 }
+export const resetPassword = (token, password, passwordConfirm) => {
+    return api.patch(`/resetPassword/${token}`, {
+        password : password,
+        passwordConfirm : passwordConfirm
+    })
+}
+
+export const forgotPassword = (email) => {
+    return api.post(`/forgotPassword/`, {
+        email : email
+    })
+}
+
+export const deleteUser = () => api.get(`/deleteUser/`)
+
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    resetPassword,
+    forgotPassword,
+    deleteUser
 }
 
 export default apis
