@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 // import AuthContext from '../auth';
 // import { GlobalStoreContext } from '../store';
 
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -17,7 +17,6 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AuthContext from '../auth'
 
 const defaultTheme = createTheme({
     palette: {
@@ -38,7 +37,6 @@ export default function TopAppBanner() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [profileOpen, setProfileOpen] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
-    const { auth } = useContext(AuthContext);
 
     const handleProfileOpen = () => setProfileOpen(true);
     const handleProfileClose = () => setProfileOpen(false);
@@ -51,73 +49,9 @@ export default function TopAppBanner() {
         setAnchorEl(null);
     };
 
-    const handleLogout = () => {
-        handleMenuClose();
-        //store.clearTransactions();
-        auth.logoutUser();
-    }
-
-    const homeclearTransactions = () => {
-        store.clearTransactions();
-    }
 
     const menuId = 'primary-search-account-menu';
-    const loggedOutMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
-        </Menu>
-    );
-    const loggedInMenu =
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        </Menu>
 
-    // let editToolbar = "";
-    // let menu = loggedOutMenu;
-    // if (auth.loggedIn) {
-    //     menu = loggedInMenu;
-    //     // if (store.currentList) {
-    //     //     editToolbar = <EditToolbar />;
-    //     // }
-    // }
-
-    function getAccountMenu(loggedIn) {
-        let userInitials = auth.getUserInitials();
-        console.log("userInitials: " + userInitials);
-        if (loggedIn)
-            return <div>{userInitials}</div>;
-        else
-            return <AccountCircle />;
-    }
 
     return (
         <div>
@@ -127,17 +61,14 @@ export default function TopAppBanner() {
             }}>
             <AppBar position="static" sx={{ bgcolor: "#800000" }}>
                 <Toolbar variant='dense'>
-                    <Box bgcolor={'#e8e8e8'}>
                     <Typography
                         variant="h4"
                         noWrap
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' }, zIndex: "2" }}
                     >
-                        <a href="home_browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" />
                     </Typography>
-                    </Box>
-                    
                     <Box
                         sx={{
                             display: 'flex',
@@ -157,13 +88,12 @@ export default function TopAppBanner() {
                             edge="end"
                             aria-haspopup="true"
                             aria-label="account of current user"
-                            id="profileButton"
                             aria-controls={menuId}
                             onClick={handleProfileOpen}
                             color="inherit"
                             sx={{ bgcolor: "black" }}
                         >
-                            <AccountCircle />
+                            <MenuIcon />
                         </IconButton>
                     </Box>
                     <Modal
@@ -185,11 +115,14 @@ export default function TopAppBanner() {
                             p: 2
                             }}
                     >
-                            <Button href="/profile" variant="contained"  marginTop="4" color="primary">
-                                VIEW PROFILE
+                            <Button href="/login" variant="contained"  marginTop="4" color="primary">
+                                Log in
                             </Button>
-                            <Button onClick={handleLogout} variant="contained" marginTop="4" color="primary">
-                                LOG OUT
+                            <Button href="/createAccount" variant="contained" marginTop="4" color="primary">
+                                Create a New Account
+                            </Button>
+                            <Button href="/" variant="contained" marginTop="4" color="primary">
+                                Splash Screen
                             </Button>
                             </Box>
                             </ThemeProvider>

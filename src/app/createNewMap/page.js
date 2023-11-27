@@ -10,6 +10,8 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem'; 
 import TopAppBanner from '../Utils/TopAppBanner';
 import BottomAppBanner from '../Utils/BottomAppBanner';
+import AuthContext from '../auth';
+import { useRouter } from 'next/navigation';
 
 const shp = require('shpjs');
 
@@ -27,6 +29,14 @@ const style = {
 };
 
 export default function CreateMapModal() {
+    const { auth } = useContext(AuthContext);
+    if (typeof window !== 'undefined') {
+    if (!auth.loggedIn) {
+        const router = useRouter();
+        router.push('/login');
+      }
+    }
+
     const [mapType, setMapType] = React.useState('');
     const handleChange = (event) => {
         setMapType(event.target.value);
@@ -110,6 +120,9 @@ export default function CreateMapModal() {
     const handleCreateMap = (event) => {
         console.log(mapType)
         store.createNewMap('name', mapData, mapType)
+        console.log('testing idpairs now')
+        store.loadIdNamePairs()
+        console.log('other side of store call')
     };
 
     return (
