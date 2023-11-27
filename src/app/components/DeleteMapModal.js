@@ -7,6 +7,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import styles from './ExportMapModal.module.css';
 import CloseIcon from '@mui/icons-material/Close';
+import GlobalStoreContext from '../store';
+import { useContext } from 'react';
 
 const modalStyle = {
   position: 'absolute',
@@ -33,14 +35,34 @@ const backdropStyle = {
   backgroundColor: 'transparent',
 };
 
-export default function TransitionsModal() {
+export default function DeleteMapModal(props) {
+
+  const { store } = useContext(GlobalStoreContext);
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = (event) => {
     event.stopPropagation();
+    store.markMapForDeletion(event.target.value);
     setOpen(true);
   }
   const handleClose = (event) => {
     event.stopPropagation();
+    store.unMarkMapForDeletion();
+    setOpen(false);
+  }
+
+  const handleCancelDelete = (event) => {
+    event.stopPropagation();
+    store.unMarkMapForDeletion();
+    setOpen(false);
+  }
+
+  const handleConfirmDelete = (event) => {
+    event.stopPropagation();
+    //Delete map
+    console.log("Deleting map: ", store.mapIdMarkedForDeletion);
+    store.deleteMap();
+
     setOpen(false);
   }
 
@@ -52,6 +74,7 @@ export default function TransitionsModal() {
                 variant="contained"
                 sx={{margin: 1, backgroundColor: "maroon"}}
                 onClick = {handleOpen}
+                value={props.id}
                 >
                 Delete
             </Button>
@@ -85,8 +108,8 @@ export default function TransitionsModal() {
             </Typography>
             </Box>
             <Box  sx = {{display: 'flex', justifyContent: 'center', padding: "70px", paddingTop: '20px'}} >
-            <Button variant="contained" color="primary"  className={styles.button}>Cancel</Button>
-            <Button variant="contained" color="primary"  className={styles.button}>Confirm</Button>
+            <Button onClick={handleCancelDelete} variant="contained" color="primary"  className={styles.button}>Cancel</Button>
+            <Button onClick={handleConfirmDelete} variant="contained" color="primary"  className={styles.button}>Confirm</Button>
             </Box>
           </Box>
         </Fade>
