@@ -278,7 +278,6 @@ describe('Module Tests', () => {
     After implementing guest functionality, have a bunch of guest tests here
   */
 
-    
   it('Logged Profile', function() {
 
     cy.get('#profileButton').click();
@@ -286,23 +285,6 @@ describe('Module Tests', () => {
     cy.contains('View Profile', {matchCase: false}).click();
 
     cy.location('href').should('include', '/profile')
-  });
-
-  /*
-
-  it('Logged Specific Map', function() { // TEMPORARY IMPLEMENTATION
-
-    cy.contains('Map Card Name', {matchCase: false}).click();
-
-    cy.location('href').should('include', '/specificMap')
-  });
-  */
-
-  it('Logged Map Editing', function() { // TEMPORARY IMPLEMENTATION
-
-    cy.contains('Fork', {matchCase: false}).click();
-
-    cy.location('href').should('include', '/mapEditing')
   });
 
 });
