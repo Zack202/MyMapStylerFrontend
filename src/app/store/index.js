@@ -128,19 +128,6 @@ function GlobalStoreContextProvider(props) {
             console.log("API FAILED TO CREATE A NEW MAP");
         }
     }
-
-    //update user info
-    store.updateUserInfo = async function(data){
-        const response = await api.updateUserInfo(data);
-        console.log("the response was" + response)
-        if(response.status == 200){
-            console.log("it worked")
-        } else {
-            console.log("it didnt workkk")
-        }
-    }
-
-
     
     store.updateMapFeatures = function (id, mapZoom, mapCenter) { //will add other features?
         //get map

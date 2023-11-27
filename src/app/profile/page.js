@@ -44,10 +44,10 @@ const defaultTheme = createTheme({
 
 
 let exampleUser = {
-  userName: "Mapy",
-  firstName: "Jane",
-  lastName: "Doe",
-  email: "jd@stonybrook.edu",
+  userName: "",//"Mapy",
+  firstName: "",//"Jane",
+  lastName: "", //"Doe",
+  email: "",//"jd@stonybrook.edu",
   //comments?????
   maps: ["21321321", "02103021", "921321321"] //NEED METHODS FOR GETTING THEIR DATA
 }
@@ -75,14 +75,32 @@ export default function Profile() {
   const handleCloseDelete = () => setOpenDelete(false);
 
 
+  const [formData, setFormData] = useState({
+    firstName: exampleUser.firstName,
+    lastName: exampleUser.lastName,
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    event.stopPropagation();
+    /*const data = new FormData(event.currentTarget);
     console.log({
       firstName: data.get('firstName'),
       lastName: data.get('lastName'),
-    });
-    store.updateUserInfo(data);
+    });*/
+    let data = {
+      firstName: formData.firstName,
+      lastName: formData.lastName}
+
+    auth.updateUserInfo(data);
     handleCloseEdit();
   };
 
@@ -248,7 +266,8 @@ export default function Profile() {
                               fullWidth
                               id="firstName"
                               label="First Name"
-                              // value={exampleUser.firstName}
+                              value={formData.firstName}
+                              onChange={handleInputChange}
                               autoFocus
                             />
                           </Grid>
@@ -260,7 +279,8 @@ export default function Profile() {
                               label="Last Name"
                               name="lastName"
                               autoComplete="family-name"
-                              // value={exampleUser.lastName}
+                              value={formData.lastName}
+                              onChange={handleInputChange}
                             />
                           </Grid>
                           {/* <Grid item xs={12}>

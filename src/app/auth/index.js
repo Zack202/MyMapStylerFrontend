@@ -229,6 +229,18 @@ function AuthContextProvider(props) {
         }
     }
 
+    //update user info
+    auth.updateUserInfo = async function(data){
+        const response = await api.updateUserInfo(data);
+        console.log("the response was" + response)
+        if(response.status == 200){
+            console.log("it worked")
+            router.refresh()
+        } else {
+            console.log("it didnt workkk")
+        }
+    }
+
     return (
         <AuthContext.Provider value={{
             auth
