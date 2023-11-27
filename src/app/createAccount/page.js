@@ -21,11 +21,12 @@ import AuthContext from '../auth'
 
 export default function CreateAccountScreen() {
     const { auth }  = useContext(AuthContext);
-
+    if (typeof window !== 'undefined') {
     if (auth.loggedIn) {
         const router = useRouter();
         router.push('/home_browser');
       }
+    }
 
     const defaultTheme = createTheme({
         palette: {

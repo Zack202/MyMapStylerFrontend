@@ -69,10 +69,11 @@ const defaultTheme = createTheme({
 export default function SignIn() {
 
   const { auth } = useContext(AuthContext);
-
-  if (auth.loggedIn) {
-    const router = useRouter();
-    router.push('/home_browser');
+  if (typeof window !== 'undefined') {
+    if (auth.loggedIn) {
+      const router = useRouter();
+      router.push('/home_browser');
+    }
   }
 
   const [error, setError] = useState(false);

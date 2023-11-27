@@ -35,11 +35,12 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
 
+    if (typeof window !== 'undefined') {
     if (!auth.loggedIn) {
         const router = useRouter();
         router.push('/login');
       }
-
+    }
     console.log("store: ", store);
     console.log("auth: ", auth);
 

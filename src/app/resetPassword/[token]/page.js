@@ -21,12 +21,12 @@ import { useEffect } from 'react';
 const ResetPassword = () => {
 
     const { auth }  = useContext(AuthContext);
-
+    if (typeof window !== 'undefined') {
     if (auth.loggedIn) {
         const router = useRouter();
         router.push('/home_browser');
       }
-
+    }
     const router = useRouter();
     const pathname = usePathname();
     const token = pathname.split('/')[2];

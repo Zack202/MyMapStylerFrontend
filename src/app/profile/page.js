@@ -22,7 +22,8 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Modal from '@mui/material/Modal';
-
+import AuthContext from '../auth';
+import { useContext, useState } from 'react';
 
 
 
@@ -66,11 +67,13 @@ let exampleUser = {
 
 
 export default function Profile() {
-
+  const { auth } = useContext(AuthContext);
+  if (typeof window !== 'undefined') {
   if (!auth.loggedIn) {
     const router = useRouter();
     router.push('/login');
   }
+}
   //for modal
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
