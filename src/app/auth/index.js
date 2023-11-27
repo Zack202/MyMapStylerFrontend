@@ -149,7 +149,7 @@ function AuthContextProvider(props) {
                 type: AuthActionType.LOGOUT_USER,
                 payload: null
             })
-            //router.push("/");
+            router.push("/");
         }
     }
 

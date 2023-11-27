@@ -17,6 +17,7 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AuthContext from '../auth'
 
 const defaultTheme = createTheme({
     palette: {
@@ -37,6 +38,7 @@ export default function TopAppBanner() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [profileOpen, setProfileOpen] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
+    const { auth } = useContext(AuthContext);
 
     const handleProfileOpen = () => setProfileOpen(true);
     const handleProfileClose = () => setProfileOpen(false);
@@ -51,7 +53,7 @@ export default function TopAppBanner() {
 
     const handleLogout = () => {
         handleMenuClose();
-        store.clearTransactions();
+        //store.clearTransactions();
         auth.logoutUser();
     }
 
@@ -182,7 +184,7 @@ export default function TopAppBanner() {
                             <Button href="/profile" variant="contained"  marginTop="4" color="primary">
                                 VIEW PROFILE
                             </Button>
-                            <Button href="/" variant="contained" marginTop="4" color="primary">
+                            <Button onClick={handleLogout} variant="contained" marginTop="4" color="primary">
                                 LOG OUT
                             </Button>
                             </Box>

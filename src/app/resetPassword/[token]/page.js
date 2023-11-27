@@ -16,10 +16,16 @@ import MUIErrorModal from '../../components/MUIErrorModal';
 import AuthContext from '../../auth';
 import React, { useContext } from 'react';
 import NavBar from '../../Utils/NavBar';
+import { useEffect } from 'react';
 
 const ResetPassword = () => {
 
     const { auth }  = useContext(AuthContext);
+
+    if (auth.loggedIn) {
+        const router = useRouter();
+        router.push('/home_browser');
+      }
 
     const router = useRouter();
     const pathname = usePathname();

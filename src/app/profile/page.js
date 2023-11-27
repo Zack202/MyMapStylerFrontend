@@ -61,6 +61,11 @@ let exampleUser= {
 }
 
 export default function Profile() {
+
+  if (!auth.loggedIn) {
+    const router = useRouter();
+    router.push('/login');
+  }
   //for modal
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

@@ -14,6 +14,8 @@ import CreateMapModal from "src/app/components/CreateMapModal.js";
 import React, { useState, useContext ,useEffect} from 'react'
 import { GlobalStoreContext } from '../store'
 import List from '@mui/material/List';
+import AuthContext from "../auth";
+import { useRouter } from 'next/navigation';
 
 const backgroundStyle = {
     backgroundImage: 'url("./topology_art.jpeg")',
@@ -29,7 +31,17 @@ const backgroundStyle = {
 
 
 export default function UserHomeScreenMapBrowsingScreenWrapper() {
-    const {store} = useContext(GlobalStoreContext);
+    
+    const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
+    if (!auth.loggedIn) {
+        const router = useRouter();
+        router.push('/login');
+      }
+
+    console.log("store: ", store);
+    console.log("auth: ", auth);
 
     useEffect(() => {
         store.loadIdNamePairs();

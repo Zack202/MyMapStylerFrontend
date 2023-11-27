@@ -10,6 +10,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem'; 
 import TopAppBanner from '../Utils/TopAppBanner';
 import BottomAppBanner from '../Utils/BottomAppBanner';
+import AuthContext from '../auth';
 
 const shp = require('shpjs');
 
@@ -27,6 +28,13 @@ const style = {
 };
 
 export default function CreateMapModal() {
+    const { auth } = useContext(AuthContext);
+
+    if (!auth.loggedIn) {
+        const router = useRouter();
+        router.push('/login');
+      }
+
     const [mapType, setMapType] = React.useState('');
     const handleChange = (event) => {
         setMapType(event.target.value);

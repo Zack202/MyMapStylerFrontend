@@ -6,6 +6,7 @@ import { Box, Typography } from '@mui/material'
 import Link from '@mui/material/Link';
 import AuthContext from './auth'
 import { useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 
 const backgroundStyle = {
@@ -21,6 +22,11 @@ const backgroundStyle = {
 
 export default function SplashScreen() {
   const { auth }  = useContext(AuthContext);
+
+  if (auth.loggedIn) {
+    const router = useRouter();
+    router.push('/home_browser');
+  }
 
   const handleGuest = (event) => {
     event.preventDefault();

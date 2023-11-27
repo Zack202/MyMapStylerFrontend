@@ -11,14 +11,20 @@ import styles from './CreateAccountScreen.module.css';
 import InputLabel from '@mui/material/InputLabel';
 import MUIErrorModal from '../components/MUIErrorModal';
 import NavBar from '../Utils/NavBar';
+import { useRouter } from 'next/navigation';
 
 import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../auth'
 
 
 export default function CreateAccountScreen() {
-
     const { auth }  = useContext(AuthContext);
+
+    if (auth.loggedIn) {
+        const router = useRouter();
+        router.push('/home_browser');
+      }
+
 
     const [formData, setFormData] = useState({
         userName: '',

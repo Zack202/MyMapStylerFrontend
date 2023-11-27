@@ -18,6 +18,9 @@ import AuthContext from '../auth'
 import { useContext, useState } from 'react';
 import MUIErrorModal from '../components/MUIErrorModal';
 import NavBar from '../Utils/NavBar';
+import { useRouter } from 'next/navigation';
+import styles from './login.module.css';
+import InputLabel from '@mui/material/InputLabel';
 
 function Copyright(props) {
   return (
@@ -66,6 +69,12 @@ const defaultTheme = createTheme({
 export default function SignIn() {
   
   const { auth } = useContext(AuthContext);
+
+  if (auth.loggedIn) {
+    const router = useRouter();
+    router.push('/home_browser');
+  }
+
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -115,8 +124,92 @@ export default function SignIn() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <NavBar/>
+<div>
+  <NavBar />
+  <div className={`${styles.backgroundContainer}`}>
+    <CssBaseline />
+    <Grid container align="center">
+      <Grid item xs>
+        <Box className={styles.rounded_box} bgcolor={'white'} maxWidth='md' padding='5%'>
+          <Container component="main" maxWidth="md">
+            <Box
+              sx={{
+                marginTop: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography className={styles.text_color} component="h1" variant="h3">
+                Welcome back to <span style={{ fontWeight: 'bold' }}>My Map Styler</span>
+              </Typography>
+              <Typography className={styles.text_color} component="h1" variant="h5">
+                Sign in to continue exploring and creating amazing maps!
+              </Typography>
+              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <InputLabel className={styles.text_color}>Email Address</InputLabel>
+                    <TextField
+                      required
+                      fullWidth
+                      id="email"
+                      label="Enter Your Email Address"
+                      name="email"
+                      autoComplete="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <InputLabel className={styles.text_color}>Password</InputLabel>
+                    <TextField
+                      required
+                      fullWidth
+                      id="password"
+                      label="Enter Your Password"
+                      name="password"
+                      type='password'
+                      autoComplete="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      className={styles.button_color}
+                      type="button"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 3, mb: 1, height: '40px' }}
+                      onClick={handleSubmit}
+                    >
+                      Sign In
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Box>
+            <Grid container>
+              <Grid item xs={6}>
+                <Link onClick={handleOpen} variant="body2" className={styles.text_color}>
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item xs={6}>
+                <Link href="/createAccount" variant="body2" className={styles.text_color}>
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+      </Grid>
+      
+    </Grid>
+
+    <Modal open={open} onClose={handleClose}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -125,122 +218,44 @@ export default function SignIn() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            bgcolor: 'background.paper',
+            p: 2,
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Forgot Password
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={handleInputChange}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={handleInputChange}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleSubmit}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link onClick={handleOpen} variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/createAccount" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-              <Grid item >
-                <Link href="/" variant="body2">
-                  {"Back to Start Screen"}
-                </Link>
+          <Typography>
+            Enter the email address associated with your account, and we'll send you a link to reset your password
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmitPassword} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="emailForgot"
+                  label="Email Address"
+                  name="emailForgot"
+                  autoComplete="email"
+                  onChange={handleInputChange}
+                />
               </Grid>
             </Grid>
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              Continue
+            </Button>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-      <Modal
-        open={open}
-        onClose={handleClose}>
-        <Container component="main" maxWidth="xs" >
-          <CssBaseline />
-          <Box
-            sx={{ marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              bgcolor: 'background.paper',
-              p:2 }}
-
-          >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Forgot Password
-            </Typography>
-            <Typography>
-              Enter the email address associated with your account and we'll send you a link to reset your password
-            </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmitPassword} sx={{ mt: 3 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="emailForgot"
-                    label="Email Address"
-                    name="emailForgot"
-                    autoComplete="email"
-                    onChange={handleInputChange}
-                  />
-                </Grid>
+    </Modal>
+    {/* Error Modal */}
+    <MUIErrorModal />
+  </div>
+</div>
 
 
-              </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Continue
-              </Button>
-            </Box>
-          </Box>
-        </Container>
-      </Modal>
-      <MUIErrorModal/>
-    </ThemeProvider>
   );
 }

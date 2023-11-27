@@ -7,8 +7,16 @@ import BottomAppBanner from '../Utils/BottomAppBanner';
 import EditToolbar from './EditToolbar';
 import Leafletmap from './Leafletmap';
 import { Grid } from '@mui/material';
+import AuthContext from '../auth';
 
 export default function MapEditingScreen() {
+    const { auth } = useContext(AuthContext);
+
+    if (!auth.loggedIn) {
+        const router = useRouter();
+        router.push('/login');
+      }
+
     if (typeof window !== 'undefined') {
     return(
         <div className={styles.container}>
