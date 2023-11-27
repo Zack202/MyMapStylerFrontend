@@ -24,6 +24,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Modal from '@mui/material/Modal';
 import AuthContext from '../auth';
 import { useContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 
 
@@ -67,17 +68,18 @@ let exampleUser = {
 
 
 export default function Profile() {
+
   const { auth } = useContext(AuthContext);
-  if (typeof window !== 'undefined') {
-  if (!auth.loggedIn) {
-    const router = useRouter();
-    router.push('/login');
-  }
-}
+
+
   //for modal
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const handleOpenEdit = () => setOpenEdit(true);
+  const handleCloseEdit = () => setOpenEdit(false);
+
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const handleOpenDelete = () => setOpenDelete(true);
+  const handleCloseDelete = () => setOpenDelete(false);
 
 
   const handleSubmit = (event) => {
@@ -88,6 +90,13 @@ export default function Profile() {
       password: data.get('password'),
     });
   };
+
+  const handleCloseConfirm = () => {
+    console.log("Delete Profile");
+    auth.deleteUser();
+    handleCloseDelete();
+  }
+
 
 
   return (
@@ -142,12 +151,12 @@ export default function Profile() {
 
                         <Grid container spacing={1} align="center">
                           <Grid item>
-                            <Button onClick={handleOpen} variant="contained" color="primary" sx={{marginTop: 1}}>
+                            <Button onClick={handleOpenEdit} variant="contained" color="primary" sx={{marginTop: 1}}>
                               Edit Account Information
                             </Button>
                           </Grid>
                           <Grid item>
-                            <Button variant="contained" color="primary">
+                            <Button onClick={handleOpenDelete} variant="contained" color="primary">
                               Delete Profile
                             </Button>
                           </Grid>
@@ -178,10 +187,43 @@ export default function Profile() {
                     </Box>
                   </Box>
                   </Grid>
-                 
+                  <Modal
+                  open={openDelete}
+                  onClose={handleCloseDelete}
+                >
+                  <Container component="main" maxWidth="xs" >
+                    <CssBaseline />
+                    <Box
+                      sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        bgcolor: 'background.paper',
+                        p: 2,
+                      }}
+                    >
+                      <Typography component="h1" variant="h5">
+                        Are you sure you want to delete your account?
+                      </Typography>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                      <Button onClick={handleCloseDelete} variant="contained" color="primary" sx={{marginTop: 1}}>
+                        Cancel
+                      </Button>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                      <Button onClick={handleCloseConfirm} variant="contained" color="primary" sx={{marginTop: 1}}>
+                        Delete
+                      </Button>
+                      </Grid>
+                      </Grid>
+                      </Box>
+                  </Container>
+                </Modal>
                 <Modal
-                  open={open}
-                  onClose={handleClose}
+                  open={openEdit}
+                  onClose={handleCloseEdit}
                 >
                   <Container component="main" maxWidth="xs" >
                     <CssBaseline />

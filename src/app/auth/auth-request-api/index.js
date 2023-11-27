@@ -45,13 +45,17 @@ export const forgotPassword = (email) => {
         email : email
     })
 }
+
+export const deleteUser = () => api.get(`/deleteUser/`)
+
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
     logoutUser,
     resetPassword,
-    forgotPassword
+    forgotPassword,
+    deleteUser
 }
 
 export default apis

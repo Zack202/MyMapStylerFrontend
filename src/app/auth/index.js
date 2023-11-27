@@ -217,6 +217,18 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.deleteUser = async function() {
+        console.log("Deleting user...")
+        const response = await api.deleteUser();
+        if (response.status === 200) {
+            authReducer( {
+                type: AuthActionType.LOGOUT_USER,
+                payload: null
+            })
+            router.push("/");
+        }
+    }
+
     return (
         <AuthContext.Provider value={{
             auth
