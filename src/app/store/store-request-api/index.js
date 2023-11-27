@@ -45,11 +45,15 @@ export const updateMapById = (id, map) => {
 }
 export const getMapPairs = () => api.get(`/mapPairs/`)
 
+export const updateUserInfo = (data) => api.put('/profile', { data: data })
+
+
 const apis = {
     createNewMap,
     getMapById,
     updateMapById,
-    getMapPairs
+    getMapPairs,
+    updateUserInfo
 
 }
 

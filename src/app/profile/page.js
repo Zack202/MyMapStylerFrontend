@@ -25,21 +25,7 @@ import Modal from '@mui/material/Modal';
 import AuthContext from '../auth';
 import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        MyMapStyler
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import GlobalStoreContext from '../store';
 
 
 const defaultTheme = createTheme({
@@ -70,7 +56,14 @@ let exampleUser = {
 export default function Profile() {
 
   const { auth } = useContext(AuthContext);
+  const { store } = useContext(GlobalStoreContext);
 
+  if(auth.loggedIn){
+    exampleUser.userName = auth.user.userName;
+    exampleUser.firstName = auth.user.firstName;
+    exampleUser.lastName = auth.user.lastName;
+    exampleUser.email = auth.user.email;
+  }
 
   //for modal
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -86,9 +79,11 @@ export default function Profile() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
     });
+    store.updateUserInfo(data);
+    handleCloseEdit();
   };
 
   const handleCloseConfirm = () => {
@@ -253,6 +248,7 @@ export default function Profile() {
                               fullWidth
                               id="firstName"
                               label="First Name"
+                              // value={exampleUser.firstName}
                               autoFocus
                             />
                           </Grid>
@@ -264,9 +260,10 @@ export default function Profile() {
                               label="Last Name"
                               name="lastName"
                               autoComplete="family-name"
+                              // value={exampleUser.lastName}
                             />
                           </Grid>
-                          <Grid item xs={12}>
+                          {/* <Grid item xs={12}>
                             <TextField
                               required
                               fullWidth
@@ -275,8 +272,8 @@ export default function Profile() {
                               name="username"
                               autoComplete="username"
                             />
-                          </Grid>
-                          <Grid item xs={12}>
+                          </Grid> */}
+                          {/* <Grid item xs={12}>
                             <TextField
                               required
                               fullWidth
@@ -285,8 +282,8 @@ export default function Profile() {
                               name="email"
                               autoComplete="email"
                             />
-                          </Grid>
-                          <Grid item xs={12}>
+                          </Grid> */}
+                          {/* <Grid item xs={12}>
                             <TextField
                               required
                               fullWidth
@@ -307,7 +304,7 @@ export default function Profile() {
                               id="confirmpassword"
                               autoComplete="confirm-password"
                             />
-                          </Grid>
+                          </Grid> */}
                         </Grid>
                         <Button
                           type="submit"
@@ -319,7 +316,7 @@ export default function Profile() {
                         </Button>
                       </Box>
                     </Box>
-                    <Copyright sx={{ mt: 5 }} />
+                    {/* <Copyright sx={{ mt: 5 }} /> */}
                   </Container>
                 </Modal>
               </div>
