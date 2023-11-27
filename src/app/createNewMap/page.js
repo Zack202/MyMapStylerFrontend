@@ -120,9 +120,7 @@ export default function CreateMapModal() {
     const handleCreateMap = (event) => {
         console.log(mapType)
         store.createNewMap('name', mapData, mapType)
-        console.log('testing idpairs now')
-        store.loadIdNamePairs()
-        console.log('other side of store call')
+        store.loadIdNamePairs();
     };
 
     return (
