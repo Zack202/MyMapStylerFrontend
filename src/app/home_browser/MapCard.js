@@ -315,7 +315,7 @@ function ListCard(props) {
                 >
                 Publish
             </Button> */}
-            <DeleteMapModal />
+            <DeleteMapModal id={idNamePair._id}/>
             <Button 
                 // disabled={!store.canUndo()}
                 id='duplicate-button'

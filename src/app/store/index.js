@@ -121,24 +121,6 @@ function GlobalStoreContextProvider(props) {
                 currentMapType: -1
                 })
             }
-            case GlobalStoreActionType.UNMARK_MAP_FOR_DELETION:{
-                return setStore({
-                currentModal: null,
-                idNamePairs: store.idNamePairs,
-                currentMap: null, //change
-                currentMapFeatures: JSON,
-                currentMapGeometry: JSON,
-                mapIdMarkedForDeletion: null,
-                mapMarkedForDeletion: null,
-                mapIdMarkedForExport: null,
-                mapMarkedForExport: null,
-                sort: "name",
-                filters: [],
-                currentEditColor: null,
-                currentMapIndex: -1,
-                currentMapType: -1
-                })
-            }
 
             //for now this is just for going to edit map screen, not updating a map
             case GlobalStoreActionType.SET_CURRENT_MAP:{
@@ -266,6 +248,35 @@ function GlobalStoreContextProvider(props) {
         return store.currentModal === CurrentModal.CREATE_NEW_MAP;
         //return true;
     }
+
+    store.unMarkMapForDeletion = () => {
+        storeReducer({
+            type: GlobalStoreActionType.MARK_MAP_FOR_DELETION,
+            payload: null
+        })
+    }
+
+    store.markMapForDeletion = (id) => {
+        storeReducer({
+            type: GlobalStoreActionType.MARK_MAP_FOR_DELETION,
+            payload: id
+        })
+    }
+
+    store.deleteMap = () => {
+        async function asyncDeleteMap(id){
+            let response = await api.deleteMap(id);
+            if(response.data.success){
+                storeReducer({
+                    type: GlobalStoreActionType.MARK_MAP_FOR_DELETION,
+                    payload: null
+                }) 
+            }
+            store.loadIdNamePairs();
+        }
+        asyncDeleteMap(store.mapIdMarkedForDeletion);
+    }
+
 
     return (
         <GlobalStoreContext.Provider value={{

@@ -35,17 +35,19 @@ const backdropStyle = {
   backgroundColor: 'transparent',
 };
 
-export default function TransitionsModal() {
+export default function DeleteMapModal(props) {
 
   const { store } = useContext(GlobalStoreContext);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = (event) => {
     event.stopPropagation();
+    store.markMapForDeletion(event.target.value);
     setOpen(true);
   }
   const handleClose = (event) => {
     event.stopPropagation();
+    store.unMarkMapForDeletion();
     setOpen(false);
   }
 
@@ -58,6 +60,7 @@ export default function TransitionsModal() {
   const handleConfirmDelete = (event) => {
     event.stopPropagation();
     //Delete map
+    console.log("Deleting map: ", store.mapIdMarkedForDeletion);
     store.deleteMap();
 
     setOpen(false);
@@ -71,6 +74,7 @@ export default function TransitionsModal() {
                 variant="contained"
                 sx={{margin: 1, backgroundColor: "maroon"}}
                 onClick = {handleOpen}
+                value={props.id}
                 >
                 Delete
             </Button>
