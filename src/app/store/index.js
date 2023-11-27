@@ -101,6 +101,43 @@ function GlobalStoreContextProvider(props) {
                     currentMapType: -1
                 })
             }
+            case GlobalStoreActionType.MARK_MAP_FOR_DELETION:{
+                return setStore({
+                currentModal: null,
+                idNamePairs: store.idNamePairs,
+                currentMap: null, //change
+                currentMapFeatures: JSON,
+                currentMapGeometry: JSON,
+                mapIdMarkedForDeletion: payload,
+                mapMarkedForDeletion: null,
+                mapIdMarkedForExport: null,
+                mapMarkedForExport: null,
+                sort: "name",
+                filters: [],
+                currentEditColor: null,
+                currentMapIndex: -1,
+                currentMapType: -1
+                })
+            }
+            case GlobalStoreActionType.UNMARK_MAP_FOR_DELETION:{
+                return setStore({
+                currentModal: null,
+                idNamePairs: store.idNamePairs,
+                currentMap: null, //change
+                currentMapFeatures: JSON,
+                currentMapGeometry: JSON,
+                mapIdMarkedForDeletion: null,
+                mapMarkedForDeletion: null,
+                mapIdMarkedForExport: null,
+                mapMarkedForExport: null,
+                sort: "name",
+                filters: [],
+                currentEditColor: null,
+                currentMapIndex: -1,
+                currentMapType: -1
+                })
+            }
+
             //for now this is just for going to edit map screen, not updating a map
             case GlobalStoreActionType.SET_CURRENT_MAP:{
                 return setStore({
