@@ -19,12 +19,14 @@ function EditToolbar(props) {
           
             const handleDoubleClick = () => {
               setEditing(true);
+              setEditedName(name);
             };
           
             const handleBlur = () => {
               setEditing(false);
-              
-              store.updateMapName(editedName);
+              if(editedName != name && editedName != ""){
+                store.updateMapName(editedName);
+              }
             };
           
             const handleChange = (event) => {
