@@ -98,8 +98,9 @@ export default function Profile() {
     });*/
     let data = {
       firstName: formData.firstName,
-      lastName: formData.lastName}
-
+      lastName: formData.lastName
+    }
+    
     auth.updateUserInfo(data);
     handleCloseEdit();
   };
@@ -162,9 +163,9 @@ export default function Profile() {
                         <Avatar sx={{ width: 175, height: 175 }} src={'/profile image.png'} alt="Profile Picture" />
 
 
-                        <Grid container spacing={1} align="center">
+                        <Grid container spacing={1} align="center" sx={{marginTop: 2}}>
                           <Grid item>
-                            <Button onClick={handleOpenEdit} variant="contained" color="primary" sx={{marginTop: 1}}>
+                            <Button onClick={handleOpenEdit} variant="contained" color="primary" >
                               Edit Account Information
                             </Button>
                           </Grid>

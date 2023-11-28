@@ -14,7 +14,8 @@ export const AuthActionType = {
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
-    REGISTER_USER_ERROR: "REGISTER_USER_ERROR"
+    REGISTER_USER_ERROR: "REGISTER_USER_ERROR",
+    UPDATE_USER_INFO: "UPDATE_USER_INFO"
 }
 
 function AuthContextProvider(props) {
@@ -66,6 +67,13 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     errorFound: payload.errorMessage
+                })
+            }
+            case AuthActionType.UPDATE_USER_INFO: {
+                return setAuth({
+                    user: payload.user,
+                    loggedIn: true,
+                    errorFound: ""
                 })
             }
             default:
@@ -235,7 +243,12 @@ function AuthContextProvider(props) {
         console.log("the response was" + response)
         if(response.status == 200){
             console.log("it worked")
-            router.refresh()
+            authReducer({
+                type: AuthActionType.UPDATE_USER_INFO,
+                payload: {
+                    user: response.data.user
+                }
+            })
         } else {
             console.log("it didnt workkk")
         }
