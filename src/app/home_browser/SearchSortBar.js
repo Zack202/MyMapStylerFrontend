@@ -24,7 +24,12 @@ import ExportMapModal from "src/app/components/ExportMapModal.js";
 // Search functionality
 import GlobalStoreContext from '../store';
 import { useContext, useState } from 'react';
-
+// Filter UI and functionality
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -72,10 +77,21 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
- 
+
   const { store } = useContext(GlobalStoreContext);
+  // can use searching for a prettier UI
   const [searching, setSearching] = useState(false);
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState([])
+
+  // Filtering
+  const mapTypes = [
+    'Color',
+    'Text',
+    'Heat',
+    'Dot',
+    'Sized Dot',
+  ];
 
   const handleDoubleClick = () => {
     setSearching(true);
@@ -86,17 +102,22 @@ export default function PrimarySearchAppBar() {
     store.updateSearch(search);
   };
 
-  const handleChange = (event) => {
+  const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
 
   const handleKeyDown = (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        handleBlur();
-      }
-    };
-    
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleBlur();
+    }
+  };
+
+  const handleFilterChange = (event) => {
+    console.log("filter change:", event.target.value);
+    setFilter(event.target.value);
+  };
+
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -191,7 +212,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{color:'maroon', background:'lightgrey'}}>
+      <AppBar position="static" style={{ color: 'maroon', background: 'lightgrey' }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -202,7 +223,7 @@ export default function PrimarySearchAppBar() {
           >
             <UserIcon />
           </IconButton>
-          <Search style={{backgroundColor:"#F1F1F1"}} 
+          <Search style={{ backgroundColor: "#F1F1F1" }}
           >
             <SearchIconWrapper>
               <SearchIcon />
@@ -211,27 +232,43 @@ export default function PrimarySearchAppBar() {
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
               onBlur={handleBlur}
-              onChange={handleChange}
+              onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
-              
+
             />
           </Search>
           {/* <CreateMapModal /> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <Box style ={{color: "black", backgroundColor: "#F1F1F1", borderRadius: '20px',m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block'}}>        
-                <Typography variant="h5" gutterBottom>
-                    Filter { }
-                    <Filter2/>
-                </Typography>
-           </Box>
-          </Box>
-          <Box style ={{color: "Black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block'}}>        
-                <Typography variant="h5" gutterBottom>
-                    Sort by Name { }
-                    <KeyboardArrowDownIcon/>
-                </Typography>
+            <Box style={{ color: "black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block' }}>
+              <FormControl fullWidth>
+                <InputLabel id="select-filter">Filter</InputLabel>
+                <Select
+                  labelId="select-filter"
+                  id="select-filter"
+                  value={filter}
+                  label="select-filter"
+                  multiple
+                  sx={{ width: 250 }}
+                  onChange={handleFilterChange}
+                  renderValue={(selected) => selected.join(', ')}
+                >
+                  {mapTypes.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      <Checkbox checked={filter.indexOf(name) > -1} />
+                      <ListItemText primary={name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Box>
+          </Box>
+          <Box style={{ color: "Black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block' }}>
+            <Typography variant="h5" gutterBottom>
+              Sort by Name { }
+              <KeyboardArrowDownIcon />
+            </Typography>
+          </Box>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
