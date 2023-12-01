@@ -44,13 +44,14 @@ export const updateMapById = (id, diff) => {
   })
 }
 export const getMapPairs = () => api.get(`/mapPairs/`)
-
+export const deleteMap = (id) => api.get(`/deleteMap/${id}`)
 
 const apis = {
     createNewMap,
     getMapById,
     updateMapById,
     getMapPairs,
+    deleteMap
 }
 
 export default apis
