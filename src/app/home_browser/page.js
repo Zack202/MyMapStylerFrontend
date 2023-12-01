@@ -35,6 +35,8 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
 
+    const [shownMaps, setShownMaps] = useState(false);
+
     let isGuest = true;
     if(auth.loggedIn){
         if (auth.user.userName === "GUEST") {
@@ -45,8 +47,8 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
         }
     }
 
-    console.log("store: ", store);
-    console.log("auth: ", auth);
+    // console.log("store: ", store);
+    // console.log("auth: ", auth);
 
 
 
@@ -56,10 +58,26 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
 
     let mapCard = "";
     if (store) {
+        
+        let filteredMap = [];
+        
+        let i = 0
+        if(store.search === ""){
+            filteredMap = store.idNamePairs;
+        }else{
+            for (let i = 0; i < store.idNamePairs.length; i++) {
+                if(store.idNamePairs[i].name.includes(store.search)){
+                    filteredMap.push(store.idNamePairs[i]);
+                }
+            }
+        }
+            
+        
+        
         mapCard =
             <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
                 {
-                    store.idNamePairs.map((pair) => (
+                    filteredMap.map((pair) => (
                         <MapCard
                             key={pair._id}
                             idNamePair={pair}
