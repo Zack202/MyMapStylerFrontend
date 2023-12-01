@@ -29,7 +29,11 @@ export default function MapEditingScreen() {
     else {
         mapData = store.currentMap.mapGeometry
     }
+    let mapName = null;
     if (typeof window !== 'undefined') {
+        if (store.currentMap != null && store.currentMap.name != null){
+            mapName = store.currentMap.name
+        }
     return(
         <div className={styles.container}>
             <Grid container spacing={0}>
@@ -40,7 +44,7 @@ export default function MapEditingScreen() {
                     <MapEditor />
                 </Grid>
                 <Grid item xs={9}>
-                    <EditToolbar />
+                    <EditToolbar name={mapName}/>
                     <Leafletmap 
                         mapGeo={mapData}
                     />

@@ -76,13 +76,6 @@ function AuthContextProvider(props) {
                     errorFound: ""
                 })
             }
-            case AuthActionType.UPDATE_INFO_ERROR: {
-                return setAuth({
-                    user: payload.user,
-                    loggedIn: true,
-                    errorFound: payload.errorMessage
-                })
-            }
             default:
                 return auth;
         }
@@ -268,17 +261,22 @@ function AuthContextProvider(props) {
         }
     }
 
-    // //update user info
-    // auth.updateUserInfo = async function(data){
-    //     const response = await api.updateUserInfo(data);
-    //     console.log("the response was" + response)
-    //     if(response.status == 200){
-    //         console.log("it worked")
-    //         router.refresh()
-    //     } else {
-    //         console.log("it didnt workkk")
-    //     }
-    // }
+    //update user info
+    auth.updateUserInfo = async function(data){
+        const response = await api.updateUserInfo(data);
+        console.log("the response was" + response)
+        if(response.status == 200){
+            console.log("it worked")
+            authReducer({
+                type: AuthActionType.UPDATE_USER_INFO,
+                payload: {
+                    user: response.data.user
+                }
+            })
+        } else {
+            console.log("it didnt workkk")
+        }
+    }
 
     return (
         <AuthContext.Provider value={{

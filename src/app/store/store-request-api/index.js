@@ -37,10 +37,10 @@ export const createNewMap = (name, userName, ownerEmail, mapData, mapType) => {
 }
 
 export const getMapById = (id) => api.get(`/map/${id}`)
-export const updateMapById = (id, map) => {
+export const updateMapById = (id, diff) => {
   return api.put(`/updateMap/${id}`, {
       // SPECIFY THE PAYLOAD
-      map : map
+      diff : diff
   })
 }
 export const getMapPairs = () => api.get(`/mapPairs/`)
