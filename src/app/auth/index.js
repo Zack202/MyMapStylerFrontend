@@ -76,13 +76,6 @@ function AuthContextProvider(props) {
                     errorFound: ""
                 })
             }
-            case AuthActionType.UPDATE_INFO_ERROR: {
-                return setAuth({
-                    user: payload.user,
-                    loggedIn: true,
-                    errorFound: payload.errorMessage
-                })
-            }
             default:
                 return auth;
         }
@@ -232,28 +225,6 @@ function AuthContextProvider(props) {
         }
     }
 
-    auth.updateUserInfo = async function(id, firstName, lastName){
-        try{
-            const response = await api.updateUserInfo(id, firstName, lastName);
-            if(response.status === 200){
-                authReducer({
-                    type: AuthActionType.UPDATE_USER_INFO,
-                    payload: {
-                        user: response.data.user
-                    }
-                })
-                console.log("succesfully updated info")
-            }
-        }catch(error){
-            authReducer({
-                type: AuthActionType.UPDATE_INFO_ERROR,
-                payload: {
-                    errorMessage: error.response.data.errorMessage
-                }
-            })
-        }
-    }
-
     auth.deleteUser = async function() {
         console.log("Deleting user...")
         const response = await api.deleteUser();
@@ -263,6 +234,23 @@ function AuthContextProvider(props) {
                 payload: null
             })
             router.push("/");
+        }
+    }
+
+    //update user info
+    auth.updateUserInfo = async function(data){
+        const response = await api.updateUserInfo(data);
+        console.log("the response was" + response)
+        if(response.status == 200){
+            console.log("it worked")
+            authReducer({
+                type: AuthActionType.UPDATE_USER_INFO,
+                payload: {
+                    user: response.data.user
+                }
+            })
+        } else {
+            console.log("it didnt workkk")
         }
     }
 

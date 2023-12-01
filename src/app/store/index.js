@@ -1,6 +1,8 @@
 import api from './store-request-api'
 import { createContext, useContext, useState } from 'react'
 import AuthContext from '../auth'
+import { useRouter } from 'next/navigation';
+import jsondiffpatch from 'jsondiffpatch'
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -22,7 +24,9 @@ export const GlobalStoreActionType = {
     ADD_DATA_PROPS: 'ADD_DATA_PROPS',
     EXPORT_MAP: 'EXPORT_MAP',
     FILTER: 'FILTER',
-    CREATE_MAP_MODAL: 'CREATE_MAP_MODAL'
+    CREATE_MAP_MODAL: 'CREATE_MAP_MODAL',
+    UPDATE_MAP: 'UPDATE_MAP',
+    UPDATE_SEARCH: 'UPDATE_SEARCH'
 
 }
 
@@ -33,13 +37,14 @@ const CurrentModal = {
     MAP_DATA_EDITING: 'MAP_DATA_EDITING',
     DELETE_MAP_MODAL: 'DELETE_MAP_MODAL',
     CREATE_NEW_MAP: 'CREATE_NEW_MAP',
-    CHANGE_ACCOUNT_INFO: 'CHANGE_ACCOUNT_INFO'
+    CHANGE_ACCOUNT_INFO: 'CHANGE_ACCOUNT_INFO',   
 }
 
 function GlobalStoreContextProvider(props) {
 
     const authContext = useContext(AuthContext);
     const { auth } = authContext;
+    const router = useRouter()
 
     const [store, setStore] = useState({
         //what the store is going to manage
@@ -57,7 +62,8 @@ function GlobalStoreContextProvider(props) {
         filters: [],
         currentEditColor: null,
         currentMapIndex: -1,
-        currentMapType: -1
+        currentMapType: -1,
+        search: ""
 
     });
 
@@ -80,7 +86,8 @@ function GlobalStoreContextProvider(props) {
                     filters: [],
                     currentEditColor: null,
                     currentMapIndex: -1,
-                    currentMapType: -1
+                    currentMapType: -1,
+                    search: ""
                 })
             }
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS:{
@@ -98,8 +105,87 @@ function GlobalStoreContextProvider(props) {
                     filters: [],
                     currentEditColor: null,
                     currentMapIndex: -1,
-                    currentMapType: -1
+                    currentMapType: -1,
+                    search: ""
                 })
+            }
+            case GlobalStoreActionType.MARK_MAP_FOR_DELETION:{
+                return setStore({
+                currentModal: null,
+                idNamePairs: store.idNamePairs,
+                currentMap: null, //change
+                currentMapFeatures: JSON,
+                currentMapGeometry: JSON,
+                mapIdMarkedForDeletion: payload,
+                mapMarkedForDeletion: null,
+                mapIdMarkedForExport: null,
+                mapMarkedForExport: null,
+                sort: "name",
+                filters: [],
+                currentEditColor: null,
+                currentMapIndex: -1,
+                currentMapType: -1,
+                search: ""
+                })
+            }
+
+            //for now this is just for going to edit map screen, not updating a map
+            case GlobalStoreActionType.SET_CURRENT_MAP:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: payload,
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filters: [],
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: payload.mapType,
+                    search: ""
+                });
+            }
+            case GlobalStoreActionType.UPDATE_MAP:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: payload,
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filters: [],
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: store.currentMapType,
+                    search: ""
+                });
+            }
+            case GlobalStoreActionType.UPDATE_SEARCH:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: null, //change
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filters: [],
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: store.currentMapType,
+                    search: payload
+                });
             }
             default:
                 return store;
@@ -116,17 +202,35 @@ function GlobalStoreContextProvider(props) {
         const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
-            // response.data. map
-            //update store with reducer
-            
-            //);
             console.log('success')
-
+            storeReducer({
+                type: GlobalStoreActionType.SET_CURRENT_MAP,
+                payload: response.data.map
+            });
             // if success bring to map editing screen
+            router.push('/mapEditing/'+ response.data.map._id)
+            
         }
         else {
             console.log("API FAILED TO CREATE A NEW MAP");
         }
+    }
+
+    store.setCurrentMap = function (id) {
+        async function asyncSetCurrentMap(id) {
+            let response = await api.getMapById(id);
+            if(response.data.success){
+                let map = response.data.map;
+                //in playlister the equivilent function uses updateplaylistbyid as well to clear transaction stack 
+                //will leave that functionality out for now since we don't have a transaction stack
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_MAP,
+                    payload: map
+                });
+                //route to map editing screen
+            }
+        }
+        asyncSetCurrentMap(id)
     }
     
     store.updateMapFeatures = function (id, mapZoom, mapCenter) { //will add other features?
@@ -190,6 +294,60 @@ function GlobalStoreContextProvider(props) {
         return store.currentModal === CurrentModal.CREATE_NEW_MAP;
         //return true;
     }
+
+    store.unMarkMapForDeletion = () => {
+        storeReducer({
+            type: GlobalStoreActionType.MARK_MAP_FOR_DELETION,
+            payload: null
+        })
+    }
+
+    store.markMapForDeletion = (id) => {
+        storeReducer({
+            type: GlobalStoreActionType.MARK_MAP_FOR_DELETION,
+            payload: id
+        })
+    }
+
+    store.deleteMap = () => {
+        async function asyncDeleteMap(id){
+            let response = await api.deleteMap(id);
+            if(response.data.success){
+                storeReducer({
+                    type: GlobalStoreActionType.MARK_MAP_FOR_DELETION,
+                    payload: null
+                }) 
+            }
+            store.loadIdNamePairs();
+        }
+        asyncDeleteMap(store.mapIdMarkedForDeletion);
+    }
+
+    store.updateMapName = (name) => {
+        //Create diff of current map and new map
+        let newMap = { ...store.currentMap };
+        newMap.name = name;
+        let diff = jsondiffpatch.diff(store.currentMap, newMap);
+        async function asyncUpdateMapName(nameDiff){
+            let response = await api.updateMapById(store.currentMap._id, diff);
+            if(response.data.success){
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: newMap
+                }) 
+            }
+        }
+        asyncUpdateMapName(diff);
+    }
+
+    // Search and Filter
+    store.updateSearch = (search) => {
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_SEARCH,
+            payload: search
+        }) 
+    }
+
 
     return (
         <GlobalStoreContext.Provider value={{

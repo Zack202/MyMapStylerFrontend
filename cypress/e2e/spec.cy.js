@@ -1,9 +1,10 @@
 
 describe('User Tests', () => {
 
+
   beforeEach(() => {
     cy.viewport(1200, 750)
-    cy.visit("http://localhost:3000/")
+    cy.visit("http://localhost:3000")
   })
 
   Cypress.on('uncaught:exception', (err, runnable) => {
@@ -41,7 +42,7 @@ describe('User Tests', () => {
 
     cy.contains('Confirm Registration', {matchCase: false}).click();
 
-    cy.location('href').should('include', '/login')
+    cy.location('href').should('include', '/home_browser')
 
   });
 
@@ -255,12 +256,11 @@ describe('User Tests', () => {
 
 });
 
-
 describe('Module Tests', () => {
 
   beforeEach(() => {
     cy.viewport(1200, 750)
-    cy.visit("http://localhost:3000/")
+    cy.visit("http://localhost:3000")
 
     cy.contains('Login', {matchCase: false}).click();
     cy.get('#email').type('exampleUser@gmail.com');
@@ -285,20 +285,6 @@ describe('Module Tests', () => {
     cy.contains('View Profile', {matchCase: false}).click();
 
     cy.location('href').should('include', '/profile')
-  });
-
-  it('Logged Specific Map', function() { // TEMPORARY IMPLEMENTATION
-
-    cy.contains('Map Card Name', {matchCase: false}).click();
-
-    cy.location('href').should('include', '/specificMap')
-  });
-
-  it('Logged Map Editing', function() { // TEMPORARY IMPLEMENTATION
-
-    cy.contains('Fork', {matchCase: false}).click();
-
-    cy.location('href').should('include', '/mapEditing')
   });
 
 });

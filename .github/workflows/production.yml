@@ -5,6 +5,7 @@ on:
     branches:
       - DeployedBranch
       - main
+      - DeployedBranch2
 
 jobs:
   deploy:
@@ -22,9 +23,9 @@ jobs:
       - name: Install client dependencies
         run: npm install
 
-      - name: Build the React app
-        run: npm run build
-
-      - name: Test Frontend
-        run: npx cypress run
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm start -p 3000
 

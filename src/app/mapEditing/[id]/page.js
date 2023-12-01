@@ -2,14 +2,16 @@
 import { Edit } from '@mui/icons-material';
 import styles from './MapEditingScreen.module.css';
 import MapEditor from './MapEditor';
-import TopAppBanner from '../Utils/TopAppBanner';
-import BottomAppBanner from '../Utils/BottomAppBanner';
+import TopAppBanner from '../../Utils/TopAppBanner';
+import BottomAppBanner from '../../Utils/BottomAppBanner';
 import EditToolbar from './EditToolbar';
 import Leafletmap from './Leafletmap';
 import { Grid } from '@mui/material';
-import AuthContext from '../auth';
+import AuthContext from '../../auth';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { GlobalStoreContext } from '../../store/index.js'
+import customA from './customA.geo.json'
 
 export default function MapEditingScreen() {
     // const { auth } = useContext(AuthContext);
@@ -19,7 +21,19 @@ export default function MapEditingScreen() {
     //     router.push('/login');
     //   }
 
+    const { store } = useContext(GlobalStoreContext);
+    let mapData;
+    if (store.currentMap == null){
+        mapData = customA
+    }
+    else {
+        mapData = store.currentMap.mapGeometry
+    }
+    let mapName = null;
     if (typeof window !== 'undefined') {
+        if (store.currentMap != null && store.currentMap.name != null){
+            mapName = store.currentMap.name
+        }
     return(
         <div className={styles.container}>
             <Grid container spacing={0}>
@@ -30,8 +44,10 @@ export default function MapEditingScreen() {
                     <MapEditor />
                 </Grid>
                 <Grid item xs={9}>
-                    <EditToolbar />
-                    <Leafletmap />
+                    <EditToolbar name={mapName}/>
+                    <Leafletmap 
+                        mapGeo={mapData}
+                    />
                 </Grid>
             </Grid>
             <BottomAppBanner />

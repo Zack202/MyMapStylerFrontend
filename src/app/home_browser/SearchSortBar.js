@@ -21,6 +21,10 @@ import { Filter2 } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CreateMapModal from '../components/CreateMapModal.js';
 import ExportMapModal from "src/app/components/ExportMapModal.js";
+// Search functionality
+import GlobalStoreContext from '../store';
+import { useContext, useState } from 'react';
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -68,7 +72,31 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+ 
+  const { store } = useContext(GlobalStoreContext);
+  const [searching, setSearching] = useState(false);
+  const [search, setSearch] = useState("");
 
+  const handleDoubleClick = () => {
+    setSearching(true);
+  };
+
+  const handleBlur = () => {
+    setSearching(false);
+    store.updateSearch(search);
+  };
+
+  const handleChange = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleBlur();
+      }
+    };
+    
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -174,13 +202,17 @@ export default function PrimarySearchAppBar() {
           >
             <UserIcon />
           </IconButton>
-          <Search style={{backgroundColor:"#F1F1F1"}}>
+          <Search style={{backgroundColor:"#F1F1F1"}} 
+          >
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
               
             />
           </Search>
