@@ -30,6 +30,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -93,11 +94,12 @@ export default function PrimarySearchAppBar() {
     'Sized Dot',
   ];
 
+  // can use for a prettier UI
   const handleDoubleClick = () => {
     setSearching(true);
   };
 
-  const handleBlur = () => {
+  const handleBlurSearch = () => {
     setSearching(false);
     store.updateSearch(search);
   };
@@ -106,16 +108,20 @@ export default function PrimarySearchAppBar() {
     setSearch(event.target.value);
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDownSearch = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleBlur();
+      handleBlurSearch();
     }
   };
 
-  const handleFilterChange = (event) => {
-    console.log("filter change:", event.target.value);
+  const handleFilterChange = async (event) => {
     setFilter(event.target.value);
+  };
+
+
+  const handleSubmitFilter = (event) => {
+      store.updateFilter(filter);
   };
 
 
@@ -231,9 +237,9 @@ export default function PrimarySearchAppBar() {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
-              onBlur={handleBlur}
+              onBlur={handleBlurSearch}
               onChange={handleSearchChange}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleKeyDownSearch}
 
             />
           </Search>
@@ -249,7 +255,7 @@ export default function PrimarySearchAppBar() {
                   value={filter}
                   label="select-filter"
                   multiple
-                  sx={{ width: 250 }}
+                  sx={{ width: 300 }}
                   onChange={handleFilterChange}
                   renderValue={(selected) => selected.join(', ')}
                 >
@@ -263,6 +269,12 @@ export default function PrimarySearchAppBar() {
               </FormControl>
             </Box>
           </Box>
+          <Button
+            variant="contained"
+            onClick={handleSubmitFilter}
+          >
+            Apply Filter
+          </Button>
           <Box style={{ color: "Black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block' }}>
             <Typography variant="h5" gutterBottom>
               Sort by Name { }
