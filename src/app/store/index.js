@@ -314,6 +314,14 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
+    //Transaction stack functions
+    store.undo = function () {
+        tps.undoTransaction();
+    }
+    store.redo = function () {
+        tps.doTransaction();
+    }
+
 
     return (
         <GlobalStoreContext.Provider value={{
