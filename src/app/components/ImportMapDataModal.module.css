@@ -3,11 +3,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
+  width: 50%;
+  max-height: 80%;
   background-color: lightgray; 
   border: 2px solid #000;
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.4); 
   padding: 16px; 
+  justify-content: space-between;
 }
 
 
@@ -23,7 +25,7 @@
 .button {
   color: white;
   background: maroon;
-  height: 75px;
+  height: 50px;
   flex: 1;
   margin: 5%;
 }

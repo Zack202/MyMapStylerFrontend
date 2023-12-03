@@ -43,14 +43,26 @@ export const updateMapById = (id, diff) => {
       diff : diff
   })
 }
+
+export const updateMapFeaturesById = (id, features, selectedOption) => {
+  return api.put(`/updateMapFeatures/${id}`, {
+      // SPECIFY THE PAYLOAD
+      features : features,
+      selectedOption : selectedOption
+  })
+}
 export const getMapPairs = () => api.get(`/mapPairs/`)
+
+export const deleteMap = (id) => api.get(`/deleteMap/${id}`)
 
 
 const apis = {
     createNewMap,
     getMapById,
     updateMapById,
+    updateMapFeaturesById,
     getMapPairs,
+    deleteMap
 }
 
 export default apis

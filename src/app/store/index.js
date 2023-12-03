@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from 'react'
 import AuthContext from '../auth'
 import { useRouter } from 'next/navigation';
 import jsondiffpatch from 'jsondiffpatch'
+import { Update } from '@mui/icons-material';
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -297,15 +298,116 @@ function GlobalStoreContextProvider(props) {
         asyncDeleteMap(store.mapIdMarkedForDeletion);
     }
 
+    store.takeAdditionalData = (file, selectedOption) => {
+        //Spilt based on selected option, file is .csv
+        const reader = new FileReader();
+        if (selectedOption === "Additional Region Data") { // Additional region data entered
+            reader.onload = function (e) {
+                const content = e.target.result;
+                const rows = content.split("\n");
+                const columns = rows[0].split(",").map(column => column.trim()); // Extract and clean column labels
+        
+                const mapGeometry = store.currentMap.mapGeometry;
+                const featuresADV = store.currentMap.mapFeatures.ADV;
+                const featuresADVToAppend = JSON.parse(JSON.stringify(featuresADV)); // Create a deep copy
+    
+            const regionNamesFromGeo = mapGeometry.features.map((feature) => feature.properties.name);
+    
+            for (let i = 1; i < rows.length; i++) {
+                const data = rows[i].split(",");
+    
+                // Ensure the row contains data for each columns
+                if (data.length === columns.length) {
+                    const region = data[0].trim();
+    
+                    if (regionNamesFromGeo.includes(region) || featuresADV[region]) {
+                        if (!featuresADVToAppend[region]) {
+                            featuresADVToAppend[region] = {};
+                        }
+    
+                        for (let j = 1; j < columns.length; j++) {
+                            const column = columns[j];
+                            const value = data[j] ? data[j].trim() : '';
+                            
+                            if (!featuresADVToAppend[region]) {
+                                featuresADVToAppend[region] = {};
+                            }
+                            featuresADVToAppend[region][column] = value;
+                        }
+                    }
+                }
+            }
+            const featuresArray = Object.entries(featuresADVToAppend).map(([region, ADV]) => ({ [region]: ADV }));
+            store.updateMapWithData(featuresArray, selectedOption);
+        }       
+        } else {
+            reader.onload = function (e) {
+                const content = e.target.result;
+                const rows = content.split("\n");
+        
+                const dataPoints = [];
+                for (let i = 0; i < rows.length; i++) {
+                    const columns = rows[i].split(",");
+                    if (columns.length >= 2) {
+                        const latitude = parseFloat(columns[0].trim());
+                        const longitude = parseFloat(columns[1].trim());
+        
+                        
+                        if (!isNaN(latitude) && !isNaN(longitude)) {
+                            dataPoints.push({ latitude, longitude });
+                        }
+                    }
+                }
+        
+                
+                if (!store.currentMapFeatures) {
+                    store.currentMapFeatures = {
+                        features: {
+                            DP: [],
+                            ADV: {}
+                        },
+                    };
+                }
+        
+                
+                store.currentMapFeatures.features.DP.push(...dataPoints);
+                }
+        }
+        reader.readAsText(file);
+    }
+
+    store.updateMapWithData = (features, selectedOption) => {
+        if (selectedOption === "Additional Region Data") {
+            features = JSON.stringify({regions: features});
+        } else {
+            features = JSON.stringify({DP: features});
+        }
+        async function asyncUpdateMap(features,selectedOption){
+            let response = await api.updateMapFeaturesById(store.currentMap._id, features, selectedOption);
+            if(response.data.success){
+                // storeReducer({ //should not be updating map, already updated
+                //     type: GlobalStoreActionType.UPDATE_MAP_FEATURES,
+                //     payload: dummyFeatures
+                // }) 
+            }
+        }
+        asyncUpdateMap(features, selectedOption);
+    }
+
+    store.updateMapAddTransaction = () => { //Add update map transaction to transaction stack
+        let transaction = new UpdateMapTransaction(this, store.currentMap._id, store.diff);
+        tps.addTransaction(transaction);
+    }
+
     store.updateMapName = (name) => {
         //Create diff of current map and new map
         let newMap = { ...store.currentMap };
         newMap.name = name;
         let diff = jsondiffpatch.diff(store.currentMap, newMap);
         async function asyncUpdateMapName(nameDiff){
-            let response = await api.updateMapById(store.currentMap._id, diff);
+            let response = await api.updateMapById(store.currentMap._id, nameDiff);
             if(response.data.success){
-                storeReducer({
+                storeReducer({ //should not be updating map, already updated
                     type: GlobalStoreActionType.UPDATE_MAP,
                     payload: newMap
                 }) 
