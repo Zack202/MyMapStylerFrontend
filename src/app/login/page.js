@@ -69,12 +69,12 @@ const defaultTheme = createTheme({
 export default function SignIn() {
 
   const { auth } = useContext(AuthContext);
-  
-  if (auth.loggedIn) {
-    const router = useRouter();
-    router.push('/home_browser');
+  if (typeof window !== 'undefined') {
+    if (auth.loggedIn) {
+      const router = useRouter();
+      router.push('/home_browser');
+    }
   }
-  
 
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -131,7 +131,8 @@ export default function SignIn() {
     <CssBaseline />
     <Grid container align="center">
       <Grid item xs>
-        <Box className={styles.rounded_box} bgcolor={'white'} maxWidth='md' padding='5%'>
+        <Box sx={{ borderRadius: '10px', padding: '10px', border: '1px solid #000000'}} 
+         bgcolor={'white'} maxWidth='md' padding='5%'>
           <Container component="main" maxWidth="md">
             <Box
               sx={{
@@ -141,16 +142,16 @@ export default function SignIn() {
                 alignItems: 'center',
               }}
             >
-              <Typography className={styles.text_color} component="h1" variant="h3">
+              <Typography sx={{color: 'maroon'}} component="h1" variant="h3">
                 Welcome back to <span style={{ fontWeight: 'bold' }}>My Map Styler</span>
               </Typography>
-              <Typography className={styles.text_color} component="h1" variant="h5">
+              <Typography sx={{color: 'maroon'}} component="h1" variant="h5">
                 Sign in to continue exploring and creating amazing maps!
               </Typography>
               <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
-                    <InputLabel className={styles.text_color}>Email Address</InputLabel>
+                    <InputLabel sx={{color: 'maroon'}}>Email Address</InputLabel>
                     <TextField
                       required
                       fullWidth
@@ -164,7 +165,7 @@ export default function SignIn() {
                     />
                   </Grid>
                   <Grid item xs={6}>
-                    <InputLabel className={styles.text_color}>Password</InputLabel>
+                    <InputLabel sx={{color: 'maroon'}}>Password</InputLabel>
                     <TextField
                       required
                       fullWidth
@@ -179,11 +180,10 @@ export default function SignIn() {
                   </Grid>
                   <Grid item xs={12}>
                     <Button
-                      className={styles.button_color}
                       type="button"
                       fullWidth
                       variant="contained"
-                      sx={{ mt: 3, mb: 1, height: '40px' }}
+                      sx={{ backgroundColor: 'maroon', mt: 3, mb: 1, height: '40px' }}
                       id="signIn"
                       onClick={handleSubmit}
                     >
@@ -195,12 +195,12 @@ export default function SignIn() {
             </Box>
             <Grid container>
               <Grid item xs={6}>
-                <Link onClick={handleOpen} variant="body2" className={styles.text_color}>
+                <Link onClick={handleOpen} variant="body2" sx={{color: 'maroon'}}>
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item xs={6}>
-                <Link href="/createAccount" variant="body2" className={styles.text_color}>
+                <Link href="/createAccount" variant="body2" sx={{color: 'maroon'}}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
@@ -246,7 +246,7 @@ export default function SignIn() {
                 />
               </Grid>
             </Grid>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            <Button type="submit" fullWidth variant="contained" sx={{backgroundColor: 'maroon', mt: 3, mb: 2 }}>
               Continue
             </Button>
           </Box>
