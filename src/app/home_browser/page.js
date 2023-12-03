@@ -66,14 +66,13 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
     // if temporary filter is changed, update
     useEffect(() => {
         if(temporaryFilter !== "NEVER SET" ) {
-            // console.log("temporary filter USE EFFECT", temporaryFilter);
             generateMapCard(temporaryFilter);
             setShownMaps(mapCard);
         }
             
     }, [triggerGenerate]); 
 
-    // if search is changed, update !!!!!!!!!
+    // if search is changed, update
     useEffect(() => {
         runFilters();
     }, [store.search]);
@@ -113,6 +112,11 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                     if (store.idNamePairs[i].name.includes(store.search)) {
                         searchedMaps.push(store.idNamePairs[i]);
                     }
+                }
+                if(searchedMaps.length === 0){
+                    setTemporaryFilter([]);
+                    setTriggerGenerate(!triggerGenerate);
+                    setShownMaps(mapCard);
                 }
             }
             // Filtering
@@ -157,24 +161,18 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                         if (filter2.includes(map.data.map.mapType)) {
                             filteredMaps.push(searchedMaps[i]);
                         }
-                        // console.log('fitleredMaps', filteredMaps);
                         setTemporaryFilter(filteredMaps);
                         if (i === searchedMaps.length - 1) {
-                            // console.log("TRIGGER GENERATE");
                             setTriggerGenerate(!triggerGenerate);
-                            generateMapCard(temporaryFilter);
                             setShownMaps(mapCard);
                         }
                     });
-                }
-                
+                }                
             }
 
         }
     }
 
-
-    // console.log("temporaryFilter", temporaryFilter);
     return (
         <Grid container >
 

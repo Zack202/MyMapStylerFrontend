@@ -181,7 +181,7 @@ function GlobalStoreContextProvider(props) {
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
                     sort: "name",
-                    filter: [],
+                    filter: store.filter,
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
