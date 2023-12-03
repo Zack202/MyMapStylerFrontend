@@ -192,28 +192,79 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    // create a new map
+    // create a new map                                             
     store.createNewMap = async function (mapname, mapData, mapType) { //input map data and map type
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
-        let newMapName = "Untitled" 
-        let userName = auth.user.userName //MMM
-        let ownerEmail = auth.user.email //mango@gmail.com
-        const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
-        console.log("createNewList response: " + response);
-        if (response.status === 201) {
-            console.log('success')
-            storeReducer({
-                type: GlobalStoreActionType.SET_CURRENT_MAP,
-                payload: response.data.map
-            });
-            // if success bring to map editing screen
-            router.push('/mapEditing/'+ response.data.map._id)
+        //creat new map
+            let newMapName = "Untitled" 
+            let userName = auth.user.userName //MMM
+            let ownerEmail = auth.user.email //mango@gmail.com
+            const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
+            console.log("createNewList response: " + response);
+            if (response.status === 201) {
+                console.log('success')
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_MAP,
+                    payload: response.data.map
+                });
+                // if success bring to map editing screen
+                router.push('/mapEditing/'+ response.data.map._id)
             
-        }
-        else {
-            console.log("API FAILED TO CREATE A NEW MAP");
-        }
+            }
+            else {
+                console.log("API FAILED TO CREATE A NEW MAP");
+            }
+    
+    }
+
+    store.forkMap = async function(dupMap){
+ //duplicate a map
+ 
+    let response = await api.getMapById(dupMap);
+
+    if(response.data.success){
+        dupMap = response.data.map;
+        let counter = 2;
+        let check = true;
+        // new name for the dup map with a system of [name](2) -> [name](3) and so on
+        let dupName = dupMap.name + "(" + counter.toString() + ")";
+        while(check){
+            if(this.idNamePairs.length === 0)
+                break;
+            for(let i = 0; i < this.idNamePairs.length; i++){
+                if(this.idNamePairs[i].name === dupName){
+                    counter += 1;
+                    dupName = dupMap.name + "(" + counter.toString() + ")";
+                    break;
+                }
+                else if (i === this.idNamePairs.length - 1) check = false
+            }
+
+    }
+    let userName = auth.user.userName //MMM
+    let ownerEmail = auth.user.email //mango@gmail.com
+    // console.log(dupMap.mapGeometry);
+    let mapData = dupMap.mapGeometry;
+    let mapType = dupMap.mapType;
+    
+
+    response = await api.createNewMap(dupName, userName, ownerEmail, mapData, mapType);
+    console.log("createNewList response: " + response);
+    if (response.status === 201) {
+        console.log('success')
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_MAP,
+            payload: response.data.map
+        });
+        // if success bring to map editing screen
+        router.push('/mapEditing/'+ response.data.map._id)
+    
+    }
+    else {
+        console.log("API FAILED TO CREATE A NEW MAP");
+    }
+}
     }
 
     store.setCurrentMap = function (id) {

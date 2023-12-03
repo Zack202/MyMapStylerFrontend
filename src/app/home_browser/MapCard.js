@@ -48,72 +48,6 @@ function ListCard(props) {
 
     // let name = idNamePair.fullName;
 
-    function handleAddNewSong(event, id) {
-        // store.addNewSong(id);
-    }
-    function handleUndo(event, id) {
-        // store.undo();
-    }
-    function handleRedo(event,id ) {
-        // store.redo();
-    }
-
-    async function handleDeleteList(event, id) {
-        event.stopPropagation();
-        let _id = event.target.id;
-        _id = ("" + _id).substring("delete-list-".length);
-        store.markListForDeletion(id);
-    }
-
-    function handleLoadList(event, id) {
-        console.log("handleLoadList for " + id);
-        if (!event.target.disabled) {
-            let _id = event.target.id;
-            if (_id.indexOf('list-card-text-') >= 0)
-                _id = ("" + _id).substring("list-card-text-".length);
-
-            console.log("load " + event.target.id);
-
-            // CHANGE THE CURRENT LIST
-            // store.loadSongsToPlay(id);
-        }
-    }
-
-    // let highlighted = "";
-    // if(store.songsToPlay){
-    //     if(store.songsToPlay._id === idNamePair._id)
-    //         highlighted ="inset";
-    // }
-
-
-    // let collapseUPorDown = "";
-    // if(listOpen){
-    //     collapseUPorDown =        
-    //     <Box 
-    //     sx={{display: 'inline-block', float: 'right', marginRight:'30px',}}
-    // >
-    //     <IconButton
-    //         onClick={(event) => {handleCloseClick(idNamePair._id)}}
-    //         aria-expanded={expandedId === idNamePair._id}
-    //         aria-label="show less"
-    //         >
-    //         <KeyboardDoubleArrowUpIcon style={{fontSize:'20pt'}} />
-    //     </IconButton>
-    // </Box>
-    // }
-    // else{
-    //     collapseUPorDown =        <Box 
-    //     sx={{display: 'inline-block', float: 'right', marginRight:'30px',}}
-    // >
-    //     <IconButton
-    //         onClick={(event) => {handleExpandClick(event, idNamePair._id)}}
-    //         aria-expanded={expandedId === idNamePair._id}
-    //         aria-label="show more"
-    //         >
-    //         <KeyboardDoubleArrowDownIcon style={{fontSize:'20pt'}} />
-    //     </IconButton>
-    // </Box>
-    // }
 
     let likeB = "";
     let actionButtons = ""
@@ -154,9 +88,9 @@ function ListCard(props) {
         store.setCurrentList(i);
     };
 
-    const handleDuplicate = (event, i) => {
+    async function handleFork(event) {
         event.stopPropagation();
-        store.createNewList(0, i);
+        store.forkMap(idNamePair._id);
     }
 
     const handleCloseModal = () => {
@@ -321,6 +255,7 @@ function ListCard(props) {
                 id='duplicate-button'
                 variant="contained"
                 sx={{margin: 1, backgroundColor: "maroon"}}
+                onClick={handleFork}
                 >
                 Fork
             </Button>

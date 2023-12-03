@@ -27,7 +27,7 @@ export default function Leafletmap(props) {
 
   return (
     <div>
-      <MapContainer style={{height: "84vh"}} center={[20,100]} zoom={2}>
+      <MapContainer style={{height: "70vh"}} center={[20,100]} zoom={2}>
         <GeoJSON style = {countryStyle} data={geoJSONData} />
       </MapContainer>
     </div>
