@@ -320,7 +320,7 @@ describe('Home Tests', () => {
 
 
   it('Home page Filtering 1', function () {
-    cy.wait(500)
+    cy.wait(1500)
     cy.get(".MuiInputBase-root > #select-filter").click();
     cy.get('[data-value="Text"]').click();
 
@@ -337,7 +337,7 @@ describe('Home Tests', () => {
   });
 
   it('Home page Filtering 2', function () {
-    cy.wait(500);
+    cy.wait(1500);
     cy.get(".MuiInputBase-root > #select-filter").click();
     cy.get('[data-value="Sized Dot"]').click();
 
