@@ -65,7 +65,16 @@ export default function TopAppBanner() {
     if(auth.loggedIn){
         profileLink = "/profile/" + auth.user.userName
 
+    let isGuest = true;
+    if(auth.loggedIn){
+        if (auth.user.userName === "GUEST") {
+            isGuest = true;
+        }
+        else{
+            isGuest = false;
+        }
     }
+
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -190,7 +199,15 @@ export default function TopAppBanner() {
                             p: 2
                             }}
                     >
+<<<<<<<<< Temporary merge branch 1
                             <Button href={profileLink} variant="contained"  marginTop="4" color="primary">
+=========
+                            <Button href="/profile" variant="contained"  marginTop="4" color="primary"
+                            sx={{display:
+                                isGuest
+                                    ? "none"
+                                    : "default",}}>
+>>>>>>>>> Temporary merge branch 2
                                 VIEW PROFILE
                             </Button>
                             <Button onClick={handleLogout} variant="contained" marginTop="4" color="primary">

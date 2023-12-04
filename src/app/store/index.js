@@ -154,6 +154,25 @@ function GlobalStoreContextProvider(props) {
                     search: "",
                 });
             }
+            case GlobalStoreActionType.PUBLISHED:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: null,
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filters: [],
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: payload.mapType,
+                    search: ""
+                });
+            }
             case GlobalStoreActionType.UPDATE_MAP:{
                 return setStore({
                     currentModal: null,
@@ -216,29 +235,33 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    // create a new map
-    store.createNewMap = async function (mapname, mapData, mapType) { //input map data and map type
+    // create a new map                                             
+    store.createNewMap = async function (mapName, mapData, mapType, mapDesc) { //input map data and map type
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
-        let newMapName = "Untitled" 
-        let userName = auth.user.userName //MMM
-        let ownerEmail = auth.user.email //mango@gmail.com
-        const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
-        console.log("createNewList response: " + response);
-        if (response.status === 201) {
-            console.log('success')
-            storeReducer({
-                type: GlobalStoreActionType.SET_CURRENT_MAP,
-                payload: response.data.map
-            });
-            // if success bring to map editing screen
-            router.push('/mapEditing/'+ response.data.map._id)
+        //creat new map
+            let newMapName = mapName
+            let newMapDesc = mapDesc
+            let userName = auth.user.userName //MMM
+            let ownerEmail = auth.user.email //mango@gmail.com
+            const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc);
+            console.log("createNewList response: " + response);
+            if (response.status === 201) {
+                console.log('success')
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_MAP,
+                    payload: response.data.map
+                });
+                // if success bring to map editing screen
+                router.push('/mapEditing/'+ response.data.map._id)
             
         }
         else {
             console.log("API FAILED TO CREATE A NEW MAP");
         }
     }
+<<<<<<<<< Temporary merge branch 1
+=========
 
     store.setCurrentMap = function (id) {
         async function asyncSetCurrentMap(id) {
@@ -374,7 +397,6 @@ function GlobalStoreContextProvider(props) {
         }
         asyncUpdateMapName(diff);
     }
-
 
     // Search and Filter
     store.updateSearch = (search) => {
