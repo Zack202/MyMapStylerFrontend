@@ -445,6 +445,36 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
+    store.publishMap = function(id) {
+        async function asyncPublishMap(id){
+            let response = await api.getMapById(id);
+            if(response.data.success){
+                let map = { ...response.data.map};
+                map.published = true;
+                let diff = jsondiffpatch.diff(map, response.data.map)
+                async function updateMap(diff){
+                    response = await api.updateMapById(id, diff);
+                    if(response.data.success){
+                        response = await api.getMapPairs();
+                        if(response.data.success){
+                            let pairsArray = response.data.idNamePairs;
+                            storeReducer({
+                                type: GlobalStoreActionType.PUBLISHED,
+                                payload:{ 
+                                    idNamePairs: pairsArray,
+                                    map: map
+                                }
+                            });
+                        store.loadIdNamePairs();
+
+                        }
+                    }
+                }
+                updateMap(diff);
+            }
+        }
+        asyncPublishMap(id)
+    }
 
     // Search and Filter
     store.updateSearch = (search) => {
