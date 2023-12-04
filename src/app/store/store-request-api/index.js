@@ -52,7 +52,6 @@ export const updateMapAttributesById = (id, attributes) => {
 export const deleteMap = (id) => api.get(`/deleteMap/${id}`)
 export const getMapPairs = () => api.get(`/mapPairs/`)
 
-
 const apis = {
     createNewMap,
     getMapById,

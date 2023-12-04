@@ -62,14 +62,28 @@ function EditToolbar(props) {
               setEditedName(event.target.value);
             };
 
-            const handleKeyDown = (event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault();
-                  handleBlur();
-                }
-              };
-
         console.log("name: " + name);
+
+        const handleChange = (event) => {
+          setEditedName(event.target.value);
+        };
+    
+        const handleKeyDown = (event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            handleBlur();
+          }
+        };
+        const handleUndo = () => {
+          console.log('undo')
+          store.undo()
+          
+        };
+        const handleRedo = () => {
+          console.log('redo')
+          store.redo()
+          
+        };
     return(
         <div id={styles.edit-toolbar} >
             <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
@@ -88,22 +102,6 @@ function EditToolbar(props) {
             <SaveIcon sx={{fontSize: "40pt"}}/>
             </IconButton>
 
-            <IconButton>
-            <TextFieldsIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
-
-            <IconButton>
-            <FormatColorFillIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
-
-            <IconButton>
-            <UndoIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
-
-            <IconButton>
-            <RedoIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
-
             {/* <Alert
               severity="success"
               onClose={handleCloseAlert}
@@ -112,10 +110,26 @@ function EditToolbar(props) {
             >
               Saved Successfully!
             </Alert> */}
-        </div>
+
+        <IconButton>
+          <TextFieldsIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+
+        <IconButton>
+          <FormatColorFillIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+
+        <IconButton onClick={handleUndo}>
+          <UndoIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+
+        <IconButton onClick={handleRedo}>
+          <RedoIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+      </div>
 
     );
-    }else{
-        return null
-    }
+  } else {
+    return null
+  }
 } export default EditToolbar

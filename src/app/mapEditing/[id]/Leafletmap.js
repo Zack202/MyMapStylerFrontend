@@ -77,12 +77,14 @@ return (
 }
 
 export default function Leafletmap(props) {
+
   const mapGeo = props.mapGeo;
   const borderSwitch = props.borderSwitch;
   const borderWidth = props.borderWidth;
   const borderColor = props.borderColor;
   const regionSwitch = props.regionSwitch;
   const regionNameColor = props.regionNameColor;
+  const mapColor = props.mapColor;
   const { store } = useContext(GlobalStoreContext);
   const backgroundColor = props.backgroundColor;
   const center = props.center;
@@ -100,14 +102,16 @@ export default function Leafletmap(props) {
     }, [mapGeo]);
   
 
-  let countryStyle = {
-    fillColor: "maroon",
+  const countryStyle = {
+    fillColor: mapColor,
     fillOpacity: 1,
     color: borderColor,
     weight: borderWidth,
   };
   if (!borderSwitch) {
     countryStyle = {
+      fillColor: mapColor,
+      fillOpacity: 1,
       color: 'transparent',
       weight: 0,
     };
