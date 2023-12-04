@@ -1,8 +1,9 @@
 describe('User Tests', () => {
 
   beforeEach(() => {
-    cy.viewport(1200, 750)
-    cy.visit("http://localhost:3000")
+    cy.viewport(1200, 750);
+    cy.visit("http://localhost:3000");
+    cy.wait(500);
   })
 
   Cypress.on('uncaught:exception', (err, runnable) => {
@@ -24,7 +25,7 @@ describe('User Tests', () => {
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
 
-    cy.location('href').should('include', '/home_browser')
+    cy.location('href').should('include', '/home_browser');
   });
 
   it('Register', function () {
@@ -84,7 +85,7 @@ describe('User Tests', () => {
     cy.get('#email').type('exampleUser');
     cy.get('#password').type('exampleUser854734t65274723');
     cy.get('#signIn').click();
-    cy.contains("Error: Wrong email or password provided.")
+    cy.contains("Error: Wrong email or password provided.");
     cy.contains('Close', { matchCase: false }).click();
 
     // wrong both
@@ -93,7 +94,7 @@ describe('User Tests', () => {
     cy.get('#email').type('exampleUser854734t65274723');
     cy.get('#password').type('exampleUser854734t65274723');
     cy.get('#signIn').click();
-    cy.contains("Error: Wrong email or password provided.")
+    cy.contains("Error: Wrong email or password provided.");
   });
 
   it('Fail Login then Log in', function () {
@@ -102,7 +103,7 @@ describe('User Tests', () => {
     cy.get('#email').type('exampleUser854734t65274723');
     cy.get('#password').type('exampleUser854734t65274723');
     cy.get('#signIn').click();
-    cy.contains("Error: Wrong email or password provided.")
+    cy.contains("Error: Wrong email or password provided.");
 
     cy.contains('Close', { matchCase: false }).click()
 
@@ -112,13 +113,13 @@ describe('User Tests', () => {
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
 
-    cy.location('href').should('include', '/home_browser')
+    cy.location('href').should('include', '/home_browser');
   });
 
 
 
   it('Fail Register Blank', function () {
-    let ran = Math.random()
+    let ran = Math.random();
 
     // blank firstName
     cy.contains('Create An Account', { matchCase: false }).click();
@@ -130,7 +131,7 @@ describe('User Tests', () => {
 
     cy.contains('Confirm Registration', { matchCase: false }).click();
 
-    cy.contains("Error: Please enter all required fields.")
+    cy.contains("Error: Please enter all required fields.");
     cy.contains('Close', { matchCase: false }).click();
 
     // blank UserName
@@ -139,7 +140,7 @@ describe('User Tests', () => {
 
     cy.contains('Confirm Registration', { matchCase: false }).click();
 
-    cy.contains("Error: Please enter all required fields.")
+    cy.contains("Error: Please enter all required fields.");
     cy.contains('Close', { matchCase: false }).click();
 
     // blank Password
@@ -148,12 +149,12 @@ describe('User Tests', () => {
 
     cy.contains('Confirm Registration', { matchCase: false }).click();
 
-    cy.contains("Error: Please enter all required fields.")
+    cy.contains("Error: Please enter all required fields.");
 
   });
 
   it('Fail Register Duplicates', function () {
-    let ran = Math.random()
+    let ran = Math.random();
 
     cy.contains('Create An Account', { matchCase: false }).click();
 
@@ -182,7 +183,7 @@ describe('User Tests', () => {
   });
 
   it('Fail Register Invalid', function () {
-    let ran = Math.random()
+    let ran = Math.random();
 
     cy.contains('Create An Account', { matchCase: false }).click();
 
@@ -220,7 +221,7 @@ describe('User Tests', () => {
 
     cy.contains('Confirm Registration', { matchCase: false }).click();
 
-    cy.contains("Error: Please enter the same password twice.")
+    cy.contains("Error: Please enter the same password twice.");
 
   });
 
@@ -239,6 +240,7 @@ describe('Home Tests', () => {
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
     cy.location('href').should('include', '/home_browser')
+    cy.wait(500);
   })
 
   Cypress.on('uncaught:exception', (err, runnable) => {
@@ -320,7 +322,7 @@ describe('Home Tests', () => {
 
 
   it('Home page Filtering 1', function () {
-    cy.wait(1500)
+    cy.wait(1000)
     cy.get(".MuiInputBase-root > #select-filter").click();
     cy.get('[data-value="Text"]').click();
 
@@ -337,7 +339,7 @@ describe('Home Tests', () => {
   });
 
   it('Home page Filtering 2', function () {
-    cy.wait(1500);
+    cy.wait(1000);
     cy.get(".MuiInputBase-root > #select-filter").click();
     cy.get('[data-value="Sized Dot"]').click();
 
@@ -366,9 +368,11 @@ describe('Editing Tests', () => {
     cy.get('#email').type('exampleUser@gmail.com');
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
-    cy.location('href').should('include', '/home_browser')
+    cy.location('href').should('include', '/home_browser');
 
-    cy.contains('Map1', { matchCase: false, timeout: 10000 }).click();
+    cy.wait(500);
+
+    cy.contains('Map2', { matchCase: false, timeout: 10000 }).click();
     cy.location('href').should('include', '/mapEditing')
   })
 
@@ -379,6 +383,9 @@ describe('Editing Tests', () => {
 
   it('Home page MapCard', function () {
 
+    //cy.contains('Brazil', { matchCase: false, timeout: 10000 }).should('not.exist');
+
+    //cy.contains('Map21', { matchCase: false, timeout: 10000 });
   });
 
 });
