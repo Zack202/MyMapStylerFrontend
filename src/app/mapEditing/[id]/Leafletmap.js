@@ -120,7 +120,7 @@ export default function Leafletmap(props) {
 
   return (
     <div>
-      <MapContainer ref={mapRef} style={{height: "84vh"}} center={center} zoom={zoom}>
+      <MapContainer ref={mapRef} style={{height: "70vh"}} center={center} zoom={zoom}>
       <LeafletmapInside 
       countryStyle={countryStyle}
       geoJSONData={geoJSONData}

@@ -192,7 +192,7 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                 <MapCard />
                 <MapCard />
         <MapCard />*/}
-                {shownMaps}
+                {mapCard}
             </Box>
             {/* <CreateMapModal open={open}/> */}
             <Box item xs={12} sx={{

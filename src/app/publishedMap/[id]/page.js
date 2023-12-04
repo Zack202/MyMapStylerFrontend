@@ -13,13 +13,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import CommentSection from './CommentSection';
-import TopAppBanner from '../Utils/TopAppBanner';
+import CommentSection from './CommentSection.js';
+import TopAppBanner from '../../Utils/TopAppBanner';
 import { MapContainer, TileLayer} from 'react-leaflet'
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import AuthContext from '../auth'
+import AuthContext from '../../auth'
 import { useContext } from 'react';
+import { GlobalStoreContext } from '../../store/index.js'
+import customA from './customA.geo.json'
+
 //import "leaflet/dist/leaflet.css"
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -38,15 +41,20 @@ const defaultTheme = createTheme({
 
 export default function specificMapScreen(){
 
+    const { store } = useContext(GlobalStoreContext);
 
     if (typeof window !== 'undefined') {
-
-        // const { auth } = useContext(AuthContext);
-
-        // if (auth.loggedIn) {
-        //     const router = useRouter();
-        //     router.push('/login');
-        //   }
+        let mapName = ""
+        if (store.currentMap != null && store.currentMap.name != null){
+            mapName = store.currentMap.name
+        }
+        let mapData;
+        if (store.currentMap == null){
+            mapData = customA
+        }
+        else {
+            mapData = store.currentMap.mapGeometry
+        }
     return(   
         <div>
         <div>
@@ -82,12 +90,14 @@ export default function specificMapScreen(){
     "describe describe describe"`,
                             }}
                         >
-                            <Box sx={{ gridArea: 'maphead', bgcolor: '#a9a9a9' }}>My Map of Asia
+                            <Box sx={{ gridArea: 'maphead', bgcolor: '#a9a9a9' }}>{mapName}
                                 
                             </Box>
 
                             <Box sx={{ gridArea: 'map', bgcolor: '#d49182' }}>
-                             <Leafletmap />
+                            <Leafletmap 
+                                mapGeo={mapData}
+                            />
                             </Box>
                             <Box sx={{ gridArea: 'comments', bgcolor: '#800000' }}>Comments
                                 <CommentSection />
