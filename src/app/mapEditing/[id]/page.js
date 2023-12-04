@@ -75,6 +75,9 @@ export default function MapEditingScreen() {
     }
     let mapName = null;
     if (typeof window !== 'undefined') {
+        if (store.currentMap != null && store.currentMap.name != null){
+            mapName = store.currentMap.name
+        }
     return(
         <div className={styles.container}>
             <Grid container spacing={0}>

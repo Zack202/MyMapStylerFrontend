@@ -122,6 +122,7 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                 }
             }
             // Filtering
+            if (store.filter !== null && store.filter !== undefined) {
             if (store.filter.length === 0) {
                 generateMapCard(searchedMaps);
                 setShownMaps(mapCard);
@@ -174,6 +175,7 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                     });
                 }                
             }
+        }
 
         }
     }
