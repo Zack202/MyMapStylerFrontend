@@ -47,11 +47,6 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
         }
     }
 
-    // console.log("store: ", store);
-    // console.log("auth: ", auth);
-
-
-
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
@@ -103,10 +98,6 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                 display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
             }} style={backgroundStyle}>
 
-                {/*<MapCard />
-                <MapCard />
-                <MapCard />
-        <MapCard />*/}
                 {mapCard}
             </Box>
             {/* <CreateMapModal open={open}/> */}

@@ -26,7 +26,7 @@ export const GlobalStoreActionType = {
     FILTER: 'FILTER',
     CREATE_MAP_MODAL: 'CREATE_MAP_MODAL',
     UPDATE_MAP: 'UPDATE_MAP',
-    UPDATE_SEARCH: 'UPDATE_SEARCH'
+    UPDATE_SEARCH: 'UPDATE_SEARCH',
 
 }
 
@@ -135,6 +135,25 @@ function GlobalStoreContextProvider(props) {
                     currentModal: null,
                     idNamePairs: store.idNamePairs,
                     currentMap: payload,
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filters: [],
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: payload.mapType,
+                    search: ""
+                });
+            }
+            case GlobalStoreActionType.PUBLISHED:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: null,
                     currentMapFeatures: JSON, //might need to change this
                     currentMapGeometry: JSON, //might need to change this
                     mapIdMarkedForDeletion: null,
@@ -389,6 +408,37 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncUpdateMapName(diff);
+    }
+
+    store.publishMap = function(id) {
+        async function asyncPublishMap(id){
+            let response = await api.getMapById(id);
+            if(response.data.success){
+                let map = { ...response.data.map};
+                map.published = true;
+                let diff = jsondiffpatch.diff(map, response.data.map)
+                async function updateMap(diff){
+                    response = await api.updateMapById(id, diff);
+                    if(response.data.success){
+                        response = await api.getMapPairs();
+                        if(response.data.success){
+                            let pairsArray = response.data.idNamePairs;
+                            storeReducer({
+                                type: GlobalStoreActionType.PUBLISHED,
+                                payload:{ 
+                                    idNamePairs: pairsArray,
+                                    map: map
+                                }
+                            });
+                        store.loadIdNamePairs();
+
+                        }
+                    }
+                }
+                updateMap(diff);
+            }
+        }
+        asyncPublishMap(id)
     }
 
     // Search and Filter

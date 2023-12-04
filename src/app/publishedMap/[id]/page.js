@@ -13,7 +13,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
-import CommentSection from './CommentSection';
+import CommentSection from './[id]/CommentSection';
 import TopAppBanner from '../Utils/TopAppBanner';
 import { MapContainer, TileLayer} from 'react-leaflet'
 import { useEffect } from 'react';

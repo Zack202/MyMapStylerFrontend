@@ -22,11 +22,10 @@ import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
 import ExportMapModal from '../components/ExportMapModal.js'
 import DeleteMapModal from '../components/DeleteMapModal.js'
-import PublishedCard from './PublishedMapCard';
 
 
 
-function ListCard(props) {
+function PublishedCard(props) {
     
 
     const router = useRouter()
@@ -34,10 +33,8 @@ function ListCard(props) {
     const { idNamePair, selected } = props;
 
     const { store } = useContext(GlobalStoreContext);
-    // const {auth} = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    // const { idNamePair, selected } = props;
     const [isActive, setIsActive] = useState(false);
     const [expandedId, setExpandedId] = useState(-1);
     const [error, setError] = useState(false);
@@ -47,7 +44,6 @@ function ListCard(props) {
     const [numLikes, setLikes] = useState(0);
     const [numDislikes, setNumDislikes] = useState(0);
 
-    // let name = idNamePair.fullName;
 
 
     let likeB = "";
@@ -158,21 +154,8 @@ function ListCard(props) {
         router.push('/mapEditing/'+idNamePair._id)
     }
 
-    let cardElement = ""
 
-
-    //published card
-    if(idNamePair.published){
-        cardElement = 
-        <PublishedCard
-        key={idNamePair._id}
-        idNamePair={idNamePair}
-        selected={false}
-        />
-    }
-    //unpublished Card
-    else{
-    cardElement =
+    let cardElement =
     <div id='cards'>
     <Card onClick={() => handleClickForMapEdit()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
     >
@@ -223,7 +206,35 @@ function ListCard(props) {
 
             <Box sx={{ p: 1, flexGrow: 1, right:"0", position: "absolute", top: 0}}>
                 <Typography variant='h7' fontSize="12pt">Created By: User</Typography>
-            </Box>    
+            </Box>
+
+            {/* like dislike comments container */}
+            <Box sx={{flexGrow: 0, p: 2, right: 0, position: 'absolute', display: "flex", bottom: 0, backgroundColor: "gray", height: "50%",
+        borderRadius: "10px"}}>
+            {/* <Box sx={{p: 0}}> */}
+                <IconButton onClick={(event) => {
+                        handleLikePlaylis(event, idNamePair)
+                    }} 
+                    aria-label='like'>
+                    <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>5</Typography>
+                </IconButton>
+            {/* </Box> */}
+
+            {/* <Box sx={{padding: 0}} > */}
+                <IconButton 
+                    aria-label='dislike'>
+                    <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>5</Typography>
+                </IconButton>
+
+                <IconButton aria-label='comments'>
+                    <CommentIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>5</Typography>
+                </IconButton>
+            {/* </Box> */}
+            </Box>
+    
                   
         </ListItem>
         
@@ -241,14 +252,12 @@ function ListCard(props) {
                 Fork
             </Button>
             <ExportMapModal />
-            <Button 
-                id='publish-button'
-                variant="contained"
-                sx={{margin: 1, visibility: actionButtons, backgroundColor: "maroon"}}
-                onClick={handlePublish}
-                >
-                Publish
-            </Button>
+
+        <Box 
+            sx={{display: 'inline-block',  p: 1,}}
+            >
+                <Typography fontSize="12pt"> Views: 10 </Typography>
+        </Box>
         </div>
     </div>
 
@@ -256,7 +265,6 @@ function ListCard(props) {
     
     </Card>
   </div>
-    }
 
     if (editActive) {
         cardElement =
@@ -313,4 +321,4 @@ function ListCard(props) {
     );
 }
 
-export default ListCard;
+export default PublishedCard;
