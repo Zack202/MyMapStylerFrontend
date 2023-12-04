@@ -236,6 +236,7 @@ export default function PrimarySearchAppBar() {
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
+              id="searchBar"
               inputProps={{ 'aria-label': 'search' }}
               onBlur={handleBlurSearch}
               onChange={handleSearchChange}
@@ -272,6 +273,7 @@ export default function PrimarySearchAppBar() {
           <Button
             variant="contained"
             onClick={handleSubmitFilter}
+            id="applyFilter"
           >
             Apply Filter
           </Button>

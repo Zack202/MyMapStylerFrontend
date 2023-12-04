@@ -7,7 +7,6 @@ import { useEffect, useState, useContext } from 'react';
 import customA from './customA.geo.json'
 import { GlobalStoreContext } from '../../store'
 import { useRef } from 'react';
-import styled from 'styled-components';
 
 const BackgroundOverlay = ({ backgroundColor }) => {
   const style = {
