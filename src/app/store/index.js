@@ -444,6 +444,38 @@ function GlobalStoreContextProvider(props) {
         }
         asyncUpdateMapName(diff);
     }
+    
+    store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom) => {
+        const updatedAttributes = {
+            mapColor,
+            borderSwitch,
+            borderWidth,
+            borderColor,
+            regionSwitch,
+            regionNameColor,
+            backgroundColor,
+            center,
+            zoom,
+          };
+        
+          // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits
+          for (const key in updatedAttributes) {
+            if (Object.prototype.hasOwnProperty.call(updatedAttributes, key)) {
+              store.currentMap.mapFeatures.edits[key] = updatedAttributes[key];
+            }
+          }
+
+        async function asyncUpdateMapAttributes(attributes){
+            let response = await api.updateMapAttributesById(store.currentMap._id, attributes);
+            if(response.data.success){
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: store.currentMap
+                }) 
+            }
+        }
+        asyncUpdateMapAttributes(store.currentMap.mapFeatures);
+    }
 
 
     // Search and Filter

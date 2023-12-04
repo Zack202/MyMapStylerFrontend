@@ -18,19 +18,53 @@ import { useState } from 'react';
 export default function MapEditingScreen() {
     const { store } = useContext(GlobalStoreContext);
 
-    //State varibles for the map
-    const [borderSwitch, setBorderSwitch] = useState(() => store.currentMap.mapFeatures.edits?.borderSwitch || true);
-    const [borderWidth, setBorderWidth] = useState(() => store.currentMap.mapFeatures.edits?.borderWidth || 2);
-    const [borderColor, setBorderColor] = useState(() => store.currentMap.mapFeatures.edits?.borderColor || "black");
-    const [regionSwitch, setRegionSwitch] = useState(() => store.currentMap.mapFeatures.edits?.regionSwitch || false);
-    const [regionNameColor, setRegionNameColor] = useState(() => store.currentMap.mapFeatures.edits?.regionNameColor || "red");
-    const [backgroundColor, setBackgroundColor] = useState(() => store.currentMap.mapFeatures.edits?.backgroundColor || "white");
-    const [tempCenter, setTempCenter] = useState(() => store.currentMap.mapFeatures.edits?.center || [0, 0]);
-    const [center, setCenter] = useState(() => store.currentMap.mapFeatures.edits?.center || [0, 0]);
-    const [tempZoom, setTempZoom] = useState(() => store.currentMap.mapFeatures.edits?.zoom || 1);
-    const [zoom, setZoom] = useState(() => store.currentMap.mapFeatures.edits?.zoom || 1);
-    const [mapColor, setMapColor] = useState(() => store.currentMap.mapFeatures.edits?.mapColor || "maroon");
-
+    const defaultValues = {
+        borderSwitch: true,
+        borderWidth: 2,
+        borderColor: "black",
+        regionSwitch: false,
+        regionNameColor: "red",
+        backgroundColor: "white",
+        tempCenter: [0, 0],
+        center: [0, 0],
+        tempZoom: 1,
+        zoom: 1,
+        mapColor: "maroon",
+      };
+      
+      const [borderSwitch, setBorderSwitch] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.borderSwitch ?? defaultValues.borderSwitch) : defaultValues.borderSwitch
+      );
+      const [borderWidth, setBorderWidth] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.borderWidth ?? defaultValues.borderWidth) : defaultValues.borderWidth
+      );
+      const [borderColor, setBorderColor] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.borderColor ?? defaultValues.borderColor) : defaultValues.borderColor
+      );
+      const [regionSwitch, setRegionSwitch] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.regionSwitch ?? defaultValues.regionSwitch) : defaultValues.regionSwitch
+      );
+      const [regionNameColor, setRegionNameColor] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameColor ?? defaultValues.regionNameColor) : defaultValues.regionNameColor
+      );
+      const [backgroundColor, setBackgroundColor] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.backgroundColor ?? defaultValues.backgroundColor) : defaultValues.backgroundColor
+      );
+      const [tempCenter, setTempCenter] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.tempCenter) : defaultValues.tempCenter
+      );
+      const [center, setCenter] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.center) : defaultValues.center
+      );
+      const [tempZoom, setTempZoom] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.tempZoom) : defaultValues.tempZoom
+      );
+      const [zoom, setZoom] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.zoom) : defaultValues.zoom
+      );
+      const [mapColor, setMapColor] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
+      );
 
     let mapData;
     if (store.currentMap == null){
