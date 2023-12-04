@@ -43,6 +43,16 @@ export default function TopAppBanner() {
     const handleProfileOpen = () => setProfileOpen(true);
     const handleProfileClose = () => setProfileOpen(false);
 
+    let isGuest = true;
+    if (auth.loggedIn) {
+        if (auth.user.userName === "GUEST") {
+            isGuest = true;
+        }
+        else {
+            isGuest = false;
+        }
+    }
+
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -190,7 +200,12 @@ export default function TopAppBanner() {
                             p: 2
                             }}
                     >
-                            <Button href={profileLink} variant="contained"  marginTop="4" color="primary">
+                            <Button href={profileLink} variant="contained"  marginTop="4" color="primary" sx={{
+                                display:
+                                isGuest
+                                    ? "none"
+                                    : "contained",
+                            }}>
                                 VIEW PROFILE
                             </Button>
                             <Button onClick={handleLogout} variant="contained" marginTop="4" color="primary">

@@ -66,11 +66,12 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
     // if temporary filter is changed, update
     useEffect(() => {
         if(temporaryFilter !== "NEVER SET" ) {
+            // console.log("USE EFFECT temporaryFilter:", temporaryFilter);
             generateMapCard(temporaryFilter);
             setShownMaps(mapCard);
         }
             
-    }, [triggerGenerate]); 
+    }, [temporaryFilter]); 
 
     // if search is changed, update
     useEffect(() => {
@@ -98,6 +99,7 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                     ))
                 }
             </List>;
+            // console.log("--------------------------");
     }
 
     const runFilters = () => {
@@ -115,7 +117,7 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                 }
                 if(searchedMaps.length === 0){
                     setTemporaryFilter([]);
-                    setTriggerGenerate(!triggerGenerate);
+                    // setTriggerGenerate(!triggerGenerate);
                     setShownMaps(mapCard);
                 }
             }
@@ -160,10 +162,13 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                     store.getMapById(searchedMaps[i]._id).then((map) => {
                         if (filter2.includes(map.data.map.mapType)) {
                             filteredMaps.push(searchedMaps[i]);
+                            // console.log("filteredMaps:", filteredMaps);
                         }
-                        setTemporaryFilter(filteredMaps);
+                        
                         if (i === searchedMaps.length - 1) {
-                            setTriggerGenerate(!triggerGenerate);
+                            setTemporaryFilter(filteredMaps);
+                            // console.log("set Temporary filter:", filteredMaps);
+                            // setTriggerGenerate(!triggerGenerate);
                             setShownMaps(mapCard);
                         }
                     });
@@ -214,3 +219,27 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
 
     )
 }
+
+/*
+function handleSortName() {
+    let sortedProducts = store.idNamePairs.sort((p1, p2)
+     => p1.name.toUpperCase() < p2.name.toUpperCase() ? -1 :
+     (p1.name.toUpperCase() > p2.name.toUpperCase()) ? 1 : 0 );
+     console.log(sortedProducts);
+     handleMenuClose();
+}
+function handleSortLikes() {
+    let sortedProducts = store.idNamePairs.sort((p1, p2)
+     => p1.likes < p2.likes ? 1 :
+     (p1.likes > p2.likes) ? -1 : 0 );
+     console.log(sortedProducts);
+     handleMenuClose();
+}
+function handleSortDisikes() {
+    let sortedProducts = store.idNamePairs.sort((p1, p2)
+     => p1.dislikes < p2.dislikes ? 1 :
+     (p1.dislikes > p2.dislikes) ? -1 : 0 );
+     console.log(sortedProducts);
+     handleMenuClose();
+}
+*/

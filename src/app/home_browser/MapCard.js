@@ -244,7 +244,7 @@ function ListCard(props) {
             // }}  
             >
             <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
-            Map Card Name: {idNamePair.name}
+            {idNamePair.name}
             </Link>
             
             <Box sx={{flexGrow: 1, display: "inline-block", float:'left',}}>
