@@ -232,7 +232,7 @@ export default function MapEditor(props) {
                   />
                </Typography>
                </Box>
-               <Box className = {styles.item_box}>
+               {/* <Box className = {styles.item_box}>
                <Typography className= {styles.text_color} component="h1" variant="h6"><i>Region Name Colors:</i> { }
                   <input
                      type="color"
@@ -241,7 +241,7 @@ export default function MapEditor(props) {
                      onChange={(e) => handleColorChangeRegionName(e.target.value)}
                   />
                </Typography>
-               </Box>
+               </Box> */}
                <Box className = {styles.item_box}>
                <Typography className= {styles.text_color} component="h1" variant="h6"><i>Background Color:</i> {}
                   <input
