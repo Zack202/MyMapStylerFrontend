@@ -216,7 +216,7 @@ function ListCard(props) {
 
             <div>
             <Typography sx={{top: 20, position: "absolute", width: "25%"}}>
-            This is the discription for a map. Users can add a description to give other users a better idea of what the map is about.
+            {idNamePair.description}
             </Typography>
             </div>
         </Box>

@@ -14,10 +14,11 @@ const api = axios.create({
   baseURL,
 });
 
-export const createNewMap = (name, userName, ownerEmail, mapData, mapType) => {
+export const createNewMap = (name, userName, ownerEmail, mapData, mapType, mapDesc) => {
     return api.post('/createNewMap',{
         //body
         name: name,//{ type: String, required: true },
+        description: mapDesc, //{type: String, required: true}
         userName: userName, //{type:String,required: true},
         ownerEmail: ownerEmail,//{ type: String, required: true },
         likes: [], //{type:[String], required: false},

@@ -212,14 +212,15 @@ function GlobalStoreContextProvider(props) {
     }
 
     // create a new map                                             
-    store.createNewMap = async function (mapname, mapData, mapType) { //input map data and map type
+    store.createNewMap = async function (mapName, mapData, mapType, mapDesc) { //input map data and map type
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
         //creat new map
-            let newMapName = "Untitled" 
+            let newMapName = mapName
+            let newMapDesc = mapDesc
             let userName = auth.user.userName //MMM
             let ownerEmail = auth.user.email //mango@gmail.com
-            const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
+            const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc);
             console.log("createNewList response: " + response);
             if (response.status === 201) {
                 console.log('success')
