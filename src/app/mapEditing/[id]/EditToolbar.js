@@ -11,73 +11,83 @@ import GlobalStoreContext from '../../store';
 import { useContext } from 'react';
 
 function EditToolbar(props) {
-    const { name } = props;
-    if (typeof window !== 'undefined') {
-        const { store } = useContext(GlobalStoreContext);
-            const [editing, setEditing] = useState(false);
-            const [editedName, setEditedName] = useState(name);
-          
-            const handleDoubleClick = () => {
-              setEditing(true);
-              setEditedName(name);
-            };
-          
-            const handleBlur = () => {
-              setEditing(false);
-              if(editedName != name && editedName != ""){
-                store.updateMapName(editedName);
-              }
-            };
-          
-            const handleChange = (event) => {
-              setEditedName(event.target.value);
-            };
+  const { name } = props;
+  if (typeof window !== 'undefined') {
+    const { store } = useContext(GlobalStoreContext);
+    const [editing, setEditing] = useState(false);
+    const [editedName, setEditedName] = useState(name);
 
-            const handleKeyDown = (event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault();
-                  handleBlur();
-                }
-              };
+    const handleDoubleClick = () => {
+      setEditing(true);
+      setEditedName(name);
+    };
 
-        console.log("name: " + name);
-    return(
-        <div id={styles.edit-toolbar} >
-            <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
-                    {editing ? (
-                <TextField
-                value={editedName}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-                />
-            ) : (
-                <div>{name}</div>
-            )}
-            </div>
-            <IconButton>
-            <ColorLensIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
+    const handleBlur = () => {
+      setEditing(false);
+      if (editedName != name && editedName != "") {
+        store.updateMapName(editedName);
+      }
+    };
 
-            <IconButton>
-            <TextFieldsIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
+    const handleChange = (event) => {
+      setEditedName(event.target.value);
+    };
 
-            <IconButton>
-            <FormatColorFillIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleBlur();
+      }
+    };
+    const handleUndo = () => {
+      console.log('undo')
+      store.undo()
+      
+    };
+    const handleRedo = () => {
+      console.log('redo')
+      store.redo()
+      
+    };
 
-            <IconButton>
-            <UndoIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
-
-            <IconButton>
-            <RedoIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
+    console.log("name: " + name);
+    return (
+      <div id={styles.edit - toolbar} >
+        <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
+          {editing ? (
+            <TextField
+              value={editedName}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+          ) : (
+            <div>{name}</div>
+          )}
         </div>
+        <IconButton>
+          <ColorLensIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+
+        <IconButton>
+          <TextFieldsIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+
+        <IconButton>
+          <FormatColorFillIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+
+        <IconButton onClick={handleUndo}>
+          <UndoIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+
+        <IconButton onClick={handleRedo}>
+          <RedoIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+      </div>
 
     );
-    }else{
-        return null
-    }
+  } else {
+    return null
+  }
 } export default EditToolbar

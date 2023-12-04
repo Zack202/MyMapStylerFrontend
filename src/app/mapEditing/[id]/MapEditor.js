@@ -10,9 +10,11 @@ import Switch from '@mui/material/Switch';
 // import { coloris, init } from "@melloware/coloris";
 import InputAdornment from '@mui/material/InputAdornment';
 import { DataGrid } from '@mui/x-data-grid';
-import { useEffect } from 'react';
+import { useEffect , useContext} from 'react';
 import dynamic from 'next/dynamic';
 import ImportMapDataModal from '../../components/ImportMapDataModal';
+import { GlobalStoreContext } from '../../store/index.js'
+
 
 
 const DynamicColoris = dynamic(() => import('@melloware/coloris'), {
@@ -27,6 +29,7 @@ export default function MapEditor() {
        }, []);
 
     const customDataProperties = "Fizzy Drink Name: String"
+    const { store } = useContext(GlobalStoreContext);
 
     const rows = [
         { color: 'red', id: 1, label: 'Soda'},
@@ -65,6 +68,15 @@ export default function MapEditor() {
             ),
           },
         ]
+      const handleColorChange = (event) => {
+         if(store.currentMap.mapFeatures == null ){
+            store.addChangePriColorTransaction('maroon', event)
+         }
+         else{
+            store.addChangePriColorTransaction(store.currentMap.mapFeatures.edits.priColor, event)
+         }
+         console.log('handleclorchange')
+      }
 
     return(
       <Box item xs={12} sx={{position:"absolute", width: "25%", 

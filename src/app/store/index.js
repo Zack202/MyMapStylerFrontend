@@ -3,6 +3,8 @@ import { createContext, useContext, useState } from 'react'
 import AuthContext from '../auth'
 import { useRouter } from 'next/navigation';
 import jsondiffpatch from 'jsondiffpatch'
+import jsTPS from '../common/jsTPS'
+import ChangePriColor_Transaction from '../transactions/ChangePriColor_Transaction'
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -30,6 +32,8 @@ export const GlobalStoreActionType = {
     UPDATE_FILTER: 'UPDATE_FILTER',
 
 }
+
+const tps = new jsTPS();
 
 const CurrentModal = {
     NONE: 'NONE',
@@ -253,21 +257,32 @@ function GlobalStoreContextProvider(props) {
         asyncSetCurrentMap(id)
     }
     
-    store.updateMapFeatures = function (id, mapZoom, mapCenter) { //will add other features?
+    store.updateMapFeatures = function (id, priColor) { //will add other features?
         //get map
         async function asyncUpdateMapFeatures(id){
             let response = await api.getMapById(id);
             if(response.data.success){
                 let map = response.data.map;
-                map.mapZoom = mapZoom;
-                map.mapCenter = mapCenter;
-                async function updateMap(map){
-                    response = await api.updateMapById(id, map);
+                if(map.mapFeatures == null){
+                    map.mapFeatures = {edits: {priColor: priColor}}
+                }
+                else{
+                    map.mapFeatures.edits.priColor = priColor;
+                }
+                 //let diff = jsondiffpatch.diff(store.currentMap, map);
+                 async function updateMap(mapmapFeatures){
+                    response = await api.updateMapFeaturesById(id, mapmapFeatures);
                     if(response.data.success){
-                        //bring to map edit screen
+                        //update store
+                        storeReducer({
+                            type: GlobalStoreActionType.UPDATE_MAP,
+                            payload: map
+                        }) 
+                        //bring to map edit screen?
+                        console.log('update map store')
                     }
                 }
-                updateMap(map);
+                updateMap(map.mapFeatures);
             }
 
         }
@@ -380,6 +395,13 @@ function GlobalStoreContextProvider(props) {
     }
 
     //Transaction stack functions
+    store.addChangePriColorTransaction = function (oldColor, newColor)  {
+        console.log('add transaction to stack')//Create transaction and add to stack
+        let transaction = new ChangePriColor_Transaction(store, oldColor, newColor);
+        tps.addTransaction(transaction);
+        
+    }
+
     store.undo = function () {
         tps.undoTransaction();
     }
