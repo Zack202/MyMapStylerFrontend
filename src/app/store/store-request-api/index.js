@@ -14,10 +14,11 @@ const api = axios.create({
   baseURL,
 });
 
-export const createNewMap = (name, userName, ownerEmail, mapData, mapType) => {
+export const createNewMap = (name, userName, ownerEmail, mapData, mapType, mapDesc, mapFeatures) => {
     return api.post('/createNewMap',{
         //body
         name: name,//{ type: String, required: true },
+        description: mapDesc, //{type: String, required: true}
         userName: userName, //{type:String,required: true},
         ownerEmail: ownerEmail,//{ type: String, required: true },
         likes: [], //{type:[String], required: false},
@@ -26,7 +27,7 @@ export const createNewMap = (name, userName, ownerEmail, mapData, mapType) => {
         date: 0,//{type: Date, required: false},
         published: false, //{type: Boolean, required: true},
         mapGeometry: mapData, //{type: Object, required: true},
-        mapFeatures: null, //{type: Object, required: true},
+        mapFeatures: mapFeatures ? mapFeatures : null, //{type: Object, required: true},
         mapZoom: 0,//{type: Number, required: false},
         mapCenter: [],//{type: [Number], required: false},
         previousCreators: [],//{ type: [String], required: false},
@@ -43,13 +44,20 @@ export const updateMapById = (id, diff) => {
       diff : diff
   })
 }
-export const getMapPairs = () => api.get(`/mapPairs/`)
+export const updateMapAttributesById = (id, attributes) => {
+  return api.put(`/updateMapFeatures/${id}`, {
+      // SPECIFY THE PAYLOAD
+      features : attributes
+  })
+}
 export const deleteMap = (id) => api.get(`/deleteMap/${id}`)
+export const getMapPairs = () => api.get(`/mapPairs/`)
 
 const apis = {
     createNewMap,
     getMapById,
     updateMapById,
+    updateMapAttributesById,
     getMapPairs,
     deleteMap
 }
