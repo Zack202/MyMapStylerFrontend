@@ -377,6 +377,7 @@ function GlobalStoreContextProvider(props) {
     store.getMapById = async (id) => {
         let response = await api.getMapById(id);
         return response;
+    }
 
     //Transaction stack functions
     store.undo = function () {
@@ -384,9 +385,7 @@ function GlobalStoreContextProvider(props) {
     }
     store.redo = function () {
         tps.doTransaction();
-
     }
-
 
     return (
         <GlobalStoreContext.Provider value={{
