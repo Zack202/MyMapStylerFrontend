@@ -44,7 +44,7 @@ export const updateMapById = (id, diff) => {
   })
 }
 export const updateMapFeaturesById = (id, diff) => {
-  return api.put(`/updateMapFeatures/${id}`, {
+  return api.put(`/updateMapFeaturesById/${id}`, {
       // SPECIFY THE PAYLOAD
       diff : diff
   })
