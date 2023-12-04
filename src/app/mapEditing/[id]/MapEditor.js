@@ -24,8 +24,13 @@ export default function MapEditor(props) {
    //For Color
    const setMapColor = props.setMapColor;
    const mapColor = props.mapColor;
+
+   let colorTimeOut = 300;
+
    const handleColorChange = (color) => {
-      setMapColor(color);
+      setTimeout(() => {
+         setMapColor(color);
+       }, colorTimeOut);
    }
 
    // const handleColorChange = (event) => {
@@ -61,7 +66,9 @@ export default function MapEditor(props) {
    const setBorderColor = props.setBorderColor;
    const borderColor = props.borderColor;
    const handleColorChangeBorders = (color) => {
-      setBorderColor(color);
+      setTimeout(() => {
+         setBorderColor(color);
+       }, colorTimeOut);
    }
 
    //For Region Name Switch
@@ -75,14 +82,18 @@ export default function MapEditor(props) {
    const setRegionNameColor = props.setRegionNameColor;
    const regionNameColor = props.regionNameColor;
    const handleColorChangeRegionName = (color) => {
-      setRegionNameColor(color);
+      setTimeout(() => {
+         setRegionNameColor(color);
+       }, colorTimeOut)
    }
 
    //For Background Color
    const setBackgroundColor = props.setBackgroundColor;
    const backgroundColor = props.backgroundColor;
    const handleColorChangeBackground = (color) => {
-      setBackgroundColor(color);
+      setTimeout(() => {
+         setBackgroundColor(color);
+       }, colorTimeOut);
    }
 
    //For Center

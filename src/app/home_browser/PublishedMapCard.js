@@ -258,7 +258,7 @@ function PublishedCard(props) {
         <Box 
             sx={{display: 'inline-block',  p: 1,}}
             >
-                <Typography fontSize="12pt"> Views: {idNamePair.views} </Typography>
+                <Typography fontSize="12pt"> Views: {idNamePair.views ? idNamePair.views : 0} </Typography>
         </Box>
         </div>
     </div>
