@@ -381,11 +381,14 @@ describe('Editing Tests', () => {
     return false;
   });
 
-  it('Home page MapCard', function () {
+  it('Toggling', function () {
+    cy.get("#border").click();
 
-    //cy.contains('Brazil', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Brazil', { matchCase: false, timeout: 10000 }).should('not.exist');
 
-    //cy.contains('Map21', { matchCase: false, timeout: 10000 });
+    cy.get("#toggleNames").click();
+
+    cy.contains('Brazil', { matchCase: false, timeout: 10000 });
   });
 
 });
