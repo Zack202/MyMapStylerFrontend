@@ -17,18 +17,28 @@ import { GlobalStoreContext } from '../../store/index.js'
 
 
 
-const DynamicColoris = dynamic(() => import('@melloware/coloris'), {
-   ssr: false, // Disable server-side rendering for this module
-   loading: () => null
- });
 
 export default function MapEditor(props) {
    if (typeof window !== 'undefined') {
-      useEffect(() => {
-         const colorisModule = require('@melloware/coloris');
-       }, []);
 
-       
+   //For Color
+   const setMapColor = props.setMapColor;
+   const mapColor = props.mapColor;
+   const handleColorChange = (color) => {
+      setMapColor(color);
+   }
+
+   // const handleColorChange = (event) => {
+   //    if(store.currentMap.mapFeatures == null ){
+   //       store.addChangePriColorTransaction('maroon', event)
+   //    }
+   //    else{
+   //       set
+   //       store.addChangePriColorTransaction(store.currentMap.mapFeatures.edits.priColor, event)
+   //    }
+   //    console.log('handleclorchange')
+   // }
+
 
    //For border Switch
    const setBorderSwitch = props.setBorderSwitch;
@@ -141,15 +151,7 @@ export default function MapEditor(props) {
             ),
           },
         ]
-      const handleColorChange = (event) => {
-         if(store.currentMap.mapFeatures == null ){
-            store.addChangePriColorTransaction('maroon', event)
-         }
-         else{
-            store.addChangePriColorTransaction(store.currentMap.mapFeatures.edits.priColor, event)
-         }
-         console.log('handleclorchange')
-      }
+
 
     return(
       <Box item xs={12} sx={{position:"absolute", width: "25%", 

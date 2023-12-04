@@ -19,6 +19,7 @@ function EditToolbar(props) {
             const [editing, setEditing] = useState(false);
             const [editedName, setEditedName] = useState(name);
             
+            const mapColor = props.mapColor;
             const borderSwitch = props.borderSwitch;
             const borderWidth = props.borderWidth;
             const borderColor = props.borderColor;
@@ -34,7 +35,7 @@ function EditToolbar(props) {
               setShowAlert(false);
             };
             const handleSaveAttributes = () => {
-                store.updateMapAttributes(borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom);
+                store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom);
                 //add a alert to show that the map has been saved
                 setTimeout(() => {
                   setShowAlert(true); 
@@ -58,9 +59,6 @@ function EditToolbar(props) {
               }
             };
           
-            const handleChange = (event) => {
-              setEditedName(event.target.value);
-            };
 
         console.log("name: " + name);
 

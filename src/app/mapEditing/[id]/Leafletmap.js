@@ -84,13 +84,13 @@ export default function Leafletmap(props) {
   const borderColor = props.borderColor;
   const regionSwitch = props.regionSwitch;
   const regionNameColor = props.regionNameColor;
-  const mapColor = props.mapColor;
   const { store } = useContext(GlobalStoreContext);
   const backgroundColor = props.backgroundColor;
   const center = props.center;
   const zoom = props.zoom;
   const setTempCenter = props.setTempCenter;
   const setTempZoom = props.setTempZoom;
+  const mapColor = props.mapColor;
 
   if (typeof window !== 'undefined') {
     const mapRef = useRef(null);
@@ -102,7 +102,7 @@ export default function Leafletmap(props) {
     }, [mapGeo]);
   
 
-  const countryStyle = {
+  let countryStyle = {
     fillColor: mapColor,
     fillOpacity: 1,
     color: borderColor,

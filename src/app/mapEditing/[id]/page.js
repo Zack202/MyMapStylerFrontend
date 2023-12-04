@@ -29,7 +29,7 @@ export default function MapEditingScreen() {
     const [center, setCenter] = useState(() => store.currentMap.mapFeatures.edits?.center || [0, 0]);
     const [tempZoom, setTempZoom] = useState(() => store.currentMap.mapFeatures.edits?.zoom || 1);
     const [zoom, setZoom] = useState(() => store.currentMap.mapFeatures.edits?.zoom || 1);
-
+    const [mapColor, setMapColor] = useState(() => store.currentMap.mapFeatures.edits?.mapColor || "maroon");
 
 
     let mapData;
@@ -40,17 +40,7 @@ export default function MapEditingScreen() {
         mapData = store.currentMap.mapGeometry
     }
     let mapName = null;
-    let mapColor;
     if (typeof window !== 'undefined') {
-        if (store.currentMap != null && store.currentMap.name != null){
-            mapName = store.currentMap.name
-        }
-        if (store.currentMap != null && store.currentMap.mapFeatures != null){
-            mapColor = store.currentMap.mapFeatures.edits.priColor
-        }
-        else {
-            mapColor = 'maroon'
-        }
     return(
         <div className={styles.container}>
             <Grid container spacing={0}>
@@ -59,6 +49,9 @@ export default function MapEditingScreen() {
                 </Grid>
                 <Grid item xs={3}>
                     <MapEditor 
+                    setMapColor={setMapColor}
+                    mapColor={mapColor}
+
                     setBorderSwitch={setBorderSwitch}
                     borderSwitch={borderSwitch}
 
@@ -88,6 +81,7 @@ export default function MapEditingScreen() {
                 </Grid>
                 <Grid item xs={9}>
                     <EditToolbar name={mapName}
+                                            mapColor={mapColor}
                                             borderSwitch={borderSwitch}
                                             borderWidth={borderWidth}
                                             borderColor={borderColor}
