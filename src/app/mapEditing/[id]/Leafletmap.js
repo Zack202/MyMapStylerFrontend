@@ -8,7 +8,7 @@ import customA from './customA.geo.json'
 import { GlobalStoreContext } from '../../store'
 
 export default function Leafletmap(props) {
-  const {mapGeo} = props;
+  const {mapGeo,mapColor} = props;
   const { store } = useContext(GlobalStoreContext);
   if (typeof window !== 'undefined') {
     const [geoJSONData, setGeoJSONData] = useState(null);
@@ -18,7 +18,7 @@ export default function Leafletmap(props) {
     }, []);
 
   const countryStyle = {
-    fillColor: "maroon",
+    fillColor: mapColor,
     fillOpacity: 1,
     color: "black",
     weight: 2

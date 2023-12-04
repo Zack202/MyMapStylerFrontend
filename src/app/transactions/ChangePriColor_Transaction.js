@@ -1,8 +1,6 @@
 import jsTPS_Transaction from "../common/jsTPS.js"
 /**
- * CreateSong_Transaction
  * 
- * This class represents a transaction that creates a song
  * in the playlist. It will be managed by the transaction stack.
  * 
  * @author McKilla Gorilla
@@ -17,10 +15,12 @@ export default class ChangePriColor_Transaction extends jsTPS_Transaction {
     }
 
     doTransaction() {
-        this.store.changePriColor(initNewColor)
+        //store.updateMapFeatures = function (id, mapZoom, mapCenter, priColor)
+        this.store.updateMapFeatures(this.store.currentMap._id, this.store.currentMap.mapZoom, this.store.currentMap.mapCenter, this.newColor)
+        console.log('after update map features in transaction class')
     }
     
     undoTransaction() {
-        this.store.changePriColor(initOldColor)
+        this.store.updateMapFeatures(this.store.currentMap._id, this.store.currentMap.mapZoom, this.store.currentMap.mapCenter, this.oldColor)
     }
 }

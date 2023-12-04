@@ -30,9 +30,16 @@ export default function MapEditingScreen() {
         mapData = store.currentMap.mapGeometry
     }
     let mapName = null;
+    let mapColor;
     if (typeof window !== 'undefined') {
         if (store.currentMap != null && store.currentMap.name != null){
             mapName = store.currentMap.name
+        }
+        if (store.currentMap != null && store.currentMap.mapFeatures != null){
+            mapColor = store.currentMap.mapFeatures.priColor
+        }
+        else {
+            mapColor = 'maroon'
         }
     return(
         <div className={styles.container}>
@@ -47,6 +54,7 @@ export default function MapEditingScreen() {
                     <EditToolbar name={mapName}/>
                     <Leafletmap 
                         mapGeo={mapData}
+                        mapColor={mapColor}
                     />
                 </Grid>
             </Grid>
