@@ -75,15 +75,7 @@ export default function TopAppBanner() {
     if(auth.loggedIn){
         profileLink = "/profile/" + auth.user.userName
     }
-    let isGuest = true;
-    if(auth.loggedIn){
-        if (auth.user.userName === "GUEST") {
-            isGuest = true;
-        }
-        else{
-            isGuest = false;
-        }
-    }
+
 
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
