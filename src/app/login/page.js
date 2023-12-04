@@ -195,8 +195,8 @@ export default function SignIn() {
             </Box>
             <Grid container>
               <Grid item xs={6}>
-                <Link onClick={handleOpen} variant="body2" sx={{color: 'maroon'}}>
-                  Forgot password?
+                <Link onClick={handleOpen} variant="body2" sx={{color: 'maroon', cursor: "pointer"}}>
+                  {"Forgot password?"}
                 </Link>
               </Grid>
               <Grid item xs={6}>
