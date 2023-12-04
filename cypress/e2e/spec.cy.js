@@ -322,7 +322,7 @@ describe('Home Tests', () => {
   it('Home page Filtering 1', function () {
     cy.wait(500)
     cy.get(".MuiInputBase-root > #select-filter").click();
-    cy.contains('Text', { matchCase: false }).click();
+    cy.get('[data-value="Text"]').click();
 
 
     cy.get("#applyFilter").click({ force: true });
@@ -339,7 +339,7 @@ describe('Home Tests', () => {
   it('Home page Filtering 2', function () {
     cy.wait(500);
     cy.get(".MuiInputBase-root > #select-filter").click();
-    cy.contains('Sized Dot', { matchCase: false }).click();
+    cy.get('[data-value="Sized Dot"]').click();
 
 
     cy.get("#applyFilter").click({ force: true });
