@@ -188,7 +188,7 @@ export default function MapEditor(props) {
                   <FormControlLabel 
                   value="start"
                   control={
-                  <Switch checked={borderSwitch} onChange={handleBorderSwitchChange}color="primary" />
+                  <Switch id="border" checked={borderSwitch} onChange={handleBorderSwitchChange}color="primary" />
                   }
                   />
                </Typography>
@@ -227,7 +227,7 @@ export default function MapEditor(props) {
                   <FormControlLabel
                   value="start"
                   control={
-                  <Switch checked={regionNameSwitch} color="primary" onChange={handleRegionNameSwitchChange}/>
+                  <Switch id="toggleNames" checked={regionNameSwitch} color="primary" onChange={handleRegionNameSwitchChange}/>
                   }
                   />
                </Typography>
