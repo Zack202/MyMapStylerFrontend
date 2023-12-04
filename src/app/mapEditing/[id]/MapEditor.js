@@ -166,6 +166,7 @@ export default function MapEditor(props) {
                   <input
                      type="color"
                      className={styles.color_box}
+                     value={mapColor}
                      onChange={(e) => handleColorChange(e.target.value)}
                   />
                </Typography>
