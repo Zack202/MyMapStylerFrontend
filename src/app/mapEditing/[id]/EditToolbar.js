@@ -9,14 +9,43 @@ import React, { useState } from 'react';
 import { TextField } from '@mui/material';
 import GlobalStoreContext from '../../store';
 import { useContext } from 'react';
+import SaveIcon from '@mui/icons-material/Save';
+import Alert from '@mui/material/Alert';
 
 function EditToolbar(props) {
-    const { name } = props;
+    const name = props.name;
     if (typeof window !== 'undefined') {
         const { store } = useContext(GlobalStoreContext);
             const [editing, setEditing] = useState(false);
             const [editedName, setEditedName] = useState(name);
-          
+            
+            const borderSwitch = props.borderSwitch;
+            const borderWidth = props.borderWidth;
+            const borderColor = props.borderColor;
+            const regionSwitch = props.regionSwitch;
+            const regionNameColor = props.regionNameColor;
+            const backgroundColor = props.backgroundColor;
+            const center = props.center;
+            const zoom = props.zoom;
+
+            const [showAlert, setShowAlert] = useState(false);
+            
+            const handleCloseAlert = () => {
+              setShowAlert(false);
+            };
+            const handleSaveAttributes = () => {
+                store.updateMapAttributes(borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom);
+                //add a alert to show that the map has been saved
+                setTimeout(() => {
+                  setShowAlert(true); 
+                  //close the alert after 3 seconds
+                  setTimeout(() => {
+                    setShowAlert(false);
+                  }, 3000);
+                }, 1000);
+              }
+
+
             const handleDoubleClick = () => {
               setEditing(true);
               setEditedName(name);
@@ -55,8 +84,8 @@ function EditToolbar(props) {
                 <div>{name}</div>
             )}
             </div>
-            <IconButton>
-            <ColorLensIcon sx={{fontSize: "40pt"}}/>
+            <IconButton onClick={handleSaveAttributes}>
+            <SaveIcon sx={{fontSize: "40pt"}}/>
             </IconButton>
 
             <IconButton>
@@ -74,6 +103,15 @@ function EditToolbar(props) {
             <IconButton>
             <RedoIcon sx={{fontSize: "40pt"}}/>
             </IconButton>
+
+            {/* <Alert
+              severity="success"
+              onClose={handleCloseAlert}
+              sx={{ mt: 2 }}
+              open={true}
+            >
+              Saved Successfully!
+            </Alert> */}
         </div>
 
     );

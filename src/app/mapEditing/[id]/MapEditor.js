@@ -20,11 +20,84 @@ const DynamicColoris = dynamic(() => import('@melloware/coloris'), {
    loading: () => null
  });
 
-export default function MapEditor() {
+export default function MapEditor(props) {
    if (typeof window !== 'undefined') {
       useEffect(() => {
          const colorisModule = require('@melloware/coloris');
        }, []);
+
+       
+
+   //For border Switch
+   const setBorderSwitch = props.setBorderSwitch;
+   const borderSwitch = props.borderSwitch;
+   const handleBorderSwitchChange = (event) => {
+      setBorderSwitch(event.target.checked);
+   }
+
+   //For Border Width
+   const setborderWidth = props.setBorderWidth;
+   const borderWidth = props.borderWidth;
+   const handleBorderWidthChange = (event) => {
+      const newWidth = event.target.value.trim();;
+      if(newWidth === '' || !isNaN(newWidth)){
+      setborderWidth(newWidth === '' ? "" : parseFloat(newWidth));
+      }
+   }
+
+   //For Border Color
+   const setBorderColor = props.setBorderColor;
+   const borderColor = props.borderColor;
+   const handleColorChangeBorders = (color) => {
+      setBorderColor(color);
+   }
+
+   //For Region Name Switch
+   const regionNameSwitch = props.regionSwitch;
+   const setRegionNameSwitch = props.setRegionSwitch;
+   const handleRegionNameSwitchChange = (event) => {
+      setRegionNameSwitch(event.target.checked);
+   }
+
+   //For Region Name Color
+   const setRegionNameColor = props.setRegionNameColor;
+   const regionNameColor = props.regionNameColor;
+   const handleColorChangeRegionName = (color) => {
+      setRegionNameColor(color);
+   }
+
+   //For Background Color
+   const setBackgroundColor = props.setBackgroundColor;
+   const backgroundColor = props.backgroundColor;
+   const handleColorChangeBackground = (color) => {
+      setBackgroundColor(color);
+   }
+
+   //For Center
+   const realCenter = props.realCenter;
+   const setCenter = props.setCenter;
+   const center = props.center;
+   const handleCenterChange = (event) => {
+      setCenter(center);
+   }
+
+   //For Zoom
+   const realZoom = props.realZoom;
+   const setZoom = props.setZoom;
+   const zoom = props.zoom;
+   const handleZoomChange = (event) => {
+      setZoom(zoom);
+   }
+
+   const formattedLat = center[0] ? center[0].toFixed(4) : '?';
+   const formattedLng = center[1] ? center[1].toFixed(4) : '?';
+
+   const realFormattedLat = realCenter[0] ? realCenter[0].toFixed(4) : '?';
+   const realFormattedLng = realCenter[1] ? realCenter[1].toFixed(4) : '?';
+
+
+
+
 
     const customDataProperties = "Fizzy Drink Name: String"
 
@@ -86,10 +159,10 @@ export default function MapEditor() {
                <Box className = {styles.item_box}>
                <Typography className= {styles.text_color} component="h1" variant="h6">
                   <i>Show Borders:</i> { }
-                  <FormControlLabel
+                  <FormControlLabel 
                   value="start"
                   control={
-                  <Switch color="primary" />
+                  <Switch checked={borderSwitch} onChange={handleBorderSwitchChange}color="primary" />
                   }
                   />
                </Typography>
@@ -99,7 +172,8 @@ export default function MapEditor() {
                   <input
                      type="color"
                      className={styles.color_box}
-                     onChange={(e) => handleColorChange(e.target.value)}
+                     value={borderColor}
+                     onChange={(e) => handleColorChangeBorders(e.target.value)}
                   />
                </Typography>
                </Box>
@@ -111,6 +185,8 @@ export default function MapEditor() {
                   id="outlined-size-small"
                   size="small"
                   sx={{ width: 100 }}
+                  value={borderWidth}
+                  onChange={handleBorderWidthChange}
                   InputProps={{
                   endAdornment: 
                   <InputAdornment position="end">px</InputAdornment>
@@ -125,7 +201,7 @@ export default function MapEditor() {
                   <FormControlLabel
                   value="start"
                   control={
-                  <Switch color="primary" />
+                  <Switch checked={regionNameSwitch} color="primary" onChange={handleRegionNameSwitchChange}/>
                   }
                   />
                </Typography>
@@ -135,19 +211,45 @@ export default function MapEditor() {
                   <input
                      type="color"
                      className={styles.color_box}
-                     onChange={(e) => handleColorChange(e.target.value)}
+                     value={regionNameColor}
+                     onChange={(e) => handleColorChangeRegionName(e.target.value)}
                   />
                </Typography>
                </Box>
                <Box className = {styles.item_box}>
-               <Typography className= {styles.text_color} component="h1" variant="h6"><i>Text Color:</i> {}
+               <Typography className= {styles.text_color} component="h1" variant="h6"><i>Background Color:</i> {}
                   <input
                      type="color"
                      className={styles.color_box}
-                     onChange={(e) => handleColorChange(e.target.value)}
+                     value={backgroundColor}
+                     onChange={(e) => handleColorChangeBackground(e.target.value)}
                   />
                </Typography>
                </Box>
+               <Box className={styles.item_box}>
+                  <Typography className={styles.text_color} component="h1" variant="h6">
+                  <i>Center : ({formattedLat}, {formattedLng}) { }</i>
+                  <Button
+                     style={{ color: 'black', backgroundColor: 'white' }}
+                     onClick={handleCenterChange}
+                     >
+                     Set
+                  </Button>
+                  </Typography>
+               </Box>
+               <i>Current Center : ({realFormattedLat}, {realFormattedLng}) </i>
+               <Box className={styles.item_box}>
+                  <Typography className={styles.text_color} component="h1" variant="h6">
+                  <i>Zoom: ({zoom}) { }</i>
+                  <Button
+                     style={{ color: 'black', backgroundColor: 'white' }}
+                     onClick={handleZoomChange}
+                  >
+                     Set
+                  </Button>
+                  </Typography>
+               </Box>
+               <i>Zoom: ({realZoom}) { }</i>
                <div style={{ display: 'flex', justifyContent: 'center', padding: '10px'}}>
                <ImportMapDataModal />
                </div>

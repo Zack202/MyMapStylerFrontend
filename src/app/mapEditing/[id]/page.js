@@ -12,16 +12,26 @@ import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { GlobalStoreContext } from '../../store/index.js'
 import customA from './customA.geo.json'
+import { useState } from 'react';
+
 
 export default function MapEditingScreen() {
-    // const { auth } = useContext(AuthContext);
-
-    // if (!auth.loggedIn) {
-    //     const router = useRouter();
-    //     router.push('/login');
-    //   }
-
     const { store } = useContext(GlobalStoreContext);
+
+    //State varibles for the map
+    const [borderSwitch, setBorderSwitch] = useState(() => store.currentMap.mapFeatures.edits?.borderSwitch || true);
+    const [borderWidth, setBorderWidth] = useState(() => store.currentMap.mapFeatures.edits?.borderWidth || 2);
+    const [borderColor, setBorderColor] = useState(() => store.currentMap.mapFeatures.edits?.borderColor || "black");
+    const [regionSwitch, setRegionSwitch] = useState(() => store.currentMap.mapFeatures.edits?.regionSwitch || false);
+    const [regionNameColor, setRegionNameColor] = useState(() => store.currentMap.mapFeatures.edits?.regionNameColor || "red");
+    const [backgroundColor, setBackgroundColor] = useState(() => store.currentMap.mapFeatures.edits?.backgroundColor || "white");
+    const [tempCenter, setTempCenter] = useState(() => store.currentMap.mapFeatures.edits?.center || [0, 0]);
+    const [center, setCenter] = useState(() => store.currentMap.mapFeatures.edits?.center || [0, 0]);
+    const [tempZoom, setTempZoom] = useState(() => store.currentMap.mapFeatures.edits?.zoom || 1);
+    const [zoom, setZoom] = useState(() => store.currentMap.mapFeatures.edits?.zoom || 1);
+
+
+
     let mapData;
     if (store.currentMap == null){
         mapData = customA
@@ -41,12 +51,58 @@ export default function MapEditingScreen() {
                     <TopAppBanner />
                 </Grid>
                 <Grid item xs={3}>
-                    <MapEditor />
+                    <MapEditor 
+                    setBorderSwitch={setBorderSwitch}
+                    borderSwitch={borderSwitch}
+
+                    setBorderWidth={setBorderWidth}
+                    borderWidth={borderWidth}
+
+                    setBorderColor={setBorderColor}
+                    borderColor={borderColor}
+
+                    setRegionSwitch={setRegionSwitch}
+                    regionSwitch={regionSwitch}
+                    
+                    setRegionNameColor={setRegionNameColor}
+                    regionNameColor = {regionNameColor}
+
+                    setBackgroundColor={setBackgroundColor}
+                    backgroundColor={backgroundColor}
+
+                    setCenter={setCenter}
+                    center={tempCenter}
+                    realCenter={center}
+
+                    setZoom={setZoom}
+                    zoom={tempZoom}
+                    realZoom={zoom}
+                    />
                 </Grid>
                 <Grid item xs={9}>
-                    <EditToolbar name={mapName}/>
+                    <EditToolbar name={mapName}
+                                            borderSwitch={borderSwitch}
+                                            borderWidth={borderWidth}
+                                            borderColor={borderColor}
+                                            regionSwitch={regionSwitch}
+                                            regionNameColor={regionNameColor}
+                                            backgroundColor={backgroundColor}
+                                            center={center}
+                                            zoom={zoom}
+
+                    />
                     <Leafletmap 
                         mapGeo={mapData}
+                        borderSwitch={borderSwitch}
+                        borderWidth={borderWidth}
+                        borderColor={borderColor}
+                        regionSwitch={regionSwitch}
+                        regionNameColor={regionNameColor}
+                        backgroundColor={backgroundColor}
+                        center={center}
+                        zoom={zoom}
+                        setTempCenter={setTempCenter}
+                        setTempZoom={setTempZoom}
                     />
                 </Grid>
             </Grid>

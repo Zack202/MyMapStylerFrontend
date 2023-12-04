@@ -1,3 +1,11 @@
-.leaflet-container {
-    background-color: ghostwhite;
-  }
+.leaflet-tooltip {
+  background-color: transparent !important; 
+  border: none !important; 
+  box-shadow: none !important; 
+  color: inherit !important; 
+}
+
+.leaflet-interactive:hover {
+  filter: none !important; 
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+}
