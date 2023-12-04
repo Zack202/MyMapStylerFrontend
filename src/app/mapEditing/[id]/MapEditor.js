@@ -73,7 +73,7 @@ export default function MapEditor() {
             store.addChangePriColorTransaction('maroon', event)
          }
          else{
-            store.addChangePriColorTransaction(store.currentMap.mapFeatures.priColor, event)
+            store.addChangePriColorTransaction(store.currentMap.mapFeatures.edits.priColor, event)
          }
          console.log('handleclorchange')
       }

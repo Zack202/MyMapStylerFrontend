@@ -211,19 +211,17 @@ function GlobalStoreContextProvider(props) {
         asyncSetCurrentMap(id)
     }
     
-    store.updateMapFeatures = function (id, mapZoom, mapCenter, priColor) { //will add other features?
+    store.updateMapFeatures = function (id, priColor) { //will add other features?
         //get map
         async function asyncUpdateMapFeatures(id){
             let response = await api.getMapById(id);
             if(response.data.success){
                 let map = response.data.map;
-                map.mapZoom = mapZoom;
-                map.mapCenter = mapCenter;
                 if(map.mapFeatures == null){
-                    map.mapFeatures = {priColor: priColor}
+                    map.mapFeatures = {edits: {priColor: priColor}}
                 }
                 else{
-                    map.mapFeatures.priColor = priColor;
+                    map.mapFeatures.edits.priColor = priColor;
                 }
                  //let diff = jsondiffpatch.diff(store.currentMap, map);
                  async function updateMap(mapmapFeatures){

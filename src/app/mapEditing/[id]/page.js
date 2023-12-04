@@ -36,7 +36,7 @@ export default function MapEditingScreen() {
             mapName = store.currentMap.name
         }
         if (store.currentMap != null && store.currentMap.mapFeatures != null){
-            mapColor = store.currentMap.mapFeatures.priColor
+            mapColor = store.currentMap.mapFeatures.edits.priColor
         }
         else {
             mapColor = 'maroon'
