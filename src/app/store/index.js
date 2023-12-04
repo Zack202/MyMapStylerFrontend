@@ -398,6 +398,7 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
+
     // Search and Filter
     store.updateSearch = (search) => {
         storeReducer({
