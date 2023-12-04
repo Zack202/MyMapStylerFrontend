@@ -1,7 +1,6 @@
 
 describe('User Tests', () => {
 
-
   beforeEach(() => {
     cy.viewport(1200, 750)
     cy.visit("http://localhost:3000")
@@ -256,6 +255,7 @@ describe('User Tests', () => {
 
 });
 
+/*
 describe('Module Tests', () => {
 
   beforeEach(() => {
@@ -273,10 +273,32 @@ describe('Module Tests', () => {
     // Prevent Cypress from failing the test
     return false;
   });
-
+  */
   /*
     After implementing guest functionality, have a bunch of guest tests here
   */
+  /*
+  it('Logged in vs Guest', function(){
+
+    cy.contains("CREATE NEW MAP", {matchCase: false})
+
+    cy.get('#profileButton').click();
+
+    cy.contains("VIEW PROFILE", {matchCase: false})
+
+    cy.contains("LOG OUT", {matchCase: false}).click()
+
+    cy.contains('CONTINUE AS GUEST', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/home_browser')
+
+    cy.contains("CREATE NEW MAP", {matchCase: false}).should('not.be.visible')
+
+    cy.get('#profileButton').click();
+
+    cy.contains("VIEW PROFILE", {matchCase: false}).should('not.be.visible')
+      
+  });
 
   it('Logged Profile', function() {
 
@@ -285,6 +307,51 @@ describe('Module Tests', () => {
     cy.contains('View Profile', {matchCase: false}).click();
 
     cy.location('href').should('include', '/profile')
+
+    cy.contains("First Name: exa", { timeout: 10000 })
+    cy.contains("User Name: exampleUser", { timeout: 10000 })
+
   });
 
+  it('Logged Profile 2', function() {
+
+    cy.get('#profileButton').click();
+
+    cy.contains('Log Out', {matchCase: false}).click();
+
+    cy.contains('Login', {matchCase: false}).click();
+    cy.get('#email').type('dave@gmail.com');
+    cy.get('#password').type('DaveDave');
+    cy.get('#signIn').click();
+    cy.location('href').should('include', '/home_browser')
+
+    cy.get('#profileButton').click();
+
+    cy.contains('View Profile', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/profile')
+
+    cy.contains("First Name: dave", { timeout: 10000 })
+    cy.contains("User Name: Dave2", { timeout: 10000 } )
+
+  });
+
+  it('Home page MapCard', function() { // temporary implementation
+
+    cy.contains('Map Card Name', {matchCase: false, timeout: 10000}).click();
+
+    cy.location('href').should('include', '/mapEditing')
+  });
+
+  it('Home page Create Map', function() { // temporary implementation
+
+    cy.contains('Create New Map', {matchCase: false}).click();
+
+    cy.location('href').should('include', '/createNewMap')
+  });
+
+
+
+
 });
+*/

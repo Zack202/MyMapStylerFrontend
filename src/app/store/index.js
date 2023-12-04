@@ -360,6 +360,7 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
+
     // Search and Filter
     store.updateSearch = (search) => {
         storeReducer({
@@ -376,6 +377,14 @@ function GlobalStoreContextProvider(props) {
     store.getMapById = async (id) => {
         let response = await api.getMapById(id);
         return response;
+
+    //Transaction stack functions
+    store.undo = function () {
+        tps.undoTransaction();
+    }
+    store.redo = function () {
+        tps.doTransaction();
+
     }
 
 

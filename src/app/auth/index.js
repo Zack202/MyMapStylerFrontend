@@ -225,6 +225,30 @@ function AuthContextProvider(props) {
         }
     }
 
+    auth.updateUserInfo = async function(id, firstName, lastName){
+        try{
+            console.log("this is")
+            console.log(firstName)
+            const response = await api.updateUserInfo(id, firstName, lastName);
+            if(response.status === 200){
+                authReducer({
+                    type: AuthActionType.UPDATE_USER_INFO,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                console.log("succesfully updated info")
+            }
+        }catch(error){
+            authReducer({
+                type: AuthActionType.UPDATE_INFO_ERROR,
+                payload: {
+                    errorMessage: error.response.data.errorMessage
+                }
+            })
+        }
+    }
+
     auth.deleteUser = async function() {
         console.log("Deleting user...")
         const response = await api.deleteUser();
