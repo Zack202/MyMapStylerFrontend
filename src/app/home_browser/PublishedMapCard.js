@@ -149,15 +149,15 @@ function PublishedCard(props) {
         
     }
 
-    function handleClickForMapEdit(event){
+    function handleClickForPublishedMap(event){
         store.setCurrentMap(idNamePair._id)
-        router.push('/mapEditing/'+idNamePair._id)
+        router.push('/publishedMap/'+idNamePair._id)
     }
 
 
     let cardElement =
     <div id='cards'>
-    <Card onClick={() => handleClickForMapEdit()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
+    <Card onClick={() => handleClickForPublishedMap()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
     >
         
     <CardContent sx={{p: 0}}/>
@@ -205,7 +205,7 @@ function PublishedCard(props) {
         </Box>
 
             <Box sx={{ p: 1, flexGrow: 1, right:"0", position: "absolute", top: 0}}>
-                <Typography variant='h7' fontSize="12pt">Created By: User</Typography>
+                <Typography variant='h7' fontSize="12pt">Created By: {idNamePair.userName}</Typography>
             </Box>
 
             {/* like dislike comments container */}
@@ -217,7 +217,7 @@ function PublishedCard(props) {
                     }} 
                     aria-label='like'>
                     <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>5</Typography>
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.likes.length}</Typography>
                 </IconButton>
             {/* </Box> */}
 
@@ -225,12 +225,13 @@ function PublishedCard(props) {
                 <IconButton 
                     aria-label='dislike'>
                     <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>5</Typography>
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.dislikes.length}</Typography>
                 </IconButton>
 
                 <IconButton aria-label='comments'>
                     <CommentIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>5</Typography>
+                                                                                        {/* still have to work on comments */}
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>0</Typography>
                 </IconButton>
             {/* </Box> */}
             </Box>
@@ -256,7 +257,7 @@ function PublishedCard(props) {
         <Box 
             sx={{display: 'inline-block',  p: 1,}}
             >
-                <Typography fontSize="12pt"> Views: 10 </Typography>
+                <Typography fontSize="12pt"> Views: {idNamePair.views} </Typography>
         </Box>
         </div>
     </div>

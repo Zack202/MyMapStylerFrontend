@@ -219,6 +219,12 @@ export default function PrimarySearchAppBar() {
           {/* <CreateMapModal /> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            {/* <Box sx={{display: 'flex', left: '0', width: '100%'}}>
+
+            <Typography>HOME SCREEN</Typography>
+
+            </Box> */}
+
           <Box style ={{color: "black", backgroundColor: "#F1F1F1", borderRadius: '20px',m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block'}}>        
                 <Typography variant="h5" gutterBottom>
                     Filter { }
