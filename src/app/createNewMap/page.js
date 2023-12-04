@@ -170,7 +170,7 @@ export default function CreateMapModal() {
                 <div className="modal-dialog">
                     <Grid item xs={12} align="center">
                     <Typography variant="h5" align="center" color="textPrimary" gutterBottom>
-                        Import a map in the format of GeoJSon, SHapefile or KML:
+                        Import a map in the format of GeoJSon, Shapefile or KML:
                      </Typography>
                     </Grid>
 
