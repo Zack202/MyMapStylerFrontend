@@ -260,8 +260,55 @@ function GlobalStoreContextProvider(props) {
             console.log("API FAILED TO CREATE A NEW MAP");
         }
     }
-<<<<<<<<< Temporary merge branch 1
-=========
+
+    store.forkMap = async function(dupMap){
+        //duplicate a map
+        
+           let response = await api.getMapById(dupMap);
+       
+           if(response.data.success){
+               dupMap = response.data.map;
+               let counter = 2;
+               let check = true;
+               // new name for the dup map with a system of [name](2) -> [name](3) and so on
+               let dupName = dupMap.name + "(" + counter.toString() + ")";
+               while(check){
+                   if(this.idNamePairs.length === 0)
+                       break;
+                   for(let i = 0; i < this.idNamePairs.length; i++){
+                       if(this.idNamePairs[i].name === dupName){
+                           counter += 1;
+                           dupName = dupMap.name + "(" + counter.toString() + ")";
+                           break;
+                       }
+                       else if (i === this.idNamePairs.length - 1) check = false
+                   }
+       
+           }
+           let userName = auth.user.userName //MMM
+           let ownerEmail = auth.user.email //mango@gmail.com
+           // console.log(dupMap.mapGeometry);
+           let mapData = dupMap.mapGeometry;
+           let mapType = dupMap.mapType;
+           let mapDesc = dupMap.description
+       
+           response = await api.createNewMap(dupName, userName, ownerEmail, mapData, mapType, mapDesc);
+           console.log("createNewList response: " + response);
+           if (response.status === 201) {
+               console.log('success')
+               storeReducer({
+                   type: GlobalStoreActionType.SET_CURRENT_MAP,
+                   payload: response.data.map
+               });
+               // if success bring to map editing screen
+               router.push('/mapEditing/'+ response.data.map._id)
+           
+           }
+           else {
+               console.log("API FAILED TO CREATE A NEW MAP");
+           }
+       }
+           }
 
     store.setCurrentMap = function (id) {
         async function asyncSetCurrentMap(id) {

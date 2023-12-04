@@ -2,8 +2,8 @@
 'use client'
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
-import TopAppBanner from '../Utils/TopAppBanner';
-import BottomAppBanner from '../Utils/BottomAppBanner';
+import TopAppBanner from '../../Utils/TopAppBanner';
+import BottomAppBanner from '../../Utils/BottomAppBanner';
 import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HomeIcon from '@mui/icons-material/Home';
@@ -22,7 +22,7 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Modal from '@mui/material/Modal';
-import AuthContext from '../auth';
+import AuthContext from '../../auth';
 import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import GlobalStoreContext from '../../store';
