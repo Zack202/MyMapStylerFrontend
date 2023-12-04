@@ -289,10 +289,11 @@ function GlobalStoreContextProvider(props) {
            let ownerEmail = auth.user.email //mango@gmail.com
            // console.log(dupMap.mapGeometry);
            let mapData = dupMap.mapGeometry;
+           let mapFeatures = dupMap.mapFeatures;
            let mapType = dupMap.mapType;
-           let mapDesc = dupMap.description
+           let mapDesc = dupMap.description;
        
-           response = await api.createNewMap(dupName, userName, ownerEmail, mapData, mapType, mapDesc);
+           response = await api.createNewMap(dupName, userName, ownerEmail, mapData, mapType, mapDesc, mapFeatures);
            console.log("createNewList response: " + response);
            if (response.status === 201) {
                console.log('success')

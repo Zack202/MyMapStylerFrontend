@@ -14,7 +14,7 @@ const api = axios.create({
   baseURL,
 });
 
-export const createNewMap = (name, userName, ownerEmail, mapData, mapType, mapDesc) => {
+export const createNewMap = (name, userName, ownerEmail, mapData, mapType, mapDesc, mapFeatures) => {
     return api.post('/createNewMap',{
         //body
         name: name,//{ type: String, required: true },
@@ -27,7 +27,7 @@ export const createNewMap = (name, userName, ownerEmail, mapData, mapType, mapDe
         date: 0,//{type: Date, required: false},
         published: false, //{type: Boolean, required: true},
         mapGeometry: mapData, //{type: Object, required: true},
-        mapFeatures: null, //{type: Object, required: true},
+        mapFeatures: mapFeatures ? mapFeatures : null, //{type: Object, required: true},
         mapZoom: 0,//{type: Number, required: false},
         mapCenter: [],//{type: [Number], required: false},
         previousCreators: [],//{ type: [String], required: false},
