@@ -21,6 +21,7 @@ import { GlobalStoreContext } from '../../store/index.js'
 export default function MapEditor(props) {
    if (typeof window !== 'undefined') {
 
+   const { store } = useContext(GlobalStoreContext);
    //For Color
    const setMapColor = props.setMapColor;
    const mapColor = props.mapColor;
@@ -30,6 +31,12 @@ export default function MapEditor(props) {
    const handleColorChange = (color) => {
       setTimeout(() => {
          setMapColor(color);
+      //let features = store.currentMap.mapFeatures
+      //features.edits.mapColor = color
+      let olde = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      let newe = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      newe.mapColor = color
+      store.addEditMapAttributesTransacation(olde, newe)
        }, colorTimeOut);
    }
 
@@ -123,7 +130,6 @@ export default function MapEditor(props) {
 
 
     const customDataProperties = "Fizzy Drink Name: String"
-    const { store } = useContext(GlobalStoreContext);
 
     const rows = [
         { color: 'red', id: 1, label: 'Soda'},
