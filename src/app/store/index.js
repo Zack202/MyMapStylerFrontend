@@ -479,7 +479,7 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapAttributes(store.currentMap.mapFeatures);
     }
 
-    store.editMapAttributes = async function (newMapEdits) {
+    store.editMapAttributes = function (newMapEdits) {
         let map = JSON.parse(JSON.stringify(store.currentMap));
         map.mapFeatures.edits = newMapEdits;
         //update store
