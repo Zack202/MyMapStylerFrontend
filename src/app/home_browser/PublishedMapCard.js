@@ -41,9 +41,15 @@ function PublishedCard(props) {
     const [error, setError] = useState(false);
     const [listOpen, setListOpen] = useState(false);
 
-    
-    const [liked, setLiked] = useState(idNamePair.likes.includes(auth.userName));
-    const [disliked, setDisliked] = useState(false);
+    let userName = "";
+    if(auth.loggedIn){
+        userName = auth.user.userName;
+    }
+    let isItLiked = idNamePair.likes.includes(userName);
+    const [liked, setLiked] = useState(isItLiked);
+    console.log(userName);
+    console.log(isItLiked);
+    const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
     
     const [numLikes, setLikes] = useState(0);
     const [numDislikes, setNumDislikes] = useState(0);
@@ -52,7 +58,7 @@ function PublishedCard(props) {
         event.stopPropagation();
         setDisliked(false);
         setLiked(!liked);
-        store.likeMap(idNamePair._id, !liked);
+        store.likeMap(idNamePair._id);
     }
 
     function handleDislikeMap(event){
@@ -65,15 +71,9 @@ function PublishedCard(props) {
     
 
     //UNLIKED
-    let likeButton =  <IconButton onClick={(event) => {
-        handleLikeMap(event)
-    }} 
-        aria-label='like'>
-        <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white"}} />
-        <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.likes.length}</Typography>
-    </IconButton>
+    let likeButton =  "";
 
-    let dislikeButton = "";
+    let dislikeButton =  "";
 
     if(liked){
         likeButton = 
@@ -85,6 +85,7 @@ function PublishedCard(props) {
             <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.likes.length}</Typography>
         </IconButton>
     } else{
+        likeButton =
         <IconButton onClick={(event) => {
             handleLikeMap(event)
         }} 
