@@ -181,7 +181,7 @@ function PublishedCard(props) {
             {idNamePair.name}
             </Link>
             
-            <Box sx={{flexGrow: 1, display: "inline-block", float:'left', cursor: pointer}}
+            <Box sx={{flexGrow: 1, display: "inline-block", float:'left', cursor: "pointer"}}
             onClick={() => handleClickForPublishedMap()}
             >
 
