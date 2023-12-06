@@ -20,8 +20,9 @@ import {Modal, Button} from '@mui/material';
 import TestMap from "public/test_map.jpg"
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
-import ExportMapModal from '../components/ExportMapModal.js'
-import DeleteMapModal from '../components/DeleteMapModal.js'
+import ExportMapModal from '../components/ExportMapModal.js';
+import DeleteMapModal from '../components/DeleteMapModal.js';
+import AuthContext from '../auth';
 
 
 
@@ -31,7 +32,7 @@ function PublishedCard(props) {
     const router = useRouter()
 
     const { idNamePair, selected } = props;
-
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
@@ -40,7 +41,8 @@ function PublishedCard(props) {
     const [error, setError] = useState(false);
     const [listOpen, setListOpen] = useState(false);
 
-    const [liked, setLiked] = useState(false);
+    
+    const [liked, setLiked] = useState(idNamePair.likes.includes(auth.userName));
     const [disliked, setDisliked] = useState(false);
     
     const [numLikes, setLikes] = useState(0);
@@ -48,9 +50,9 @@ function PublishedCard(props) {
 
     function handleLikeMap(event){
         event.stopPropagation();
-        setDisliked(false)
+        setDisliked(false);
         setLiked(!liked);
-        store.likeMap(idNamePair._id);
+        store.likeMap(idNamePair._id, !liked);
     }
 
     function handleDislikeMap(event){
@@ -60,10 +62,10 @@ function PublishedCard(props) {
         store.dislikeMap(idNamePair._id);
     }
 
+    
 
     //UNLIKED
-    let likeButton = 
-    <IconButton onClick={(event) => {
+    let likeButton =  <IconButton onClick={(event) => {
         handleLikeMap(event)
     }} 
         aria-label='like'>
@@ -71,14 +73,7 @@ function PublishedCard(props) {
         <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.likes.length}</Typography>
     </IconButton>
 
-    let dislikeButton = 
-    <IconButton onClick={(event) => {
-        handleDislikeMap(event)
-    }} 
-        aria-label='dislike'>
-        <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white"}} />
-        <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.dislikes.length}</Typography>
-    </IconButton>
+    let dislikeButton = "";
 
     if(liked){
         likeButton = 
@@ -171,13 +166,12 @@ function PublishedCard(props) {
     <CardActions disableSpacing >
         
     <ListItem 
-            // sx={{ display: 'flex', bgcolor: "white" }}
             style={{fontSize: '18pt', height: "100px", top: 0}}
             id={"map-card"}
             key={"map-card"}
             // button
             >
-            <Link /*/href="/specificMap"*/ style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
             {idNamePair.name}
             </Link>
             

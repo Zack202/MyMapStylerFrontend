@@ -445,6 +445,40 @@ function GlobalStoreContextProvider(props) {
         }
         asyncUpdateMapName(diff);
     }
+
+    store.likeMap = function(mapId, liked){
+        async function likeMap(mapId){
+            let response = await api.getMapById(mapId);
+            if(response.data.success){
+                let obj1 = {
+                    liked: liked
+                }
+                let obj2 = {
+                    liked: !liked
+                }
+                
+                let map = {...response.data.map};
+                let diff = jsondiffpatch.diff(obj1, obj2);
+                response = await api.updateMapById(mapId, diff);
+                if(response.data.success){
+                    let pairsArray = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.PUBLISHED,
+                        payload:{ 
+                            idNamePairs: pairsArray,
+                            map: map
+                        }
+                    });
+                        store.loadIdNamePairs();
+                }
+            }
+        }
+        likeMap(mapId)
+    }
+
+    store.dislikeMap = function(mapId){
+
+    }
     
     store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom) => {
         const updatedAttributes = {
@@ -540,14 +574,6 @@ function GlobalStoreContextProvider(props) {
     }
     store.redo = function () {
         tps.doTransaction();
-    }
-
-    store.likeMap = function(mapId){
-
-    }
-
-    store.dislikeMap = function(mapId){
-
     }
 
     return (
