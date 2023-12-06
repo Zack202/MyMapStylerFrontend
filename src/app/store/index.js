@@ -542,6 +542,14 @@ function GlobalStoreContextProvider(props) {
         tps.doTransaction();
     }
 
+    store.likeMap = function(mapId){
+
+    }
+
+    store.dislikeMap = function(mapId){
+
+    }
+
     return (
         <GlobalStoreContext.Provider value={{
             store

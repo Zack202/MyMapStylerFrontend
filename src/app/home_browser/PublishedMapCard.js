@@ -39,51 +39,86 @@ function PublishedCard(props) {
     const [expandedId, setExpandedId] = useState(-1);
     const [error, setError] = useState(false);
     const [listOpen, setListOpen] = useState(false);
-    const [liked, setLiked] = useState("");
-    const [disliked, setDisliked] = useState("");
+
+    const [liked, setLiked] = useState(false);
+    const [disliked, setDisliked] = useState(false);
+    
     const [numLikes, setLikes] = useState(0);
     const [numDislikes, setNumDislikes] = useState(0);
 
-
-
-    let likeB = "";
-    let actionButtons = ""
-    let deleteCase = "";
-    // if(idNamePair.public ){
-    //     actionButtons = "hidden";
-    //     likeB = ""
-    // }else{
-    //     actionButtons = "";
-    //     likeB = "hidden"
-    // }
-
-    // if(auth.loggedIn){
-    //     if(idNamePair.ownerEmail !== auth.user.email){
-    //         deleteCase = "hidden";
-
-    //     } else{
-    //         deleteCase = "";
-    //     }
-    // }
-
-    const handleCloseClick = (i) => {
-        setExpandedId(expandedId === i ? -1 : i);
-        store.closeCurrentList();
-        setListOpen(false);
+    function handleLikeMap(event){
+        event.stopPropagation();
+        setDisliked(false)
+        setLiked(!liked);
+        store.likeMap(idNamePair._id);
     }
 
-    const handleExpandClick = (event, i) => {
+    function handleDislikeMap(event){
         event.stopPropagation();
-        // if(store.currentList){
-        //     store.setCurrentList(i);
-        // }
-        // else{
-        
-        // }
-        setExpandedId(expandedId === i ? -1 : i);
-        setListOpen(true);
-        store.setCurrentList(i);
-    };
+        setLiked(false);
+        setDisliked(!disliked);
+        store.dislikeMap(idNamePair._id);
+    }
+
+
+    //UNLIKED
+    let likeButton = 
+    <IconButton onClick={(event) => {
+        handleLikeMap(event)
+    }} 
+        aria-label='like'>
+        <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white"}} />
+        <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.likes.length}</Typography>
+    </IconButton>
+
+    let dislikeButton = 
+    <IconButton onClick={(event) => {
+        handleDislikeMap(event)
+    }} 
+        aria-label='dislike'>
+        <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white"}} />
+        <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.dislikes.length}</Typography>
+    </IconButton>
+
+    if(liked){
+        likeButton = 
+        <IconButton onClick={(event) => {
+            handleLikeMap(event)
+        }} 
+            aria-label='like'>
+            <ThumbUpAltIcon style={{fontSize:'30pt', color: "white"}} />
+            <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.likes.length}</Typography>
+        </IconButton>
+    } else{
+        <IconButton onClick={(event) => {
+            handleLikeMap(event)
+        }} 
+            aria-label='like'>
+            <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white"}} />
+            <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.likes.length}</Typography>
+        </IconButton>
+    }
+
+
+    if(disliked){
+        dislikeButton = 
+            <IconButton onClick={(event) => {
+                handleDislikeMap(event)
+            }} 
+                aria-label='dislike'>
+                <ThumbDownAltIcon style={{fontSize:'30pt', color: "white"}} />
+                <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.dislikes.length}</Typography>
+            </IconButton>
+    } else {
+        dislikeButton = 
+            <IconButton onClick={(event) => {
+                handleDislikeMap(event)
+            }} 
+                aria-label='dislike'>
+                <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white"}} />
+                <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.dislikes.length}</Typography>
+            </IconButton>
+    }
 
     function handleFork(event) {
         event.stopPropagation();
@@ -121,34 +156,6 @@ function PublishedCard(props) {
         setdeleteModal(true);
     console.log("clicked");}
 
-    function handleDislikes(event, idNamePair) {
-
-    }
-
-
-    function handleKeyPress(event) {
-    }
-
-    function handlePublish(event, id) {
-        event.stopPropagation();
-        store.publishMap(idNamePair._id);
-    }
-
-    function handleUpdateText(event) {
-    }
-
-    let selectClass = "unselected-list-card";
-    // if (selected) {
-    //     selectClass = "selected-list-card";
-    // }
-    // let cardStatus = false;
-    // if (store.isListNameEditActive) {
-    //     cardStatus = true;
-    // }
-    function handelSwitchToEdit(event){
-        
-    }
-
     function handleClickForPublishedMap(event){
         store.setCurrentMap(idNamePair._id)
         router.push('/publishedMap/'+idNamePair._id)
@@ -157,7 +164,7 @@ function PublishedCard(props) {
 
     let cardElement =
     <div id='cards'>
-    <Card onClick={() => handleClickForPublishedMap()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
+    <Card sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
     >
         
     <CardContent sx={{p: 0}}/>
@@ -169,20 +176,15 @@ function PublishedCard(props) {
             id={"map-card"}
             key={"map-card"}
             // button
-            onDoubleClick={(event) => {
-                handleToggleEdit(event)
-            }}
-            // onClick={(event) => {
-            //     handleLoadList(event, idNamePair._id)
-            // }}  
             >
-            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link /*/href="/specificMap"*/ style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
             {idNamePair.name}
             </Link>
             
-            <Box sx={{flexGrow: 1, display: "inline-block", float:'left',}}>
+            <Box sx={{flexGrow: 1, display: "inline-block", float:'left', cursor: pointer}}
+            onClick={() => handleClickForPublishedMap()}
+            >
 
-            
             <div>
             <img src={'test_map.jpg'} alt="image" height={'100px'} style={{marginTop: 10, position:'absolute'}} />    
             </div>
@@ -212,27 +214,15 @@ function PublishedCard(props) {
             {/* like dislike comments container */}
             <Box sx={{flexGrow: 0, p: 2, right: 0, position: 'absolute', display: "flex", bottom: 0, backgroundColor: "gray", height: "50%",
         borderRadius: "10px"}}>
-            {/* <Box sx={{p: 0}}> */}
-                <IconButton onClick={(event) => {
-                        handleLikePlaylis(event, idNamePair)
-                    }} 
-                    aria-label='like'>
-                    <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.likes.length}</Typography>
-                </IconButton>
-            {/* </Box> */}
+                
+                {likeButton}
 
-            {/* <Box sx={{padding: 0}} > */}
-                <IconButton 
-                    aria-label='dislike'>
-                    <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.dislikes.length}</Typography>
-                </IconButton>
-
+                {dislikeButton}
+                
                 <IconButton aria-label='comments'>
-                    <CommentIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
+                    <CommentIcon style={{fontSize:'30pt', color: "white"}} />
                                                                                         {/* still have to work on comments */}
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>0</Typography>
+                    <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>0</Typography>
                 </IconButton>
             {/* </Box> */}
             </Box>
