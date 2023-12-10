@@ -3,7 +3,8 @@ import { createContext, useContext, useState } from 'react'
 import AuthContext from '../auth'
 import { useRouter } from 'next/navigation';
 import jsondiffpatch from 'jsondiffpatch'
-import { Update } from '@mui/icons-material';
+import jsTPS from '../common/jsTPS'
+import ChangePriColor_Transaction from '../transactions/ChangePriColor_Transaction'
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -27,8 +28,12 @@ export const GlobalStoreActionType = {
     FILTER: 'FILTER',
     CREATE_MAP_MODAL: 'CREATE_MAP_MODAL',
     UPDATE_MAP: 'UPDATE_MAP',
+    UPDATE_SEARCH: 'UPDATE_SEARCH',
+    UPDATE_FILTER: 'UPDATE_FILTER',
 
 }
+
+const tps = new jsTPS();
 
 const CurrentModal = {
     NONE: 'NONE',
@@ -37,7 +42,7 @@ const CurrentModal = {
     MAP_DATA_EDITING: 'MAP_DATA_EDITING',
     DELETE_MAP_MODAL: 'DELETE_MAP_MODAL',
     CREATE_NEW_MAP: 'CREATE_NEW_MAP',
-    CHANGE_ACCOUNT_INFO: 'CHANGE_ACCOUNT_INFO'
+    CHANGE_ACCOUNT_INFO: 'CHANGE_ACCOUNT_INFO',   
 }
 
 function GlobalStoreContextProvider(props) {
@@ -59,10 +64,11 @@ function GlobalStoreContextProvider(props) {
         mapIdMarkedForExport: null,
         mapMarkedForExport: null,
         sort: "name",
-        filters: [],
+        filter: [],
         currentEditColor: null,
         currentMapIndex: -1,
-        currentMapType: -1
+        currentMapType: -1,
+        search: "",
 
     });
 
@@ -82,10 +88,11 @@ function GlobalStoreContextProvider(props) {
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
                     sort: "name",
-                    filters: [],
+                    filter: [],
                     currentEditColor: null,
                     currentMapIndex: -1,
-                    currentMapType: -1
+                    currentMapType: -1,
+                    search: "",
                 })
             }
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS:{
@@ -100,10 +107,11 @@ function GlobalStoreContextProvider(props) {
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
                     sort: "name",
-                    filters: [],
+                    filter: [],
                     currentEditColor: null,
                     currentMapIndex: -1,
-                    currentMapType: -1
+                    currentMapType: -1,
+                    search: "",
                 })
             }
             case GlobalStoreActionType.MARK_MAP_FOR_DELETION:{
@@ -118,10 +126,11 @@ function GlobalStoreContextProvider(props) {
                 mapIdMarkedForExport: null,
                 mapMarkedForExport: null,
                 sort: "name",
-                filters: [],
+                filter: [],
                 currentEditColor: null,
                 currentMapIndex: -1,
-                currentMapType: -1
+                currentMapType: -1,
+                search: "",
                 })
             }
 
@@ -138,10 +147,30 @@ function GlobalStoreContextProvider(props) {
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
                     sort: "name",
+                    filter: [],
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: payload.mapType,
+                    search: "",
+                });
+            }
+            case GlobalStoreActionType.PUBLISHED:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: null,
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
                     filters: [],
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
-                    currentMapType: payload.mapType
+                    currentMapType: payload.mapType,
+                    search: ""
                 });
             }
             case GlobalStoreActionType.UPDATE_MAP:{
@@ -156,10 +185,49 @@ function GlobalStoreContextProvider(props) {
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
                     sort: "name",
-                    filters: [],
+                    filter: [],
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
-                    currentMapType: store.currentMapType
+                    currentMapType: store.currentMapType,
+                    search: "",
+                });
+            }
+            case GlobalStoreActionType.UPDATE_SEARCH:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: null, //change
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filter: store.filter,
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: store.currentMapType,
+                    search: payload,
+                });
+            }
+            case GlobalStoreActionType.UPDATE_FILTER:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: null, //change
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: "name",
+                    filter: payload,
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: store.currentMapType,
+                    search: store.search, // ?!?
                 });
             }
             default:
@@ -167,29 +235,81 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    // create a new map
-    store.createNewMap = async function (mapname, mapData, mapType) { //input map data and map type
+    // create a new map                                             
+    store.createNewMap = async function (mapName, mapData, mapType, mapDesc) { //input map data and map type
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
-        let newMapName = "Untitled" 
-        let userName = auth.user.userName //MMM
-        let ownerEmail = auth.user.email //mango@gmail.com
-        const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType);
-        console.log("createNewList response: " + response);
-        if (response.status === 201) {
-            console.log('success')
-            storeReducer({
-                type: GlobalStoreActionType.SET_CURRENT_MAP,
-                payload: response.data.map
-            });
-            // if success bring to map editing screen
-            router.push('/mapEditing/'+ response.data.map._id)
+        //creat new map
+            let newMapName = mapName
+            let newMapDesc = mapDesc
+            let userName = auth.user.userName //MMM
+            let ownerEmail = auth.user.email //mango@gmail.com
+            const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc);
+            console.log("createNewList response: " + response);
+            if (response.status === 201) {
+                console.log('success')
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_MAP,
+                    payload: response.data.map
+                });
+                // if success bring to map editing screen
+                router.push('/mapEditing/'+ response.data.map._id)
             
         }
         else {
             console.log("API FAILED TO CREATE A NEW MAP");
         }
     }
+
+    store.forkMap = async function(dupMap){
+        //duplicate a map
+        
+           let response = await api.getMapById(dupMap);
+       
+           if(response.data.success){
+               dupMap = response.data.map;
+               let counter = 2;
+               let check = true;
+               // new name for the dup map with a system of [name](2) -> [name](3) and so on
+               let dupName = dupMap.name + "(" + counter.toString() + ")";
+               while(check){
+                   if(this.idNamePairs.length === 0)
+                       break;
+                   for(let i = 0; i < this.idNamePairs.length; i++){
+                       if(this.idNamePairs[i].name === dupName){
+                           counter += 1;
+                           dupName = dupMap.name + "(" + counter.toString() + ")";
+                           break;
+                       }
+                       else if (i === this.idNamePairs.length - 1) check = false
+                   }
+       
+           }
+           let userName = auth.user.userName //MMM
+           let ownerEmail = auth.user.email //mango@gmail.com
+           // console.log(dupMap.mapGeometry);
+           let mapData = dupMap.mapGeometry;
+           let mapFeatures = dupMap.mapFeatures;
+           let mapType = dupMap.mapType;
+           let mapDesc = dupMap.description;
+       
+           response = await api.createNewMap(dupName, userName, ownerEmail, mapData, mapType, mapDesc, mapFeatures);
+           console.log("createNewList response: " + response);
+           if (response.status === 201) {
+               console.log('success')
+               storeReducer({
+                   type: GlobalStoreActionType.SET_CURRENT_MAP,
+                   payload: response.data.map
+               });
+               // if success bring to map editing screen
+               router.push('/mapEditing/'+ response.data.map._id)
+           
+           }
+           else {
+               console.log("API FAILED TO CREATE A NEW MAP");
+           }
+       }
+           }
 
     store.setCurrentMap = function (id) {
         async function asyncSetCurrentMap(id) {
@@ -208,21 +328,32 @@ function GlobalStoreContextProvider(props) {
         asyncSetCurrentMap(id)
     }
     
-    store.updateMapFeatures = function (id, mapZoom, mapCenter) { //will add other features?
+    store.updateMapFeatures = function (id, priColor) { //will add other features?
         //get map
         async function asyncUpdateMapFeatures(id){
             let response = await api.getMapById(id);
             if(response.data.success){
                 let map = response.data.map;
-                map.mapZoom = mapZoom;
-                map.mapCenter = mapCenter;
-                async function updateMap(map){
-                    response = await api.updateMapById(id, map);
+                if(map.mapFeatures == null){
+                    map.mapFeatures = {edits: {priColor: priColor}}
+                }
+                else{
+                    map.mapFeatures.edits.priColor = priColor;
+                }
+                 //let diff = jsondiffpatch.diff(store.currentMap, map);
+                 async function updateMap(mapmapFeatures){
+                    response = await api.updateMapFeaturesById(id, mapmapFeatures);
                     if(response.data.success){
-                        //bring to map edit screen
+                        //update store
+                        storeReducer({
+                            type: GlobalStoreActionType.UPDATE_MAP,
+                            payload: map
+                        }) 
+                        //bring to map edit screen?
+                        console.log('update map store')
                     }
                 }
-                updateMap(map);
+                updateMap(map.mapFeatures);
             }
 
         }
@@ -415,7 +546,102 @@ function GlobalStoreContextProvider(props) {
         }
         asyncUpdateMapName(diff);
     }
+    
+    store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom) => {
+        const updatedAttributes = {
+            mapColor,
+            borderSwitch,
+            borderWidth,
+            borderColor,
+            regionSwitch,
+            regionNameColor,
+            backgroundColor,
+            center,
+            zoom,
+          };
+        
+          // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits
+          for (const key in updatedAttributes) {
+            if (Object.prototype.hasOwnProperty.call(updatedAttributes, key)) {
+              store.currentMap.mapFeatures.edits[key] = updatedAttributes[key];
+            }
+          }
 
+        async function asyncUpdateMapAttributes(attributes){
+            let response = await api.updateMapAttributesById(store.currentMap._id, attributes);
+            if(response.data.success){
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: store.currentMap
+                }) 
+            }
+        }
+        asyncUpdateMapAttributes(store.currentMap.mapFeatures);
+    }
+
+    store.publishMap = function(id) {
+        async function asyncPublishMap(id){
+            let response = await api.getMapById(id);
+            if(response.data.success){
+                let map = { ...response.data.map};
+                map.published = true;
+                let diff = jsondiffpatch.diff(map, response.data.map)
+                async function updateMap(diff){
+                    response = await api.updateMapById(id, diff);
+                    if(response.data.success){
+                        response = await api.getMapPairs();
+                        if(response.data.success){
+                            let pairsArray = response.data.idNamePairs;
+                            storeReducer({
+                                type: GlobalStoreActionType.PUBLISHED,
+                                payload:{ 
+                                    idNamePairs: pairsArray,
+                                    map: map
+                                }
+                            });
+                        store.loadIdNamePairs();
+
+                        }
+                    }
+                }
+                updateMap(diff);
+            }
+        }
+        asyncPublishMap(id)
+    }
+
+    // Search and Filter
+    store.updateSearch = (search) => {
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_SEARCH,
+            payload: search
+        }) 
+    }
+    store.updateFilter = (filter) => {
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_FILTER,
+            payload: filter
+        }) 
+    }
+    store.getMapById = async (id) => {
+        let response = await api.getMapById(id);
+        return response;
+    }
+
+    //Transaction stack functions
+    store.addChangePriColorTransaction = function (oldColor, newColor)  {
+        console.log('add transaction to stack')//Create transaction and add to stack
+        let transaction = new ChangePriColor_Transaction(store, oldColor, newColor);
+        tps.addTransaction(transaction);
+        
+    }
+
+    store.undo = function () {
+        tps.undoTransaction();
+    }
+    store.redo = function () {
+        tps.doTransaction();
+    }
 
     return (
         <GlobalStoreContext.Provider value={{

@@ -9,14 +9,44 @@ import React, { useState } from 'react';
 import { TextField } from '@mui/material';
 import GlobalStoreContext from '../../store';
 import { useContext } from 'react';
+import SaveIcon from '@mui/icons-material/Save';
+import Alert from '@mui/material/Alert';
 
 function EditToolbar(props) {
-    const { name } = props;
+    const name = props.name;
     if (typeof window !== 'undefined') {
         const { store } = useContext(GlobalStoreContext);
             const [editing, setEditing] = useState(false);
             const [editedName, setEditedName] = useState(name);
-          
+            
+            const mapColor = props.mapColor;
+            const borderSwitch = props.borderSwitch;
+            const borderWidth = props.borderWidth;
+            const borderColor = props.borderColor;
+            const regionSwitch = props.regionSwitch;
+            const regionNameColor = props.regionNameColor;
+            const backgroundColor = props.backgroundColor;
+            const center = props.center;
+            const zoom = props.zoom;
+
+            const [showAlert, setShowAlert] = useState(false);
+            
+            const handleCloseAlert = () => {
+              setShowAlert(false);
+            };
+            const handleSaveAttributes = () => {
+                store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom);
+                //add a alert to show that the map has been saved
+                setTimeout(() => {
+                  setShowAlert(true); 
+                  //close the alert after 3 seconds
+                  setTimeout(() => {
+                    setShowAlert(false);
+                  }, 3000);
+                }, 1000);
+              }
+
+
             const handleDoubleClick = () => {
               setEditing(true);
               setEditedName(name);
@@ -29,18 +59,29 @@ function EditToolbar(props) {
               }
             };
           
-            const handleChange = (event) => {
-              setEditedName(event.target.value);
-            };
-
-            const handleKeyDown = (event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault();
-                  handleBlur();
-                }
-              };
 
         console.log("name: " + name);
+
+        const handleChange = (event) => {
+          setEditedName(event.target.value);
+        };
+    
+        const handleKeyDown = (event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            handleBlur();
+          }
+        };
+        const handleUndo = () => {
+          console.log('undo')
+          store.undo()
+          
+        };
+        const handleRedo = () => {
+          console.log('redo')
+          store.redo()
+          
+        };
     return(
         <div id={styles.edit-toolbar} >
             <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
@@ -55,29 +96,38 @@ function EditToolbar(props) {
                 <div>{name}</div>
             )}
             </div>
-            <IconButton>
-            <ColorLensIcon sx={{fontSize: "40pt"}}/>
+            <IconButton onClick={handleSaveAttributes}>
+            <SaveIcon sx={{fontSize: "40pt"}}/>
             </IconButton>
 
-            <IconButton>
-            <TextFieldsIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
+            {/* <Alert
+              severity="success"
+              onClose={handleCloseAlert}
+              sx={{ mt: 2 }}
+              open={true}
+            >
+              Saved Successfully!
+            </Alert> */}
 
-            <IconButton>
-            <FormatColorFillIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
+        <IconButton>
+          <TextFieldsIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
 
-            <IconButton>
-            <UndoIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
+        <IconButton>
+          <FormatColorFillIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
 
-            <IconButton>
-            <RedoIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
-        </div>
+        <IconButton onClick={handleUndo}>
+          <UndoIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+
+        <IconButton onClick={handleRedo}>
+          <RedoIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+      </div>
 
     );
-    }else{
-        return null
-    }
+  } else {
+    return null
+  }
 } export default EditToolbar

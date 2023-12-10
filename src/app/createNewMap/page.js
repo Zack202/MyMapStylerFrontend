@@ -1,7 +1,7 @@
 'use client'
 import React, { useContext, useState } from 'react'
 import GlobalStoreContext from '../store';
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, TextField } from "@mui/material";
 import * as tj from "@mapbox/togeojson";
 import { file } from '@babel/types';
 import InputLabel from '@mui/material/InputLabel';
@@ -63,6 +63,16 @@ export default function CreateMapModal() {
     };
 
     const [open, setOpen] = React.useState(false);
+
+    const [mapName, setMapName] = React.useState('');
+    const handleNameChange = (event) => {
+        setMapName(event.target.value);
+    }
+
+    const [mapDesc, setMapDesc] = React.useState('');
+    const handleDescChange = (event) => {
+        setMapDesc(event.target.value);
+    }
 
     //code here for if user is on home screen or map browsing screen
     //const openCreateMapModal = () => {setOpen(true)};
@@ -139,13 +149,13 @@ export default function CreateMapModal() {
 
     const handleCreateMap = (event) => {
         console.log(mapType)
-        store.createNewMap('name', mapData, mapType)
+        store.createNewMap(mapName, mapData, mapType, mapDesc)
         store.loadIdNamePairs();
     };
 
     return (
         <div>
-            <Grid container>
+            <Grid container sx={{maxHeight: "80%"}}>
                 
             <Grid item xs={12}>
                 <TopAppBanner />
@@ -160,18 +170,42 @@ export default function CreateMapModal() {
                 <div className="modal-dialog">
                     <Grid item xs={12} align="center">
                     <Typography variant="h5" align="center" color="textPrimary" gutterBottom>
-                        Import a map in the format of GeoJSon, SHapefile or KML:
+                        Import a map in the format of GeoJSon, Shapefile or KML:
                      </Typography>
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box sx={{marginTop: 1, marginBottom: 5}}>
+                        
+                        <Box sx={{marginTop: 1, marginBottom: 5, position: "absolute"}}>
                         <div id="middle-container">
                             <input type="file" accept="" id="import-map-button" onChange={handleFileChange} />
                         </div>
                         </Box>
+
                     </Grid>
+                    <Box sx={{display: "block", marginTop: 5}}>
+                        {/* <Typography sx={{fontSize: "22pt", paddingRight: 2}}>Map Name: </Typography> */}
+                    <TextField
+                        name="MapName"
+                        fullWidth
+                        required
+                        label="Map Name"
+                        sx={{paddingBottom: 3}}
+                        onChange={handleNameChange}
+                    />
+                    <p></p>
                     
+                    {/* <Typography sx={{fontSize: "22pt", paddingRight: 2}}>Description: </Typography> */}
+                    <TextField
+                        name="Description"
+                        fullWidth
+                        required
+                        label="Description"
+                        multiline
+                        onChange={handleDescChange}
+                    />
+
+                    </Box>
                     <Grid item xs={12}>
                         <Box sx={{marginTop: 5}}>
                         <FormControl fullWidth>

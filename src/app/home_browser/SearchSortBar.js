@@ -21,6 +21,16 @@ import { Filter2 } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CreateMapModal from '../components/CreateMapModal.js';
 import ExportMapModal from "src/app/components/ExportMapModal.js";
+// Search functionality
+import GlobalStoreContext from '../store';
+import { useContext, useState } from 'react';
+// Filter UI and functionality
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -68,6 +78,51 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const { store } = useContext(GlobalStoreContext);
+  // can use searching for a prettier UI
+  const [searching, setSearching] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState([])
+
+  // Filtering
+  const mapTypes = [
+    'Color',
+    'Text',
+    'Heat',
+    'Dot',
+    'Sized Dot',
+  ];
+
+  // can use for a prettier UI
+  const handleDoubleClick = () => {
+    setSearching(true);
+  };
+
+  const handleBlurSearch = () => {
+    setSearching(false);
+    store.updateSearch(search);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const handleKeyDownSearch = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleBlurSearch();
+    }
+  };
+
+  const handleFilterChange = async (event) => {
+    setFilter(event.target.value);
+  };
+
+
+  const handleSubmitFilter = (event) => {
+      store.updateFilter(filter);
+  };
 
 
   const handleProfileMenuOpen = (event) => {
@@ -163,7 +218,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{color:'maroon', background:'lightgrey'}}>
+      <AppBar position="static" style={{ color: 'maroon', background: 'lightgrey' }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -174,32 +229,60 @@ export default function PrimarySearchAppBar() {
           >
             <UserIcon />
           </IconButton>
-          <Search style={{backgroundColor:"#F1F1F1"}}>
+          <Search style={{ backgroundColor: "#F1F1F1" }}
+          >
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
+              id="searchBar"
               inputProps={{ 'aria-label': 'search' }}
-              
+              onBlur={handleBlurSearch}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDownSearch}
+
             />
           </Search>
           {/* <CreateMapModal /> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <Box style ={{color: "black", backgroundColor: "#F1F1F1", borderRadius: '20px',m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block'}}>        
-                <Typography variant="h5" gutterBottom>
-                    Filter { }
-                    <Filter2/>
-                </Typography>
-           </Box>
-          </Box>
-          <Box style ={{color: "Black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block'}}>        
-                <Typography variant="h5" gutterBottom>
-                    Sort by Name { }
-                    <KeyboardArrowDownIcon/>
-                </Typography>
+            <Box style={{ color: "black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block' }}>
+              <FormControl fullWidth>
+                <InputLabel id="select-filter">Filter</InputLabel>
+                <Select
+                  labelId="select-filter"
+                  id="select-filter"
+                  value={filter}
+                  label="select-filter"
+                  multiple
+                  sx={{ width: 300 }}
+                  onChange={handleFilterChange}
+                  renderValue={(selected) => selected.join(', ')}
+                >
+                  {mapTypes.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      <Checkbox checked={filter.indexOf(name) > -1} />
+                      <ListItemText primary={name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Box>
+          </Box>
+          <Button
+            variant="contained"
+            onClick={handleSubmitFilter}
+            id="applyFilter"
+          >
+            Apply Filter
+          </Button>
+          <Box style={{ color: "Black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block' }}>
+            <Typography variant="h5" gutterBottom>
+              Sort by Name { }
+              <KeyboardArrowDownIcon />
+            </Typography>
+          </Box>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
