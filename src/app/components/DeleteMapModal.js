@@ -72,7 +72,8 @@ export default function DeleteMapModal(props) {
                 // disabled={!store.canRedo()}
                 id='delete-button'
                 variant="contained"
-                sx={{margin: 1, backgroundColor: "maroon"}}
+                sx={{margin: 1, backgroundColor: "maroon",
+              display: props.show ? "default"  : "none"}}
                 onClick = {handleOpen}
                 value={props.id}
                 >

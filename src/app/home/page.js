@@ -1,13 +1,11 @@
-
-
 // Import dependencies
 'use client'
 import { Grid, Box } from "@mui/material";
 import TopAppBanner from '../Utils/TopAppBanner';
 import HomeBanner from '../Utils/HomeBanner';
 import BottomAppBanner from '../Utils/BottomAppBanner';
-import SearchSortBar from './SearchSortBar';
-import MapCard from './MapCard';
+import SearchSortBar from '../Utils/SearchSortBar';
+import MapCard from '../Utils/MapCard';
 import Button from '@mui/material/Button';
 import React, { useState, useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
@@ -21,8 +19,6 @@ const backgroundStyle = {
     height: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    // alignItems: 'center',
-    // justifyContent: 'center',
     width: '100%'
 };
 
@@ -47,7 +43,8 @@ export default function Home() {
     }
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        // idNamePair actually has a ton of the actually map data too.
+        store.loadIdNamePairs(); 
     }, []);
 
     // after store.idNamePairs, generate
@@ -195,13 +192,10 @@ export default function Home() {
                 display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
             }} style={backgroundStyle}>
 
-                {/*<MapCard />
-                <MapCard />
-                <MapCard />
-        <MapCard />*/}
-                {shownMaps}
+                
+                {shownMaps /* shows all the map cards*/} 
             </Box>
-            {/* <CreateMapModal open={open}/> */}
+
             <Box item xs={12} sx={{
                 position: "absolute", width: "100%",
             }}>

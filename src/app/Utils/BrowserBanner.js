@@ -12,7 +12,7 @@ export default function BrowserBanner() {
 
     const { auth } = useContext(AuthContext);
 
-    let isGuest = true;
+    let isGuest = false;
     if (auth.loggedIn) {
         if (auth.user.userName === "GUEST") {
             isGuest = true;
@@ -32,10 +32,21 @@ export default function BrowserBanner() {
             <AppBar position="static" sx={{ bgcolor: "#800000" }}>
                 <Toolbar variant='dense'>
                     
-                <Button 
-                    href="/home" variant='contained'>
+                <Button href="/home" variant='contained'
+                sx ={{ display:
+                    isGuest
+                        ? "none"
+                        : "inline-block",}}>
                     HOME
                 </Button>
+                <Typography 
+                style= {{fontWeight: 'bold', fontSize: '20px'}}
+                sx ={{ display:
+                    !isGuest
+                        ? "none"
+                        : "inline-block",}}>
+                    Guest 
+                </Typography>
 
                     <Box
                         sx={{

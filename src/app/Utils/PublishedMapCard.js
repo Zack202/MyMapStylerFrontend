@@ -1,6 +1,6 @@
-import { Fragment, useContext, useState } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
-// import AuthContext from '../auth';
+import AuthContext from '../auth';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
@@ -27,6 +27,8 @@ import DeleteMapModal from '../components/DeleteMapModal.js'
 
 function PublishedCard(props) {
     
+    const authContext = useContext(AuthContext);
+    const { auth } = authContext;
 
     const router = useRouter()
 
@@ -34,6 +36,8 @@ function PublishedCard(props) {
 
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
+    const [deletable, setDeletable] = useState(false);
+
     const [text, setText] = useState("");
     const [isActive, setIsActive] = useState(false);
     const [expandedId, setExpandedId] = useState(-1);
@@ -44,11 +48,11 @@ function PublishedCard(props) {
     const [numLikes, setLikes] = useState(0);
     const [numDislikes, setNumDislikes] = useState(0);
 
+   
 
 
     let likeB = "";
     let actionButtons = ""
-    let deleteCase = "";
     // if(idNamePair.public ){
     //     actionButtons = "hidden";
     //     likeB = ""
@@ -57,14 +61,18 @@ function PublishedCard(props) {
     //     likeB = "hidden"
     // }
 
-    // if(auth.loggedIn){
-    //     if(idNamePair.ownerEmail !== auth.user.email){
-    //         deleteCase = "hidden";
+    useEffect(() => {
+        console.log("EFFECT CALLED");
+        if(auth.loggedIn){ 
+            console.log("auth.user.email", auth.user.email);
+            console.log("idNamePair.ownerEmail", idNamePair.ownerEmail);
+            if(idNamePair.ownerEmail === auth.user.email){
+               setDeletable(true);
+            }
+       }
+    }, [auth]);
 
-    //     } else{
-    //         deleteCase = "";
-    //     }
-    // }
+    
 
     const handleCloseClick = (i) => {
         setExpandedId(expandedId === i ? -1 : i);
@@ -218,7 +226,7 @@ function PublishedCard(props) {
                     }} 
                     aria-label='like'>
                     <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.likes.length}</Typography>
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.likes ? idNamePair.likes.length : 247}</Typography>
                 </IconButton>
             {/* </Box> */}
 
@@ -226,7 +234,7 @@ function PublishedCard(props) {
                 <IconButton 
                     aria-label='dislike'>
                     <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.dislikes.length}</Typography>
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.dislikes ? idNamePair.dislikes.length : 247}</Typography>
                 </IconButton>
 
                 <IconButton aria-label='comments'>
@@ -243,7 +251,7 @@ function PublishedCard(props) {
     </CardActions>
     <div style={{width: "50%", float: 'right', position: "relative"}}>
         <div style={{ float: 'right', position: "relative", display: "flex"}}>
-            <DeleteMapModal id={idNamePair._id}/>
+            <DeleteMapModal id={idNamePair._id} show={deletable}/>
             <Button 
                 // disabled={!store.canUndo()}
                 id='duplicate-button'

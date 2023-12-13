@@ -22,10 +22,11 @@ import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
 import ExportMapModal from '../components/ExportMapModal.js'
 import DeleteMapModal from '../components/DeleteMapModal.js'
+import PublishedCard from './PublishedMapCard';
 
 
 
-function PublishedCard(props) {
+function ListCard(props) {
     
 
     const router = useRouter()
@@ -33,8 +34,10 @@ function PublishedCard(props) {
     const { idNamePair, selected } = props;
 
     const { store } = useContext(GlobalStoreContext);
+    // const {auth} = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
+    // const { idNamePair, selected } = props;
     const [isActive, setIsActive] = useState(false);
     const [expandedId, setExpandedId] = useState(-1);
     const [error, setError] = useState(false);
@@ -44,6 +47,7 @@ function PublishedCard(props) {
     const [numLikes, setLikes] = useState(0);
     const [numDislikes, setNumDislikes] = useState(0);
 
+    // let name = idNamePair.fullName;
 
 
     let likeB = "";
@@ -102,7 +106,7 @@ function PublishedCard(props) {
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            store.setIsListNameEditActive();
+            //store.setIsListNameEditActive();
         }
         setEditActive(newActive);
     }
@@ -149,15 +153,28 @@ function PublishedCard(props) {
         
     }
 
-    function handleClickForPublishedMap(event){
+    function handleClickForMapEdit(event){
         store.setCurrentMap(idNamePair._id)
-        router.push('/publishedMap/'+idNamePair._id)
+        router.push('/mapEditing/'+idNamePair._id)
     }
 
+    let cardElement = ""
 
-    let cardElement =
+
+    //published card
+    if(idNamePair.published){
+        cardElement = 
+        <PublishedCard
+        key={idNamePair._id}
+        idNamePair={idNamePair}
+        selected={false}
+        />
+    }
+    //unpublished Card
+    else{
+    cardElement =
     <div id='cards'>
-    <Card onClick={() => handleClickForPublishedMap()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
+    <Card onClick={() => handleClickForMapEdit()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
     >
         
     <CardContent sx={{p: 0}}/>
@@ -176,7 +193,7 @@ function PublishedCard(props) {
             //     handleLoadList(event, idNamePair._id)
             // }}  
             >
-            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder", cursor: "pointer"}}>
             {idNamePair.name}
             </Link>
             
@@ -199,51 +216,21 @@ function PublishedCard(props) {
 
             <div>
             <Typography sx={{top: 20, position: "absolute", width: "25%"}}>
-                {idNamePair.description}
-
+            {idNamePair.description}
             </Typography>
             </div>
         </Box>
 
             <Box sx={{ p: 1, flexGrow: 1, right:"0", position: "absolute", top: 0}}>
                 <Typography variant='h7' fontSize="12pt">Created By: {idNamePair.userName}</Typography>
-            </Box>
-
-            {/* like dislike comments container */}
-            <Box sx={{flexGrow: 0, p: 2, right: 0, position: 'absolute', display: "flex", bottom: 0, backgroundColor: "gray", height: "50%",
-        borderRadius: "10px"}}>
-            {/* <Box sx={{p: 0}}> */}
-                <IconButton onClick={(event) => {
-                        handleLikePlaylis(event, idNamePair)
-                    }} 
-                    aria-label='like'>
-                    <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.likes.length}</Typography>
-                </IconButton>
-            {/* </Box> */}
-
-            {/* <Box sx={{padding: 0}} > */}
-                <IconButton 
-                    aria-label='dislike'>
-                    <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.dislikes.length}</Typography>
-                </IconButton>
-
-                <IconButton aria-label='comments'>
-                    <CommentIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                                                                                        {/* still have to work on comments */}
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>0</Typography>
-                </IconButton>
-            {/* </Box> */}
-            </Box>
-    
+            </Box>    
                   
         </ListItem>
         
     </CardActions>
     <div style={{width: "50%", float: 'right', position: "relative"}}>
         <div style={{ float: 'right', position: "relative", display: "flex"}}>
-            <DeleteMapModal id={idNamePair._id}/>
+            <DeleteMapModal id={idNamePair._id} show={true}/>
             <Button 
                 // disabled={!store.canUndo()}
                 id='duplicate-button'
@@ -254,12 +241,14 @@ function PublishedCard(props) {
                 Fork
             </Button>
             <ExportMapModal />
-
-        <Box 
-            sx={{display: 'inline-block',  p: 1,}}
-            >
-                <Typography fontSize="12pt"> Views: {idNamePair.views ? idNamePair.views : 0} </Typography>
-        </Box>
+            <Button 
+                id='publish-button'
+                variant="contained"
+                sx={{margin: 1, visibility: actionButtons, backgroundColor: "maroon"}}
+                onClick={handlePublish}
+                >
+                Publish
+            </Button>
         </div>
     </div>
 
@@ -267,6 +256,7 @@ function PublishedCard(props) {
     
     </Card>
   </div>
+    }
 
     if (editActive) {
         cardElement =
@@ -323,4 +313,4 @@ function PublishedCard(props) {
     );
 }
 
-export default PublishedCard;
+export default ListCard;
