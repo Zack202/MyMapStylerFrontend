@@ -148,9 +148,9 @@ export default function TopAppBanner() {
                         variant="h4"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' }, zIndex: "2"}}
+                        sx={{ position: 'relative', display: { xs: 'none', sm: 'block' }, zIndex: "2"}}
                     >
-                        <a href="/home"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <a href="/browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
                     </Box>
                     
