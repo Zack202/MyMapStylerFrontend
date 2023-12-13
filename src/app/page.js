@@ -22,10 +22,17 @@ const backgroundStyle = {
 
 export default function SplashScreen() {
   const { auth }  = useContext(AuthContext);
+  const [isGuest, setGuest] = useState(false);
 
   if (auth.loggedIn) {
     const router = useRouter();
-    router.push('/home');
+    if(!isGuest){
+      router.push('/home');
+    }
+    else{
+      router.push('/browser');
+    }
+    
   }
 
   const handleGuest = (event) => {
@@ -36,6 +43,7 @@ export default function SplashScreen() {
       "GUEST@GUEST.GUEST",
       "GUESTGUEST",
     )
+    setGuest(true);
   }
   return (
     <div style={backgroundStyle}>
@@ -51,7 +59,7 @@ export default function SplashScreen() {
             </Typography>
             <Button href="/login" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Login</Button>
             <Button href="/createAccount" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Create an Account</Button>
-            <Button href="/browser" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }} onClick={handleGuest}>Continue As Guest</Button>
+            <Button variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }} onClick={handleGuest}>Continue As Guest</Button>
           </Box>
         </Box>
       </Box>

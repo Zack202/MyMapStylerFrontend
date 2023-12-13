@@ -30,7 +30,7 @@ export default function HomeBanner() {
                             width: '100%',
                         }}
                     >
-                        <Typography style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '20px', marginRight: '80px' }}>
+                        <Typography style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '20px', marginRight: '90px' }}>
                             <b><u>YOUR MAPS</u></b>
                         </Typography>
                     </Box>
