@@ -72,7 +72,7 @@ export default function SignIn() {
   if (typeof window !== 'undefined') {
     if (auth.loggedIn) {
       const router = useRouter();
-      router.push('/home_browser');
+      router.push('/home');
     }
   }
 

@@ -136,7 +136,7 @@ export default function TopAppBanner() {
                                         <Button href="/createAccount" variant="contained" marginTop="4" color="primary">
                                             Create a New Account
                                         </Button>
-                                        <Button href="/home_browser" variant="contained" marginTop="4" color="primary" onClick={handleGuest}>
+                                        <Button href="/browser" variant="contained" marginTop="4" color="primary" onClick={handleGuest}>
                                             Continue As Guest
                                         </Button>
                                         <Button href="/" variant="contained" marginTop="4" color="primary">

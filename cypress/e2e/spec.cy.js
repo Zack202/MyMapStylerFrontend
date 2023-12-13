@@ -15,7 +15,7 @@ describe('User Tests', () => {
   it('Guest User Success', function () {
     cy.contains('CONTINUE AS GUEST', { matchCase: false }).click();
 
-    cy.location('href').should('include', '/home_browser')
+    cy.location('href').should('include', '/browser')
   });
 
   it('Log In Success', function () {
@@ -25,7 +25,7 @@ describe('User Tests', () => {
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
 
-    cy.location('href').should('include', '/home_browser');
+    cy.location('href').should('include', '/home');
   });
 
   it('Register', function () {
@@ -42,7 +42,7 @@ describe('User Tests', () => {
 
     cy.contains('Confirm Registration', { matchCase: false }).click();
 
-    cy.location('href').should('include', '/home_browser')
+    cy.location('href').should('include', '/home')
 
   });
 
@@ -113,7 +113,7 @@ describe('User Tests', () => {
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
 
-    cy.location('href').should('include', '/home_browser');
+    cy.location('href').should('include', '/home');
   });
 
 
@@ -239,7 +239,7 @@ describe('Home Tests', () => {
     cy.get('#email').type('exampleUser@gmail.com');
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
-    cy.location('href').should('include', '/home_browser')
+    cy.location('href').should('include', '/home')
     cy.wait(500);
   })
 
@@ -260,7 +260,7 @@ describe('Home Tests', () => {
 
     cy.contains('CONTINUE AS GUEST', { matchCase: false }).click();
 
-    cy.location('href').should('include', '/home_browser')
+    cy.location('href').should('include', '/browser')
 
     cy.contains("CREATE NEW MAP", { matchCase: false }).should('not.be.visible')
 
@@ -368,7 +368,7 @@ describe('Editing Tests', () => {
     cy.get('#email').type('exampleUser@gmail.com');
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
-    cy.location('href').should('include', '/home_browser');
+    cy.location('href').should('include', '/home');
 
     cy.wait(500);
 

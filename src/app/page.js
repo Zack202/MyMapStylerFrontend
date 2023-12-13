@@ -25,7 +25,7 @@ export default function SplashScreen() {
 
   if (auth.loggedIn) {
     const router = useRouter();
-    router.push('/home_browser');
+    router.push('/home');
   }
 
   const handleGuest = (event) => {
@@ -51,7 +51,7 @@ export default function SplashScreen() {
             </Typography>
             <Button href="/login" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Login</Button>
             <Button href="/createAccount" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Create an Account</Button>
-            <Button href="/home_browser" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }} onClick={handleGuest}>Continue As Guest</Button>
+            <Button href="/browser" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }} onClick={handleGuest}>Continue As Guest</Button>
           </Box>
         </Box>
       </Box>
