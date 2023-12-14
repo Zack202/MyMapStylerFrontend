@@ -62,10 +62,7 @@ function PublishedCard(props) {
     // }
 
     useEffect(() => {
-        console.log("EFFECT CALLED");
         if(auth.loggedIn){ 
-            console.log("auth.user.email", auth.user.email);
-            console.log("idNamePair.ownerEmail", idNamePair.ownerEmail);
             if(idNamePair.ownerEmail === auth.user.email){
                setDeletable(true);
             }
