@@ -143,14 +143,14 @@ export default function TopAppBanner() {
             }}>
             <AppBar position="static" sx={{ bgcolor: "#800000" }}>
                 <Toolbar variant='dense'>
-                    <Box bgcolor={'#e8e8e8'}>
+                    <Box bgcolor={'#e8e8e8'} >
                     <Typography
                         variant="h4"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' }, zIndex: "2" }}
+                        sx={{ position: 'relative', display: { xs: 'none', sm: 'block' }, zIndex: "2"}}
                     >
-                        <a href="/home_browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <a href="/browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
                     </Box>
                     
@@ -160,6 +160,7 @@ export default function TopAppBanner() {
                             justifyContent: 'center',
                             alignItems: 'center',
                             width: '100%',
+                            marginRight: 5
                         }}
                     >
                         <Typography style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '20px' }}>

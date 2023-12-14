@@ -381,6 +381,27 @@ function GlobalStoreContextProvider(props) {
         console.log(store.idNamePairs)
     }
 
+    store.loadPublishedIdNamePairs = function () {
+        async function asyncLoadPublishedIdNamePairs() {
+            const response = await api.getPublishedMapPairs();
+            if (response.data.success) {
+                console.log(response.data.idNamePairs)
+                let pairsArray = response.data.idNamePairs;
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncLoadPublishedIdNamePairs();
+        console.log('outside async pair id function')
+        console.log(store.idNamePairs)
+    }
+
+
     ///MODAL STUFF
     store.showCreateMapModal = function () {
         storeReducer({

@@ -1,6 +1,6 @@
-import { Fragment, useContext, useState } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
-// import AuthContext from '../auth';
+import AuthContext from '../auth';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
@@ -28,6 +28,7 @@ import AuthContext from '../auth';
 
 function PublishedCard(props) {
     
+    const authContext = useContext(AuthContext);
 
     const router = useRouter()
 
@@ -35,6 +36,8 @@ function PublishedCard(props) {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
+    const [deletable, setDeletable] = useState(false);
+
     const [text, setText] = useState("");
     const [isActive, setIsActive] = useState(false);
     const [expandedId, setExpandedId] = useState(-1);
@@ -59,6 +62,36 @@ function PublishedCard(props) {
         setDisliked(false);
         setLiked(!liked);
         store.likeMap(idNamePair._id);
+   
+
+
+    let likeB = "";
+    let actionButtons = ""
+    // if(idNamePair.public ){
+    //     actionButtons = "hidden";
+    //     likeB = ""
+    // }else{
+    //     actionButtons = "";
+    //     likeB = "hidden"
+    // }
+
+    useEffect(() => {
+        console.log("EFFECT CALLED");
+        if(auth.loggedIn){ 
+            console.log("auth.user.email", auth.user.email);
+            console.log("idNamePair.ownerEmail", idNamePair.ownerEmail);
+            if(idNamePair.ownerEmail === auth.user.email){
+               setDeletable(true);
+            }
+       }
+    }, [auth]);
+
+    
+
+    const handleCloseClick = (i) => {
+        setExpandedId(expandedId === i ? -1 : i);
+        store.closeCurrentList();
+        setListOpen(false);
     }
 
     function handleDislikeMap(event){
@@ -209,8 +242,22 @@ function PublishedCard(props) {
             {/* like dislike comments container */}
             <Box sx={{flexGrow: 0, p: 2, right: 0, position: 'absolute', display: "flex", bottom: 0, backgroundColor: "gray", height: "50%",
         borderRadius: "10px"}}>
-                
-                {likeButton}
+            {/* <Box sx={{p: 0}}> */}
+                <IconButton onClick={(event) => {
+                        handleLikePlaylis(event, idNamePair)
+                    }} 
+                    aria-label='like'>
+                    <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.likes ? idNamePair.likes.length : 247}</Typography>
+                </IconButton>
+            {/* </Box> */}
+
+            {/* <Box sx={{padding: 0}} > */}
+                <IconButton 
+                    aria-label='dislike'>
+                    <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
+                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.dislikes ? idNamePair.dislikes.length : 247}</Typography>
+                </IconButton>
 
                 {dislikeButton}
                 
@@ -228,7 +275,7 @@ function PublishedCard(props) {
     </CardActions>
     <div style={{width: "50%", float: 'right', position: "relative"}}>
         <div style={{ float: 'right', position: "relative", display: "flex"}}>
-            <DeleteMapModal id={idNamePair._id}/>
+            <DeleteMapModal id={idNamePair._id} show={deletable}/>
             <Button 
                 // disabled={!store.canUndo()}
                 id='duplicate-button'

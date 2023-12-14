@@ -2,10 +2,8 @@ import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
@@ -16,11 +14,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import { Filter2 } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import CreateMapModal from '../components/CreateMapModal.js';
-import ExportMapModal from "src/app/components/ExportMapModal.js";
 // Search functionality
 import GlobalStoreContext from '../store';
 import { useContext, useState } from 'react';
@@ -80,8 +74,6 @@ export default function PrimarySearchAppBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const { store } = useContext(GlobalStoreContext);
-  // can use searching for a prettier UI
-  const [searching, setSearching] = useState(false);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState([])
 
@@ -95,12 +87,8 @@ export default function PrimarySearchAppBar() {
   ];
 
   // can use for a prettier UI
-  const handleDoubleClick = () => {
-    setSearching(true);
-  };
 
   const handleBlurSearch = () => {
-    setSearching(false);
     store.updateSearch(search);
   };
 
@@ -138,9 +126,6 @@ export default function PrimarySearchAppBar() {
     handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -217,9 +202,12 @@ export default function PrimarySearchAppBar() {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box flex
+    sx={{
+        width: '100%'
+    }}>
       <AppBar position="static" style={{ color: 'maroon', background: 'lightgrey' }}>
-        <Toolbar>
+        <Toolbar variant="dense">
           <IconButton
             size="large"
             edge="start"
@@ -247,7 +235,7 @@ export default function PrimarySearchAppBar() {
           {/* <CreateMapModal /> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Box style={{ color: "black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block' }}>
+            <Box style={{ color: "black", backgroundColor: "#F1F1F1", borderRadius: '7px',  marginLeft: '50px', marginRight: '50px', display: 'inline-block' }}>
               <FormControl fullWidth>
                 <InputLabel id="select-filter">Filter</InputLabel>
                 <Select
@@ -277,7 +265,7 @@ export default function PrimarySearchAppBar() {
           >
             Apply Filter
           </Button>
-          <Box style={{ color: "Black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', paddingLeft: '50px', paddingRight: '50px', display: 'inline-block' }}>
+          <Box style={{ color: "Black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', marginLeft: '40px', marginRight: '40px', paddingLeft: '10px', paddingRight: '10px', display: 'inline-block' }}>
             <Typography variant="h5" gutterBottom>
               Sort by Name { }
               <KeyboardArrowDownIcon />

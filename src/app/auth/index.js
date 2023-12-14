@@ -114,7 +114,7 @@ function AuthContextProvider(props) {
                 }
             })
             console.log("successfully registered user")
-            router.push("/home_browser");
+            router.push("/home");
         }
     } catch(error) { 
         authReducer({
@@ -138,7 +138,6 @@ function AuthContextProvider(props) {
                 }
             })
             console.log(response.data.user)
-            router.push("/home_browser");
         }
     } catch(error) { 
         authReducer({
@@ -190,7 +189,7 @@ function AuthContextProvider(props) {
                     }
                 })
                 console.log("succesfully reset password")
-                router.push("/home_browser");
+                // router.push("/home_browser");
             }
         } catch(error) { 
             authReducer({
