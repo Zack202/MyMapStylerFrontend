@@ -373,6 +373,9 @@ describe('Editing Tests', () => {
     cy.wait(500);
 
     cy.contains('Map2', { matchCase: false, timeout: 10000 }).click();
+
+    cy.wait(500);
+    
     cy.location('href').should('include', '/mapEditing')
   })
 

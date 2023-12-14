@@ -1,11 +1,10 @@
 'use client'
 import styles from './SplashScreen.module.css'
 import React from 'react'
-import Button  from '@mui/material/Button'
+import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
-import Link from '@mui/material/Link';
 import AuthContext from './auth'
-import { useContext, useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 
 
@@ -21,18 +20,17 @@ const backgroundStyle = {
 };
 
 export default function SplashScreen() {
-  const { auth }  = useContext(AuthContext);
-  const [isGuest, setGuest] = useState(false);
+  const { auth } = useContext(AuthContext);
 
   if (auth.loggedIn) {
     const router = useRouter();
-    if(!isGuest){
-      router.push('/home');
-    }
-    else{
+    if (auth.user.userName === "GUEST") {
       router.push('/browser');
     }
-    
+    else {
+      router.push('/home');
+    }
+
   }
 
   const handleGuest = (event) => {
@@ -43,7 +41,6 @@ export default function SplashScreen() {
       "GUEST@GUEST.GUEST",
       "GUESTGUEST",
     )
-    setGuest(true);
   }
   return (
     <div style={backgroundStyle}>
