@@ -99,7 +99,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: null,
                     idNamePairs: payload,
-                    currentMap: null, //change
+                    currentMap: store.currentMap, //change
                     currentMapFeatures: JSON,
                     currentMapGeometry: JSON,
                     mapIdMarkedForDeletion: null,
@@ -158,7 +158,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: null,
                     idNamePairs: store.idNamePairs,
-                    currentMap: null,
+                    currentMap: store.currentMap,
                     currentMapFeatures: JSON, //might need to change this
                     currentMapGeometry: JSON, //might need to change this
                     mapIdMarkedForDeletion: null,
@@ -506,6 +506,26 @@ function GlobalStoreContextProvider(props) {
         dislikeMap(mapId)
     }
     
+    store.addComment = (comment) => {
+        async function asyncAddComment(comment){
+            let diff = {
+                newComment: comment
+            }
+            console.log("the diff is ", diff)
+            let response = await api.updateMapById(store.currentMap._id, diff);
+            if(response.data.success){
+                storeReducer({
+                    type: GlobalStoreActionType.PUBLISHED,
+                    payload:{
+                        map: map
+                    }
+                })
+            }
+            store.loadIdNamePairs();
+        }
+        asyncAddComment(comment);
+    }
+
     store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom) => {
         const updatedAttributes = {
             mapColor,
