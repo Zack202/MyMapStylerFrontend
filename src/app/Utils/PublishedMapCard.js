@@ -22,7 +22,6 @@ import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
 import ExportMapModal from '../components/ExportMapModal.js';
 import DeleteMapModal from '../components/DeleteMapModal.js';
-import AuthContext from '../auth';
 
 
 
@@ -38,24 +37,21 @@ function PublishedCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [deletable, setDeletable] = useState(false);
 
-    const [text, setText] = useState("");
     const [isActive, setIsActive] = useState(false);
-    const [expandedId, setExpandedId] = useState(-1);
+
     const [error, setError] = useState(false);
-    const [listOpen, setListOpen] = useState(false);
 
     let userName = "";
     if(auth.loggedIn){
         userName = auth.user.userName;
     }
+    console.log("we are here for some reason", idNamePair)
     let isItLiked = idNamePair.likes.includes(userName);
     const [liked, setLiked] = useState(isItLiked);
     console.log(userName);
     console.log(isItLiked);
     const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
     
-    const [numLikes, setLikes] = useState(0);
-    const [numDislikes, setNumDislikes] = useState(0);
 
     function handleLikeMap(event){
         event.stopPropagation();
@@ -66,14 +62,6 @@ function PublishedCard(props) {
 
 
     let likeB = "";
-    let actionButtons = ""
-    // if(idNamePair.public ){
-    //     actionButtons = "hidden";
-    //     likeB = ""
-    // }else{
-    //     actionButtons = "";
-    //     likeB = "hidden"
-    // }
 
     useEffect(() => {
         console.log("EFFECT CALLED");
@@ -86,21 +74,12 @@ function PublishedCard(props) {
        }
     }, [auth]);
 
-    
-
-    const handleCloseClick = (i) => {
-        setExpandedId(expandedId === i ? -1 : i);
-        store.closeCurrentList();
-        setListOpen(false);
-    }
-
     function handleDislikeMap(event){
         event.stopPropagation();
         setLiked(false);
         setDisliked(!disliked);
         store.dislikeMap(idNamePair._id);
     }
-
     
 
     //UNLIKED
@@ -158,25 +137,15 @@ function PublishedCard(props) {
         setError(false);
     }
     
-    function handleToggleEdit(event) {
-        event.stopPropagation();
-        toggleEdit();
-    }
 
-    function toggleEdit() {
-        let newActive = !editActive;
-        if (newActive) {
-            store.setIsListNameEditActive();
-        }
-        setEditActive(newActive);
-    }
 
     const [exportModal, setExportModal] = useState(false);
 
     const handleExportMapModal = (event) => {
         event.preventDefault();
         setExportModal(true);
-    console.log("clicked");}
+        console.log("clicked");
+    }
 
     const [deleteModal, setdeleteModal] = useState(false);
 
@@ -300,25 +269,6 @@ function PublishedCard(props) {
     </Card>
   </div>
 
-    if (editActive) {
-        cardElement =
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id={"list-" + idNamePair._id}
-                label="Playlist Name"
-                name="name"
-                autoComplete="Playlist Name"
-                className='list-card'
-                onKeyPress={handleKeyPress}
-                onChange={handleUpdateText}
-                defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 48}}}
-                InputLabelProps={{style: {fontSize: 24}}}
-                autoFocus
-            />
-    }
     const style = {
         position: 'absolute',
         top: '50%',
@@ -353,6 +303,7 @@ function PublishedCard(props) {
         </Modal>
         </div>
     );
+    }
 }
 
 export default PublishedCard;
