@@ -215,7 +215,7 @@ function PublishedCard(props) {
                 <IconButton aria-label='comments'>
                     <CommentIcon style={{fontSize:'30pt', color: "white"}} />
                                                                                         {/* still have to work on comments */}
-                    <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>0</Typography>
+                    <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.comments.length}</Typography>
                 </IconButton>
             {/* </Box> */}
             </Box>

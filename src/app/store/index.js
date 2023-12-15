@@ -520,7 +520,7 @@ function GlobalStoreContextProvider(props) {
                             map: map
                         }
                     });
-                        store.loadIdNamePairs();
+                        // store.loadIdNamePairs();
                 }
             }
         }

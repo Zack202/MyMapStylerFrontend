@@ -17,6 +17,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // Search functionality
 import GlobalStoreContext from '../store';
+import AuthContext from '../auth';
+
 import { useContext, useState } from 'react';
 // Filter UI and functionality
 import InputLabel from '@mui/material/InputLabel';
@@ -69,7 +71,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const {auth} = useContext(AuthContext);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -102,6 +104,16 @@ export default function PrimarySearchAppBar() {
       handleBlurSearch();
     }
   };
+
+  let isGuest = true;
+    if (auth.loggedIn) {
+        if (auth.user.userName === "GUEST") {
+            isGuest = true;
+        }
+        else {
+            isGuest = false;
+        }
+    }
 
   const handleFilterChange = async (event) => {
     setFilter(event.target.value);
@@ -233,6 +245,16 @@ export default function PrimarySearchAppBar() {
             />
           </Search>
           {/* <CreateMapModal /> */}
+          <Box item xs={12} sx={{}}>
+                <Button sx={{
+                    marginLeft: 5, marginRight: 0, marginTop: .75, display:
+                        isGuest
+                            ? "none"
+                            : "inline-block",
+                }} href="/createNewMap" variant='contained'>
+                    Create New Map
+                </Button>
+            </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <Box style={{ color: "black", backgroundColor: "#F1F1F1", borderRadius: '7px',  marginLeft: '50px', marginRight: '50px', display: 'inline-block' }}>
