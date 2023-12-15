@@ -532,13 +532,14 @@ function GlobalStoreContextProvider(props) {
             let diff = {
                 newComment: comment
             }
+            store.currentMap.comments.push(comment);
             console.log("the diff is ", diff)
             let response = await api.updateMapById(store.currentMap._id, diff);
             if(response.data.success){
                 storeReducer({
                     type: GlobalStoreActionType.PUBLISHED,
                     payload:{
-                        map: map
+                        map: store.currentMap
                     }
                 })
             }

@@ -58,16 +58,13 @@ function PublishedCard(props) {
         setDisliked(false);
         setLiked(!liked);
         store.likeMap(idNamePair._id);
-   
+    }
 
 
     let likeB = "";
 
     useEffect(() => {
-        console.log("EFFECT CALLED");
         if(auth.loggedIn){ 
-            console.log("auth.user.email", auth.user.email);
-            console.log("idNamePair.ownerEmail", idNamePair.ownerEmail);
             if(idNamePair.ownerEmail === auth.user.email){
                setDeletable(true);
             }
@@ -212,22 +209,7 @@ function PublishedCard(props) {
             <Box sx={{flexGrow: 0, p: 2, right: 0, position: 'absolute', display: "flex", bottom: 0, backgroundColor: "gray", height: "50%",
         borderRadius: "10px"}}>
             {/* <Box sx={{p: 0}}> */}
-                <IconButton onClick={(event) => {
-                        handleLikePlaylis(event, idNamePair)
-                    }} 
-                    aria-label='like'>
-                    <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.likes ? idNamePair.likes.length : 247}</Typography>
-                </IconButton>
-            {/* </Box> */}
-
-            {/* <Box sx={{padding: 0}} > */}
-                <IconButton 
-                    aria-label='dislike'>
-                    <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.dislikes ? idNamePair.dislikes.length : 247}</Typography>
-                </IconButton>
-
+                {likeButton}
                 {dislikeButton}
                 
                 <IconButton aria-label='comments'>
@@ -303,7 +285,6 @@ function PublishedCard(props) {
         </Modal>
         </div>
     );
-    }
 }
 
 export default PublishedCard;
