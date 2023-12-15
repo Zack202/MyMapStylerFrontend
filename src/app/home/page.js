@@ -30,7 +30,6 @@ export default function Home() {
 
     const [shownMaps, setShownMaps] = useState(false);
     const [temporaryFilter, setTemporaryFilter] = useState("NEVER SET");
-    const [triggerGenerate, setTriggerGenerate] = useState(false);
 
     let isGuest = true;
     if (auth.loggedIn) {
@@ -60,7 +59,6 @@ export default function Home() {
     // if temporary filter is changed, update
     useEffect(() => {
         if(temporaryFilter !== "NEVER SET" ) {
-            // console.log("USE EFFECT temporaryFilter:", temporaryFilter);
             generateMapCard(temporaryFilter);
             setShownMaps(mapCard);
         }
@@ -93,10 +91,9 @@ export default function Home() {
                     ))
                 }
             </List>;
-            // console.log("--------------------------");
     }
 
-    const runFilters = () => {
+    const runFilters = async () => {
         if (store) {
             let searchedMaps = [];
 
@@ -111,7 +108,6 @@ export default function Home() {
                 }
                 if(searchedMaps.length === 0){
                     setTemporaryFilter([]);
-                    // setTriggerGenerate(!triggerGenerate);
                     setShownMaps(mapCard);
                 }
             }
@@ -154,16 +150,13 @@ export default function Home() {
 
                 let filteredMaps = [];
                 for (let i = 0; i < searchedMaps.length; i++) {
-                    store.getMapById(searchedMaps[i]._id).then((map) => {
+                    await store.getMapById(searchedMaps[i]._id).then((map) => {
                         if (filter2.includes(map.data.map.mapType)) {
                             filteredMaps.push(searchedMaps[i]);
-                            // console.log("filteredMaps:", filteredMaps);
                         }
-                        
+            
                         if (i === searchedMaps.length - 1) {
                             setTemporaryFilter(filteredMaps);
-                            // console.log("set Temporary filter:", filteredMaps);
-                            // setTriggerGenerate(!triggerGenerate);
                             setShownMaps(mapCard);
                         }
                     });
