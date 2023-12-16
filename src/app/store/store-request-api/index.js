@@ -31,8 +31,8 @@ export const createNewMap = (name, userName, ownerEmail, mapData, mapType, mapDe
         mapZoom: 0,//{type: Number, required: false},
         mapCenter: [],//{type: [Number], required: false},
         previousCreators: [],//{ type: [String], required: false},
-        mapType: mapType//{type: Number, required: true},
-
+        mapType: mapType,//{type: Number, required: true},
+        comments: []
 
     })
 }

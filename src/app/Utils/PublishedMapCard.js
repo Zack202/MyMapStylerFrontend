@@ -20,46 +20,48 @@ import {Modal, Button} from '@mui/material';
 import TestMap from "public/test_map.jpg"
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
-import ExportMapModal from '../components/ExportMapModal.js'
-import DeleteMapModal from '../components/DeleteMapModal.js'
+import ExportMapModal from '../components/ExportMapModal.js';
+import DeleteMapModal from '../components/DeleteMapModal.js';
 
 
 
 function PublishedCard(props) {
     
     const authContext = useContext(AuthContext);
-    const { auth } = authContext;
 
     const router = useRouter()
 
     const { idNamePair, selected } = props;
-
+    const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [deletable, setDeletable] = useState(false);
 
-    const [text, setText] = useState("");
     const [isActive, setIsActive] = useState(false);
-    const [expandedId, setExpandedId] = useState(-1);
-    const [error, setError] = useState(false);
-    const [listOpen, setListOpen] = useState(false);
-    const [liked, setLiked] = useState("");
-    const [disliked, setDisliked] = useState("");
-    const [numLikes, setLikes] = useState(0);
-    const [numDislikes, setNumDislikes] = useState(0);
 
-   
+    const [error, setError] = useState(false);
+
+    let userName = "";
+    if(auth.loggedIn){
+        userName = auth.user.userName;
+    }
+    console.log("we are here for some reason", idNamePair)
+    let isItLiked = idNamePair.likes.includes(userName);
+    const [liked, setLiked] = useState(isItLiked);
+    console.log(userName);
+    console.log(isItLiked);
+    const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
+    
+
+    function handleLikeMap(event){
+        event.stopPropagation();
+        setDisliked(false);
+        setLiked(!liked);
+        store.likeMap(idNamePair._id);
+    }
 
 
     let likeB = "";
-    let actionButtons = ""
-    // if(idNamePair.public ){
-    //     actionButtons = "hidden";
-    //     likeB = ""
-    // }else{
-    //     actionButtons = "";
-    //     likeB = "hidden"
-    // }
 
     useEffect(() => {
         if(auth.loggedIn){ 
@@ -69,26 +71,59 @@ function PublishedCard(props) {
        }
     }, [auth]);
 
+    function handleDislikeMap(event){
+        event.stopPropagation();
+        setLiked(false);
+        setDisliked(!disliked);
+        store.dislikeMap(idNamePair._id);
+    }
     
 
-    const handleCloseClick = (i) => {
-        setExpandedId(expandedId === i ? -1 : i);
-        store.closeCurrentList();
-        setListOpen(false);
+    //UNLIKED
+    let likeButton =  "";
+
+    let dislikeButton =  "";
+
+    if(liked){
+        likeButton = 
+        <IconButton onClick={(event) => {
+            handleLikeMap(event)
+        }} 
+            aria-label='like'>
+            <ThumbUpAltIcon style={{fontSize:'30pt', color: "white"}} />
+            <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.likes.length}</Typography>
+        </IconButton>
+    } else{
+        likeButton =
+        <IconButton onClick={(event) => {
+            handleLikeMap(event)
+        }} 
+            aria-label='like'>
+            <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white"}} />
+            <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.likes.length}</Typography>
+        </IconButton>
     }
 
-    const handleExpandClick = (event, i) => {
-        event.stopPropagation();
-        // if(store.currentList){
-        //     store.setCurrentList(i);
-        // }
-        // else{
-        
-        // }
-        setExpandedId(expandedId === i ? -1 : i);
-        setListOpen(true);
-        store.setCurrentList(i);
-    };
+
+    if(disliked){
+        dislikeButton = 
+            <IconButton onClick={(event) => {
+                handleDislikeMap(event)
+            }} 
+                aria-label='dislike'>
+                <ThumbDownAltIcon style={{fontSize:'30pt', color: "white"}} />
+                <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.dislikes.length}</Typography>
+            </IconButton>
+    } else {
+        dislikeButton = 
+            <IconButton onClick={(event) => {
+                handleDislikeMap(event)
+            }} 
+                aria-label='dislike'>
+                <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white"}} />
+                <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.dislikes.length}</Typography>
+            </IconButton>
+    }
 
     function handleFork(event) {
         event.stopPropagation();
@@ -99,25 +134,15 @@ function PublishedCard(props) {
         setError(false);
     }
     
-    function handleToggleEdit(event) {
-        event.stopPropagation();
-        toggleEdit();
-    }
 
-    function toggleEdit() {
-        let newActive = !editActive;
-        if (newActive) {
-            store.setIsListNameEditActive();
-        }
-        setEditActive(newActive);
-    }
 
     const [exportModal, setExportModal] = useState(false);
 
     const handleExportMapModal = (event) => {
         event.preventDefault();
         setExportModal(true);
-    console.log("clicked");}
+        console.log("clicked");
+    }
 
     const [deleteModal, setdeleteModal] = useState(false);
 
@@ -125,34 +150,6 @@ function PublishedCard(props) {
         event.preventDefault();
         setdeleteModal(true);
     console.log("clicked");}
-
-    function handleDislikes(event, idNamePair) {
-
-    }
-
-
-    function handleKeyPress(event) {
-    }
-
-    function handlePublish(event, id) {
-        event.stopPropagation();
-        store.publishMap(idNamePair._id);
-    }
-
-    function handleUpdateText(event) {
-    }
-
-    let selectClass = "unselected-list-card";
-    // if (selected) {
-    //     selectClass = "selected-list-card";
-    // }
-    // let cardStatus = false;
-    // if (store.isListNameEditActive) {
-    //     cardStatus = true;
-    // }
-    function handelSwitchToEdit(event){
-        
-    }
 
     function handleClickForPublishedMap(event){
         store.setCurrentMap(idNamePair._id)
@@ -162,32 +159,30 @@ function PublishedCard(props) {
 
     let cardElement =
     <div id='cards'>
-    <Card onClick={() => handleClickForPublishedMap()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
+    <Card sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
     >
         
     <CardContent sx={{p: 0}}/>
     <CardActions disableSpacing >
         
     <ListItem 
-            // sx={{ display: 'flex', bgcolor: "white" }}
             style={{fontSize: '18pt', height: "100px", top: 0}}
             id={"map-card"}
             key={"map-card"}
             // button
-            onDoubleClick={(event) => {
-                handleToggleEdit(event)
-            }}
-            // onClick={(event) => {
-            //     handleLoadList(event, idNamePair._id)
-            // }}  
             >
+<<<<<<< HEAD
             <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder", cursor: "pointer"}}>
+=======
+            <Link style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+>>>>>>> 28db61a8f0c156d10457ec79e046c5450bdfbc92
             {idNamePair.name}
             </Link>
             
-            <Box sx={{flexGrow: 1, display: "inline-block", float:'left',}}>
+            <Box sx={{flexGrow: 1, display: "inline-block", float:'left', cursor: "pointer"}}
+            onClick={() => handleClickForPublishedMap()}
+            >
 
-            
             <div>
             <img src={'test_map.jpg'} alt="image" height={'100px'} style={{marginTop: 10, position:'absolute'}} />    
             </div>
@@ -218,26 +213,13 @@ function PublishedCard(props) {
             <Box sx={{flexGrow: 0, p: 2, right: 0, position: 'absolute', display: "flex", bottom: 0, backgroundColor: "gray", height: "50%",
         borderRadius: "10px"}}>
             {/* <Box sx={{p: 0}}> */}
-                <IconButton onClick={(event) => {
-                        handleLikePlaylis(event, idNamePair)
-                    }} 
-                    aria-label='like'>
-                    <ThumbUpOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.likes ? idNamePair.likes.length : 247}</Typography>
-                </IconButton>
-            {/* </Box> */}
-
-            {/* <Box sx={{padding: 0}} > */}
-                <IconButton 
-                    aria-label='dislike'>
-                    <ThumbDownOffAltIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>{idNamePair.dislikes ? idNamePair.dislikes.length : 247}</Typography>
-                </IconButton>
-
+                {likeButton}
+                {dislikeButton}
+                
                 <IconButton aria-label='comments'>
-                    <CommentIcon style={{fontSize:'30pt', color: "white", visibility: likeB}} />
+                    <CommentIcon style={{fontSize:'30pt', color: "white"}} />
                                                                                         {/* still have to work on comments */}
-                    <Typography sx={{margin: 1, fontSize: '22pt', visibility: likeB, color: "white"}}>0</Typography>
+                    <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.comments.length}</Typography>
                 </IconButton>
             {/* </Box> */}
             </Box>
@@ -273,25 +255,6 @@ function PublishedCard(props) {
     </Card>
   </div>
 
-    if (editActive) {
-        cardElement =
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id={"list-" + idNamePair._id}
-                label="Playlist Name"
-                name="name"
-                autoComplete="Playlist Name"
-                className='list-card'
-                onKeyPress={handleKeyPress}
-                onChange={handleUpdateText}
-                defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 48}}}
-                InputLabelProps={{style: {fontSize: 24}}}
-                autoFocus
-            />
-    }
     const style = {
         position: 'absolute',
         top: '50%',

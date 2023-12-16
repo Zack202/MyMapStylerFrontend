@@ -11,6 +11,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import List from '@mui/material/List';
 import AuthContext from "../auth";
+import CreateMapModal from "../components/CreateMapModal";
 
 const backgroundStyle = {
     backgroundImage: 'url("./topology_art.jpeg")',
@@ -218,22 +219,8 @@ export default function Home() {
                 position: "relative", width: "100%",
                 display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
             }} style={backgroundStyle}>
-
-
-                {shownMaps /* shows all the map cards*/}
-            </Box>
-
-            <Box item xs={12} sx={{
-                position: "absolute", width: "100%",
-            }}>
-                <Button sx={{
-                    marginLeft: 15, marginRight: 0, marginTop: .75, display:
-                        isGuest
-                            ? "none"
-                            : "inline-block",
-                }} href="/createNewMap" variant='contained'>
-                    Create New Map
-                </Button>
+                
+                {shownMaps /* shows all the map cards*/} 
             </Box>
             <Grid item xs={12}>
                 <BottomAppBanner />

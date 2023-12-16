@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { GlobalStoreContext } from '../../store/index.js'
 import customA from './customA.geo.json'
 import { useState } from 'react';
+import AddCustomDataProps from './AddCustomDataProps';
 
 
 export default function MapEditingScreen() {
@@ -30,6 +31,9 @@ export default function MapEditingScreen() {
         tempZoom: 1,
         zoom: 1,
         mapColor: "maroon",
+        radius: 5,
+        dotColor: "black",
+        dotOpacity: 1,
       };
       
       const [borderSwitch, setBorderSwitch] = useState(() =>
@@ -65,6 +69,17 @@ export default function MapEditingScreen() {
       const [mapColor, setMapColor] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
       );
+      const [radius, setRadius] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.radius ?? defaultValues.radius) : defaultValues.radius
+      );
+      const [dotColor, setDotColor] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.dotColor ?? defaultValues.dotColor) : defaultValues.dotColor
+      );
+      const [dotOpacity, setDotOpacity] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.dotOpacity ?? defaultValues.dotOpacity) : defaultValues.dotOpacity
+      );
+      const [addDot, setAddDot] = useState(false);
+
 
     let mapData;
     if (store.currentMap == null){
@@ -114,9 +129,19 @@ export default function MapEditingScreen() {
                     setZoom={setZoom}
                     zoom={tempZoom}
                     realZoom={zoom}
+
+                    setRadius={setRadius}
+                    radius={radius}
+
+                    setDotColor={setDotColor}
+                    dotColor={dotColor}
+
+                    setDotOpacity={setDotOpacity}
+                    dotOpacity={dotOpacity}
+
                     />
                 </Grid>
-                <Grid item xs={9}>
+                <Grid item xs={7}>
                     <EditToolbar name={mapName}
                                             mapColor={mapColor}
                                             borderSwitch={borderSwitch}
@@ -127,6 +152,10 @@ export default function MapEditingScreen() {
                                             backgroundColor={backgroundColor}
                                             center={center}
                                             zoom={zoom}
+                                            radius={radius}
+                                            dotColor={dotColor}
+                                            dotOpacity={dotOpacity}
+
 
                     />
                     <Leafletmap 
@@ -142,6 +171,16 @@ export default function MapEditingScreen() {
                         setTempCenter={setTempCenter}
                         setTempZoom={setTempZoom}
                         mapColor={mapColor}
+                        radius={radius}
+                        dotColor={dotColor}
+                        dotOpacity={dotOpacity}
+                        addDot={addDot}
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <AddCustomDataProps 
+                    addDot={addDot}
+                    setAddDot={setAddDot}
                     />
                 </Grid>
             </Grid>
