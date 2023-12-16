@@ -547,7 +547,7 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
     
-    store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom) => {
+    store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity) => {
         const updatedAttributes = {
             mapColor,
             borderSwitch,
@@ -558,6 +558,9 @@ function GlobalStoreContextProvider(props) {
             backgroundColor,
             center,
             zoom,
+            radius,
+            dotColor,
+            dotOpacity,
           };
         
           // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits
@@ -634,6 +637,13 @@ function GlobalStoreContextProvider(props) {
         let transaction = new ChangePriColor_Transaction(store, oldColor, newColor);
         tps.addTransaction(transaction);
         
+    }
+
+    store.updateCurrentMapLocally = function (updatedMapData) {
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_MAP,
+            payload: updatedMapData
+        }) 
     }
 
     store.undo = function () {
