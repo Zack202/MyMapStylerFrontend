@@ -171,11 +171,7 @@ function PublishedCard(props) {
             key={"map-card"}
             // button
             >
-<<<<<<< HEAD
-            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder", cursor: "pointer"}}>
-=======
             <Link style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
->>>>>>> 28db61a8f0c156d10457ec79e046c5450bdfbc92
             {idNamePair.name}
             </Link>
             
