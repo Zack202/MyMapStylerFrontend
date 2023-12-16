@@ -181,7 +181,7 @@ function PublishedCard(props) {
             //     handleLoadList(event, idNamePair._id)
             // }}  
             >
-            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder", cursor: "pointer"}}>
             {idNamePair.name}
             </Link>
             

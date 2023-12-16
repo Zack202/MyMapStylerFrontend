@@ -51,11 +51,6 @@ export default function Browser() {
         generateDefaultMapCard();
     }, [store.idNamePairs]);
 
-    // if store's filter is changed, update
-    useEffect(() => {
-        runFilters();
-    }, [store.filter]);
-
     // if temporary filter is changed, update
     useEffect(() => {
         if(temporaryFilter !== "NEVER SET" ) {
@@ -65,10 +60,21 @@ export default function Browser() {
             
     }, [temporaryFilter]); 
 
+        // if sort is changed, update
+    useEffect(() => {
+        runFilters();
+    }, [store.sort]);
+
+    // if store's filter is changed, update
+    useEffect(() => {
+        runFilters();
+    }, [store.filter]);
+
     // if search is changed, update
     useEffect(() => {
         runFilters();
     }, [store.search]);
+
 
     let mapCard = "mapCard is never defined, AKA generateMapCard never ran";
 
@@ -96,6 +102,33 @@ export default function Browser() {
     const runFilters = async () => {
         if (store) {
             let searchedMaps = [];
+
+            // Sorting
+            switch (store.sort) {
+                case "Likes": {
+                    store.idNamePairs.sort((p1, p2) => p1.likes.length > p2.likes.length ? -
+                    1 : (p1.likes.length < p2.likes.length) ? 1 : 0);
+                    break;
+                }
+                case "Dislikes": {
+                    store.idNamePairs.sort((p1, p2) => p1.dislikes.length > p2.dislikes.length ? -
+                    1 : (p1.dislikes.length < p2.dislikes.length) ? 1 : 0);
+                    break;
+                }
+                case "Date": {
+                    store.idNamePairs.sort((p1, p2) => p1.createdAt < p2.createdAt ? -
+                    1 : (p1.createdAt > p2.createdAt) ? 1 : 0);
+                    break;
+                }
+                case "Name": {
+                    store.idNamePairs.sort((p1, p2) => p1.name.toUpperCase() < p2.name.toUpperCase() ? -
+                    1 : (p1.name.toUpperCase() > p2.name.toUpperCase()) ? 1 : 0);
+                    break;
+                }
+                default: {
+                    console.log("SORTING ERROR");
+                }
+            }
 
             // Searching
             if (store.search === "") {
@@ -206,27 +239,3 @@ export default function Browser() {
 
     )
 }
-
-/*
-function handleSortName() {
-    let sortedProducts = store.idNamePairs.sort((p1, p2)
-     => p1.name.toUpperCase() < p2.name.toUpperCase() ? -1 :
-     (p1.name.toUpperCase() > p2.name.toUpperCase()) ? 1 : 0 );
-     console.log(sortedProducts);
-     handleMenuClose();
-}
-function handleSortLikes() {
-    let sortedProducts = store.idNamePairs.sort((p1, p2)
-     => p1.likes < p2.likes ? 1 :
-     (p1.likes > p2.likes) ? -1 : 0 );
-     console.log(sortedProducts);
-     handleMenuClose();
-}
-function handleSortDisikes() {
-    let sortedProducts = store.idNamePairs.sort((p1, p2)
-     => p1.dislikes < p2.dislikes ? 1 :
-     (p1.dislikes > p2.dislikes) ? -1 : 0 );
-     console.log(sortedProducts);
-     handleMenuClose();
-}
-*/

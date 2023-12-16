@@ -4,7 +4,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,7 +13,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // Search functionality
 import GlobalStoreContext from '../store';
 import { useContext, useState } from 'react';
@@ -105,6 +103,10 @@ export default function PrimarySearchAppBar() {
 
   const handleFilterChange = async (event) => {
     setFilter(event.target.value);
+  };
+
+  const handleSortChange = async (event) => {
+    store.updateSort(event.target.value);
   };
 
 
@@ -265,11 +267,22 @@ export default function PrimarySearchAppBar() {
           >
             Apply Filter
           </Button>
-          <Box style={{ color: "Black", backgroundColor: "#F1F1F1", borderRadius: '20px', m: '20px', padding: '8px', marginLeft: '40px', marginRight: '40px', paddingLeft: '10px', paddingRight: '10px', display: 'inline-block' }}>
-            <Typography variant="h5" gutterBottom>
-              Sort by Name { }
-              <KeyboardArrowDownIcon />
-            </Typography>
+          <Box style={{ color: "Black", width: '200px', backgroundColor: "#F1F1F1", borderRadius: '7px', padding: '8px', marginLeft: '40px', marginRight: '40px', paddingLeft: '10px', paddingRight: '10px', display: 'inline-block' }}>
+          <FormControl fullWidth>
+          <InputLabel id="sort-select">Sorting Type</InputLabel>
+          <Select
+          labelId="sort-select"
+          id="sort-select"
+          value={store.sort}
+          label="sorting"
+          onChange={handleSortChange}
+         >
+          <MenuItem value={"Likes"}>Sort by Likes</MenuItem>
+          <MenuItem value={"Dislikes"}>Sort by Disikes</MenuItem>
+          <MenuItem value={"Date"}>Sort by Date</MenuItem>
+          <MenuItem value={"Name"}>Sort by Name</MenuItem>
+        </Select>
+      </FormControl>
           </Box>
         </Toolbar>
       </AppBar>

@@ -28,6 +28,7 @@ export const GlobalStoreActionType = {
     FILTER: 'FILTER',
     CREATE_MAP_MODAL: 'CREATE_MAP_MODAL',
     UPDATE_MAP: 'UPDATE_MAP',
+    UPDATE_SORT: 'UPDATE_SORT',
     UPDATE_SEARCH: 'UPDATE_SEARCH',
     UPDATE_FILTER: 'UPDATE_FILTER',
 
@@ -63,7 +64,7 @@ function GlobalStoreContextProvider(props) {
         mapMarkedForDeletion: null,
         mapIdMarkedForExport: null,
         mapMarkedForExport: null,
-        sort: "name",
+        sort: "Likes",
         filter: [],
         currentEditColor: null,
         currentMapIndex: -1,
@@ -87,7 +88,7 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "name",
+                    sort: "Likes",
                     filter: [],
                     currentEditColor: null,
                     currentMapIndex: -1,
@@ -106,7 +107,7 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "name",
+                    sort: "Likes",
                     filter: [],
                     currentEditColor: null,
                     currentMapIndex: -1,
@@ -125,7 +126,7 @@ function GlobalStoreContextProvider(props) {
                 mapMarkedForDeletion: null,
                 mapIdMarkedForExport: null,
                 mapMarkedForExport: null,
-                sort: "name",
+                sort: "Likes",
                 filter: [],
                 currentEditColor: null,
                 currentMapIndex: -1,
@@ -146,7 +147,7 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "name",
+                    sort: "Likes",
                     filter: [],
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
@@ -165,7 +166,7 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "name",
+                    sort: "Likes",
                     filters: [],
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
@@ -184,12 +185,31 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "name",
+                    sort: "Likes",
                     filter: [],
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
                     search: "",
+                });
+            }
+            case GlobalStoreActionType.UPDATE_SORT:{
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: null, //change
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: payload,
+                    filter: store.filter,
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: store.currentMapType,
+                    search: store.search,
                 });
             }
             case GlobalStoreActionType.UPDATE_SEARCH:{
@@ -203,7 +223,7 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "name",
+                    sort: store.sort,
                     filter: store.filter,
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
@@ -222,7 +242,7 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "name",
+                    sort: store.sort,
                     filter: payload,
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
@@ -530,7 +550,13 @@ function GlobalStoreContextProvider(props) {
         asyncPublishMap(id)
     }
 
-    // Search and Filter
+    // Sort and Search and Filter 
+    store.updateSort = (sort) => {
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_SORT,
+            payload: sort
+        }) 
+    }
     store.updateSearch = (search) => {
         storeReducer({
             type: GlobalStoreActionType.UPDATE_SEARCH,
