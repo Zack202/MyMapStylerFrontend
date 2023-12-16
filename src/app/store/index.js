@@ -99,7 +99,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: null,
                     idNamePairs: payload,
-                    currentMap: null, //change
+                    currentMap: store.currentMap, //change
                     currentMapFeatures: JSON,
                     currentMapGeometry: JSON,
                     mapIdMarkedForDeletion: null,
@@ -158,7 +158,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: null,
                     idNamePairs: store.idNamePairs,
-                    currentMap: null,
+                    currentMap: store.currentMap,
                     currentMapFeatures: JSON, //might need to change this
                     currentMapGeometry: JSON, //might need to change this
                     mapIdMarkedForDeletion: null,
@@ -381,6 +381,27 @@ function GlobalStoreContextProvider(props) {
         console.log(store.idNamePairs)
     }
 
+    store.loadPublishedIdNamePairs = function () {
+        async function asyncLoadPublishedIdNamePairs() {
+            const response = await api.getPublishedMapPairs();
+            if (response.data.success) {
+                console.log(response.data.idNamePairs)
+                let pairsArray = response.data.idNamePairs;
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncLoadPublishedIdNamePairs();
+        console.log('outside async pair id function')
+        console.log(store.idNamePairs)
+    }
+
+
     ///MODAL STUFF
     store.showCreateMapModal = function () {
         storeReducer({
@@ -546,7 +567,88 @@ function GlobalStoreContextProvider(props) {
         }
         asyncUpdateMapName(diff);
     }
+
+    store.likeMap = function(mapId){
+        async function likeMap(mapId){
+            let response = await api.getMapById(mapId);
+            if(response.data.success){
+                let obj1 = {
+                    liked: true
+                }
+                let obj2 = {
+                    liked: false
+                }
+                
+                let map = {...response.data.map};
+                let diff = jsondiffpatch.diff(obj1, obj2);
+                response = await api.updateMapById(mapId, diff);
+                if(response.data.success){
+                    let pairsArray = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.PUBLISHED,
+                        payload:{ 
+                            idNamePairs: pairsArray,
+                            map: map
+                        }
+                    });
+                        store.loadIdNamePairs();
+                }
+            }
+        }
+        likeMap(mapId)
+    }
+
+    store.dislikeMap = function(mapId){
+        async function dislikeMap(mapId){
+            let response = await api.getMapById(mapId);
+            if(response.data.success){
+                let obj1 = {
+                    disliked: true
+                }
+                let obj2 = {
+                    disliked: false
+                }
+                
+                let map = {...response.data.map};
+                let diff = jsondiffpatch.diff(obj1, obj2);
+                response = await api.updateMapById(mapId, diff);
+                if(response.data.success){
+                    let pairsArray = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.PUBLISHED,
+                        payload:{ 
+                            idNamePairs: pairsArray,
+                            map: map
+                        }
+                    });
+                        // store.loadIdNamePairs();
+                }
+            }
+        }
+        dislikeMap(mapId)
+    }
     
+    store.addComment = (comment) => {
+        async function asyncAddComment(comment){
+            let diff = {
+                newComment: comment
+            }
+            store.currentMap.comments.push(comment);
+            console.log("the diff is ", diff)
+            let response = await api.updateMapById(store.currentMap._id, diff);
+            if(response.data.success){
+                storeReducer({
+                    type: GlobalStoreActionType.PUBLISHED,
+                    payload:{
+                        map: store.currentMap
+                    }
+                })
+            }
+            store.loadIdNamePairs();
+        }
+        asyncAddComment(comment);
+    }
+
     store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity) => {
         const updatedAttributes = {
             mapColor,

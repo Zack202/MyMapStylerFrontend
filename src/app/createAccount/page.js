@@ -24,7 +24,7 @@ export default function CreateAccountScreen() {
     if (typeof window !== 'undefined') {
     if (auth.loggedIn) {
         const router = useRouter();
-        router.push('/home_browser');
+        router.push('/home');
       }
     }
 
