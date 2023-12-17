@@ -95,6 +95,7 @@ export default function Browser() {
                             key={pair._id}
                             idNamePair={pair}
                             selected={false}
+                            location={"browser"}
                         />
                     ))
                 }

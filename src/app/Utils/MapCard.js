@@ -31,7 +31,7 @@ function ListCard(props) {
 
     const router = useRouter()
 
-    const { idNamePair, selected } = props;
+    const { idNamePair, selected, location } = props;
 
     const { store } = useContext(GlobalStoreContext);
     // const {auth} = useContext(AuthContext);
@@ -168,6 +168,7 @@ function ListCard(props) {
         key={idNamePair._id}
         idNamePair={idNamePair}
         selected={false}
+        location={location}
         />
     }
     //unpublished Card

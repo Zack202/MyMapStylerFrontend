@@ -588,7 +588,7 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
-    store.likeMap = function(mapId){
+    store.likeMap = function(mapId, location){
         async function likeMap(mapId){
             let response = await api.getMapById(mapId);
             if(response.data.success){
@@ -611,14 +611,21 @@ function GlobalStoreContextProvider(props) {
                             map: map
                         }
                     });
+                    if (location === "home") {
+                        console.log("home");
                         store.loadIdNamePairs();
+                    }
+                    else {
+                        console.log("browser");
+                        store.loadPublishedIdNamePairs();
+                    }
                 }
             }
         }
         likeMap(mapId)
     }
 
-    store.dislikeMap = function(mapId){
+    store.dislikeMap = function(mapId, location){
         async function dislikeMap(mapId){
             let response = await api.getMapById(mapId);
             if(response.data.success){
@@ -641,7 +648,14 @@ function GlobalStoreContextProvider(props) {
                             map: map
                         }
                     });
-                        // store.loadIdNamePairs();
+                    if (location === "home") {
+                        console.log("home");
+                        store.loadIdNamePairs();
+                    }
+                    else {
+                        console.log("browser");
+                        store.loadPublishedIdNamePairs();
+                    }                
                 }
             }
         }

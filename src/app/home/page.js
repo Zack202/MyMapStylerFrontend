@@ -98,6 +98,7 @@ export default function Home() {
                             key={pair._id}
                             idNamePair={pair}
                             selected={false}
+                            location={"home"}
                         />
                     ))
                 }
