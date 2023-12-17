@@ -31,7 +31,8 @@ export default function Home() {
 
     const [shownMaps, setShownMaps] = useState(false);
     const [temporaryFilter, setTemporaryFilter] = useState("NEVER SET");
-    const [sortingType, setSortingType] = useState("Name")
+
+    let mapCard = "mapCard is never defined, AKA generateMapCard never ran";
 
     let isGuest = true;
     if (auth.loggedIn) {
@@ -50,7 +51,9 @@ export default function Home() {
 
     // after store.idNamePairs, generate
     useEffect(() => {
-        generateDefaultMapCard();
+        if(store.search === "" && store.filter.length === 0){
+            generateDefaultMapCard();
+        }
     }, [store.idNamePairs]);
 
      // if sort is changed, update
@@ -78,7 +81,7 @@ export default function Home() {
     }, [temporaryFilter]);
 
 
-    let mapCard = "mapCard is never defined, AKA generateMapCard never ran";
+    
 
     const generateDefaultMapCard = () => {
         setTemporaryFilter(store.idNamePairs); // must do to avoid crashing while loading first filter
@@ -110,21 +113,25 @@ export default function Home() {
                 case "Likes": {
                     store.idNamePairs.sort((p1, p2) => p1.likes.length > p2.likes.length ? -
                     1 : (p1.likes.length < p2.likes.length) ? 1 : 0);
+                    store.updateSort("Likes");
                     break;
                 }
                 case "Dislikes": {
                     store.idNamePairs.sort((p1, p2) => p1.dislikes.length > p2.dislikes.length ? -
                     1 : (p1.dislikes.length < p2.dislikes.length) ? 1 : 0);
+                    store.updateSort("Dislikes");
                     break;
                 }
                 case "Date": {
                     store.idNamePairs.sort((p1, p2) => p1.createdAt < p2.createdAt ? -
                     1 : (p1.createdAt > p2.createdAt) ? 1 : 0);
+                    store.updateSort("Date");
                     break;
                 }
                 case "Name": {
                     store.idNamePairs.sort((p1, p2) => p1.name.toUpperCase() < p2.name.toUpperCase() ? -
                     1 : (p1.name.toUpperCase() > p2.name.toUpperCase()) ? 1 : 0);
+                    store.updateSort("Name");
                     break;
                 }
                 default: {
@@ -146,6 +153,7 @@ export default function Home() {
                     setShownMaps(mapCard);
                 }
             }
+
             // Filtering
             if (store.filter !== null && store.filter !== undefined) {
                 if (store.filter.length === 0) {
