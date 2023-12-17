@@ -78,7 +78,10 @@ export default function MapEditingScreen() {
       const [dotOpacity, setDotOpacity] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.dotOpacity ?? defaultValues.dotOpacity) : defaultValues.dotOpacity
       );
-      const [addDot, setAddDot] = useState(false);
+      const [cursorModes, setCursorModes] = useState('');
+
+
+      const [colorRegion, setColorRegion] = useState("#A9A9A9");
 
 
     let mapData;
@@ -155,6 +158,10 @@ export default function MapEditingScreen() {
                                             radius={radius}
                                             dotColor={dotColor}
                                             dotOpacity={dotOpacity}
+                                            cursorModes={cursorModes}
+                                            setCursorModes={setCursorModes}
+                                            colorRegion={colorRegion}
+                                            setColorRegion={setColorRegion}
 
 
                     />
@@ -174,13 +181,14 @@ export default function MapEditingScreen() {
                         radius={radius}
                         dotColor={dotColor}
                         dotOpacity={dotOpacity}
-                        addDot={addDot}
+                        cursorModes={cursorModes}
+                        colorRegion={colorRegion}
                     />
                 </Grid>
                 <Grid item xs={2}>
                     <AddCustomDataProps 
-                    addDot={addDot}
-                    setAddDot={setAddDot}
+                    cursorModes={cursorModes}
+                    setCursorModes={setCursorModes}
                     />
                 </Grid>
             </Grid>

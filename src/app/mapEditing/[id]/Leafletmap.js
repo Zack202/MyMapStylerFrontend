@@ -6,6 +6,8 @@ import "./Leafletmap.css"
 import { useEffect, useState, useContext } from 'react';
 import customA from './customA.geo.json'
 import { GlobalStoreContext } from '../../store'
+import pointInPolygon from '@turf/boolean-point-in-polygon';
+import { featureCollection, point } from '@turf/helpers';
 import { useRef } from 'react';
 
 const BackgroundOverlay = ({ backgroundColor }) => {
@@ -22,6 +24,26 @@ const BackgroundOverlay = ({ backgroundColor }) => {
   return <div style={style} />;
 };
 
+const getClickedRegion = (store, lat, lng) => {
+
+  const clickedPoint = point([lng, lat]);
+
+  //See if geoJSONData is loaded
+  if (store.currentMap && store.currentMap.mapGeometry) {
+    const featureCollectionData = featureCollection(store.currentMap.mapGeometry);
+
+    //Check if the clicked point is in any of the polygons in the feature collection
+    for (const feature of featureCollectionData.features.features) {
+      const isClicked = pointInPolygon(clickedPoint, feature)
+      if (isClicked) {
+        return (feature.properties.name).replace(/\./g, '') //May need to clean this like in server when creating map
+      }
+    }
+  }
+
+  return null;
+};
+
 const LeafletmapInside = (props) => {
   const { store } = useContext(GlobalStoreContext);
   const countryStyle = props.countryStyle;
@@ -33,15 +55,18 @@ const LeafletmapInside = (props) => {
   const radius = props.radius;
   const dotColor = props.dotColor;
   const dotOpacity = props.dotOpacity;
-  const addDot = props.addDot;
-  
+  const cursorModes = props.cursorModes;
+  const colorRegion = props.colorRegion;
+  const mapColor = props.mapColor;
+  const borderColor = props.borderColor;
+  const borderSwitch = props.borderSwitch;
 
 
   const map = useMap();
 
   useEffect(() => {
     if (map) {
-      if (addDot) {
+      if (cursorModes === 'dot') {
         map.dragging.disable();
         map.touchZoom.disable();
         map.doubleClickZoom.disable();
@@ -50,6 +75,15 @@ const LeafletmapInside = (props) => {
         map.keyboard.disable();
         if (map.tap) map.tap.disable();
         map.getContainer().style.cursor = 'crosshair';
+      } else if (cursorModes === 'color') {
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+        if (map.tap) map.tap.disable();
+        map.getContainer().style.cursor = 'pointer';
       } else {
         map.dragging.enable();
         map.touchZoom.enable();
@@ -69,9 +103,9 @@ const LeafletmapInside = (props) => {
         let tempCenter = [lat, lng];
         setTempCenter(tempCenter);
       });
-      if (addDot) {
+      if (cursorModes === 'dot') {
       map.on('click', (e) => {
-        if (addDot) {
+        if (cursorModes === 'dot') {
           let lat = e.latlng.lat;
           let lng = e.latlng.lng;
           let tempDot = [lat, lng];
@@ -85,13 +119,55 @@ const LeafletmapInside = (props) => {
           }
         }
     });
-  } else {
+      } else if (cursorModes === 'color'){
+        map.on('click', (e) => {
+          if (cursorModes === 'color' && store.currentMap && store.currentMap.mapFeatures) {
+            let lat = e.latlng.lat;
+            let lng = e.latlng.lng;
+            let clickedRegion = getClickedRegion(store, lat, lng);
+        
+            if (clickedRegion) {
+              let updatedMap = { ...store.currentMap };
+              let tempColors = { ...store.currentMap.mapFeatures.ADV };
+        
+              Object.keys(tempColors).forEach(region => {
+                if (!tempColors[region].some(obj => obj.hasOwnProperty('color'))) {
+                  tempColors[region].push({ color: "" });
+                }
+              });
+        
+              if (!tempColors[clickedRegion].some(obj => obj.hasOwnProperty('color'))) {
+                tempColors[clickedRegion].push({ color: colorRegion });
+              } else {
+                tempColors[clickedRegion] = [{ color: colorRegion }];
+              }
+        
+              updatedMap.mapFeatures.ADV = tempColors;
+              store.updateCurrentMapLocally(updatedMap);
+            }
+          }
+        });
+      } else {
     map.off('click');
   }
     }
-  }, [map, addDot]);
+  }, [map, cursorModes, colorRegion]);
 
-
+const getRegionColor = (regionName) => {
+  //Clean region name
+  regionName = regionName.replace(/\./g, '');
+  if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
+    const regionColors = store.currentMap.mapFeatures.ADV;
+    if (regionColors[regionName]) {
+      const color = regionColors[regionName][0].color;
+      if (color) {
+        return color;
+      } else {
+        return mapColor;
+      }
+    }
+  }
+}
 
 return (
   <div>
@@ -106,28 +182,40 @@ return (
     />
       ))}
 
-    <FeatureGroup>
-    {regionSwitch &&
-      geoJSONData &&
-      geoJSONData.features.map((feature, index) => (
-        <GeoJSON
-        style={{
-          fillColor: 'transparent',
+<FeatureGroup>
+  {regionSwitch &&
+    geoJSONData &&
+    geoJSONData.features.map((feature, index) => (
+      <GeoJSON
+        pane="markerPane"
+        style={(feature) => ({
+          fillColor: getRegionColor(feature.properties.name),
           color: 'transparent',
+          fillOpacity: 0,
+        })}
+        key={index}
+        data={feature}
+        onEachFeature={(feature, layer) => {
+          layer.bindTooltip(feature.properties.name, { permanent: true });
         }}
-          key={index}
-          data={feature}
-          onEachFeature={(feature, layer) => {
-            const bounds = layer.getBounds();
-            if (regionSwitch) {
-              layer.bindTooltip(feature.properties.name, { permanent: true });
-            } else {
-              layer.unbindTooltip();
-            }
-          }}
-        />
-      ))}
-    </FeatureGroup>
+      />
+    ))}
+</FeatureGroup>
+
+<FeatureGroup>
+  {geoJSONData &&
+    geoJSONData.features.map((feature, index) => (
+      <GeoJSON
+        style={(feature) => ({
+          fillColor: getRegionColor(feature.properties.name),
+          fillOpacity: 1,
+          color: 'transparent',
+        })}
+        key={index}
+        data={feature}
+      />
+    ))}
+</FeatureGroup>
 </div>
 )
 
@@ -152,7 +240,8 @@ export default function Leafletmap(props) {
   const radius = props.radius;
   const dotColor = props.dotColor;
   const dotOpacity = props.dotOpacity;
-  const addDot = props.addDot;
+  const cursorModes = props.cursorModes;
+  const colorRegion = props.colorRegion;
 
   if (typeof window !== 'undefined') {
     const mapRef = useRef(null);
@@ -164,27 +253,24 @@ export default function Leafletmap(props) {
     }, [mapGeo]);
   
 
-  let countryStyle = {
-    fillColor: mapColor,
-    fillOpacity: 1,
-    color: borderColor,
-    weight: borderWidth,
-  };
-  if (!borderSwitch) {
-    countryStyle = {
-      fillColor: mapColor,
-      fillOpacity: 1,
-      color: 'transparent',
-      weight: 0,
-    };
-  }
 
 
   return (
     <div>
       <MapContainer ref={mapRef} style={{height: "70vh"}} center={center} zoom={zoom}>
+      {borderSwitch && (
+        <FeatureGroup>
+          <GeoJSON
+            style={{
+              weight: borderWidth,
+              color: borderColor,
+              fillOpacity: 0,
+            }}
+            data={geoJSONData}
+          />
+        </FeatureGroup>
+        )}
       <LeafletmapInside 
-      countryStyle={countryStyle}
       geoJSONData={geoJSONData}
       regionSwitch={regionSwitch}
       setTempCenter={setTempCenter}
@@ -193,7 +279,11 @@ export default function Leafletmap(props) {
       radius={radius}
       dotColor={dotColor}
       dotOpacity={dotOpacity}
-      addDot={addDot}
+      cursorModes={cursorModes}
+      colorRegion={colorRegion}
+      mapColor={mapColor}
+      borderColor={borderColor}
+      borderSwitch={borderSwitch}
 
       />
       </MapContainer>

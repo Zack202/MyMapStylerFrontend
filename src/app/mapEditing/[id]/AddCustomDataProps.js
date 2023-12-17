@@ -59,8 +59,8 @@ export default function AddCustomDataProps(props) {
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [newPropertyName, setNewPropertyName] = useState('');
 
-    const addDot = props.addDot;
-    const setAddDot = props.setAddDot;
+    const cursorModes = props.cursorModes;
+    const setCursorModes = props.setCursorModes;
     
 
 
@@ -84,11 +84,11 @@ export default function AddCustomDataProps(props) {
       };
 
       const handleAddPointByClick = () => {
-        setAddDot(true);
+        setCursorModes('dot')
       };
 
       const handleCancelAddPoint = () => {
-        setAddDot(false);
+        setCursorModes('')
       };
 
 
@@ -329,7 +329,7 @@ return(
   <Grid item xs={12}>
     <h4>or</h4>
   <h2><u>Add points by click</u></h2>
-    {addDot ? (
+    {cursorModes == 'dot' ? (
       <Button variant="contained" onClick={handleCancelAddPoint} fullWidth style={{ marginTop: '8px' }}>
         Stop Adding Points
       </Button>
