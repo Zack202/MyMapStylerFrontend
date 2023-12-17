@@ -164,7 +164,7 @@ export default function specificMapScreen(){
                                 mapColor={mapColor}
                             />
                             </Box>
-                            <Box sx={{ gridArea: 'comments', bgcolor: '#800000' }}>Comments
+                            <Box sx={{ gridArea: 'comments', bgcolor: '#800000'}}>Comments
                                 <CommentSection />
                             </Box>
                             <Box sx={{ gridArea: 'describe', bgcolor: '#800000' }}>Description

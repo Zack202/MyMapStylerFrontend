@@ -1,21 +1,16 @@
-
-
 // Import dependencies
 'use client'
 import { Grid, Box } from "@mui/material";
 import TopAppBanner from '../Utils/TopAppBanner';
+import BrowserBanner from '../Utils/BrowserBanner';
 import BottomAppBanner from '../Utils/BottomAppBanner';
-import SearchSortBar from './SearchSortBar';
-import MapCard from './MapCard';
-import AddIcon from '@mui/icons-material/Add';
-import Link from '@mui/material/Link';
+import SearchSortBar from '../Utils/SearchSortBar';
+import PublishedMapCard from '../Utils/PublishedMapCard';
 import Button from '@mui/material/Button';
-import CreateMapModal from "src/app/components/CreateMapModal.js";
 import React, { useState, useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import List from '@mui/material/List';
 import AuthContext from "../auth";
-import { useRouter } from 'next/navigation';
 
 const backgroundStyle = {
     backgroundImage: 'url("./topology_art.jpeg")',
@@ -24,20 +19,17 @@ const backgroundStyle = {
     height: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    // alignItems: 'center',
-    // justifyContent: 'center',
     width: '100%'
 };
 
 
-export default function UserHomeScreenMapBrowsingScreenWrapper() {
+export default function Browser() {
 
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
 
     const [shownMaps, setShownMaps] = useState(false);
     const [temporaryFilter, setTemporaryFilter] = useState("NEVER SET");
-    const [triggerGenerate, setTriggerGenerate] = useState(false);
 
     let isGuest = true;
     if (auth.loggedIn) {
@@ -50,7 +42,8 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
     }
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        // idNamePair actually has a ton of the actually map data too.
+        store.loadPublishedIdNamePairs();
     }, []);
 
     // after store.idNamePairs, generate
@@ -58,25 +51,30 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
         generateDefaultMapCard();
     }, [store.idNamePairs]);
 
-    // if store's filter is changed, update
-    useEffect(() => {
-        runFilters();
-    }, [store.filter]);
-
     // if temporary filter is changed, update
     useEffect(() => {
         if(temporaryFilter !== "NEVER SET" ) {
-            // console.log("USE EFFECT temporaryFilter:", temporaryFilter);
             generateMapCard(temporaryFilter);
             setShownMaps(mapCard);
         }
             
     }, [temporaryFilter]); 
 
+        // if sort is changed, update
+    useEffect(() => {
+        runFilters();
+    }, [store.sort]);
+
+    // if store's filter is changed, update
+    useEffect(() => {
+        runFilters();
+    }, [store.filter]);
+
     // if search is changed, update
     useEffect(() => {
         runFilters();
     }, [store.search]);
+
 
     let mapCard = "mapCard is never defined, AKA generateMapCard never ran";
 
@@ -91,7 +89,7 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
             <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
                 {
                     maps.map((pair) => (
-                        <MapCard
+                        <PublishedMapCard
                             key={pair._id}
                             idNamePair={pair}
                             selected={false}
@@ -99,12 +97,38 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                     ))
                 }
             </List>;
-            // console.log("--------------------------");
     }
 
-    const runFilters = () => {
+    const runFilters = async () => {
         if (store) {
             let searchedMaps = [];
+
+            // Sorting
+            switch (store.sort) {
+                case "Likes": {
+                    store.idNamePairs.sort((p1, p2) => p1.likes.length > p2.likes.length ? -
+                    1 : (p1.likes.length < p2.likes.length) ? 1 : 0);
+                    break;
+                }
+                case "Dislikes": {
+                    store.idNamePairs.sort((p1, p2) => p1.dislikes.length > p2.dislikes.length ? -
+                    1 : (p1.dislikes.length < p2.dislikes.length) ? 1 : 0);
+                    break;
+                }
+                case "Date": {
+                    store.idNamePairs.sort((p1, p2) => p1.createdAt < p2.createdAt ? -
+                    1 : (p1.createdAt > p2.createdAt) ? 1 : 0);
+                    break;
+                }
+                case "Name": {
+                    store.idNamePairs.sort((p1, p2) => p1.name.toUpperCase() < p2.name.toUpperCase() ? -
+                    1 : (p1.name.toUpperCase() > p2.name.toUpperCase()) ? 1 : 0);
+                    break;
+                }
+                default: {
+                    console.log("SORTING ERROR");
+                }
+            }
 
             // Searching
             if (store.search === "") {
@@ -117,7 +141,6 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                 }
                 if(searchedMaps.length === 0){
                     setTemporaryFilter([]);
-                    // setTriggerGenerate(!triggerGenerate);
                     setShownMaps(mapCard);
                 }
             }
@@ -160,16 +183,13 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
 
                 let filteredMaps = [];
                 for (let i = 0; i < searchedMaps.length; i++) {
-                    store.getMapById(searchedMaps[i]._id).then((map) => {
+                    await store.getMapById(searchedMaps[i]._id).then((map) => {
                         if (filter2.includes(map.data.map.mapType)) {
                             filteredMaps.push(searchedMaps[i]);
-                            // console.log("filteredMaps:", filteredMaps);
                         }
                         
                         if (i === searchedMaps.length - 1) {
                             setTemporaryFilter(filteredMaps);
-                            // console.log("set Temporary filter:", filteredMaps);
-                            // setTriggerGenerate(!triggerGenerate);
                             setShownMaps(mapCard);
                         }
                     });
@@ -187,26 +207,24 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
                 <TopAppBanner />
             </Grid>
             <Grid item xs={12}>
+                <BrowserBanner />
+            </Grid>
+            <Grid item xs={12}>
                 <SearchSortBar />
             </Grid>
 
             <Box item xs={12} sx={{
-                position: "absolute", width: "100%",
+                position: "relative", width: "100%",
                 display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
             }} style={backgroundStyle}>
 
-                {/*<MapCard />
-                <MapCard />
-                <MapCard />
-        <MapCard />*/}
-                {shownMaps}
+                {shownMaps /* shows all the map cards*/} 
             </Box>
-            {/* <CreateMapModal open={open}/> */}
             <Box item xs={12} sx={{
                 position: "absolute", width: "100%",
             }}>
                 <Button sx={{
-                    marginLeft: 15, marginTop: .75, display:
+                    marginLeft: 15, marginRight: 0, marginTop: .75, display:
                         isGuest
                             ? "none"
                             : "inline-block",
@@ -221,27 +239,3 @@ export default function UserHomeScreenMapBrowsingScreenWrapper() {
 
     )
 }
-
-/*
-function handleSortName() {
-    let sortedProducts = store.idNamePairs.sort((p1, p2)
-     => p1.name.toUpperCase() < p2.name.toUpperCase() ? -1 :
-     (p1.name.toUpperCase() > p2.name.toUpperCase()) ? 1 : 0 );
-     console.log(sortedProducts);
-     handleMenuClose();
-}
-function handleSortLikes() {
-    let sortedProducts = store.idNamePairs.sort((p1, p2)
-     => p1.likes < p2.likes ? 1 :
-     (p1.likes > p2.likes) ? -1 : 0 );
-     console.log(sortedProducts);
-     handleMenuClose();
-}
-function handleSortDisikes() {
-    let sortedProducts = store.idNamePairs.sort((p1, p2)
-     => p1.dislikes < p2.dislikes ? 1 :
-     (p1.dislikes > p2.dislikes) ? -1 : 0 );
-     console.log(sortedProducts);
-     handleMenuClose();
-}
-*/

@@ -114,6 +114,35 @@ export default function MapEditor(props) {
       setZoom(zoom);
    }
 
+   //For Radius
+   const setRadius = props.setRadius;
+   const radius = props.radius;
+   const handleRadiusChange = (event) => {
+      const newRadius = event.target.value.trim();
+      if(newRadius === '' || !isNaN(newRadius)){
+      setRadius(newRadius === '' ? "" : parseFloat(newRadius));
+      }
+   }
+
+   //For Dot Color
+   const setDotColor = props.setDotColor;
+   const dotColor = props.dotColor;
+   const handleColorChangeDot = (color) => {
+      setTimeout(() => {
+         setDotColor(color);
+         }, colorTimeOut);
+   }
+
+   //For Dot Opacity
+   const setDotOpacity = props.setDotOpacity;
+   const dotOpacity = props.dotOpacity;
+   const handleDotOpacityChange = (event) => {
+      const newOpacity = event.target.value.trim();
+      if(newOpacity === '' || !isNaN(newOpacity)){
+      setDotOpacity(newOpacity === '' ? "" : parseFloat(newOpacity/100));
+      }
+   }
+
    const formattedLat = center[0] ? center[0].toFixed(4) : '?';
    const formattedLng = center[1] ? center[1].toFixed(4) : '?';
 
@@ -124,7 +153,6 @@ export default function MapEditor(props) {
 
 
 
-    const customDataProperties = "Fizzy Drink Name: String"
 
     const rows = [
         { color: 'red', id: 1, label: 'Soda'},
@@ -277,12 +305,58 @@ export default function MapEditor(props) {
                   </Typography>
                </Box>
                <i>Zoom: ({realZoom}) { }</i>
+               <div> DotMapParts
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Radius:</i> { }
+                  <TextField
+                  className={styles.text_box}
+                  id="outlined-size-small"
+                  size="small"
+                  sx={{ width: 100 }}
+                  value={radius}
+                  onChange={handleRadiusChange}
+                  InputProps={{
+                  endAdornment: 
+                  <InputAdornment position="end">px</InputAdornment>
+                  ,
+                  }}
+                  ></TextField>
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6"><i>Dot Color:</i> { }
+                  <input
+                     type="color"
+                     className={styles.color_box}
+                     value={dotColor}
+                     onChange={(e) => handleColorChangeDot(e.target.value)}
+                  />
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Dot Opacity:</i> { }
+                  <TextField
+                  className={styles.text_box}
+                  id="outlined-size-small"
+                  size="small"
+                  sx={{ width: 100 }}
+                  value={dotOpacity * 100}
+                  onChange={handleDotOpacityChange}
+                  InputProps={{
+                  endAdornment: 
+                  <InputAdornment position="end">%</InputAdornment>
+                  ,
+                  }}
+                  ></TextField>
+               </Typography>
+               </Box>
+               </div>
                <div style={{ display: 'flex', justifyContent: 'center', padding: '10px'}}>
                <ImportMapDataModal />
                </div>
-               <Typography className= {styles.text_color} component="h1" variant="h6"><b><u>Current Custom Properties</u></b></Typography>
-               <div style={{ height: '100px', overflowY: 'auto' }}>
-               <Typography className= {styles.text_color} component="h6" variant="h6">{customDataProperties}</Typography>
+               <div style={{ height: '30px', overflowY: 'auto' }}>
                </div>
                <div style={{margin: '10px', background: "darkgrey", padding: "10px", margin: "-10px"}}>
                <Typography className= {styles.text_color} component="h1" variant="h6">

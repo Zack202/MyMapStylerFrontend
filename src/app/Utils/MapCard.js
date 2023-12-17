@@ -193,7 +193,7 @@ function ListCard(props) {
             //     handleLoadList(event, idNamePair._id)
             // }}  
             >
-            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder", cursor: "pointer"}}>
             {idNamePair.name}
             </Link>
             
@@ -230,7 +230,7 @@ function ListCard(props) {
     </CardActions>
     <div style={{width: "50%", float: 'right', position: "relative"}}>
         <div style={{ float: 'right', position: "relative", display: "flex"}}>
-            <DeleteMapModal id={idNamePair._id}/>
+            <DeleteMapModal id={idNamePair._id} show={true}/>
             <Button 
                 // disabled={!store.canUndo()}
                 id='duplicate-button'

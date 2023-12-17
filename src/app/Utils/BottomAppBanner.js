@@ -11,12 +11,21 @@ import { Typography } from '@mui/material';
 export default function BottomAppBanner() {
 
     return (
-        <Box sx={{ flexGrow: 1, width: "100%", position:"absolute", bottom: 0}}>
+        <Box flex sx={{ width: "100%", bottom: 0}}>
             <AppBar position="static" sx={{bgcolor: "#800000", height:"48px"}}>
-                <Typography sx={{  position: "absolute", top: "50%", left: "50%",   transform: "translate(-50%,-50%)"}}>
-                <Copyright>My Map Styler</Copyright>
-                My Map Styler
-                </Typography>
+            <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: '100%',
+                        }}
+                    >
+                        <Typography style={{ marginTop: 10, fontSize: '20px' }}>
+                        <Copyright>My Map Styler</Copyright>
+                          My Map Styler
+                        </Typography>
+                    </Box>
             </AppBar>
         </Box>
     );

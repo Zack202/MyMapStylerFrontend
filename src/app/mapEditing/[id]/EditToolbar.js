@@ -11,40 +11,50 @@ import GlobalStoreContext from '../../store';
 import { useContext } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import Alert from '@mui/material/Alert';
+import BackHandIcon from '@mui/icons-material/BackHand';
+import AdjustIcon from '@mui/icons-material/Adjust';
 
 function EditToolbar(props) {
-  const name = props.name;
-  if (typeof window !== 'undefined') {
-    const { store } = useContext(GlobalStoreContext);
-    const [editing, setEditing] = useState(false);
-    const [editedName, setEditedName] = useState(name);
+    const name = props.name;
+    if (typeof window !== 'undefined') {
+        const { store } = useContext(GlobalStoreContext);
+            const [editing, setEditing] = useState(false);
+            const [editedName, setEditedName] = useState(name);
+            
+            const mapColor = props.mapColor;
+            const borderSwitch = props.borderSwitch;
+            const borderWidth = props.borderWidth;
+            const borderColor = props.borderColor;
+            const regionSwitch = props.regionSwitch;
+            const regionNameColor = props.regionNameColor;
+            const backgroundColor = props.backgroundColor;
+            const center = props.center;
+            const zoom = props.zoom;
+            const radius = props.radius;
+            const dotColor = props.dotColor;
+            const dotOpacity = props.dotOpacity;
+            const cursorModes = props.cursorModes;
+            const setCursorModes = props.setCursorModes;
+            const setColorRegion = props.setColorRegion;
+            const colorRegion = props.colorRegion;
 
-    const mapColor = props.mapColor;
-    const borderSwitch = props.borderSwitch;
-    const borderWidth = props.borderWidth;
-    const borderColor = props.borderColor;
-    const regionSwitch = props.regionSwitch;
-    const regionNameColor = props.regionNameColor;
-    const backgroundColor = props.backgroundColor;
-    const center = props.center;
-    const zoom = props.zoom;
 
-    const [showAlert, setShowAlert] = useState(false);
-
-    const handleCloseAlert = () => {
-      setShowAlert(false);
-    };
-    const handleSaveAttributes = () => {
-      store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom);
-      //add a alert to show that the map has been saved
-      setTimeout(() => {
-        setShowAlert(true);
-        //close the alert after 3 seconds
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 3000);
-      }, 1000);
-    }
+            const [showAlert, setShowAlert] = useState(false);
+            
+            const handleCloseAlert = () => {
+              setShowAlert(false);
+            };
+            const handleSaveAttributes = () => {
+                store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity);
+                //add a alert to show that the map has been saved
+                setTimeout(() => {
+                  setShowAlert(true); 
+                  //close the alert after 3 seconds
+                  setTimeout(() => {
+                    setShowAlert(false);
+                  }, 3000);
+                }, 1000);
+              }
 
 
     const handleDoubleClick = () => {
@@ -62,43 +72,65 @@ function EditToolbar(props) {
 
     console.log("name: " + name);
 
-    const handleChange = (event) => {
-      setEditedName(event.target.value);
-    };
+        const handleChange = (event) => {
+          setEditedName(event.target.value);
+        };
+    
+        const handleKeyDown = (event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            handleBlur();
+          }
+        };
+        const handleUndo = () => {
+          console.log('undo')
+          store.undo()
+          
+        };
+        const handleRedo = () => {
+          console.log('redo')
+          store.redo()
+          
+        };
 
-    const handleKeyDown = (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        handleBlur();
-      }
-    };
-    const handleUndo = () => {
-      console.log('undo')
-      store.undo()
+        const handleColorChangeRegions = (color) => {
+          setTimeout(() => {
+             setColorRegion(color);
+           }, 300);
+       }
 
-    };
-    const handleRedo = () => {
-      console.log('redo')
-      store.redo()
+        const handleTurnOnColorMode = () => {
+          console.log('color mode')
+          //setColor('black')
+          setCursorModes('color')
+        };
 
-    };
-    return (
-      <div id={styles.edit - toolbar} >
-        <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
-          {editing ? (
-            <TextField
-              value={editedName}
-              onBlur={handleBlur}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-            />
-          ) : (
-            <div>{name}</div>
-          )}
-        </div>
-        <IconButton onClick={handleSaveAttributes}>
-          <SaveIcon sx={{ fontSize: "40pt" }} />
-        </IconButton>
+        const handleTurnOnDefault = () => {
+          console.log('grab mode')
+          setCursorModes('')
+        }
+
+        const handleTurnOnDotMode = () => {
+          console.log('dot mode')
+          setCursorModes('dot')
+        }
+    return(
+        <div id={styles.edit-toolbar} >
+            <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
+                    {editing ? (
+                <TextField
+                value={editedName}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                />
+            ) : (
+                <div>{name}</div>
+            )}
+            </div>
+            <IconButton onClick={handleSaveAttributes}>
+            <SaveIcon sx={{fontSize: "40pt"}}/>
+            </IconButton>
 
         {/* <Alert
               severity="success"
@@ -109,13 +141,29 @@ function EditToolbar(props) {
               Saved Successfully!
             </Alert> */}
 
+        <IconButton onClick={handleTurnOnDefault}>
+          <BackHandIcon sx={{ fontSize: "40pt", color: cursorModes === '' ? 'green' : 'black' }} />
+        </IconButton>
+
         <IconButton>
           <TextFieldsIcon sx={{ fontSize: "40pt" }} />
         </IconButton>
 
-        <IconButton>
-          <FormatColorFillIcon sx={{ fontSize: "40pt" }} />
+        <IconButton onClick={handleTurnOnDotMode}>
+          <AdjustIcon sx={{ fontSize: "40pt", color: cursorModes === 'dot' ? 'green' : 'black' }} />
         </IconButton>
+
+        <IconButton onClick={handleTurnOnColorMode}>
+          {/*Change color to green if color mode is on*/}
+          <ColorLensIcon sx={{ fontSize: "40pt", color: cursorModes === 'color' ? 'green' : 'black' }} />
+        </IconButton>
+        {cursorModes === 'color' && (
+        <input
+            type="color"
+            value={colorRegion}
+            onChange={(e) => handleColorChangeRegions(e.target.value)}
+          />)
+        }
 
         <IconButton onClick={handleUndo}>
           <UndoIcon sx={{ fontSize: "40pt" }} />
