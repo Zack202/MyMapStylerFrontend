@@ -30,7 +30,9 @@ export default function MapEditor(props) {
 
    const handleColorChange = (color) => {
       setTimeout(() => {
+         store.addChangePriColorTransaction(JSON.parse(JSON.stringify(mapColor)), JSON.parse(JSON.stringify(color)));
          setMapColor(color);
+         
       //let features = store.currentMap.mapFeatures
       //features.edits.mapColor = color
       let olde = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));

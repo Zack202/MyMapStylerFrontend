@@ -17,10 +17,15 @@ export default class ChangePriColor_Transaction extends jsTPS_Transaction {
     doTransaction() {
         //store.updateMapFeatures = function (id, mapZoom, mapCenter, priColor)
         this.store.updateMapFeatures(this.store.currentMap._id, this.newColor)
-        console.log('after update map features in transaction class')
+        console.log(this.newColor)
+        console.log(this.store.edits.mapColor)
+        console.log('after do in transaction class')
     }
     
     undoTransaction() {
         this.store.updateMapFeatures(this.store.currentMap._id, this.oldColor)
+        console.log(this.oldColor)
+        console.log(this.store.edits.mapColor)
+        console.log('after undo in transaction class')
     }
 }
