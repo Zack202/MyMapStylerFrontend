@@ -45,11 +45,9 @@ function PublishedCard(props) {
     if(auth.loggedIn){
         userName = auth.user.userName;
     }
-    console.log("we are here for some reason", idNamePair)
+
     let isItLiked = idNamePair.likes.includes(userName);
     const [liked, setLiked] = useState(isItLiked);
-    console.log(userName);
-    console.log(isItLiked);
     const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
     
 
