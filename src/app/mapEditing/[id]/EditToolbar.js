@@ -37,6 +37,10 @@ function EditToolbar(props) {
             const setCursorModes = props.setCursorModes;
             const setColorRegion = props.setColorRegion;
             const colorRegion = props.colorRegion;
+            const regionNameTextSize = props.regionNameTextSize;
+            const selectedValue = props.selectedValue;
+
+
 
 
             const [showAlert, setShowAlert] = useState(false);
@@ -45,7 +49,7 @@ function EditToolbar(props) {
               setShowAlert(false);
             };
             const handleSaveAttributes = () => {
-                store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity);
+                store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity, regionNameTextSize, selectedValue);
                 //add a alert to show that the map has been saved
                 setTimeout(() => {
                   setShowAlert(true); 
