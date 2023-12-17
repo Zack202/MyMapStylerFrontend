@@ -155,7 +155,7 @@ const LeafletmapInside = (props) => {
 
 const getRegionColor = (regionName) => {
   //Clean region name
-  regionName = regionName.replace(/\./g, '');
+  /*regionName = regionName.replace(/\./g, '');
   if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
     const regionColors = store.currentMap.mapFeatures.ADV;
     if (regionColors[regionName]) {
@@ -166,7 +166,7 @@ const getRegionColor = (regionName) => {
         return mapColor;
       }
     }
-  }
+  }*/return mapColor
 }
 
 return (

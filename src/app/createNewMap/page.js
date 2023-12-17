@@ -217,7 +217,7 @@ export default function CreateMapModal() {
                                 label="Age"
                                 onChange={handleChange}
                             >
-                                <MenuItem value={0}>Color Categorized Map</MenuItem>
+                                <MenuItem value={5}>Color Categorized Map</MenuItem>
                                 <MenuItem value={1}>Textual Map</MenuItem>
                                 <MenuItem value={2}>Heat Map</MenuItem>
                                 <MenuItem value={3}>Dot Map</MenuItem>

@@ -71,16 +71,6 @@ export default function MapEditingScreen() {
         //store.edits ? (store.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
         store.edits ? (store.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
         );
-      const [radius, setRadius] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.radius ?? defaultValues.radius) : defaultValues.radius
-      );
-      const [dotColor, setDotColor] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.dotColor ?? defaultValues.dotColor) : defaultValues.dotColor
-      );
-      const [dotOpacity, setDotOpacity] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.dotOpacity ?? defaultValues.dotOpacity) : defaultValues.dotOpacity
-      );
-      const [addDot, setAddDot] = useState(false);
 
       const [radius, setRadius] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.radius ?? defaultValues.radius) : defaultValues.radius
