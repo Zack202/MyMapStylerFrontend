@@ -11,6 +11,8 @@ import GlobalStoreContext from '../../store';
 import { useContext } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import Alert from '@mui/material/Alert';
+import BackHandIcon from '@mui/icons-material/BackHand';
+import AdjustIcon from '@mui/icons-material/Adjust';
 
 function EditToolbar(props) {
     const name = props.name;
@@ -31,6 +33,11 @@ function EditToolbar(props) {
             const radius = props.radius;
             const dotColor = props.dotColor;
             const dotOpacity = props.dotOpacity;
+            const cursorModes = props.cursorModes;
+            const setCursorModes = props.setCursorModes;
+            const setColorRegion = props.setColorRegion;
+            const colorRegion = props.colorRegion;
+
 
             const [showAlert, setShowAlert] = useState(false);
             
@@ -85,6 +92,28 @@ function EditToolbar(props) {
           store.redo()
           
         };
+
+        const handleColorChangeRegions = (color) => {
+          setTimeout(() => {
+             setColorRegion(color);
+           }, 300);
+       }
+
+        const handleTurnOnColorMode = () => {
+          console.log('color mode')
+          //setColor('black')
+          setCursorModes('color')
+        };
+
+        const handleTurnOnDefault = () => {
+          console.log('grab mode')
+          setCursorModes('')
+        }
+
+        const handleTurnOnDotMode = () => {
+          console.log('dot mode')
+          setCursorModes('dot')
+        }
     return(
         <div id={styles.edit-toolbar} >
             <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
@@ -112,13 +141,29 @@ function EditToolbar(props) {
               Saved Successfully!
             </Alert> */}
 
+        <IconButton onClick={handleTurnOnDefault}>
+          <BackHandIcon sx={{ fontSize: "40pt", color: cursorModes === '' ? 'green' : 'black' }} />
+        </IconButton>
+
         <IconButton>
           <TextFieldsIcon sx={{ fontSize: "40pt" }} />
         </IconButton>
 
-        <IconButton>
-          <FormatColorFillIcon sx={{ fontSize: "40pt" }} />
+        <IconButton onClick={handleTurnOnDotMode}>
+          <AdjustIcon sx={{ fontSize: "40pt", color: cursorModes === 'dot' ? 'green' : 'black' }} />
         </IconButton>
+
+        <IconButton onClick={handleTurnOnColorMode}>
+          {/*Change color to green if color mode is on*/}
+          <ColorLensIcon sx={{ fontSize: "40pt", color: cursorModes === 'color' ? 'green' : 'black' }} />
+        </IconButton>
+        {cursorModes === 'color' && (
+        <input
+            type="color"
+            value={colorRegion}
+            onChange={(e) => handleColorChangeRegions(e.target.value)}
+          />)
+        }
 
         <IconButton onClick={handleUndo}>
           <UndoIcon sx={{ fontSize: "40pt" }} />
