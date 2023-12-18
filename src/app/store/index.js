@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import jsondiffpatch from 'jsondiffpatch'
 import jsTPS from '../common/jsTPS'
 import ChangePriColor_Transaction from '../transactions/ChangePriColor_Transaction'
-import EditMapAttributes_Transaction from '../transactions/EditMapAttributes_Transaction'
+import BorderEdits_Transaction from '../transactions/BorderEdits_Transaction'
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -764,6 +764,31 @@ function GlobalStoreContextProvider(props) {
         return response;
     }
 
+    store.updateCurrentMapLocally = function (updatedMapData) {
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_MAP,
+            payload: updatedMapData
+        }) 
+    }
+    store.updateMapFeatures = function (priColor) { //will add other features?
+        let map = JSON.parse(JSON.stringify(store.currentMap));
+                map.mapFeatures.edits.mapColor = priColor
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: map
+        });
+    
+    }
+    store.updateBorderFeatures = function (showb, bcolor, bwidth){
+        let map = JSON.parse(JSON.stringify(store.currentMap));
+                map.mapFeatures.edits.borderSwitch = showb;
+                map.mapFeatures.edits.borderWidth = bwidth;
+                map.mapFeatures.edits.borderColor = bcolor;
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: map
+                });
+    }
     //Transaction stack functions
     store.addChangePriColorTransaction = function (oldColor, newColor) {
         console.log('add transaction to stack')//Create transaction and add to stack
@@ -771,38 +796,20 @@ function GlobalStoreContextProvider(props) {
         tps.addTransaction(transaction);
         
     }
+    store.addBorderEditsTransaction = function (oldSB, newSB, oldBC, newBC, oldBW, newBW) {
+        //Handles any edits related to borders
+        //ie show borders, border color, border width
+        //is called for each individual edit 
+        //so even though its taking multiple features only one of them will actually be changed and edited 
+        //not all of them
+        //SB: show border, BC: border color, BW: border width
 
-    store.updateCurrentMapLocally = function (updatedMapData) {
-        storeReducer({
-            type: GlobalStoreActionType.UPDATE_MAP,
-            payload: updatedMapData
-        }) 
-    }
-    store.updateMapFeatures = function (id, priColor) { //will add other features?
-        async function asyncGetCurrentMap(id) {
-            let response = await api.getMapById(id);
-            if(response.data.success){
-                let map = response.data.map;
-                map.mapFeatures.edits.mapColor = priColor
-                storeReducer({
-                    type: GlobalStoreActionType.UPDATE_MAP,
-                    payload: map
-                });
-            }
-        }
-        asyncGetCurrentMap(id)
-    
-    }
-
-    store.addEditMapAttributesTransacation = function (oldE, newE) {
         console.log('add transaction to stack')//Create transaction and add to stack
-        //let edits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits))
-        let transaction = new EditMapAttributes_Transaction(store, oldE, newE);
-        console.log('old color' + oldE.mapColor)
-        console.log('new color' + newE.mapColor)
+        let transaction = new BorderEdits_Transaction(store, oldSB, newSB, oldBC, newBC, oldBW, newBW);
         tps.addTransaction(transaction);
 
     }
+
     store.undo = function () {
         tps.undoTransaction();
     }
