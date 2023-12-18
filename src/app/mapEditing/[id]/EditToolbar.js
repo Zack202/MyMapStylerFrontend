@@ -22,28 +22,34 @@ function EditToolbar(props) {
     const [editing, setEditing] = useState(false);
     const [editedName, setEditedName] = useState(name);
 
-    let mapColor, borderSwitch, borderColor, borderWidth;
+    let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor;
     if (store.currentMap) {
       mapColor = store.currentMap.mapFeatures.edits.mapColor;
       borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
       borderColor = store.currentMap.mapFeatures.edits.borderColor;
       borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
+      regionNameSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
+      regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
+      backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
     }
     else {
       mapColor = 'maroon';
       borderSwitch = true;
       borderColor = 'maroon';
       borderWidth = 1;
+      regionNameSwitch = false;
+      regionNameColor = 'black';
+      backgroundColor = 'white';
     }
 
     //const mapColor = props.mapColor;
     //const borderSwitch = props.borderSwitch;
     //const borderWidth = props.borderWidth;
     //const borderColor = props.borderColor;
-    const regionSwitch = props.regionSwitch;
-    const regionNameColor = props.regionNameColor;
+    //const regionSwitch = props.regionSwitch;
+    //const regionNameColor = props.regionNameColor;
+    //const backgroundColor = props.backgroundColor;
     const regionNameTextSize = props.regionNameTextSize;
-    const backgroundColor = props.backgroundColor;
     const center = props.center;
     const zoom = props.zoom;
     const radius = props.radius;
@@ -61,7 +67,6 @@ function EditToolbar(props) {
     const legendValues = props.legendValues;
     const legendOn = props.legendOn;
     const legendName = props.legendName;
-
 
 
     const handleDoubleClick = () => {

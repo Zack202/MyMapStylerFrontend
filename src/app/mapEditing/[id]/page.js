@@ -304,7 +304,7 @@ export default function MapEditingScreen() {
             <BottomAppBanner />
         </div>
     )
-    }else{
-        return null
-    }
+  } else {
+    return null
+  }
 };
