@@ -90,7 +90,7 @@ function EditToolbar(props) {
                   borderSwitch, 
                   borderWidth, 
                   borderColor, 
-                  regionNameSwitch, 
+                  regionSwitch, 
                   regionNameColor, 
                   backgroundColor, 
                   center, zoom, radius,
