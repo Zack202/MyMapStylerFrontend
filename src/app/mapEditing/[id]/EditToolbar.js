@@ -15,128 +15,140 @@ import BackHandIcon from '@mui/icons-material/BackHand';
 import AdjustIcon from '@mui/icons-material/Adjust';
 
 function EditToolbar(props) {
-    const name = props.name;
-    if (typeof window !== 'undefined') {
-        const { store } = useContext(GlobalStoreContext);
-            const [editing, setEditing] = useState(false);
-            const [editedName, setEditedName] = useState(name);
-            
-            const mapColor = props.mapColor;
-            const borderSwitch = props.borderSwitch;
-            const borderWidth = props.borderWidth;
-            const borderColor = props.borderColor;
-            const regionSwitch = props.regionSwitch;
-            const regionNameColor = props.regionNameColor;
-            const backgroundColor = props.backgroundColor;
-            const center = props.center;
-            const zoom = props.zoom;
-            const radius = props.radius;
-            const dotColor = props.dotColor;
-            const dotOpacity = props.dotOpacity;
-            const cursorModes = props.cursorModes;
-            const setCursorModes = props.setCursorModes;
-            const setColorRegion = props.setColorRegion;
-            const colorRegion = props.colorRegion;
-            const regionNameTextSize = props.regionNameTextSize;
-            const selectedValue = props.selectedValue;
+
+  const name = props.name;
+  if (typeof window !== 'undefined') {
+    const { store } = useContext(GlobalStoreContext);
+    const [editing, setEditing] = useState(false);
+    const [editedName, setEditedName] = useState(name);
+
+    let mapColor, borderSwitch, borderColor, borderWidth;
+    if (store.currentMap) {
+      mapColor = store.currentMap.mapFeatures.edits.mapColor;
+      borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
+      borderColor = store.currentMap.mapFeatures.edits.borderColor;
+      borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
+    }
+    else {
+      mapColor = 'maroon';
+      borderSwitch = true;
+      borderColor = 'maroon';
+      borderWidth = 1;
+    }
+
+    //const mapColor = props.mapColor;
+    //const borderSwitch = props.borderSwitch;
+    //const borderWidth = props.borderWidth;
+    //const borderColor = props.borderColor;
+    const regionSwitch = props.regionSwitch;
+    const regionNameColor = props.regionNameColor;
+    const backgroundColor = props.backgroundColor;
+    const center = props.center;
+    const zoom = props.zoom;
+    const radius = props.radius;
+    const dotColor = props.dotColor;
+    const dotOpacity = props.dotOpacity;
+    const cursorModes = props.cursorModes;
+    const setCursorModes = props.setCursorModes;
+    const setColorRegion = props.setColorRegion;
+    const colorRegion = props.colorRegion;
 
 
+    const [showAlert, setShowAlert] = useState(false);
+
+    const handleCloseAlert = () => {
+      setShowAlert(false);
+    };
+    const handleSaveAttributes = () => {
+      store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity);
+      //add a alert to show that the map has been saved
+      setTimeout(() => {
+        setShowAlert(true);
+        //close the alert after 3 seconds
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 3000);
+      }, 1000);
+    }
 
 
-            const [showAlert, setShowAlert] = useState(false);
-            
-            const handleCloseAlert = () => {
-              setShowAlert(false);
-            };
-            const handleSaveAttributes = () => {
-                store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity, regionNameTextSize, selectedValue);
-                //add a alert to show that the map has been saved
-                setTimeout(() => {
-                  setShowAlert(true); 
-                  //close the alert after 3 seconds
-                  setTimeout(() => {
-                    setShowAlert(false);
-                  }, 3000);
-                }, 1000);
-              }
+    const handleDoubleClick = () => {
+      setEditing(true);
+      setEditedName(name);
+    };
+
+    const handleBlur = () => {
+      setEditing(false);
+      if (editedName != name && editedName != "") {
+        store.updateMapName(editedName);
+      }
+    };
 
 
-            const handleDoubleClick = () => {
-              setEditing(true);
-              setEditedName(name);
-            };
-          
-            const handleBlur = () => {
-              setEditing(false);
-              if(editedName != name && editedName != ""){
-                store.updateMapName(editedName);
-              }
-            };
-          
+    console.log("name: " + name);
 
-        console.log("name: " + name);
+    const handleChange = (event) => {
+      setEditedName(event.target.value);
+    };
 
-        const handleChange = (event) => {
-          setEditedName(event.target.value);
-        };
-    
-        const handleKeyDown = (event) => {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            handleBlur();
-          }
-        };
-        const handleUndo = () => {
-          console.log('undo')
-          store.undo()
-          
-        };
-        const handleRedo = () => {
-          console.log('redo')
-          store.redo()
-          
-        };
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleBlur();
+      }
+    };
+    const handleUndo = () => {
+      console.log('undo');
+      store.undo();
 
-        const handleColorChangeRegions = (color) => {
-          setTimeout(() => {
-             setColorRegion(color);
-           }, 300);
-       }
+    };
+    const handleRedo = () => {
+      console.log('redo');
+      store.redo();
 
-        const handleTurnOnColorMode = () => {
-          console.log('color mode')
-          //setColor('black')
-          setCursorModes('color')
-        };
+    };
 
-        const handleTurnOnDefault = () => {
-          console.log('grab mode')
-          setCursorModes('')
-        }
+    const handleColorChangeRegions = (color) => {
+      setTimeout(() => {
+        setColorRegion(color);
+      }, 300);
+    }
 
-        const handleTurnOnDotMode = () => {
-          console.log('dot mode')
-          setCursorModes('dot')
-        }
-    return(
-        <div id={styles.edit-toolbar} >
-            <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
-                    {editing ? (
-                <TextField
-                value={editedName}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-                />
-            ) : (
-                <div>{name}</div>
-            )}
-            </div>
-            <IconButton onClick={handleSaveAttributes}>
-            <SaveIcon sx={{fontSize: "40pt"}}/>
-            </IconButton>
+    const handleTurnOnColorMode = () => {
+      console.log('color mode')
+      //setColor('black')
+      setCursorModes('color')
+    };
 
-            {/* <Alert
+    const handleTurnOnDefault = () => {
+      console.log('grab mode')
+      setCursorModes('')
+    }
+
+    const handleTurnOnDotMode = () => {
+      console.log('dot mode')
+      setCursorModes('dot')
+    }
+
+    return (
+      <div id={styles.edit - toolbar} >
+        <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
+          {editing ? (
+            <TextField
+              value={editedName}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+          ) : (
+            <div>{name}</div>
+          )}
+        </div>
+        <IconButton onClick={handleSaveAttributes}>
+          <SaveIcon sx={{ fontSize: "40pt" }} />
+        </IconButton>
+
+        {/* <Alert
               severity="success"
               onClose={handleCloseAlert}
               sx={{ mt: 2 }}
@@ -162,7 +174,7 @@ function EditToolbar(props) {
           <ColorLensIcon sx={{ fontSize: "40pt", color: cursorModes === 'color' ? 'green' : 'black' }} />
         </IconButton>
         {cursorModes === 'color' && (
-        <input
+          <input
             type="color"
             value={colorRegion}
             onChange={(e) => handleColorChangeRegions(e.target.value)}

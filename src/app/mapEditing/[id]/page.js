@@ -37,7 +37,7 @@ export default function MapEditingScreen() {
         regionNameTextSize: 10,
       };
       
-      const [borderSwitch, setBorderSwitch] = useState(() =>
+      /*const [borderSwitch, setBorderSwitch] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.borderSwitch ?? defaultValues.borderSwitch) : defaultValues.borderSwitch
       );
       const [borderWidth, setBorderWidth] = useState(() =>
@@ -46,6 +46,7 @@ export default function MapEditingScreen() {
       const [borderColor, setBorderColor] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.borderColor ?? defaultValues.borderColor) : defaultValues.borderColor
       );
+      */
       const [regionSwitch, setRegionSwitch] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.regionSwitch ?? defaultValues.regionSwitch) : defaultValues.regionSwitch
       );
@@ -70,9 +71,13 @@ export default function MapEditingScreen() {
       const [zoom, setZoom] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.zoom) : defaultValues.zoom
       );
-      const [mapColor, setMapColor] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
-      );
+
+      /*const [mapColor, setMapColor] = useState(() =>
+        //store.currentMap ? (store.currentMap.mapFeatures.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
+        //store.edits ? (store.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
+        store.edits ? (store.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
+        );*/
+
       const [radius, setRadius] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.radius ?? defaultValues.radius) : defaultValues.radius
       );
@@ -112,7 +117,7 @@ export default function MapEditingScreen() {
                 </Grid>
                 <Grid item xs={3}>
                     <MapEditor 
-                    setMapColor={setMapColor}
+                    /*setMapColor={setMapColor}
                     mapColor={mapColor}
 
                     setBorderSwitch={setBorderSwitch}
@@ -122,7 +127,7 @@ export default function MapEditingScreen() {
                     borderWidth={borderWidth}
 
                     setBorderColor={setBorderColor}
-                    borderColor={borderColor}
+                    borderColor={borderColor}*/
 
                     setRegionSwitch={setRegionSwitch}
                     regionSwitch={regionSwitch}
@@ -160,10 +165,11 @@ export default function MapEditingScreen() {
                 </Grid>
                 <Grid item xs={7}>
                     <EditToolbar name={mapName}
-                                            mapColor={mapColor}
+                                            /*mapColor={mapColor}
                                             borderSwitch={borderSwitch}
                                             borderWidth={borderWidth}
                                             borderColor={borderColor}
+                                            */
                                             regionSwitch={regionSwitch}
                                             regionNameColor={regionNameColor}
                                             backgroundColor={backgroundColor}
@@ -186,9 +192,9 @@ export default function MapEditingScreen() {
                     />
                     <Leafletmap 
                         mapGeo={mapData}
-                        borderSwitch={borderSwitch}
-                        borderWidth={borderWidth}
-                        borderColor={borderColor}
+                        //borderSwitch={borderSwitch}
+                        //borderWidth={borderWidth}
+                        //borderColor={borderColor}
                         regionSwitch={regionSwitch}
                         regionNameColor={regionNameColor}
                         backgroundColor={backgroundColor}
@@ -196,7 +202,7 @@ export default function MapEditingScreen() {
                         zoom={zoom}
                         setTempCenter={setTempCenter}
                         setTempZoom={setTempZoom}
-                        mapColor={mapColor}
+                        //mapColor={mapColor}
                         radius={radius}
                         dotColor={dotColor}
                         dotOpacity={dotOpacity}

@@ -23,56 +23,63 @@ import { useState } from 'react';
 export default function MapEditor(props) {
    if (typeof window !== 'undefined') {
 
+   const { store } = useContext(GlobalStoreContext);
+   
+   let mapColor, borderSwitch, borderColor, borderWidth;
+   if(store.currentMap){
+      mapColor = store.currentMap.mapFeatures.edits.mapColor;
+      borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
+      borderColor = store.currentMap.mapFeatures.edits.borderColor;
+      borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
+   }
+   else{
+      mapColor = 'maroon';
+      borderSwitch = true;
+      borderColor = 'maroon';
+      borderWidth = 1;
+   }
+
    //For Color
-   const setMapColor = props.setMapColor;
-   const mapColor = props.mapColor;
-
+   //const setMapColor = props.setMapColor;
+   //const mapColor = props.mapColor;
    let colorTimeOut = 300;
-
    const handleColorChange = (color) => {
       setTimeout(() => {
-         setMapColor(color);
+         store.addChangePriColorTransaction(mapColor, color);
+         //setMapColor(color);
        }, colorTimeOut);
    }
 
-   // const handleColorChange = (event) => {
-   //    if(store.currentMap.mapFeatures == null ){
-   //       store.addChangePriColorTransaction('maroon', event)
-   //    }
-   //    else{
-   //       set
-   //       store.addChangePriColorTransaction(store.currentMap.mapFeatures.edits.priColor, event)
-   //    }
-   //    console.log('handleclorchange')
-   // }
-
-
    //For border Switch
-   const setBorderSwitch = props.setBorderSwitch;
-   const borderSwitch = props.borderSwitch;
+   //const setBorderSwitch = props.setBorderSwitch;
+   //const borderSwitch = props.borderSwitch;
    const handleBorderSwitchChange = (event) => {
-      setBorderSwitch(event.target.checked);
-   }
-
-   //For Border Width
-   const setborderWidth = props.setBorderWidth;
-   const borderWidth = props.borderWidth;
-   const handleBorderWidthChange = (event) => {
-      const newWidth = event.target.value.trim();;
-      if(newWidth === '' || !isNaN(newWidth)){
-      setborderWidth(newWidth === '' ? "" : parseFloat(newWidth));
-      }
+      //setBorderSwitch(event.target.checked);
+      console.log(event.target.checked)
+      store.addBorderEditsTransaction(borderSwitch, event.target.checked, borderColor, borderColor, borderWidth, borderWidth)
    }
 
    //For Border Color
-   const setBorderColor = props.setBorderColor;
-   const borderColor = props.borderColor;
+   //const setBorderColor = props.setBorderColor;
+   //const borderColor = props.borderColor;
    const handleColorChangeBorders = (color) => {
       setTimeout(() => {
-         setBorderColor(color);
+         //setBorderColor(color);
+         store.addBorderEditsTransaction(borderSwitch, borderSwitch, borderColor, color , borderWidth , borderWidth)
        }, colorTimeOut);
    }
 
+   //For Border Width
+   //const setborderWidth = props.setBorderWidth;
+   //const borderWidth = props.borderWidth;
+   const handleBorderWidthChange = (event) => {
+      const newWidth = event.target.value.trim();;
+      if(newWidth === '' || !isNaN(newWidth)){
+      //setborderWidth(newWidth === '' ? "" : parseFloat(newWidth));
+      store.addBorderEditsTransaction(borderSwitch, borderSwitch, borderColor, borderColor , borderWidth , newWidth === '' ? "" : parseFloat(newWidth))
+      }
+   }
+ 
    //For Region Name Switch
    const regionNameSwitch = props.regionSwitch;
    const setRegionNameSwitch = props.setRegionSwitch;
@@ -171,7 +178,6 @@ export default function MapEditor(props) {
 
 
 
-    const { store } = useContext(GlobalStoreContext);
 
       const selectedValue = props.selectedValue;
       const setSelectedValue = props.setSelectedValue;

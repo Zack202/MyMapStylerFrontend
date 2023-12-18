@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import jsondiffpatch from 'jsondiffpatch'
 import jsTPS from '../common/jsTPS'
 import ChangePriColor_Transaction from '../transactions/ChangePriColor_Transaction'
+import BorderEdits_Transaction from '../transactions/BorderEdits_Transaction'
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -43,7 +44,7 @@ const CurrentModal = {
     MAP_DATA_EDITING: 'MAP_DATA_EDITING',
     DELETE_MAP_MODAL: 'DELETE_MAP_MODAL',
     CREATE_NEW_MAP: 'CREATE_NEW_MAP',
-    CHANGE_ACCOUNT_INFO: 'CHANGE_ACCOUNT_INFO',   
+    CHANGE_ACCOUNT_INFO: 'CHANGE_ACCOUNT_INFO',
 }
 
 function GlobalStoreContextProvider(props) {
@@ -96,7 +97,7 @@ function GlobalStoreContextProvider(props) {
                     search: store.search,
                 })
             }
-            case GlobalStoreActionType.LOAD_ID_NAME_PAIRS:{
+            case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
                 return setStore({
                     currentModal: null,
                     idNamePairs: payload,
@@ -136,7 +137,7 @@ function GlobalStoreContextProvider(props) {
             }
 
             //for now this is just for going to edit map screen, not updating a map
-            case GlobalStoreActionType.SET_CURRENT_MAP:{
+            case GlobalStoreActionType.SET_CURRENT_MAP: {
                 return setStore({
                     currentModal: null,
                     idNamePairs: store.idNamePairs,
@@ -155,7 +156,7 @@ function GlobalStoreContextProvider(props) {
                     search: store.search,
                 });
             }
-            case GlobalStoreActionType.PUBLISHED:{
+            case GlobalStoreActionType.PUBLISHED: {
                 return setStore({
                     currentModal: null,
                     idNamePairs: store.idNamePairs,
@@ -174,7 +175,7 @@ function GlobalStoreContextProvider(props) {
                     search: store.search
                 });
             }
-            case GlobalStoreActionType.UPDATE_MAP:{
+            case GlobalStoreActionType.UPDATE_MAP: {
                 return setStore({
                     currentModal: null,
                     idNamePairs: store.idNamePairs,
@@ -231,7 +232,7 @@ function GlobalStoreContextProvider(props) {
                     search: payload,
                 });
             }
-            case GlobalStoreActionType.UPDATE_FILTER:{
+            case GlobalStoreActionType.UPDATE_FILTER: {
                 return setStore({
                     currentModal: null,
                     idNamePairs: store.idNamePairs,
@@ -260,11 +261,60 @@ function GlobalStoreContextProvider(props) {
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
         //creat new map
-            let newMapName = mapName
-            let newMapDesc = mapDesc
+        let newMapName = mapName
+        let newMapDesc = mapDesc
+        let userName = auth.user.userName //MMM
+        let ownerEmail = auth.user.email //mango@gmail.com
+        const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc);
+        console.log("createNewList response: " + response);
+        if (response.status === 201) {
+            console.log('success')
+            storeReducer({
+                type: GlobalStoreActionType.SET_CURRENT_MAP,
+                payload: response.data.map
+            });
+            // if success bring to map editing screen
+            router.push('/mapEditing/' + response.data.map._id)
+
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW MAP");
+        }
+    }
+
+    store.forkMap = async function (dupMap) {
+        //duplicate a map
+
+        let response = await api.getMapById(dupMap);
+
+        if (response.data.success) {
+            dupMap = response.data.map;
+            let counter = 2;
+            let check = true;
+            // new name for the dup map with a system of [name](2) -> [name](3) and so on
+            let dupName = dupMap.name + "(" + counter.toString() + ")";
+            while (check) {
+                if (this.idNamePairs.length === 0)
+                    break;
+                for (let i = 0; i < this.idNamePairs.length; i++) {
+                    if (this.idNamePairs[i].name === dupName) {
+                        counter += 1;
+                        dupName = dupMap.name + "(" + counter.toString() + ")";
+                        break;
+                    }
+                    else if (i === this.idNamePairs.length - 1) check = false
+                }
+
+            }
             let userName = auth.user.userName //MMM
             let ownerEmail = auth.user.email //mango@gmail.com
-            const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc);
+            // console.log(dupMap.mapGeometry);
+            let mapData = dupMap.mapGeometry;
+            let mapFeatures = dupMap.mapFeatures;
+            let mapType = dupMap.mapType;
+            let mapDesc = dupMap.description;
+
+            response = await api.createNewMap(dupName, userName, ownerEmail, mapData, mapType, mapDesc, mapFeatures);
             console.log("createNewList response: " + response);
             if (response.status === 201) {
                 console.log('success')
@@ -273,68 +323,19 @@ function GlobalStoreContextProvider(props) {
                     payload: response.data.map
                 });
                 // if success bring to map editing screen
-                router.push('/mapEditing/'+ response.data.map._id)
-            
-        }
-        else {
-            console.log("API FAILED TO CREATE A NEW MAP");
+                router.push('/mapEditing/' + response.data.map._id)
+
+            }
+            else {
+                console.log("API FAILED TO CREATE A NEW MAP");
+            }
         }
     }
-
-    store.forkMap = async function(dupMap){
-        //duplicate a map
-        
-           let response = await api.getMapById(dupMap);
-       
-           if(response.data.success){
-               dupMap = response.data.map;
-               let counter = 2;
-               let check = true;
-               // new name for the dup map with a system of [name](2) -> [name](3) and so on
-               let dupName = dupMap.name + "(" + counter.toString() + ")";
-               while(check){
-                   if(this.idNamePairs.length === 0)
-                       break;
-                   for(let i = 0; i < this.idNamePairs.length; i++){
-                       if(this.idNamePairs[i].name === dupName){
-                           counter += 1;
-                           dupName = dupMap.name + "(" + counter.toString() + ")";
-                           break;
-                       }
-                       else if (i === this.idNamePairs.length - 1) check = false
-                   }
-       
-           }
-           let userName = auth.user.userName //MMM
-           let ownerEmail = auth.user.email //mango@gmail.com
-           // console.log(dupMap.mapGeometry);
-           let mapData = dupMap.mapGeometry;
-           let mapFeatures = dupMap.mapFeatures;
-           let mapType = dupMap.mapType;
-           let mapDesc = dupMap.description;
-       
-           response = await api.createNewMap(dupName, userName, ownerEmail, mapData, mapType, mapDesc, mapFeatures);
-           console.log("createNewList response: " + response);
-           if (response.status === 201) {
-               console.log('success')
-               storeReducer({
-                   type: GlobalStoreActionType.SET_CURRENT_MAP,
-                   payload: response.data.map
-               });
-               // if success bring to map editing screen
-               router.push('/mapEditing/'+ response.data.map._id)
-           
-           }
-           else {
-               console.log("API FAILED TO CREATE A NEW MAP");
-           }
-       }
-           }
 
     store.setCurrentMap = function (id) {
         async function asyncSetCurrentMap(id) {
             let response = await api.getMapById(id);
-            if(response.data.success){
+            if (response.data.success) {
                 let map = response.data.map;
                 //in playlister the equivilent function uses updateplaylistbyid as well to clear transaction stack 
                 //will leave that functionality out for now since we don't have a transaction stack
@@ -348,38 +349,7 @@ function GlobalStoreContextProvider(props) {
         asyncSetCurrentMap(id)
     }
     
-    store.updateMapFeatures = function (id, priColor) { //will add other features?
-        //get map
-        async function asyncUpdateMapFeatures(id){
-            let response = await api.getMapById(id);
-            if(response.data.success){
-                let map = response.data.map;
-                if(map.mapFeatures == null){
-                    map.mapFeatures = {edits: {priColor: priColor}}
-                }
-                else{
-                    map.mapFeatures.edits.priColor = priColor;
-                }
-                 //let diff = jsondiffpatch.diff(store.currentMap, map);
-                 async function updateMap(mapmapFeatures){
-                    response = await api.updateMapFeaturesById(id, mapmapFeatures);
-                    if(response.data.success){
-                        //update store
-                        storeReducer({
-                            type: GlobalStoreActionType.UPDATE_MAP,
-                            payload: map
-                        }) 
-                        //bring to map edit screen?
-                        console.log('update map store')
-                    }
-                }
-                updateMap(map.mapFeatures);
-            }
-
-        }
-        asyncUpdateMapFeatures(id)
     
-    }
     
     store.loadIdNamePairs = function () {
         async function asyncLoadIdNamePairs() {
@@ -432,7 +402,7 @@ function GlobalStoreContextProvider(props) {
 
     store.hideModals = () => {
         storeReducer({
-            type:GlobalStoreActionType.HIDE_MODALS,
+            type: GlobalStoreActionType.HIDE_MODALS,
             payload: {}
         })
     }
@@ -457,13 +427,13 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.deleteMap = () => {
-        async function asyncDeleteMap(id){
+        async function asyncDeleteMap(id) {
             let response = await api.deleteMap(id);
-            if(response.data.success){
+            if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.MARK_MAP_FOR_DELETION,
                     payload: null
-                }) 
+                })
             }
             store.loadIdNamePairs();
         }
@@ -576,13 +546,13 @@ function GlobalStoreContextProvider(props) {
         let newMap = { ...store.currentMap };
         newMap.name = name;
         let diff = jsondiffpatch.diff(store.currentMap, newMap);
-        async function asyncUpdateMapName(nameDiff){
+        async function asyncUpdateMapName(nameDiff) {
             let response = await api.updateMapById(store.currentMap._id, nameDiff);
-            if(response.data.success){
+            if (response.data.success) {
                 storeReducer({ //should not be updating map, already updated
                     type: GlobalStoreActionType.UPDATE_MAP,
                     payload: newMap
-                }) 
+                })
             }
         }
         asyncUpdateMapName(diff);
@@ -704,43 +674,58 @@ function GlobalStoreContextProvider(props) {
           // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits
           for (const key in updatedAttributes) {
             if (Object.prototype.hasOwnProperty.call(updatedAttributes, key)) {
-              store.currentMap.mapFeatures.edits[key] = updatedAttributes[key];
+                store.currentMap.mapFeatures.edits[key] = updatedAttributes[key];
             }
-          }
+        }
 
-        async function asyncUpdateMapAttributes(attributes){
+        async function asyncUpdateMapAttributes(attributes) {
             let response = await api.updateMapAttributesById(store.currentMap._id, attributes);
-            if(response.data.success){
+            if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.UPDATE_MAP,
                     payload: store.currentMap
-                }) 
+                })
             }
         }
         asyncUpdateMapAttributes(store.currentMap.mapFeatures);
     }
 
-    store.publishMap = function(id) {
-        async function asyncPublishMap(id){
+    store.editMapAttributes = function (newMapEdits) {
+        let map = JSON.parse(JSON.stringify(store.currentMap));
+        map.mapFeatures.edits = newMapEdits;
+        //update store
+        storeReducer({
+            type: GlobalStoreActionType.UPDATE_MAP,
+            payload: map
+        })
+        console.log('store.editMapAttributes')
+        console.log('recieved:' + newMapEdits.mapColor)
+        console.log('set store to' + map.mapFeatures.edits.mapColor)
+        console.log('store is now' + store.currentMap.mapFeatures.edits.mapColor)
+    }
+
+
+    store.publishMap = function (id) {
+        async function asyncPublishMap(id) {
             let response = await api.getMapById(id);
-            if(response.data.success){
-                let map = { ...response.data.map};
+            if (response.data.success) {
+                let map = { ...response.data.map };
                 map.published = true;
                 let diff = jsondiffpatch.diff(map, response.data.map)
-                async function updateMap(diff){
+                async function updateMap(diff) {
                     response = await api.updateMapById(id, diff);
-                    if(response.data.success){
+                    if (response.data.success) {
                         response = await api.getMapPairs();
-                        if(response.data.success){
+                        if (response.data.success) {
                             let pairsArray = response.data.idNamePairs;
                             storeReducer({
                                 type: GlobalStoreActionType.PUBLISHED,
-                                payload:{ 
+                                payload: {
                                     idNamePairs: pairsArray,
                                     map: map
                                 }
                             });
-                        store.loadIdNamePairs();
+                            store.loadIdNamePairs();
 
                         }
                     }
@@ -762,25 +747,17 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.UPDATE_SEARCH,
             payload: search
-        }) 
+        })
     }
     store.updateFilter = (filter) => {
         storeReducer({
             type: GlobalStoreActionType.UPDATE_FILTER,
             payload: filter
-        }) 
+        })
     }
     store.getMapById = async (id) => {
         let response = await api.getMapById(id);
         return response;
-    }
-
-    //Transaction stack functions
-    store.addChangePriColorTransaction = function (oldColor, newColor)  {
-        console.log('add transaction to stack')//Create transaction and add to stack
-        let transaction = new ChangePriColor_Transaction(store, oldColor, newColor);
-        tps.addTransaction(transaction);
-        
     }
 
     store.updateCurrentMapLocally = function (updatedMapData) {
@@ -788,6 +765,45 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.UPDATE_MAP,
             payload: updatedMapData
         }) 
+    }
+    store.updateMapFeatures = function (priColor) { //will add other features?
+        let map = JSON.parse(JSON.stringify(store.currentMap));
+                map.mapFeatures.edits.mapColor = priColor
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: map
+        });
+    
+    }
+    store.updateBorderFeatures = function (showb, bcolor, bwidth){
+        let map = JSON.parse(JSON.stringify(store.currentMap));
+                map.mapFeatures.edits.borderSwitch = showb;
+                map.mapFeatures.edits.borderWidth = bwidth;
+                map.mapFeatures.edits.borderColor = bcolor;
+                storeReducer({
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: map
+                });
+    }
+    //Transaction stack functions
+    store.addChangePriColorTransaction = function (oldColor, newColor) {
+        console.log('add transaction to stack')//Create transaction and add to stack
+        let transaction = new ChangePriColor_Transaction(store, oldColor, newColor);
+        tps.addTransaction(transaction);
+        
+    }
+    store.addBorderEditsTransaction = function (oldSB, newSB, oldBC, newBC, oldBW, newBW) {
+        //Handles any edits related to borders
+        //ie show borders, border color, border width
+        //is called for each individual edit 
+        //so even though its taking multiple features only one of them will actually be changed and edited 
+        //not all of them
+        //SB: show border, BC: border color, BW: border width
+
+        console.log('add transaction to stack')//Create transaction and add to stack
+        let transaction = new BorderEdits_Transaction(store, oldSB, newSB, oldBC, newBC, oldBW, newBW);
+        tps.addTransaction(transaction);
+
     }
 
     store.undo = function () {

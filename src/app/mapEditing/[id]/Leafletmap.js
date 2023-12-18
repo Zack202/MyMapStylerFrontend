@@ -57,13 +57,26 @@ const LeafletmapInside = (props) => {
   const dotOpacity = props.dotOpacity;
   const cursorModes = props.cursorModes;
   const colorRegion = props.colorRegion;
-  const mapColor = props.mapColor;
-  const borderColor = props.borderColor;
-  const borderSwitch = props.borderSwitch;
+  //const mapColor = props.mapColor;
+  //const borderColor = props.borderColor;
+  //const borderSwitch = props.borderSwitch;
   const selectedValue = props.selectedValue;
   const regionNameColor = props.regionNameColor;
   const regionNameTextSize = props.regionNameTextSize;
 
+  let mapColor, borderSwitch, borderColor, borderWidth;
+  if (store.currentMap) {
+    mapColor = store.currentMap.mapFeatures.edits.mapColor;
+    borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
+    borderColor = store.currentMap.mapFeatures.edits.borderColor;
+    borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
+  }
+  else {
+    mapColor = 'maroon';
+    borderSwitch = true;
+    borderColor = 'maroon';
+    borderWidth = 1;
+  }
 
   const map = useMap();
 
@@ -107,61 +120,62 @@ const LeafletmapInside = (props) => {
         setTempCenter(tempCenter);
       });
       if (cursorModes === 'dot') {
-      map.on('click', (e) => {
-        if (cursorModes === 'dot') {
-          let lat = e.latlng.lat;
-          let lng = e.latlng.lng;
-          let tempDot = [lat, lng];
-          //update store
-          if(store.currentMap && store.currentMap.mapFeatures){
-            let updatedMap = {...store.currentMap}
-            let tempDataPoints = [...store.currentMap.mapFeatures.DP]
-            tempDataPoints.push(tempDot)
-            updatedMap.mapFeatures.DP = tempDataPoints
-            store.updateCurrentMapLocally(updatedMap)
+        map.on('click', (e) => {
+          if (cursorModes === 'dot') {
+            let lat = e.latlng.lat;
+            let lng = e.latlng.lng;
+            let tempDot = [lat, lng];
+            //update store
+            if (store.currentMap && store.currentMap.mapFeatures) {
+              let updatedMap = { ...store.currentMap }
+              let tempDataPoints = [...store.currentMap.mapFeatures.DP]
+              tempDataPoints.push(tempDot)
+              updatedMap.mapFeatures.DP = tempDataPoints
+              store.updateCurrentMapLocally(updatedMap)
+            }
           }
-        }
-    });
-      } else if (cursorModes === 'color'){
+        });
+      } else if (cursorModes === 'color') {
         map.on('click', (e) => {
           if (cursorModes === 'color' && store.currentMap && store.currentMap.mapFeatures) {
             let lat = e.latlng.lat;
             let lng = e.latlng.lng;
             let clickedRegion = getClickedRegion(store, lat, lng);
-        
+
             if (clickedRegion) {
               let updatedMap = { ...store.currentMap };
               let tempColors = { ...store.currentMap.mapFeatures.ADV };
-        
+
               Object.keys(tempColors).forEach(region => {
                 if (!tempColors[region].some(obj => obj.hasOwnProperty('color'))) {
                   tempColors[region].push({ color: "" });
                 }
               });
-        
+
               if (!tempColors[clickedRegion].some(obj => obj.hasOwnProperty('color'))) {
                 tempColors[clickedRegion].push({ color: colorRegion });
               } else {
                 tempColors[clickedRegion] = [{ color: colorRegion }];
               }
-        
+
               updatedMap.mapFeatures.ADV = tempColors;
               store.updateCurrentMapLocally(updatedMap);
             }
           }
         });
       } else {
-    map.off('click');
-  }
+        map.off('click');
+      }
     }
   }, [map, cursorModes, colorRegion]);
 
-const getRegionColor = (regionName) => {
+  const getRegionColor = (regionName) => {
   //Clean region name
   regionName = regionName.replace(/\./g, '');
   if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
     const regionColors = store.currentMap.mapFeatures.ADV;
     if (regionColors[regionName]) {
+      if(regionColors[regionName][0]){
       const color = regionColors[regionName][0].color;
       if (color) {
         return color;
@@ -169,20 +183,21 @@ const getRegionColor = (regionName) => {
         return mapColor;
       }
     }
+    }
+  }return mapColor
   }
-}
 
-return (
-  <div>
-    <BackgroundOverlay backgroundColor={backgroundColor} />
-    <GeoJSON style = {countryStyle} data={geoJSONData} />
-    {store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.DP && store.currentMap.mapFeatures.DP.map((coord, index) => (
+  return (
+    <div>
+      <BackgroundOverlay backgroundColor={backgroundColor} />
+      <GeoJSON style={countryStyle} data={geoJSONData} />
+      {store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.DP && store.currentMap.mapFeatures.DP.map((coord, index) => (
         <CircleMarker
-        key={index}
-        center={coord}
-        radius={radius}
-        pathOptions={{ color: 'transparent' , fillColor: dotColor, fillOpacity: dotOpacity, opacity: dotOpacity}}
-    />
+          key={index}
+          center={coord}
+          radius={radius}
+          pathOptions={{ color: 'transparent', fillColor: dotColor, fillOpacity: dotOpacity, opacity: dotOpacity }}
+        />
       ))}
 
 <FeatureGroup>
@@ -256,20 +271,34 @@ return (
 }
 
 export default function Leafletmap(props) {
+  const { store } = useContext(GlobalStoreContext);
+  let mapColor, borderSwitch, borderColor, borderWidth;
+  if (store.currentMap) {
+    mapColor = store.currentMap.mapFeatures.edits.mapColor;
+    borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
+    borderColor = store.currentMap.mapFeatures.edits.borderColor;
+    borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
+  }
+  else {
+    mapColor = 'maroon';
+    borderSwitch = true;
+    borderColor = 'maroon';
+    borderWidth = 1;
+  }
 
   const mapGeo = props.mapGeo;
-  const borderSwitch = props.borderSwitch;
-  const borderWidth = props.borderWidth;
-  const borderColor = props.borderColor;
+  //const borderSwitch = props.borderSwitch;
+  //const borderWidth = props.borderWidth;
+  //const borderColor = props.borderColor;
   const regionSwitch = props.regionSwitch;
   const regionNameColor = props.regionNameColor;
-  const { store } = useContext(GlobalStoreContext);
+
   const backgroundColor = props.backgroundColor;
   const center = props.center;
   const zoom = props.zoom;
   const setTempCenter = props.setTempCenter;
   const setTempZoom = props.setTempZoom;
-  const mapColor = props.mapColor;
+  //const mapColor = props.mapColor;
   const radius = props.radius;
   const dotColor = props.dotColor;
   const dotOpacity = props.dotOpacity;
@@ -286,25 +315,23 @@ export default function Leafletmap(props) {
     useEffect(() => {
       setGeoJSONData(mapGeo);
     }, [mapGeo]);
-  
 
 
-
-  return (
-    <div>
-      <MapContainer ref={mapRef} style={{height: "70vh"}} center={center} zoom={zoom}>
-      {borderSwitch && (
-        <FeatureGroup>
-          <GeoJSON
-            style={{
-              weight: borderWidth,
-              color: borderColor,
-              fillOpacity: 0,
-            }}
-            data={geoJSONData}
-          />
-        </FeatureGroup>
-        )}
+    return (
+      <div>
+        <MapContainer ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
+          {borderSwitch && (
+            <FeatureGroup>
+              <GeoJSON
+                style={{
+                  weight: borderWidth,
+                  color: borderColor,
+                  fillOpacity: 0,
+                }}
+                data={geoJSONData}
+              />
+            </FeatureGroup>
+          )}
       <LeafletmapInside 
       geoJSONData={geoJSONData}
       regionSwitch={regionSwitch}
@@ -322,12 +349,12 @@ export default function Leafletmap(props) {
       selectedValue={selectedValue}
       regionNameColor={regionNameColor}
       regionNameTextSize={regionNameTextSize}
-
       />
       </MapContainer>
     </div>
   );
   }else{
+
     return null
   }
 }
