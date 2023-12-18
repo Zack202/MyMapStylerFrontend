@@ -233,7 +233,7 @@ export default function Home() {
                 {shownMaps /* shows all the map cards*/} 
                 <Typography sx={{display: !isGuest ? "none" : "default"}}
                  variant="h1" align="center" backgroundColor="grey" color="black" paragraph>
-                            {"Log in to create maps and utalize the home screen"}
+                            {"Log in to create maps and utilize the home screen"}
                 </Typography>
             </Box>
            
