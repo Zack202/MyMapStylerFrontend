@@ -929,6 +929,7 @@ export default function MapEditor(props) {
                </Box>
         )}
 
+
          {store.currentMap && store.currentMap.mapType === 5 && (
             <Box className = {styles.item_box}>
                   <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {

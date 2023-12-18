@@ -186,14 +186,7 @@ const LeafletmapInside = (props) => {
     <div>
       <BackgroundOverlay backgroundColor={backgroundColor} />
       <GeoJSON style={countryStyle} data={geoJSONData} />
-      {store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.DP && store.currentMap.mapFeatures.DP.map((coord, index) => (
-        <CircleMarker
-          key={index}
-          center={coord}
-          radius={radius}
-          pathOptions={{ color: 'transparent', fillColor: dotColor, fillOpacity: dotOpacity, opacity: dotOpacity }}
-        />
-      ))}
+      
 
       <FeatureGroup>
         {regionNameSwitch &&
@@ -259,6 +252,15 @@ const LeafletmapInside = (props) => {
             />
           ))}
       </FeatureGroup>
+      
+      {store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.DP && store.currentMap.mapFeatures.DP.map((coord, index) => (
+        <CircleMarker
+          key={index}
+          center={coord}
+          radius={radius}
+          pathOptions={{ color: 'transparent', fillColor: dotColor, fillOpacity: dotOpacity, opacity: dotOpacity }}
+        />
+      ))}
     </div>
   )
 
