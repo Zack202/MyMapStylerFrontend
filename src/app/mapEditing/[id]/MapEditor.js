@@ -32,7 +32,7 @@ export default function MapEditor(props) {
 
       const { store } = useContext(GlobalStoreContext);
 
-      let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor, dotColor;
+      let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor, dotColor, radius;
       if (store.currentMap) {
          mapColor = store.currentMap.mapFeatures.edits.mapColor;
          borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
@@ -42,6 +42,7 @@ export default function MapEditor(props) {
          regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
          backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
          dotColor = store.currentMap.mapFeatures.edits.dotColor;
+         radius = store.currentMap.mapFeatures.edits.radius;
       }
       else {
          mapColor = 'maroon';
@@ -52,6 +53,7 @@ export default function MapEditor(props) {
          regionNameColor = 'black';
          backgroundColor = 'white';
          dotColor = 'black';
+         radius = 2;
       }
 
       //For Color
@@ -199,12 +201,16 @@ export default function MapEditor(props) {
       }
 
       //For Radius
-      const setRadius = props.setRadius;
-      const radius = props.radius;
+      //const setRadius = props.setRadius;
+      //const radius = props.radius;
       const handleRadiusChange = (event) => {
          const newRadius = event.target.value.trim();
          if (newRadius === '' || !isNaN(newRadius)) {
-            setRadius(newRadius === '' ? "" : parseFloat(newRadius));
+            //setRadius(newRadius === '' ? "" : parseFloat(newRadius));
+            let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+            let newEdits = JSON.parse(JSON.stringify(oldEdits));
+            newEdits.radius = newRadius === '' ? "" : parseFloat(newRadius);
+            store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
          }
       }
 

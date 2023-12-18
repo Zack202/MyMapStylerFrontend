@@ -22,7 +22,7 @@ function EditToolbar(props) {
     const [editing, setEditing] = useState(false);
     const [editedName, setEditedName] = useState(name);
 
-    let mapColor, borderSwitch, borderColor, borderWidth, regionSwitch, regionNameColor, backgroundColor, dotColor;
+    let mapColor, borderSwitch, borderColor, borderWidth, regionSwitch, regionNameColor, backgroundColor, dotColor, radius;
     if (store.currentMap) {
       mapColor = store.currentMap.mapFeatures.edits.mapColor;
       borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
@@ -32,6 +32,7 @@ function EditToolbar(props) {
       regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
       backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
       dotColor = store.currentMap.mapFeatures.edits.dotColor;
+      radius = store.currentMap.mapFeatures.edits.radius;
     }
     else {
       mapColor = 'maroon';
@@ -41,7 +42,8 @@ function EditToolbar(props) {
       regionSwitch = false;
       regionNameColor = 'black';
       backgroundColor = 'white';
-      dotColor = 'black'
+      dotColor = 'black';
+      radius = 2;
     }
 
     //const mapColor = props.mapColor;
@@ -54,7 +56,7 @@ function EditToolbar(props) {
     const regionNameTextSize = props.regionNameTextSize;
     const center = props.center;
     const zoom = props.zoom;
-    const radius = props.radius;
+    //const radius = props.radius;
     //const dotColor = props.dotColor;
     const dotOpacity = props.dotOpacity;
     const cursorModes = props.cursorModes;
