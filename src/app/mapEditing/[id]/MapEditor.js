@@ -138,6 +138,7 @@ export default function MapEditor(props) {
           }, 25);*/
       }
 
+      //text size doesn't save, look into later , need to change store index and map controller 
       const regionNameTextSize = props.regionNameTextSize;
       const setRegionNameTextSize = props.setRegionNameTextSize;
       const handleRegionNameTextSizeChange = (event) => {
@@ -149,6 +150,14 @@ export default function MapEditor(props) {
          setTimeout(() => {
             setRegionNameSwitch(true);
           }, 25);*/
+          //temp fix 
+          let newEdits =  JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+          newEdits.regionSwitch = false;
+          store.editMapAttributes(newEdits);
+          setTimeout(() => {
+             newEdits.regionSwitch = true;
+             store.editMapAttributes(newEdits);
+          }, 25);
       }
 
       //For Background Color
@@ -243,6 +252,14 @@ export default function MapEditor(props) {
          setTimeout(() => {
             setRegionNameSwitch(true);
           }, 25);*/
+          //temp fix: doesn't work with undo/redo
+         let newEdits =  JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+          newEdits.regionSwitch = false;
+          store.editMapAttributes(newEdits);
+          setTimeout(() => {
+             newEdits.regionSwitch = true;
+             store.editMapAttributes(newEdits);
+          }, 25);
       };
 
       const rows = [
