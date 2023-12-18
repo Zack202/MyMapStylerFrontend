@@ -22,27 +22,34 @@ function EditToolbar(props) {
     const [editing, setEditing] = useState(false);
     const [editedName, setEditedName] = useState(name);
 
-    let mapColor, borderSwitch, borderColor, borderWidth;
+    let mapColor, borderSwitch, borderColor, borderWidth, regionSwitch, regionNameColor, backgroundColor;
     if (store.currentMap) {
       mapColor = store.currentMap.mapFeatures.edits.mapColor;
       borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
       borderColor = store.currentMap.mapFeatures.edits.borderColor;
       borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
+      regionSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
+      regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
+      backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
     }
     else {
       mapColor = 'maroon';
       borderSwitch = true;
       borderColor = 'maroon';
       borderWidth = 1;
+      regionSwitch = false;
+      regionNameColor = 'black';
+      backgroundColor = 'white';
     }
 
     //const mapColor = props.mapColor;
     //const borderSwitch = props.borderSwitch;
     //const borderWidth = props.borderWidth;
     //const borderColor = props.borderColor;
-    const regionSwitch = props.regionSwitch;
-    const regionNameColor = props.regionNameColor;
-    const backgroundColor = props.backgroundColor;
+    //const regionSwitch = props.regionSwitch;
+    //const regionNameColor = props.regionNameColor;
+    //const backgroundColor = props.backgroundColor;
+    const regionNameTextSize = props.regionNameTextSize;
     const center = props.center;
     const zoom = props.zoom;
     const radius = props.radius;
@@ -52,7 +59,14 @@ function EditToolbar(props) {
     const setCursorModes = props.setCursorModes;
     const setColorRegion = props.setColorRegion;
     const colorRegion = props.colorRegion;
-
+    const selectedValue = props.selectedValue;
+    const lowColorChoro = props.lowColorChoro;
+    const highColorChoro = props.highColorChoro;
+    const levelsChoro = props.levelsChoro;
+    const legendColors = props.legendColors;
+    const legendValues = props.legendValues;
+    const legendOn = props.legendOn;
+    const legendName = props.legendName;
 
 
     const handleDoubleClick = () => {
