@@ -79,13 +79,14 @@ const CommentSection = () => {
   function handleAddComment(event){
    console.log(comment)
    let date = new Date();
+   let dateStr = date.toLocaleDateString("en-US");
    let commentObject = {
       commentString: comment,
       userName: auth.user.userName,
       likes: 0,
       dislikes: 0,
       replies: [],
-      date: date.toLocaleDateString("en-US"),
+      date: dateStr
    }
    store.addComment(commentObject);
    setComment('');
