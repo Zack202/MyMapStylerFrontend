@@ -48,8 +48,12 @@ export default function MapEditor(props) {
    let colorTimeOut = 300;
    const handleColorChange = (color) => {
       setTimeout(() => {
-         store.addChangePriColorTransaction(mapColor, color);
+         //store.addChangePriColorTransaction(mapColor, color);
          //setMapColor(color);
+         let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         let newEdits = JSON.parse(JSON.stringify(oldEdits));
+         newEdits.mapColor = color;
+         store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
        }, colorTimeOut);
    }
 
@@ -59,7 +63,10 @@ export default function MapEditor(props) {
    const handleBorderSwitchChange = (event) => {
       //setBorderSwitch(event.target.checked);
       console.log(event.target.checked)
-      store.addBorderEditsTransaction(borderSwitch, event.target.checked, borderColor, borderColor, borderWidth, borderWidth)
+      let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      let newEdits = JSON.parse(JSON.stringify(oldEdits));
+      newEdits.borderSwitch = event.target.checked;
+      store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
    }
 
    //For Border Color
@@ -68,7 +75,10 @@ export default function MapEditor(props) {
    const handleColorChangeBorders = (color) => {
       setTimeout(() => {
          //setBorderColor(color);
-         store.addBorderEditsTransaction(borderSwitch, borderSwitch, borderColor, color , borderWidth , borderWidth)
+         let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         let newEdits = JSON.parse(JSON.stringify(oldEdits));
+         newEdits.borderColor = color;
+         store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
        }, colorTimeOut);
    }
 
@@ -79,7 +89,10 @@ export default function MapEditor(props) {
       const newWidth = event.target.value.trim();;
       if(newWidth === '' || !isNaN(newWidth)){
       //setborderWidth(newWidth === '' ? "" : parseFloat(newWidth));
-      store.addBorderEditsTransaction(borderSwitch, borderSwitch, borderColor, borderColor , borderWidth , newWidth === '' ? "" : parseFloat(newWidth))
+      let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      let newEdits = JSON.parse(JSON.stringify(oldEdits));
+      newEdits.borderWidth = newWidth === '' ? "" : parseFloat(newWidth);
+      store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
       }
    }
  
