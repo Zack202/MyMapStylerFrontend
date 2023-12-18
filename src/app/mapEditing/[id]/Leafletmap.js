@@ -124,6 +124,7 @@ const LeafletmapInside = (props) => {
         setTempCenter(tempCenter);
       });
       if (cursorModes === 'dot') {
+        map.off('click');
         map.on('click', (e) => {
           if (cursorModes === 'dot') {
             let lat = e.latlng.lat;
@@ -140,6 +141,7 @@ const LeafletmapInside = (props) => {
           }
         });
       } else if (cursorModes === 'color') {
+        map.off('click');
         map.on('click', (e) => {
           if (cursorModes === 'color' && store.currentMap && store.currentMap.mapFeatures) {
             let lat = e.latlng.lat;
@@ -151,16 +153,18 @@ const LeafletmapInside = (props) => {
               let tempColors = { ...store.currentMap.mapFeatures.ADV };
 
               Object.keys(tempColors).forEach(region => {
-                if (!tempColors[region].some(obj => obj.hasOwnProperty('color'))) {
-                  tempColors[region].push({ color: "" });
+                if (!Array.isArray(tempColors[region])) {
+                  tempColors[region] = [{}]; //shouldnt be necessary but just in case
+                } else if (!tempColors[region][0]) {
+                  tempColors[region][0] = {}; 
+                }
+              
+                if (!tempColors[region][0].hasOwnProperty('color')) {
+                  tempColors[region][0].color = ""; // Add the 'color' property if it doesn't exist
                 }
               });
 
-              if (!tempColors[clickedRegion].some(obj => obj.hasOwnProperty('color'))) {
-                tempColors[clickedRegion].push({ color: colorRegion });
-              } else {
-                tempColors[clickedRegion] = [{ color: colorRegion }];
-              }
+                tempColors[clickedRegion][0].color = colorRegion;
 
               updatedMap.mapFeatures.ADV = tempColors;
               store.updateCurrentMapLocally(updatedMap);

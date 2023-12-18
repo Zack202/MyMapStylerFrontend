@@ -42,6 +42,7 @@ function EditToolbar(props) {
     //const borderColor = props.borderColor;
     const regionSwitch = props.regionSwitch;
     const regionNameColor = props.regionNameColor;
+    const regionNameTextSize = props.regionNameTextSize;
     const backgroundColor = props.backgroundColor;
     const center = props.center;
     const zoom = props.zoom;
@@ -52,6 +53,14 @@ function EditToolbar(props) {
     const setCursorModes = props.setCursorModes;
     const setColorRegion = props.setColorRegion;
     const colorRegion = props.colorRegion;
+    const selectedValue = props.selectedValue;
+    const lowColorChoro = props.lowColorChoro;
+    const highColorChoro = props.highColorChoro;
+    const levelsChoro = props.levelsChoro;
+    const legendColors = props.legendColors;
+    const legendValues = props.legendValues;
+    const legendOn = props.legendOn;
+    const legendName = props.legendName;
 
 
 
