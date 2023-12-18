@@ -19,6 +19,10 @@ import { useState } from 'react';
 import chroma from 'chroma-js';
 import { useRef } from 'react';
 import { useCallback } from 'react';
+import { IconButton  } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+
 
 
 
@@ -231,14 +235,127 @@ export default function MapEditor(props) {
          }, colorTimeOut);
       }
 
-      //For Choropleth High Color
-      const setHighColorChoro = props.setHighColorChoro;
-      const highColorChoro = props.highColorChoro;
-      const handleColorChangeHighChoro = (color) => {
-         setTimeout(() => {
-            setHighColorChoro(color);
-         }, colorTimeOut);
+   //For Legend Colors
+   const setLegendColors = props.setLegendColors;
+   const legendColors = props.legendColors;
+
+   //For Legend Values
+   const setLegendValues = props.setLegendValues;
+   const legendValues = props.legendValues;
+
+   //Legend Creation
+   const handleAddRow = () => {
+      //Just add new legend value and color to the end of the list
+      const updatedLegendValues = [...legendValues, ''];
+      const updatedLegendColors = [...legendColors, '#000000'];
+      setLegendValues(updatedLegendValues);
+      setLegendColors(updatedLegendColors);
+
+      const updatedRows = updatedLegendValues.map((value, index) => ({
+         id: index + 1,
+         color: updatedLegendColors[index],
+         label: value || '',
+       }))
+       setRows(updatedRows)
+   }
+
+   const handleDeleteRow = (id) => {
+      //Just delete the legend value and color from the list
+      const index = id - 1;
+      const updatedLegendValues = legendValues.filter((value, i) => i !== index);
+      const updatedLegendColors = legendColors.filter((value, i) => i !== index);
+      setLegendValues(updatedLegendValues);
+      setLegendColors(updatedLegendColors);
+
+      const updatedRows = updatedLegendValues.map((value, index) => ({
+         id: index + 1,
+         color: updatedLegendColors[index],
+         label: value || '',
+       }))
+       setRows(updatedRows)
+   }
+
+   const handleLegendColorEdit = (id, color) => {
+      //Just update the legend color
+      const index = id - 1;
+      const updatedLegendColors = [...legendColors];
+      updatedLegendColors[index] = color;
+      setLegendColors(updatedLegendColors);
+   }
+
+
+   function generateGradient(color1, color2, levels) {
+      const gradient = chroma.scale([color1, color2]).colors(levels);
+      return gradient;
+    }
+
+   const handleGenerateGradient = () => {
+      const gradient = generateGradient(lowColorChoro, highColorChoro, levelsChoro);
+      console.log(gradient);
+      setLegendColors(gradient);
+      const blankValues = Array.from({ length: gradient.length }, () => '')
+      setLegendValues(blankValues)
+
+      const updatedRows = gradient.map((color, index) => ({
+         id: index + 1,
+         color: color,
+         label: '',
+       }))
+       setRows(updatedRows)
+   }
+
+   
+
+   const handleGenerateCloropleth = () => {
+      // needs to set values in store.currentMap.mapFeatures.ADV for colors
+      // Use the selected value to get the properity
+      // iterate through the mapFeatures.ADV for selected properity
+      // for a region, if the value is between the legend values, set the color to the legend color
+
+      const mapFeatures = { ...store.currentMap.mapFeatures.ADV };
+      const propertyToUse = selectedValue; 
+      for (const country in mapFeatures) {
+        if (Object.prototype.hasOwnProperty.call(mapFeatures, country)) {
+          const countryRegions = mapFeatures[country];
+    
+          //Update colors 
+          const updatedRegions = countryRegions.map(region => {
+            const propertyValue = parseFloat(region[propertyToUse]);
+    
+      
+            let updatedRegion = {
+              color: null, //Set tpo default color or null if needed
+              ...region
+            };
+    
+            for (let i = 0; i < legendValues.length; i++) {
+               // Check if property value falls within legend bounds
+               if (i === 0 && propertyValue < parseFloat(legendValues[i])) {
+                 console.log('Value is less than the first legend value');
+                 const legendColor = legendColors[i];
+                 updatedRegion.color = legendColor; 
+                 break;
+               } else if (i === legendValues.length - 1 && propertyValue >= parseFloat(legendValues[i])) {
+                 console.log('Value is greater than or equal to the last legend value');
+                 const legendColor = legendColors[i];
+                 updatedRegion.color = legendColor; 
+                 break;
+               } else if (propertyValue >= parseFloat(legendValues[i]) && propertyValue < parseFloat(legendValues[i + 1])) {
+                 console.log('Value falls within legend range');
+                 const legendColor = legendColors[i];
+                 updatedRegion.color = legendColor;
+                 break;
+               }
+             }
+     
+    
+            return updatedRegion;
+          });
+    
+          mapFeatures[country] = updatedRegions;
+        }
       }
+   }
 
       //For Choropleth Levels
       const setLevelsChoro = props.setLevelsChoro;
@@ -250,113 +367,70 @@ export default function MapEditor(props) {
          }
       }
 
-      //For Legend Colors
-      const setLegendColors = props.setLegendColors;
-      const legendColors = props.legendColors;
+   //For Legend
+   const setLegendOn = props.setLegendOn;
+   const legendOn = props.legendOn;
+   const handleLegendSwitchChange = (event) => {
+      setLegendOn(event.target.checked);
+   }
 
-      //For Legend Values
-      const setLegendValues = props.setLegendValues;
-      const legendValues = props.legendValues;
-
-      function generateGradient(color1, color2, levels) {
-         const gradient = chroma.scale([color1, color2]).colors(levels);
-         return gradient;
-      }
-
-      const handleGenerateGradient = () => {
-         const gradient = generateGradient(lowColorChoro, highColorChoro, levelsChoro);
-         console.log(gradient);
-         setLegendColors(gradient);
-         const blankValues = Array.from({ length: gradient.length }, () => '')
-         setLegendValues(blankValues)
-
-         const updatedRows = gradient.map((color, index) => ({
-            id: index + 1,
-            color: color,
-            label: '',
-         }))
-         setRows(updatedRows)
-      }
+   //For Legend Name
+   const setLegendName = props.setLegendName;
+   const legendName = props.legendName;
+   const handleLegendNameChange = (event) => {
+      setLegendName(event.target.value);
+   }
 
 
-
-      const handleGenerateCloropleth = () => {
-         // needs to set values in store.currentMap.mapFeatures.ADV for colors
-         // Use the selected value to get the properity
-         // iterate through the mapFeatures.ADV for selected properity
-         // for a region, if the value is between the legend values, set the color to the legend color
-
-         const mapFeatures = { ...store.currentMap.mapFeatures.ADV };
-         const propertyToUse = selectedValue;
-         for (const country in mapFeatures) {
-            if (Object.prototype.hasOwnProperty.call(mapFeatures, country)) {
-               const countryRegions = mapFeatures[country];
-
-               //Update colors 
-               const updatedRegions = countryRegions.map(region => {
-                  const propertyValue = parseFloat(region[propertyToUse]);
-
-
-                  let updatedRegion = {
-                     color: null, //Set tpo default color or null if needed
-                     ...region
-                  };
-
-                  for (let i = 0; i < legendValues.length; i++) {
-                     // Check if property value falls within legend bounds
-                     if (i === 0 && propertyValue < parseFloat(legendValues[i])) {
-                        console.log('Value is less than the first legend value');
-                        const legendColor = legendColors[i];
-                        updatedRegion.color = legendColor;
-                        break;
-                     } else if (i === legendValues.length - 1 && propertyValue >= parseFloat(legendValues[i])) {
-                        console.log('Value is greater than or equal to the last legend value');
-                        const legendColor = legendColors[i];
-                        updatedRegion.color = legendColor;
-                        break;
-                     } else if (propertyValue >= parseFloat(legendValues[i]) && propertyValue < parseFloat(legendValues[i + 1])) {
-                        console.log('Value falls within legend range');
-                        const legendColor = legendColors[i];
-                        updatedRegion.color = legendColor;
-                        break;
-                     }
-                  }
-
-
-                  return updatedRegion;
-               });
-
-               mapFeatures[country] = updatedRegions;
+   //For Color Mode
+   const handleGenerateColor = () => {
+      const mapFeatures = { ...store.currentMap.mapFeatures.ADV };
+      const propertyToUse = selectedValue;
+    
+      for (const country in mapFeatures) {
+        if (Object.prototype.hasOwnProperty.call(mapFeatures, country)) {
+          const countryRegions = mapFeatures[country];
+    
+          // Update colors to legend colors
+          const updatedRegions = countryRegions.map((region) => {
+            const propertyValue = region[propertyToUse];
+    
+            let updatedRegion = {
+              color: "",
+              ...region,
+            };
+    
+            let foundMatch = false;
+            for (let i = 0; i < legendValues.length; i++) {
+              if (propertyValue === legendValues[i]) {
+                const legendColor = legendColors[i];
+                updatedRegion.color = legendColor;
+                foundMatch = true;
+                break;
+              }
             }
-         }
-
-         const updatedMap = {
-            ...store.currentMap,
-            mapFeatures: { ...store.currentMap.mapFeatures, ADV: mapFeatures }
-         };
-
-         // Update the map data through store.updateCurrentMapLocally()
-         store.updateCurrentMapLocally(updatedMap);
+    
+            if (!foundMatch) {
+              updatedRegion.color = "";
+            }
+    
+            return updatedRegion;
+          });
+    
+          mapFeatures[country] = updatedRegions;
+        }
       }
-      //____________________________________________________________________________
+    
+      const updatedMap = {
+        ...store.currentMap,
+        mapFeatures: { ...store.currentMap.mapFeatures, ADV: mapFeatures },
+      };
+    
+      store.updateCurrentMapLocally(updatedMap);
+    };
 
-      //For Legend
-      const setLegendOn = props.setLegendOn;
-      const legendOn = props.legendOn;
-      const handleLegendSwitchChange = (event) => {
-         setLegendOn(event.target.checked);
-      }
-
-      //For Legend Name
-      const setLegendName = props.setLegendName;
-      const legendName = props.legendName;
-      const handleLegendNameChange = (event) => {
-         setLegendName(event.target.value);
-      }
-
-      const formattedLat = center[0] ? center[0].toFixed(4) : '?';
-      const formattedLng = center[1] ? center[1].toFixed(4) : '?';
-
+   const formattedLat = center[0] ? center[0].toFixed(4) : '?';
+   const formattedLng = center[1] ? center[1].toFixed(4) : '?';
       const realFormattedLat = realCenter[0] ? realCenter[0].toFixed(4) : '?';
       const realFormattedLng = realCenter[1] ? realCenter[1].toFixed(4) : '?';
 
@@ -450,343 +524,426 @@ export default function MapEditor(props) {
          const updatedLegendValues = updatedRows.map((row) => row.label);
          setLegendValues(updatedLegendValues);
       }
-
-      return (
-         <Box item xs={12} sx={{
-            position: "absolute", width: "25%",
-            display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "85%",
-         }}>
-            <Grid container>
-               <Box className={styles.rect_box}>
-                  <Box className={styles.title_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h4" style={{ textAlign: 'center' }}><b><i>Map Editor</i></b></Typography>
-                  </Box>
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6"><i>Select Color:</i> { }
-                        <input
-                           type="color"
-                           className={styles.color_box}
-                           value={mapColor}
-                           onChange={(e) => handleColorChange(e.target.value)}
-                        />
-                     </Typography>
-                  </Box>
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6">
-                        <i>Show Borders:</i> { }
-                        <FormControlLabel
-                           value="start"
-                           control={
-                              <Switch id="border" checked={borderSwitch} onChange={handleBorderSwitchChange} color="primary" />
-                           }
-                        />
-                     </Typography>
-                  </Box>
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6"><i>Border Color:</i> { }
-                        <input
-                           type="color"
-                           className={styles.color_box}
-                           value={borderColor}
-                           onChange={(e) => handleColorChangeBorders(e.target.value)}
-                        />
-                     </Typography>
-                  </Box>
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6">
-                        <i>Border Width:</i> { }
-                        <TextField
-                           className={styles.text_box}
-                           id="outlined-size-small"
-                           size="small"
-                           sx={{ width: 100 }}
-                           value={borderWidth}
-                           onChange={handleBorderWidthChange}
-                           InputProps={{
-                              endAdornment:
-                                 <InputAdornment position="end">px</InputAdornment>
-                              ,
-                           }}
-                        ></TextField>
-                     </Typography>
-                  </Box>
-                  {store.currentMap && store.currentMap.mapType === 1 && (
-                     <div>
-                        <FormControl fullWidth>
-                           <InputLabel id="select-label">Select a property</InputLabel>
-                           <Select
-                              labelId="select-label"
-                              value={selectedValue}
-                              onChange={handleSelectChange}
-                              label="Select a region"
-                           >
-                              <MenuItem value="">
-                                 Names
-                              </MenuItem>
-                              {options.map((option, index) => (
-                                 <MenuItem key={index} value={option}>
-                                    {option}
-                                 </MenuItem>
-                              ))}
-                           </Select>
-                        </FormControl>
-                     </div>)}
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6">
-                        <i>Show Regions Names:</i> { }
-                        <FormControlLabel
-                           value="start"
-                           control={
-                              <Switch id="toggleNames" checked={regionNameSwitch} color="primary" onChange={handleRegionNameSwitchChange} />
-                           }
-                        />
-                     </Typography>
-                  </Box>
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6"><i>Region Name Colors:</i> { }
-                        <input
-                           type="color"
-                           className={styles.color_box}
-                           value={regionNameColor}
-                           onChange={(e) => handleColorChangeRegionName(e.target.value)}
-                        />
-                     </Typography>
-                  </Box>
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6">
-                        <i>Region Name Text Size:</i> { }
-                        <TextField
-                           className={styles.text_box}
-                           id="outlined-size-small"
-                           size="small"
-                           sx={{ width: 100 }}
-                           value={regionNameTextSize}
-                           onChange={handleRegionNameTextSizeChange}
-                           InputProps={{
-                              endAdornment:
-                                 <InputAdornment position="end">px</InputAdornment>
-                              ,
-                           }}
-                        ></TextField>
-                     </Typography>
-                  </Box>
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6"><i>Background Color:</i> { }
-                        <input
-                           type="color"
-                           className={styles.color_box}
-                           value={backgroundColor}
-                           onChange={(e) => handleColorChangeBackground(e.target.value)}
-                        />
-                     </Typography>
-                  </Box>
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6">
-                        <i>Center : ({formattedLat}, {formattedLng}) { }</i>
-                        <Button
-                           style={{ color: 'black', backgroundColor: 'white' }}
-                           onClick={handleCenterChange}
-                        >
-                           Set
-                        </Button>
-                     </Typography>
-                  </Box>
-                  <i>Current Center : ({realFormattedLat}, {realFormattedLng}) </i>
-                  <Box className={styles.item_box}>
-                     <Typography className={styles.text_color} component="h1" variant="h6">
-                        <i>Zoom: ({zoom}) { }</i>
-                        <Button
-                           style={{ color: 'black', backgroundColor: 'white' }}
-                           onClick={handleZoomChange}
-                        >
-                           Set
-                        </Button>
-                     </Typography>
-                  </Box>
-                  <i>Zoom: ({realZoom}) { }</i>
-                  {store.currentMap && (store.currentMap.mapType === 3 || store.currentMap.mapType === 2) && (
-                     <div>
-                        <Box className={styles.item_box}>
-                           <Typography className={styles.text_color} component="h1" variant="h6">
-                              <i>Radius:</i> { }
-                              <TextField
-                                 className={styles.text_box}
-                                 id="outlined-size-small"
-                                 size="small"
-                                 sx={{ width: 100 }}
-                                 value={radius}
-                                 onChange={handleRadiusChange}
-                                 InputProps={{
-                                    endAdornment:
-                                       <InputAdornment position="end">px</InputAdornment>
-                                    ,
-                                 }}
-                              ></TextField>
-                           </Typography>
-                        </Box>
-                        <Box className={styles.item_box}>
-                           <Typography className={styles.text_color} component="h1" variant="h6"><i>Dot Color:</i> { }
-                              <input
-                                 type="color"
-                                 className={styles.color_box}
-                                 value={dotColor}
-                                 onChange={(e) => handleColorChangeDot(e.target.value)}
-                              />
-                           </Typography>
-                        </Box>
-                        <Box className={styles.item_box}>
-                           <Typography className={styles.text_color} component="h1" variant="h6">
-                              <i>Dot Opacity:</i> { }
-                              <TextField
-                                 className={styles.text_box}
-                                 id="outlined-size-small"
-                                 size="small"
-                                 sx={{ width: 100 }}
-                                 value={dotOpacity * 100}
-                                 onChange={handleDotOpacityChange}
-                                 InputProps={{
-                                    endAdornment:
-                                       <InputAdornment position="end">%</InputAdornment>
-                                    ,
-                                 }}
-                              ></TextField>
-                           </Typography>
-                        </Box>
-                     </div>)}
-                  {store.currentMap && store.currentMap.mapType === 4 && (
-                     <div>
-                        <Typography className={styles.text_color} component="h1" variant="h6"><i>Choose Property:</i></Typography>
-                        <FormControl fullWidth>
-                           <InputLabel id="select-label">Select a property</InputLabel>
-                           <Select
-                              labelId="select-label"
-                              value={selectedValue}
-                              onChange={handleSelectChange}
-                              label="Select a region"
-                           >
-                              <MenuItem value="">
-                                 Names
-                              </MenuItem>
-                              {options.map((option, index) => (
-                                 <MenuItem key={index} value={option}>
-                                    {option}
-                                 </MenuItem>
-                              ))}
-                           </Select>
-                        </FormControl>
-                        <Box className={styles.item_box}>
-                           <Typography className={styles.text_color} component="h1" variant="h6"><i>Low Color:</i> { }
-                              <input
-                                 type="color"
-                                 className={styles.color_box}
-                                 value={lowColorChoro}
-                                 onChange={(e) => handleColorChangeLowChoro(e.target.value)}
-                              />
-                           </Typography>
-                        </Box>
-                        <Box className={styles.item_box}>
-                           <Typography className={styles.text_color} component="h1" variant="h6"><i>High Color:</i> { }
-                              <input
-                                 type="color"
-                                 className={styles.color_box}
-                                 value={highColorChoro}
-                                 onChange={(e) => handleColorChangeHighChoro(e.target.value)}
-                              />
-                           </Typography>
-                        </Box>
-                        <Box className={styles.item_box}>
-                           <Typography className={styles.text_color} component="h1" variant="h6">
-                              <i>Levels: </i> { }
-                              <TextField
-                                 className={styles.text_box}
-                                 id="outlined-size-small"
-                                 size="small"
-                                 sx={{ width: 100 }}
-                                 value={levelsChoro}
-                                 onChange={handleLevelsChoroChange}
-                              ></TextField>
-                           </Typography>
-                        </Box>
-                        <Box className={styles.item_box}>
-                           <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
-                              handleGenerateGradient();
-                           }
-                           }>
-                              Generate Gradient
-                           </Button>
-                        </Box>
-                     </div>)}
-                  <div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
-                     <ImportMapDataModal />
-                  </div>
-                  <div style={{ height: '30px', overflowY: 'auto' }}>
-                  </div>
-                  <div style={{ margin: '10px', background: "darkgrey", padding: "10px", margin: "-10px" }}>
-                     <Typography className={styles.text_color} component="h1" variant="h6">
-                        Legend: { }
-                        <FormControlLabel
-                           value="start"
-                           control={
-                              <Switch color="primary"
-                                 value={legendOn}
-                                 onChange={handleLegendSwitchChange}
-                              />
-                           }
-                        />
-                        <TextField
-                           className={styles.text_box}
-                           id="outlined-size-small"
-                           variant="standard"
-                           size="small"
-                           defaultValue={"Legend"}
-                           label={"Enter Legend Name"}
-                           value={legendName}
-                           onChange={handleLegendNameChange}
-                           sx={{ width: 260, borderRadius: 1, marginBottom: '5px' }}>
-
-
-                        </TextField>
-
-                     </Typography>
-
-                     <Box backgroundColor="white" borderRadius={'5px'}>
-                        {rows.map((row) => (
-                           <div key={row.id} style={{ display: 'flex', alignItems: 'center', padding: '5px', marginLeft: '50px' }}>
-                              <div
-                                 style={{
-                                    width: '20px',
-                                    height: '20px',
-                                    backgroundColor: row.color,
-                                    border: '1px solid black',
-                                    marginRight: '10px'
-                                 }}
-                              ></div>
-                              {row.id === 1 && <span style={{ marginLeft: '5px' }}>{'<'}</span>}
-                              {row.id !== 1 && row.id !== rows.length && <span style={{ marginLeft: '5px' }}>x<sub>{`${row.id - 1}`}</sub>-x<sub>{`${row.id}`}</sub></span>}
-                              {row.id === rows.length && <span style={{ marginLeft: '5px' }}>{'>'}</span>}
-                              <TextField
-                                 variant="outlined"
-                                 size="small"
-                                 value={row.label}
-                                 onChange={(e) => {
-                                    handleCellEdit(row.id, 'label', e.target.value);
-                                 }}
-                                 style={{ marginLeft: 'auto' }}
-                              />
-                           </div>
-                        ))}
-                     </Box>
-                     <Box className={styles.item_box}>
-                        <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
-                           handleGenerateCloropleth();
-                        }
-                        }>
-                           Generate Choropleth using Legend
-                        </Button>
-                     </Box>
-                  </div>
+    return(
+      <Box item xs={12} sx={{position:"absolute", width: "25%", 
+            display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "85%",}}>
+         <Grid container>
+            <Box className = {styles.rect_box}>
+               <Box className = {styles.title_box}>
+                  <Typography className= {styles.text_color} component="h1" variant="h4" style={{ textAlign: 'center' }}><b><i>Map Editor</i></b></Typography>
                </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6"><i>Select Color:</i> { }
+                  <input
+                     type="color"
+                     className={styles.color_box}
+                     value={mapColor || 'maroon'}
+                     onChange={(e) => handleColorChange(e.target.value)}
+                  />
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Show Borders:</i> { }
+                  <FormControlLabel 
+                  value="start"
+                  control={
+                  <Switch id="border" checked={borderSwitch} onChange={handleBorderSwitchChange}color="primary" />
+                  }
+                  />
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6"><i>Border Color:</i> { }
+                  <input
+                     type="color"
+                     className={styles.color_box}
+                     value={borderColor}
+                     onChange={(e) => handleColorChangeBorders(e.target.value)}
+                  />
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Border Width:</i> { }
+                  <TextField
+                  className={styles.text_box}
+                  id="outlined-size-small"
+                  size="small"
+                  sx={{ width: 100 }}
+                  value={borderWidth}
+                  onChange={handleBorderWidthChange}
+                  InputProps={{
+                  endAdornment: 
+                  <InputAdornment position="end">px</InputAdornment>
+                  ,
+                  }}
+                  ></TextField>
+               </Typography>
+               </Box>
+               { store.currentMap && (store.currentMap.mapType === 5 || store.currentMap.mapType === 4 || store.currentMap.mapType === 1) && (
+               <div>
+               <FormControl fullWidth>
+        <InputLabel id="select-label">Select a property</InputLabel>
+        <Select
+          labelId="select-label"
+          value={selectedValue}
+          onChange={handleSelectChange}
+          label="Select a region"
+        >
+          <MenuItem value="">
+            Names
+          </MenuItem>
+          {options.map((option, index) => (
+            <MenuItem key={index} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      </div>)}
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Show Regions Names:</i> { }
+                  <FormControlLabel
+                  value="start"
+                  control={
+                  <Switch id="toggleNames" checked={regionNameSwitch} color="primary" onChange={handleRegionNameSwitchChange}/>
+                  }
+                  />
+               </Typography>
+               </Box>
+                <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6"><i>Region Name Colors:</i> { }
+                  <input
+                     type="color"
+                     className={styles.color_box}
+                     value={regionNameColor}
+                     onChange={(e) => handleColorChangeRegionName(e.target.value)}
+                  />
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Region Name Text Size:</i> { }
+                  <TextField
+                  className={styles.text_box}
+                  id="outlined-size-small"
+                  size="small"
+                  sx={{ width: 100 }}
+                  value={regionNameTextSize}
+                  onChange={handleRegionNameTextSizeChange}
+                  InputProps={{
+                  endAdornment:
+                  <InputAdornment position="end">px</InputAdornment>
+                  ,
+                  }}
+                  ></TextField>
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6"><i>Background Color:</i> {}
+                  <input
+                     type="color"
+                     className={styles.color_box}
+                     value={backgroundColor}
+                     onChange={(e) => handleColorChangeBackground(e.target.value)}
+                  />
+               </Typography>
+               </Box>
+               <Box className={styles.item_box}>
+                  <Typography className={styles.text_color} component="h1" variant="h6">
+                  <i>Center : ({formattedLat}, {formattedLng}) { }</i>
+                  <Button
+                     style={{ color: 'black', backgroundColor: 'white' }}
+                     onClick={handleCenterChange}
+                     >
+                     Set
+                  </Button>
+                  </Typography>
+               </Box>
+               <i>Current Center : ({realFormattedLat}, {realFormattedLng}) </i>
+               <Box className={styles.item_box}>
+                  <Typography className={styles.text_color} component="h1" variant="h6">
+                  <i>Zoom: ({zoom}) { }</i>
+                  <Button
+                     style={{ color: 'black', backgroundColor: 'white' }}
+                     onClick={handleZoomChange}
+                  >
+                     Set
+                  </Button>
+                  </Typography>
+               </Box>
+               <i>Zoom: ({realZoom}) { }</i>
+               {store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 3 || store.currentMap.mapType === 2) && (
+               <div>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Radius:</i> { }
+                  <TextField
+                  className={styles.text_box}
+                  id="outlined-size-small"
+                  size="small"
+                  sx={{ width: 100 }}
+                  value={radius}
+                  onChange={handleRadiusChange}
+                  InputProps={{
+                  endAdornment: 
+                  <InputAdornment position="end">px</InputAdornment>
+                  ,
+                  }}
+                  ></TextField>
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6"><i>Dot Color:</i> { }
+                  <input
+                     type="color"
+                     className={styles.color_box}
+                     value={dotColor}
+                     onChange={(e) => handleColorChangeDot(e.target.value)}
+                  />
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Dot Opacity:</i> { }
+                  <TextField
+                  className={styles.text_box}
+                  id="outlined-size-small"
+                  size="small"
+                  sx={{ width: 100 }}
+                  value={dotOpacity * 100}
+                  onChange={handleDotOpacityChange}
+                  InputProps={{
+                  endAdornment: 
+                  <InputAdornment position="end">%</InputAdornment>
+                  ,
+                  }}
+                  ></TextField>
+               </Typography>
+               </Box>
+               </div>)}
+               { store.currentMap && store.currentMap.mapType === 4 && (
+               <div>
+                  <Typography className= {styles.text_color} component="h1" variant="h6"><i>Choose Property:</i></Typography>
+                  <FormControl fullWidth>
+                  <InputLabel id="select-label">Select a property</InputLabel>
+                  <Select
+                     labelId="select-label"
+                     value={selectedValue}
+                     onChange={handleSelectChange}
+                     label="Select a region"
+                  >
+                     <MenuItem value="">
+                        Names
+                     </MenuItem>
+                     {options.map((option, index) => (
+                        <MenuItem key={index} value={option}>
+                        {option}
+                        </MenuItem>
+                     ))}
+                  </Select>
+                  </FormControl> 
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6"><i>Low Color:</i> { }
+                  <input
+                     type="color"
+                     className={styles.color_box}
+                     value={lowColorChoro}
+                     onChange={(e) => handleColorChangeLowChoro(e.target.value)}
+                  />
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6"><i>High Color:</i> { }
+                  <input
+                     type="color"
+                     className={styles.color_box}
+                     value={highColorChoro}
+                     onChange={(e) => handleColorChangeHighChoro(e.target.value)}
+                  />
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Levels: </i> { }
+                  <TextField
+                  className={styles.text_box}
+                  id="outlined-size-small"
+                  size="small"
+                  sx={{ width: 100 }}
+                  value={levelsChoro}
+                  onChange={handleLevelsChoroChange}
+                  ></TextField>
+               </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+                  <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
+                     handleGenerateGradient();
+                  }
+                  }>
+                     Generate Gradient
+                  </Button>
+               </Box>
+               </div>)}
+               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px'}}>
+               <ImportMapDataModal />
+               </div>
+               <div style={{ height: '30px', overflowY: 'auto' }}>
+               </div>
+               <div style={{margin: '10px', background: "darkgrey", padding: "10px", margin: "-10px"}}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  Legend: { }
+                  <FormControlLabel
+                  value="start"
+                  control={
+                  <Switch color="primary" 
+                  value={legendOn}
+                  onChange={handleLegendSwitchChange}
+                  />
+                  }
+                  />
+                  <TextField
+                  className={styles.text_box}
+                  id="outlined-size-small"
+                  variant="standard"
+                  size="small"
+                  defaultValue={"Legend"}
+                  label={"Enter Legend Name"}
+                  value={legendName}
+                  onChange={handleLegendNameChange}
+                  sx={{ width: 260, borderRadius: 1, marginBottom: '5px'}}>
+                  
+                     
+                  </TextField>
 
+            </Typography>
+            {/*FOR CHOROPLETH AND HEAT____________________________________________________________*/}
+            { store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 4 || store.currentMap.mapType === 2) && (
+            <Box backgroundColor="white" borderRadius={'5px'}>
+          {rows.map((row) => (
+            <div key={row.id} style={{ display: 'flex', alignItems: 'center', padding: '5px', marginLeft: '50px'}}>
+              <div
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  backgroundColor: row.color,
+                  border: '1px solid black',
+                  marginRight: '10px'
+                }}
+              ></div>
+               {store.currentMap && store.currentMap.mapType && (
+               <>
+                  {
+                     <>
+                     {row.id === 1 && <span style={{ marginLeft: '5px' }}>{'<'}</span>}
+                     {row.id !== 1 && row.id !== rows.length && (
+                        <span style={{ marginLeft: '5px' }}>x<sub>{`${row.id - 1}`}</sub>-x<sub>{`${row.id}`}</sub></span>
+                     )}
+                     {row.id === rows.length && <span style={{ marginLeft: '5px' }}>{'>'}</span>}
+                     </>
+                  }
+               </>
+               )}
+
+              <TextField
+                variant="outlined"
+                size="small"
+                value={row.label}
+                onChange={(e) => {
+                  handleCellEdit(row.id, 'label', e.target.value);
+                }}
+                style={{ marginLeft: 'auto' }}
+              />
+            </div>
+          ))}
+        </Box>)}
+         {/*______________________________________________________________________________________*/}
+         {/*FOR COLOR AND TEXT____________________________________________________________________________*/}
+         {store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 1 || store.currentMap.mapType === 5) && (
+        <Box backgroundColor="white" borderRadius={'5px'}>
+          {rows.map((row) => (
+            <div key={row.id} style={{ display: 'flex', alignItems: 'center', padding: '5px', marginLeft: '50px' }}>
+              <input
+                type="color"
+                value={legendColors[row.id - 1]}
+                onChange={(e) => {
+                  handleLegendColorEdit(row.id, e.target.value);
+                }}
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  border: 'none',
+                  borderRadius: '5px',
+                  marginRight: '10px',
+                }}
+              />
+              {store.currentMap && store.currentMap.mapType && (
+                <>
+                  {store.currentMap.mapType === 2 || store.currentMap.mapType === 4 ? (
+                    <>
+                      {row.id === 1 && <span style={{ marginLeft: '5px' }}>{'<'}</span>}
+                      {row.id !== 1 && row.id !== rows.length && (
+                        <span style={{ marginLeft: '5px' }}>x<sub>{`${row.id - 1}`}</sub>-x<sub>{`${row.id}`}</sub></span>
+                      )}
+                      {row.id === rows.length && <span style={{ marginLeft: '5px' }}>{'>'}</span>}
+                    </>
+                  ) : (
+                    store.currentMap.mapType === 5 || store.currentMap.mapType === 1 && (
+                      <span style={{ marginLeft: '5px' }}>{'='}</span>
+                    )
+                  )}
+                </>
+              )}
+
+              <TextField
+                variant="outlined"
+                size="small"
+                value={row.label}
+                onChange={(e) => {
+                  handleCellEdit(row.id, 'label', e.target.value);
+                }}
+                style={{ marginLeft: 'auto' }}
+              />
+
+              <IconButton onClick={() => handleDeleteRow(row.id)}>
+                <DeleteIcon />
+              </IconButton>
+            </div>
+          ))}
+
+          <IconButton onClick={handleAddRow}>
+            <AddIcon />
+          </IconButton>
+        </Box>
+      )}
+        {store.currentMap && store.currentMap.mapType === 4 && ( // Only show the button if the map is a choropleth
+            <Box className = {styles.item_box}>
+                  <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
+                     handleGenerateCloropleth();
+                  }
+                  }>
+                     Generate Choropleth using Legend
+                  </Button>
+               </Box>
+        )}
+
+
+         {store.currentMap && store.currentMap.mapType === 5 && (
+            <Box className = {styles.item_box}>
+                  <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
+                     handleGenerateColor();
+                  }
+                  }>
+                     Generate Colors using Legend
+                  </Button>
+               </Box>
+        )}
+
+
+            </div>
+            </Box>
             </Grid>
          </Box>
       );

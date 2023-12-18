@@ -22,13 +22,13 @@ function EditToolbar(props) {
     const [editing, setEditing] = useState(false);
     const [editedName, setEditedName] = useState(name);
 
-    let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor;
+    let mapColor, borderSwitch, borderColor, borderWidth, regionSwitch, regionNameColor, backgroundColor;
     if (store.currentMap) {
       mapColor = store.currentMap.mapFeatures.edits.mapColor;
       borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
       borderColor = store.currentMap.mapFeatures.edits.borderColor;
       borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
-      regionNameSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
+      regionSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
       regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
       backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
     }
@@ -37,7 +37,7 @@ function EditToolbar(props) {
       borderSwitch = true;
       borderColor = 'maroon';
       borderWidth = 1;
-      regionNameSwitch = false;
+      regionSwitch = false;
       regionNameColor = 'black';
       backgroundColor = 'white';
     }
