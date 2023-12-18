@@ -327,7 +327,7 @@ export default function Leafletmap(props) {
 
           <LeafletmapInside 
       geoJSONData={geoJSONData}
-      regionSwitch={regionSwitch}
+      regionSwitch={regionNameSwitch}
       setTempCenter={setTempCenter}
       setTempZoom={setTempZoom}
       backgroundColor={backgroundColor}
