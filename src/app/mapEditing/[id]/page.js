@@ -35,6 +35,12 @@ export default function MapEditingScreen() {
         dotColor: "black",
         dotOpacity: 1,
         regionNameTextSize: 10,
+        lowColorChoro: "#FFFFFF",
+        highColorChoro: "#000000",
+        levelsChoro: 2,
+        legendColors: ["#FFFFFF", "#000000"],
+        legendValues: ['', ''],
+        legendName: 'Legend',
       };
       
       /*const [borderSwitch, setBorderSwitch] = useState(() =>
@@ -90,10 +96,38 @@ export default function MapEditingScreen() {
       const [cursorModes, setCursorModes] = useState('');
 
 
-      const [colorRegion, setColorRegion] = useState("#A9A9A9");
+      const [colorRegion, setColorRegion] = useState("#000000");
 
       const [selectedValue, setSelectedValue] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.selectedValue ?? "") : ""
+      );
+
+      const [lowColorChoro, setLowColorChoro] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.lowColorChoro ?? defaultValues.lowColorChoro) : defaultValues.lowColorChoro
+      );
+
+      const [highColorChoro, setHighColorChoro] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.highColorChoro ?? defaultValues.highColorChoro) : defaultValues.highColorChoro
+      );
+
+      const [levelsChoro, setLevelsChoro] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.levelsChoro ?? defaultValues.levelsChoro) : defaultValues.levelsChoro
+      );
+
+      const [legendColors, setLegendColors] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.legendColors ?? defaultValues.legendColors) : defaultValues.legendColors
+      );
+
+      const [legendValues, setLegendValues] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.legendValues ?? defaultValues.legendValues) : defaultValues.legendValues
+      );
+
+      const [legendOn, setLegendOn] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.legendOn ?? defaultValues.legendOn) : defaultValues.legendOn
+      );
+
+      const [legendName, setLegendName] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.legendName ?? defaultValues.legendName) : defaultValues.legendName
       );
 
 
@@ -161,6 +195,31 @@ export default function MapEditingScreen() {
                     setRegionNameTextSize={setRegionNameTextSize}
                     regionNameTextSize={regionNameTextSize}
 
+                    //For choropleth map
+                    setLowColorChoro={setLowColorChoro}
+                    lowColorChoro={lowColorChoro}
+
+                    setHighColorChoro={setHighColorChoro}
+                    highColorChoro={highColorChoro}
+                    
+                    setLevelsChoro={setLevelsChoro}
+                    levelsChoro={levelsChoro}
+
+                    setLegendColors={setLegendColors}
+                    legendColors={legendColors}
+
+                    setLegendValues={setLegendValues}
+                    legendValues={legendValues}
+                    //For choropleth map
+
+                    setLegendOn={setLegendOn}
+                    legendOn={legendOn}
+
+                    setLegendName={setLegendName}
+                    legendName={legendName}
+
+
+
                     />
                 </Grid>
                 <Grid item xs={7}>
@@ -182,9 +241,20 @@ export default function MapEditingScreen() {
                                             setCursorModes={setCursorModes}
                                             colorRegion={colorRegion}
                                             setColorRegion={setColorRegion}
-
-                                            regionNameTextSize={regionNameTextSize} //addToSave
+                                            regionNameTextSize={regionNameTextSize}
                                             selectedValue={selectedValue}
+
+                                            //For choropleth map
+                                            lowColorChoro={lowColorChoro}
+                                            highColorChoro={highColorChoro}
+                                            levelsChoro={levelsChoro}
+                                            legendColors={legendColors}
+                                            legendValues={legendValues}
+                                            //For choropleth map
+
+                                            legendOn={legendOn}
+                                            legendName={legendName}
+
 
 
 
@@ -210,6 +280,18 @@ export default function MapEditingScreen() {
                         colorRegion={colorRegion}
                         selectedValue={selectedValue}
                         regionNameTextSize={regionNameTextSize}
+
+                        //For choropleth map
+                        lowColorChoro={lowColorChoro}
+                        highColorChoro={highColorChoro}
+                        levelsChoro={levelsChoro}
+                        legendColors={legendColors}
+                        legendValues={legendValues}
+                        //For choropleth map
+
+                        legendOn={legendOn}
+                        legendName={legendName}
+
                     />
                 </Grid>
                 <Grid item xs={2}>

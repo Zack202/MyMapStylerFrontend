@@ -221,7 +221,7 @@ export default function CreateMapModal() {
                                 <MenuItem value={1}>Textual Map</MenuItem>
                                 <MenuItem value={2}>Heat Map</MenuItem>
                                 <MenuItem value={3}>Dot Map</MenuItem>
-                                <MenuItem value={4}>Sized Dot Map</MenuItem>
+                                <MenuItem value={4}>Choropleth</MenuItem>
                             </Select>
                         </FormControl>
                         </Box>

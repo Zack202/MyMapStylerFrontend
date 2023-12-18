@@ -653,7 +653,29 @@ function GlobalStoreContextProvider(props) {
         asyncAddComment(comment);
     }
 
-    store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity, regionNameTextSize, selectedValue) => {
+    store.updateMapAttributes = (
+        mapColor, 
+        borderSwitch, 
+        borderWidth, 
+        borderColor, 
+        regionSwitch, 
+        regionNameColor, 
+        backgroundColor, 
+        center, 
+        zoom, 
+        radius, 
+        dotColor, 
+        dotOpacity, 
+        regionNameTextSize, 
+        selectedValue,
+        lowColorChoro,
+        highColorChoro,
+        levelsChoro,
+        legendColors,
+        legendValues,
+        legendOn,
+        legendName
+        ) => {
         const updatedAttributes = {
             mapColor,
             borderSwitch,
@@ -668,7 +690,14 @@ function GlobalStoreContextProvider(props) {
             dotColor,
             dotOpacity,
             regionNameTextSize,
-            selectedValue
+            selectedValue,
+            lowColorChoro,
+            highColorChoro,
+            levelsChoro,
+            legendColors,
+            legendValues,
+            legendOn,
+            legendName
           };
         
           // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits

@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Grid, IconButton } from '@mui/material';
 import { useEffect } from 'react';
+import { StoreRounded } from '@mui/icons-material';
 
 
 
@@ -55,7 +56,9 @@ export default function AddCustomDataProps(props) {
 
     const { store }  = useContext(GlobalStoreContext);
 
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(() =>
+      (store.currentMap && (store.currentMap.mapType === 2 || store.currentMap.mapType === 3)) ? 1 : 0
+    );
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [newPropertyName, setNewPropertyName] = useState('');
 
@@ -226,8 +229,10 @@ return(
     <div style={{ maxHeight: '90vh', overflowY: 'auto' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Additional Properties" />
-            <Tab label="Data Points" />
+            {store.currentMap && (store.currentMap.mapType === 0 || store.currentMap.mapType === 1 || store.currentMap.mapType === 2 || store.currentMap.mapType === 4) &&
+              (<Tab label="Additional Properties" />)}
+            {store.currentMap && (store.currentMap.mapType === 2 || store.currentMap.mapType === 3) &&
+            (<Tab label="Data Points" />)}
         </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>

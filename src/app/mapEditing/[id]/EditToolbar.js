@@ -54,23 +54,6 @@ function EditToolbar(props) {
     const colorRegion = props.colorRegion;
 
 
-    const [showAlert, setShowAlert] = useState(false);
-
-    const handleCloseAlert = () => {
-      setShowAlert(false);
-    };
-    const handleSaveAttributes = () => {
-      store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity);
-      //add a alert to show that the map has been saved
-      setTimeout(() => {
-        setShowAlert(true);
-        //close the alert after 3 seconds
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 3000);
-      }, 1000);
-    }
-
 
     const handleDoubleClick = () => {
       setEditing(true);
@@ -83,6 +66,43 @@ function EditToolbar(props) {
         store.updateMapName(editedName);
       }
     };
+            const [showAlert, setShowAlert] = useState(false);
+            
+            const handleCloseAlert = () => {
+              setShowAlert(false);
+            };
+            const handleSaveAttributes = () => {
+                store.updateMapAttributes(mapColor,
+                  borderSwitch, 
+                  borderWidth, 
+                  borderColor, 
+                  regionSwitch, 
+                  regionNameColor, 
+                  backgroundColor, 
+                  center, zoom, radius,
+                  dotColor, 
+                  dotOpacity, 
+                  regionNameTextSize, 
+                  selectedValue,
+                  lowColorChoro,
+                  highColorChoro,
+                  levelsChoro,
+                  legendColors,
+                  legendValues,
+                  legendOn,
+                  legendName
+
+
+                  );
+                //add a alert to show that the map has been saved
+                setTimeout(() => {
+                  setShowAlert(true); 
+                  //close the alert after 3 seconds
+                  setTimeout(() => {
+                    setShowAlert(false);
+                  }, 3000);
+                }, 1000);
+              }
 
 
     console.log("name: " + name);
