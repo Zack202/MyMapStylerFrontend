@@ -19,6 +19,10 @@ import { useState } from 'react';
 import chroma from 'chroma-js';
 import { useRef } from 'react';
 import { useCallback } from 'react';
+import { IconButton  } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+
 
 
 
@@ -220,6 +224,47 @@ export default function MapEditor(props) {
    const setLegendValues = props.setLegendValues;
    const legendValues = props.legendValues;
 
+   //Legend Creation
+   const handleAddRow = () => {
+      //Just add new legend value and color to the end of the list
+      const updatedLegendValues = [...legendValues, ''];
+      const updatedLegendColors = [...legendColors, '#000000'];
+      setLegendValues(updatedLegendValues);
+      setLegendColors(updatedLegendColors);
+
+      const updatedRows = updatedLegendValues.map((value, index) => ({
+         id: index + 1,
+         color: updatedLegendColors[index],
+         label: value || '',
+       }))
+       setRows(updatedRows)
+   }
+
+   const handleDeleteRow = (id) => {
+      //Just delete the legend value and color from the list
+      const index = id - 1;
+      const updatedLegendValues = legendValues.filter((value, i) => i !== index);
+      const updatedLegendColors = legendColors.filter((value, i) => i !== index);
+      setLegendValues(updatedLegendValues);
+      setLegendColors(updatedLegendColors);
+
+      const updatedRows = updatedLegendValues.map((value, index) => ({
+         id: index + 1,
+         color: updatedLegendColors[index],
+         label: value || '',
+       }))
+       setRows(updatedRows)
+   }
+
+   const handleLegendColorEdit = (id, color) => {
+      //Just update the legend color
+      const index = id - 1;
+      const updatedLegendColors = [...legendColors];
+      updatedLegendColors[index] = color;
+      setLegendColors(updatedLegendColors);
+   }
+
+
    function generateGradient(color1, color2, levels) {
       const gradient = chroma.scale([color1, color2]).colors(levels);
       return gradient;
@@ -316,6 +361,53 @@ export default function MapEditor(props) {
       setLegendName(event.target.value);
    }
 
+
+   //For Color Mode
+   const handleGenerateColor = () => {
+      const mapFeatures = { ...store.currentMap.mapFeatures.ADV };
+      const propertyToUse = selectedValue;
+    
+      for (const country in mapFeatures) {
+        if (Object.prototype.hasOwnProperty.call(mapFeatures, country)) {
+          const countryRegions = mapFeatures[country];
+    
+          // Update colors to legend colors
+          const updatedRegions = countryRegions.map((region) => {
+            const propertyValue = region[propertyToUse];
+    
+            let updatedRegion = {
+              color: "",
+              ...region,
+            };
+    
+            let foundMatch = false;
+            for (let i = 0; i < legendValues.length; i++) {
+              if (propertyValue === legendValues[i]) {
+                const legendColor = legendColors[i];
+                updatedRegion.color = legendColor;
+                foundMatch = true;
+                break;
+              }
+            }
+    
+            if (!foundMatch) {
+              updatedRegion.color = "";
+            }
+    
+            return updatedRegion;
+          });
+    
+          mapFeatures[country] = updatedRegions;
+        }
+      }
+    
+      const updatedMap = {
+        ...store.currentMap,
+        mapFeatures: { ...store.currentMap.mapFeatures, ADV: mapFeatures },
+      };
+    
+      store.updateCurrentMapLocally(updatedMap);
+    };
 
    const formattedLat = center[0] ? center[0].toFixed(4) : '?';
    const formattedLng = center[1] ? center[1].toFixed(4) : '?';
@@ -423,7 +515,7 @@ export default function MapEditor(props) {
                   <input
                      type="color"
                      className={styles.color_box}
-                     value={mapColor}
+                     value={mapColor || 'maroon'}
                      onChange={(e) => handleColorChange(e.target.value)}
                   />
                </Typography>
@@ -467,7 +559,7 @@ export default function MapEditor(props) {
                   ></TextField>
                </Typography>
                </Box>
-               { store.currentMap && store.currentMap.mapType === 1 && (
+               { store.currentMap && (store.currentMap.mapType === 5 || store.currentMap.mapType === 4 || store.currentMap.mapType === 1) && (
                <div>
                <FormControl fullWidth>
         <InputLabel id="select-label">Select a property</InputLabel>
@@ -561,7 +653,7 @@ export default function MapEditor(props) {
                   </Typography>
                </Box>
                <i>Zoom: ({realZoom}) { }</i>
-               {store.currentMap && store.currentMap.mapType === 3 || store.currentMap.mapType === 2 && (
+               {store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 3 || store.currentMap.mapType === 2) && (
                <div>
                <Box className = {styles.item_box}>
                <Typography className= {styles.text_color} component="h1" variant="h6">
@@ -705,7 +797,8 @@ export default function MapEditor(props) {
                   </TextField>
 
             </Typography>
-            
+            {/*FOR CHOROPLETH AND HEAT____________________________________________________________*/}
+            { store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 4 || store.currentMap.mapType === 2) && (
             <Box backgroundColor="white" borderRadius={'5px'}>
           {rows.map((row) => (
             <div key={row.id} style={{ display: 'flex', alignItems: 'center', padding: '5px', marginLeft: '50px'}}>
@@ -718,9 +811,20 @@ export default function MapEditor(props) {
                   marginRight: '10px'
                 }}
               ></div>
-              {row.id === 1 && <span style={{ marginLeft: '5px' }}>{'<'}</span>}
-              {row.id !== 1 && row.id !== rows.length && <span style={{ marginLeft: '5px' }}>x<sub>{`${row.id - 1}`}</sub>-x<sub>{`${row.id}`}</sub></span>}
-              {row.id === rows.length && <span style={{ marginLeft: '5px' }}>{'>'}</span>}
+               {store.currentMap && store.currentMap.mapType && (
+               <>
+                  {
+                     <>
+                     {row.id === 1 && <span style={{ marginLeft: '5px' }}>{'<'}</span>}
+                     {row.id !== 1 && row.id !== rows.length && (
+                        <span style={{ marginLeft: '5px' }}>x<sub>{`${row.id - 1}`}</sub>-x<sub>{`${row.id}`}</sub></span>
+                     )}
+                     {row.id === rows.length && <span style={{ marginLeft: '5px' }}>{'>'}</span>}
+                     </>
+                  }
+               </>
+               )}
+
               <TextField
                 variant="outlined"
                 size="small"
@@ -732,7 +836,67 @@ export default function MapEditor(props) {
               />
             </div>
           ))}
+        </Box>)}
+         {/*______________________________________________________________________________________*/}
+         {/*FOR COLOR AND TEXT____________________________________________________________________________*/}
+         {store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 1 || store.currentMap.mapType === 5) && (
+        <Box backgroundColor="white" borderRadius={'5px'}>
+          {rows.map((row) => (
+            <div key={row.id} style={{ display: 'flex', alignItems: 'center', padding: '5px', marginLeft: '50px' }}>
+              <input
+                type="color"
+                value={legendColors[row.id - 1]}
+                onChange={(e) => {
+                  handleLegendColorEdit(row.id, e.target.value);
+                }}
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  border: 'none',
+                  borderRadius: '5px',
+                  marginRight: '10px',
+                }}
+              />
+              {store.currentMap && store.currentMap.mapType && (
+                <>
+                  {store.currentMap.mapType === 2 || store.currentMap.mapType === 4 ? (
+                    <>
+                      {row.id === 1 && <span style={{ marginLeft: '5px' }}>{'<'}</span>}
+                      {row.id !== 1 && row.id !== rows.length && (
+                        <span style={{ marginLeft: '5px' }}>x<sub>{`${row.id - 1}`}</sub>-x<sub>{`${row.id}`}</sub></span>
+                      )}
+                      {row.id === rows.length && <span style={{ marginLeft: '5px' }}>{'>'}</span>}
+                    </>
+                  ) : (
+                    store.currentMap.mapType === 5 || store.currentMap.mapType === 1 && (
+                      <span style={{ marginLeft: '5px' }}>{'='}</span>
+                    )
+                  )}
+                </>
+              )}
+
+              <TextField
+                variant="outlined"
+                size="small"
+                value={row.label}
+                onChange={(e) => {
+                  handleCellEdit(row.id, 'label', e.target.value);
+                }}
+                style={{ marginLeft: 'auto' }}
+              />
+
+              <IconButton onClick={() => handleDeleteRow(row.id)}>
+                <DeleteIcon />
+              </IconButton>
+            </div>
+          ))}
+
+          <IconButton onClick={handleAddRow}>
+            <AddIcon />
+          </IconButton>
         </Box>
+      )}
+        {store.currentMap && store.currentMap.mapType === 4 && ( // Only show the button if the map is a choropleth
             <Box className = {styles.item_box}>
                   <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
                      handleGenerateCloropleth();
@@ -741,6 +905,20 @@ export default function MapEditor(props) {
                      Generate Choropleth using Legend
                   </Button>
                </Box>
+        )}
+
+         {store.currentMap && store.currentMap.mapType === 5 && (
+            <Box className = {styles.item_box}>
+                  <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
+                     handleGenerateColor();
+                  }
+                  }>
+                     Generate Colors using Legend
+                  </Button>
+               </Box>
+        )}
+
+
             </div>
             </Box>
 

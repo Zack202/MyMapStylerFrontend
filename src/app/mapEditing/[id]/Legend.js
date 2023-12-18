@@ -1,6 +1,11 @@
 import React from 'react';
+import { useContext } from 'react';
+import GlobalStoreContext from '../../store';
 
 const Legend = (props) => {
+
+  const { store } = useContext(GlobalStoreContext);
+
   const legendColors = props.legendColors || [];
   const legendValues = props.legendValues || [];
   const mapColor = props.mapColor || '#000000';
@@ -30,13 +35,19 @@ const Legend = (props) => {
       />
     );
 
+
     let label;
+    if (store.currentMap && store.currentMap.mapType === 4){
     if (index === 0) {
       label = `${value} <`;
     } else if (index === legendValues.length - 1) {
       label = `${value} >`;
     } else {
       label = `${legendValues[index - 1]} - ${value}`;
+    }
+    }
+    else{
+      label = `${value}`;
     }
 
     return (

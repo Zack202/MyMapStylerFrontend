@@ -201,14 +201,14 @@ export default function AddCustomDataProps(props) {
           const { region, properties } = regionData;
           if (region && properties) {
             if (!updatedMap.mapFeatures.ADV[region]) {
-              updatedMap.mapFeatures.ADV[region] = [properties];
+              updatedMap.mapFeatures.ADV[region] = [{ ...properties }]; // Create an array with the properties object
             } else {
-              const regionProperties = updatedMap.mapFeatures.ADV[region][0];
+              const regionProperties = updatedMap.mapFeatures.ADV[region][0] || {}; // Empty object if it doesn't exist
               for (const [key, value] of Object.entries(regionProperties)) {
                 if (!properties.hasOwnProperty(key)) {
-                  delete regionProperties[key]; 
+                  delete regionProperties[key];
                 } else {
-                  regionProperties[key] = properties[key]; 
+                  regionProperties[key] = properties[key];
                 }
               }
     
@@ -217,11 +217,12 @@ export default function AddCustomDataProps(props) {
                   regionProperties[key] = value;
                 }
               }
+              updatedMap.mapFeatures.ADV[region] = [regionProperties];
             }
           }
         });
     
-        store.updateCurrentMapLocally(updatedMap); //Local update
+        store.updateCurrentMapLocally(updatedMap); // Local update
       }
     };
 
@@ -259,7 +260,7 @@ return(
         <div>
           {/* Display properties of the selected region */}
           <ul>
-            {region.properties.length === 0 && <h4>No properties found.</h4>}
+            {Object.entries(region.properties).length === 0 && <h4>No properties found.</h4>}
             {Object.entries(region.properties).map(([key, value], propertyIndex) => (
               <li key={`property-${propertyIndex}`}>
                   <div key={`property-${key}`}>
