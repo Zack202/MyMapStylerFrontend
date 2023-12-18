@@ -31,7 +31,7 @@ function PublishedCard(props) {
 
     const router = useRouter()
 
-    const { idNamePair, selected } = props;
+    const { idNamePair, selected, location } = props;
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
@@ -45,11 +45,9 @@ function PublishedCard(props) {
     if(auth.loggedIn){
         userName = auth.user.userName;
     }
-    console.log("we are here for some reason", idNamePair)
+
     let isItLiked = idNamePair.likes.includes(userName);
     const [liked, setLiked] = useState(isItLiked);
-    console.log(userName);
-    console.log(isItLiked);
     const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
     
 
@@ -57,7 +55,7 @@ function PublishedCard(props) {
         event.stopPropagation();
         setDisliked(false);
         setLiked(!liked);
-        store.likeMap(idNamePair._id);
+        store.likeMap(idNamePair._id, location);
     }
 
 
@@ -75,7 +73,7 @@ function PublishedCard(props) {
         event.stopPropagation();
         setLiked(false);
         setDisliked(!disliked);
-        store.dislikeMap(idNamePair._id);
+        store.dislikeMap(idNamePair._id, location);
     }
     
 

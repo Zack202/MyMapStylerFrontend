@@ -15,6 +15,7 @@ import BackHandIcon from '@mui/icons-material/BackHand';
 import AdjustIcon from '@mui/icons-material/Adjust';
 
 function EditToolbar(props) {
+
   const name = props.name;
   if (typeof window !== 'undefined') {
     const { store } = useContext(GlobalStoreContext);
@@ -128,6 +129,7 @@ function EditToolbar(props) {
       console.log('dot mode')
       setCursorModes('dot')
     }
+
     return (
       <div id={styles.edit - toolbar} >
         <div id={styles.editheader} onDoubleClick={handleDoubleClick}>

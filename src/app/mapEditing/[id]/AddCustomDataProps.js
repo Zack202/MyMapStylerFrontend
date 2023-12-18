@@ -286,7 +286,7 @@ return(
   />
   <Button variant="contained" onClick={() => handleAddProperty(newPropertyName)}>Add New Property</Button>
   <Button variant="contained" onClick={copyDataToStoreADV}>
-      Set Data Points
+      Set Properties
     </Button>
 </CustomTabPanel>
 <CustomTabPanel value={value} index={1}>

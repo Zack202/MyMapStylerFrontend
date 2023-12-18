@@ -89,12 +89,12 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "Likes",
-                    filter: [],
+                    sort: store.sort,
+                    filter: store.filter,
                     currentEditColor: null,
                     currentMapIndex: -1,
                     currentMapType: -1,
-                    search: "",
+                    search: store.search,
                 })
             }
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
@@ -108,13 +108,12 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "Likes",
-                    filter: [],
+                    sort: store.sort,
+                    filter: store.filter,
                     currentEditColor: null,
                     currentMapIndex: -1,
                     currentMapType: -1,
-                    search: "",
-
+                    search: store.search,
                 })
             }
             case GlobalStoreActionType.MARK_MAP_FOR_DELETION:{
@@ -149,12 +148,12 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "Likes",
-                    filter: [],
+                    sort: store.sort,
+                    filter: store.filter,
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
                     currentMapType: payload.mapType,
-                    search: "",
+                    search: store.search,
                 });
             }
             case GlobalStoreActionType.PUBLISHED: {
@@ -168,12 +167,12 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "Likes",
-                    filters: [],
+                    sort: store.sort,
+                    filters: store.filter,
                     currentEditColor: null,///???
-                    currentMapIndex: -1, ///????
+                    currentMapIndex: -1, ///???? 
                     currentMapType: payload.mapType,
-                    search: "",
+                    search: store.search
                 });
             }
             case GlobalStoreActionType.UPDATE_MAP: {
@@ -187,12 +186,12 @@ function GlobalStoreContextProvider(props) {
                     mapMarkedForDeletion: null,
                     mapIdMarkedForExport: null,
                     mapMarkedForExport: null,
-                    sort: "Likes",
-                    filter: [],
+                    sort: store.sort,
+                    filter: store.filter,
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
-                    search: "",
+                    search: store.search,
                 });
             }
             case GlobalStoreActionType.UPDATE_SORT:{
@@ -250,25 +249,6 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
                     search: store.search, // ?!?
-                });
-            }
-            case GlobalStoreActionType.UPDATE_MAP_EDITS:{
-                return setStore({
-                    currentModal: null,
-                    idNamePairs: store.idNamePairs,
-                    currentMap: payload.map,
-                    currentMapFeatures: JSON, //might need to change this
-                    currentMapGeometry: JSON, //might need to change this
-                    mapIdMarkedForDeletion: null,
-                    mapMarkedForDeletion: null,
-                    mapIdMarkedForExport: null,
-                    mapMarkedForExport: null,
-                    sort: "name",
-                    filter: [],
-                    currentEditColor: null,///???
-                    currentMapIndex: -1, ///????
-                    currentMapType: -1,
-                    search: "",
                 });
             }
             default:
@@ -578,7 +558,7 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
-    store.likeMap = function(mapId){
+    store.likeMap = function(mapId, location){
         async function likeMap(mapId){
             let response = await api.getMapById(mapId);
             if(response.data.success){
@@ -601,14 +581,21 @@ function GlobalStoreContextProvider(props) {
                             map: map
                         }
                     });
+                    if (location === "home") {
+                        console.log("home");
                         store.loadIdNamePairs();
+                    }
+                    else {
+                        console.log("browser");
+                        store.loadPublishedIdNamePairs();
+                    }
                 }
             }
         }
         likeMap(mapId)
     }
 
-    store.dislikeMap = function(mapId){
+    store.dislikeMap = function(mapId, location){
         async function dislikeMap(mapId){
             let response = await api.getMapById(mapId);
             if(response.data.success){
@@ -631,7 +618,14 @@ function GlobalStoreContextProvider(props) {
                             map: map
                         }
                     });
-                        // store.loadIdNamePairs();
+                    if (location === "home") {
+                        console.log("home");
+                        store.loadIdNamePairs();
+                    }
+                    else {
+                        console.log("browser");
+                        store.loadPublishedIdNamePairs();
+                    }                
                 }
             }
         }
@@ -659,7 +653,7 @@ function GlobalStoreContextProvider(props) {
         asyncAddComment(comment);
     }
 
-    store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity) => {
+    store.updateMapAttributes = (mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity, regionNameTextSize, selectedValue) => {
         const updatedAttributes = {
             mapColor,
             borderSwitch,
@@ -673,6 +667,8 @@ function GlobalStoreContextProvider(props) {
             radius,
             dotColor,
             dotOpacity,
+            regionNameTextSize,
+            selectedValue
           };
         
           // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits

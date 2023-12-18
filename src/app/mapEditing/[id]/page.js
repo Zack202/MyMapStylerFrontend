@@ -34,6 +34,7 @@ export default function MapEditingScreen() {
         radius: 5,
         dotColor: "black",
         dotOpacity: 1,
+        regionNameTextSize: 10,
       };
       
       /*const [borderSwitch, setBorderSwitch] = useState(() =>
@@ -51,6 +52,9 @@ export default function MapEditingScreen() {
       );
       const [regionNameColor, setRegionNameColor] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameColor ?? defaultValues.regionNameColor) : defaultValues.regionNameColor
+      );
+      const [regionNameTextSize, setRegionNameTextSize] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameTextSize ?? defaultValues.regionNameTextSize) : defaultValues.regionNameTextSize
       );
       const [backgroundColor, setBackgroundColor] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.backgroundColor ?? defaultValues.backgroundColor) : defaultValues.backgroundColor
@@ -87,6 +91,10 @@ export default function MapEditingScreen() {
 
 
       const [colorRegion, setColorRegion] = useState("#A9A9A9");
+
+      const [selectedValue, setSelectedValue] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.selectedValue ?? "") : ""
+      );
 
 
     let mapData;
@@ -147,6 +155,12 @@ export default function MapEditingScreen() {
                     setDotOpacity={setDotOpacity}
                     dotOpacity={dotOpacity}
 
+                    selectedValue={selectedValue}
+                    setSelectedValue={setSelectedValue}
+
+                    setRegionNameTextSize={setRegionNameTextSize}
+                    regionNameTextSize={regionNameTextSize}
+
                     />
                 </Grid>
                 <Grid item xs={7}>
@@ -169,6 +183,11 @@ export default function MapEditingScreen() {
                                             colorRegion={colorRegion}
                                             setColorRegion={setColorRegion}
 
+                                            regionNameTextSize={regionNameTextSize} //addToSave
+                                            selectedValue={selectedValue}
+
+
+
 
                     />
                     <Leafletmap 
@@ -189,6 +208,8 @@ export default function MapEditingScreen() {
                         dotOpacity={dotOpacity}
                         cursorModes={cursorModes}
                         colorRegion={colorRegion}
+                        selectedValue={selectedValue}
+                        regionNameTextSize={regionNameTextSize}
                     />
                 </Grid>
                 <Grid item xs={2}>

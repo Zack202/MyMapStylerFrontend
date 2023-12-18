@@ -48,7 +48,9 @@ export default function Browser() {
 
     // after store.idNamePairs, generate
     useEffect(() => {
-        generateDefaultMapCard();
+        if(store.search === "" && store.filter.length === 0){
+            generateDefaultMapCard();
+        }
     }, [store.idNamePairs]);
 
     // if temporary filter is changed, update
@@ -93,6 +95,7 @@ export default function Browser() {
                             key={pair._id}
                             idNamePair={pair}
                             selected={false}
+                            location={"browser"}
                         />
                     ))
                 }
@@ -108,21 +111,26 @@ export default function Browser() {
                 case "Likes": {
                     store.idNamePairs.sort((p1, p2) => p1.likes.length > p2.likes.length ? -
                     1 : (p1.likes.length < p2.likes.length) ? 1 : 0);
+                    store.updateSort("Likes");
+
                     break;
                 }
                 case "Dislikes": {
                     store.idNamePairs.sort((p1, p2) => p1.dislikes.length > p2.dislikes.length ? -
                     1 : (p1.dislikes.length < p2.dislikes.length) ? 1 : 0);
+                    store.updateSort("Disikes");
                     break;
                 }
                 case "Date": {
                     store.idNamePairs.sort((p1, p2) => p1.createdAt < p2.createdAt ? -
                     1 : (p1.createdAt > p2.createdAt) ? 1 : 0);
+                    store.updateSort("Date");
                     break;
                 }
                 case "Name": {
                     store.idNamePairs.sort((p1, p2) => p1.name.toUpperCase() < p2.name.toUpperCase() ? -
                     1 : (p1.name.toUpperCase() > p2.name.toUpperCase()) ? 1 : 0);
+                    store.updateSort("Name");
                     break;
                 }
                 default: {

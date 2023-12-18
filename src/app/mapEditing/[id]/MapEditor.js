@@ -14,6 +14,8 @@ import { useEffect , useContext} from 'react';
 import dynamic from 'next/dynamic';
 import ImportMapDataModal from '../../components/ImportMapDataModal';
 import { GlobalStoreContext } from '../../store/index.js'
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { useState } from 'react';
 
 
 
@@ -92,6 +94,24 @@ export default function MapEditor(props) {
       setTimeout(() => {
          setRegionNameColor(color);
        }, colorTimeOut)
+      
+         setRegionNameSwitch(false); //temp fix for region name switch not updating
+         setTimeout(() => {
+            setRegionNameSwitch(true);
+          }, 25);
+   }
+
+   const regionNameTextSize = props.regionNameTextSize;
+   const setRegionNameTextSize = props.setRegionNameTextSize;
+   const handleRegionNameTextSizeChange = (event) => {
+      const newTextSize = event.target.value.trim();
+      if(newTextSize === '' || !isNaN(newTextSize)){
+      setRegionNameTextSize(newTextSize === '' ? "" : parseFloat(newTextSize));
+      }
+      setRegionNameSwitch(false); //temp fix for region name switch not updating
+      setTimeout(() => {
+         setRegionNameSwitch(true);
+       }, 25);
    }
 
    //For Background Color
@@ -158,6 +178,31 @@ export default function MapEditor(props) {
 
 
 
+
+      const selectedValue = props.selectedValue;
+      const setSelectedValue = props.setSelectedValue;
+      
+      const [options, setOptions] = useState([]);
+
+      useEffect(() => {
+         if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
+            const adv = store.currentMap.mapFeatures.ADV;
+            if (Object.keys(adv).length > 0) {
+               let firstRegion = Object.keys(adv)[0];
+               let listOfProps = Object.values(adv[firstRegion])
+               let keysFromObjects = listOfProps.map(obj => Object.keys(obj));
+               setOptions(keysFromObjects.flat());
+            }
+         }
+      }, [store.currentMap]);
+
+   const handleSelectChange = (event) => {
+      setSelectedValue(event.target.value);
+      setRegionNameSwitch(false); //temp fix for region name switch not updating
+      setTimeout(() => {
+         setRegionNameSwitch(true);
+       }, 25);
+   };
 
     const rows = [
         { color: 'red', id: 1, label: 'Soda'},
@@ -255,6 +300,25 @@ export default function MapEditor(props) {
                   ></TextField>
                </Typography>
                </Box>
+               <h4>TextMapParts</h4>
+               <FormControl fullWidth>
+        <InputLabel id="select-label">Select a property</InputLabel>
+        <Select
+          labelId="select-label"
+          value={selectedValue}
+          onChange={handleSelectChange}
+          label="Select a region"
+        >
+          <MenuItem value="">
+            Names
+          </MenuItem>
+          {options.map((option, index) => (
+            <MenuItem key={index} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
                <Box className = {styles.item_box}>
                <Typography className= {styles.text_color} component="h1" variant="h6">
                   <i>Show Regions Names:</i> { }
@@ -266,7 +330,7 @@ export default function MapEditor(props) {
                   />
                </Typography>
                </Box>
-               {/* <Box className = {styles.item_box}>
+                <Box className = {styles.item_box}>
                <Typography className= {styles.text_color} component="h1" variant="h6"><i>Region Name Colors:</i> { }
                   <input
                      type="color"
@@ -275,7 +339,25 @@ export default function MapEditor(props) {
                      onChange={(e) => handleColorChangeRegionName(e.target.value)}
                   />
                </Typography>
-               </Box> */}
+               </Box>
+               <Box className = {styles.item_box}>
+               <Typography className= {styles.text_color} component="h1" variant="h6">
+                  <i>Region Name Text Size:</i> { }
+                  <TextField
+                  className={styles.text_box}
+                  id="outlined-size-small"
+                  size="small"
+                  sx={{ width: 100 }}
+                  value={regionNameTextSize}
+                  onChange={handleRegionNameTextSizeChange}
+                  InputProps={{
+                  endAdornment:
+                  <InputAdornment position="end">px</InputAdornment>
+                  ,
+                  }}
+                  ></TextField>
+               </Typography>
+               </Box>
                <Box className = {styles.item_box}>
                <Typography className= {styles.text_color} component="h1" variant="h6"><i>Background Color:</i> {}
                   <input
