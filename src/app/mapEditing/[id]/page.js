@@ -66,11 +66,12 @@ export default function MapEditingScreen() {
       const [zoom, setZoom] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.zoom) : defaultValues.zoom
       );
-      const [mapColor, setMapColor] = useState(() =>
+
+      /*const [mapColor, setMapColor] = useState(() =>
         //store.currentMap ? (store.currentMap.mapFeatures.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
         //store.edits ? (store.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
         store.edits ? (store.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
-        );
+        );*/
 
       const [radius, setRadius] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.radius ?? defaultValues.radius) : defaultValues.radius
@@ -107,8 +108,8 @@ export default function MapEditingScreen() {
                 </Grid>
                 <Grid item xs={3}>
                     <MapEditor 
-                    setMapColor={setMapColor}
-                    mapColor={mapColor}
+                    //setMapColor={setMapColor}
+                    //mapColor={mapColor}
 
                     setBorderSwitch={setBorderSwitch}
                     borderSwitch={borderSwitch}
@@ -149,7 +150,7 @@ export default function MapEditingScreen() {
                 </Grid>
                 <Grid item xs={7}>
                     <EditToolbar name={mapName}
-                                            mapColor={mapColor}
+                                            //mapColor={mapColor}
                                             borderSwitch={borderSwitch}
                                             borderWidth={borderWidth}
                                             borderColor={borderColor}
@@ -180,7 +181,7 @@ export default function MapEditingScreen() {
                         zoom={zoom}
                         setTempCenter={setTempCenter}
                         setTempZoom={setTempZoom}
-                        mapColor={mapColor}
+                        //mapColor={mapColor}
                         radius={radius}
                         dotColor={dotColor}
                         dotOpacity={dotOpacity}

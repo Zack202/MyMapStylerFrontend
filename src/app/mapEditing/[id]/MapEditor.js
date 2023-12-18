@@ -23,15 +23,23 @@ export default function MapEditor(props) {
 
    const { store } = useContext(GlobalStoreContext);
    //For Color
-   const setMapColor = props.setMapColor;
-   const mapColor = props.mapColor;
-
+   //const setMapColor = props.setMapColor;
+   //const mapColor = props.mapColor;
+   let mapColor;
+   if(store.currentMap){
+      mapColor = store.currentMap.mapFeatures.edits.mapColor;
+   }
+   else{
+      mapColor = 'maroon'
+   }
+   
+   
    let colorTimeOut = 300;
 
    const handleColorChange = (color) => {
       setTimeout(() => {
          store.addChangePriColorTransaction(JSON.parse(JSON.stringify(mapColor)), JSON.parse(JSON.stringify(color)));
-         setMapColor(color);
+         //setMapColor(color);
        }, colorTimeOut);
    }
 

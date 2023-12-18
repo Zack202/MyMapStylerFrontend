@@ -57,7 +57,14 @@ const LeafletmapInside = (props) => {
   const dotOpacity = props.dotOpacity;
   const cursorModes = props.cursorModes;
   const colorRegion = props.colorRegion;
-  const mapColor = props.mapColor;
+  //const mapColor = props.mapColor;
+  let mapColor;
+   if(store.currentMap){
+      mapColor = store.currentMap.mapFeatures.edits.mapColor;
+   }
+   else{
+      mapColor = 'maroon'
+   }
   const borderColor = props.borderColor;
   const borderSwitch = props.borderSwitch;
 
@@ -236,7 +243,14 @@ export default function Leafletmap(props) {
   const zoom = props.zoom;
   const setTempCenter = props.setTempCenter;
   const setTempZoom = props.setTempZoom;
-  const mapColor = props.mapColor;
+  //const mapColor = props.mapColor;
+  let mapColor;
+   if(store.currentMap){
+      mapColor = store.currentMap.mapFeatures.edits.mapColor;
+   }
+   else{
+      mapColor = 'maroon'
+   }
   const radius = props.radius;
   const dotColor = props.dotColor;
   const dotOpacity = props.dotOpacity;
