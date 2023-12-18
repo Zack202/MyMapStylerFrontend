@@ -240,7 +240,7 @@ return(
     <div style={{ maxHeight: '90vh', overflowY: 'auto' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            {store.currentMap && (store.currentMap.mapType === 0 || store.currentMap.mapType === 1 || store.currentMap.mapType === 2 || store.currentMap.mapType === 4) &&
+            {store.currentMap && (store.currentMap.mapType === 5 || store.currentMap.mapType === 1 || store.currentMap.mapType === 2 || store.currentMap.mapType === 4) &&
               (<Tab label="Additional Properties" />)}
             {store.currentMap && (store.currentMap.mapType === 2 || store.currentMap.mapType === 3) &&
             (<Tab label="Data Points" />)}
