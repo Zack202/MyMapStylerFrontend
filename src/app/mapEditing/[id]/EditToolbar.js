@@ -39,6 +39,14 @@ function EditToolbar(props) {
             const colorRegion = props.colorRegion;
             const regionNameTextSize = props.regionNameTextSize;
             const selectedValue = props.selectedValue;
+            const lowColorChoro = props.lowColorChoro;
+            const highColorChoro = props.highColorChoro;
+            const levelsChoro = props.levelsChoro;
+            const legendColors = props.legendColors || [];
+            const legendValues = props.legendValues || [];
+            const legendOn = props.legendOn;
+            const legendName = props.legendName;
+
 
 
 
@@ -49,7 +57,28 @@ function EditToolbar(props) {
               setShowAlert(false);
             };
             const handleSaveAttributes = () => {
-                store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity, regionNameTextSize, selectedValue);
+                store.updateMapAttributes(mapColor,
+                  borderSwitch, 
+                  borderWidth, 
+                  borderColor, 
+                  regionSwitch, 
+                  regionNameColor, 
+                  backgroundColor, 
+                  center, zoom, radius,
+                  dotColor, 
+                  dotOpacity, 
+                  regionNameTextSize, 
+                  selectedValue,
+                  lowColorChoro,
+                  highColorChoro,
+                  levelsChoro,
+                  legendColors,
+                  legendValues,
+                  legendOn,
+                  legendName
+
+
+                  );
                 //add a alert to show that the map has been saved
                 setTimeout(() => {
                   setShowAlert(true); 

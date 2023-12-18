@@ -9,6 +9,7 @@ import { GlobalStoreContext } from '../../store'
 import pointInPolygon from '@turf/boolean-point-in-polygon';
 import { featureCollection, point } from '@turf/helpers';
 import { useRef } from 'react';
+import Legend from './Legend';
 
 const BackgroundOverlay = ({ backgroundColor }) => {
   const style = {
@@ -63,6 +64,9 @@ const LeafletmapInside = (props) => {
   const selectedValue = props.selectedValue;
   const regionNameColor = props.regionNameColor;
   const regionNameTextSize = props.regionNameTextSize;
+  const legendColors = props.legendColors;
+  const legendValues = props.legendValues;
+  
 
 
   const map = useMap();
@@ -161,14 +165,16 @@ const getRegionColor = (regionName) => {
   regionName = regionName.replace(/\./g, '');
   if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
     const regionColors = store.currentMap.mapFeatures.ADV;
-    if (regionColors[regionName]) {
+    if (regionColors[regionName] && regionColors[regionName].length > 0) {
       const color = regionColors[regionName][0].color;
       if (color) {
         return color;
       } else {
         return mapColor;
       }
-    }
+    } else {
+      return mapColor;
+  }
   }
 }
 
@@ -277,6 +283,10 @@ export default function Leafletmap(props) {
   const colorRegion = props.colorRegion;
   const selectedValue = props.selectedValue;
   const regionNameTextSize = props.regionNameTextSize;
+  const legendColors = props.legendColors;
+  const legendValues = props.legendValues;
+  const legendOn = props.legendOn;
+  const legendName = props.legendName;
 
   if (typeof window !== 'undefined') {
     const mapRef = useRef(null);
@@ -322,8 +332,17 @@ export default function Leafletmap(props) {
       selectedValue={selectedValue}
       regionNameColor={regionNameColor}
       regionNameTextSize={regionNameTextSize}
+      legendColors={legendColors}
+      legendValues={legendValues}
 
       />
+      {legendOn &&(
+      <Legend
+      legendColors={legendColors}
+      legendValues={legendValues}
+      mapColor={mapColor}
+      legendName={legendName}
+      />)}
       </MapContainer>
     </div>
   );
