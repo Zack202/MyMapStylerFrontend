@@ -115,23 +115,23 @@ function GlobalStoreContextProvider(props) {
                     search: store.search,
                 })
             }
-            case GlobalStoreActionType.MARK_MAP_FOR_DELETION:{
+            case GlobalStoreActionType.MARK_MAP_FOR_DELETION: {
                 return setStore({
-                currentModal: null,
-                idNamePairs: store.idNamePairs,
-                currentMap: null, //change
-                currentMapFeatures: JSON,
-                currentMapGeometry: JSON,
-                mapIdMarkedForDeletion: payload,
-                mapMarkedForDeletion: null,
-                mapIdMarkedForExport: null,
-                mapMarkedForExport: null,
-                sort: store.sort,
-                filter: store.filter,
-                currentEditColor: null,
-                currentMapIndex: -1,
-                currentMapType: -1,
-                search: store.search,
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: null, //change
+                    currentMapFeatures: JSON,
+                    currentMapGeometry: JSON,
+                    mapIdMarkedForDeletion: payload,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: store.sort,
+                    filter: store.filter,
+                    currentEditColor: null,
+                    currentMapIndex: -1,
+                    currentMapType: -1,
+                    search: store.search,
                 })
             }
 
@@ -193,7 +193,7 @@ function GlobalStoreContextProvider(props) {
                     search: store.search,
                 });
             }
-            case GlobalStoreActionType.UPDATE_SORT:{
+            case GlobalStoreActionType.UPDATE_SORT: {
                 return setStore({
                     currentModal: null,
                     idNamePairs: store.idNamePairs,
@@ -212,7 +212,7 @@ function GlobalStoreContextProvider(props) {
                     search: store.search,
                 });
             }
-            case GlobalStoreActionType.UPDATE_SEARCH:{
+            case GlobalStoreActionType.UPDATE_SEARCH: {
                 return setStore({
                     currentModal: null,
                     idNamePairs: store.idNamePairs,
@@ -347,9 +347,9 @@ function GlobalStoreContextProvider(props) {
         }
         asyncSetCurrentMap(id)
     }
-    
-    
-    
+
+
+
     store.loadIdNamePairs = function () {
         async function asyncLoadIdNamePairs() {
             const response = await api.getMapPairs();
@@ -447,60 +447,60 @@ function GlobalStoreContextProvider(props) {
                 const content = e.target.result;
                 const rows = content.split("\n");
                 const columns = rows[0].split(",").map(column => column.trim()); // Extract and clean column labels
-        
+
                 const mapGeometry = store.currentMap.mapGeometry;
                 const featuresADV = store.currentMap.mapFeatures.ADV;
                 const featuresADVToAppend = JSON.parse(JSON.stringify(featuresADV)); // Create a deep copy
-    
-            const regionNamesFromGeo = mapGeometry.features.map((feature) => feature.properties.name);
-    
-            for (let i = 1; i < rows.length; i++) {
-                const data = rows[i].split(",");
-    
-                // Ensure the row contains data for each columns
-                if (data.length === columns.length) {
-                    const region = data[0].trim();
-    
-                    if (regionNamesFromGeo.includes(region) || featuresADV[region]) {
-                        if (!featuresADVToAppend[region]) {
-                            featuresADVToAppend[region] = {};
-                        }
-    
-                        for (let j = 1; j < columns.length; j++) {
-                            const column = columns[j];
-                            const value = data[j] ? data[j].trim() : '';
-                            
+
+                const regionNamesFromGeo = mapGeometry.features.map((feature) => feature.properties.name);
+
+                for (let i = 1; i < rows.length; i++) {
+                    const data = rows[i].split(",");
+
+                    // Ensure the row contains data for each columns
+                    if (data.length === columns.length) {
+                        const region = data[0].trim();
+
+                        if (regionNamesFromGeo.includes(region) || featuresADV[region]) {
                             if (!featuresADVToAppend[region]) {
                                 featuresADVToAppend[region] = {};
                             }
-                            featuresADVToAppend[region][column] = value;
+
+                            for (let j = 1; j < columns.length; j++) {
+                                const column = columns[j];
+                                const value = data[j] ? data[j].trim() : '';
+
+                                if (!featuresADVToAppend[region]) {
+                                    featuresADVToAppend[region] = {};
+                                }
+                                featuresADVToAppend[region][column] = value;
+                            }
                         }
                     }
                 }
+                const featuresArray = Object.entries(featuresADVToAppend).map(([region, ADV]) => ({ [region]: ADV }));
+                store.updateMapWithData(featuresArray, selectedOption);
             }
-            const featuresArray = Object.entries(featuresADVToAppend).map(([region, ADV]) => ({ [region]: ADV }));
-            store.updateMapWithData(featuresArray, selectedOption);
-        }       
         } else {
             reader.onload = function (e) {
                 const content = e.target.result;
                 const rows = content.split("\n");
-        
+
                 const dataPoints = [];
                 for (let i = 0; i < rows.length; i++) {
                     const columns = rows[i].split(",");
                     if (columns.length >= 2) {
                         const latitude = parseFloat(columns[0].trim());
                         const longitude = parseFloat(columns[1].trim());
-        
-                        
+
+
                         if (!isNaN(latitude) && !isNaN(longitude)) {
                             dataPoints.push({ latitude, longitude });
                         }
                     }
                 }
-        
-                
+
+
                 if (!store.currentMapFeatures) {
                     store.currentMapFeatures = {
                         features: {
@@ -509,23 +509,23 @@ function GlobalStoreContextProvider(props) {
                         },
                     };
                 }
-        
-                
+
+
                 store.currentMapFeatures.features.DP.push(...dataPoints);
-                }
+            }
         }
         reader.readAsText(file);
     }
 
     store.updateMapWithData = (features, selectedOption) => {
         if (selectedOption === "Additional Region Data") {
-            features = JSON.stringify({regions: features});
+            features = JSON.stringify({ regions: features });
         } else {
-            features = JSON.stringify({DP: features});
+            features = JSON.stringify({ DP: features });
         }
-        async function asyncUpdateMap(features,selectedOption){
+        async function asyncUpdateMap(features, selectedOption) {
             let response = await api.updateMapFeaturesById(store.currentMap._id, features, selectedOption);
-            if(response.data.success){
+            if (response.data.success) {
                 // storeReducer({ //should not be updating map, already updated
                 //     type: GlobalStoreActionType.UPDATE_MAP_FEATURES,
                 //     payload: dummyFeatures
@@ -557,25 +557,25 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
-    store.likeMap = function(mapId, location){
-        async function likeMap(mapId){
+    store.likeMap = function (mapId, location) {
+        async function likeMap(mapId) {
             let response = await api.getMapById(mapId);
-            if(response.data.success){
+            if (response.data.success) {
                 let obj1 = {
                     liked: true
                 }
                 let obj2 = {
                     liked: false
                 }
-                
-                let map = {...response.data.map};
+
+                let map = { ...response.data.map };
                 let diff = jsondiffpatch.diff(obj1, obj2);
                 response = await api.updateMapById(mapId, diff);
-                if(response.data.success){
+                if (response.data.success) {
                     let pairsArray = response.data.idNamePairs;
                     storeReducer({
                         type: GlobalStoreActionType.PUBLISHED,
-                        payload:{ 
+                        payload: {
                             idNamePairs: pairsArray,
                             map: map
                         }
@@ -594,25 +594,25 @@ function GlobalStoreContextProvider(props) {
         likeMap(mapId)
     }
 
-    store.dislikeMap = function(mapId, location){
-        async function dislikeMap(mapId){
+    store.dislikeMap = function (mapId, location) {
+        async function dislikeMap(mapId) {
             let response = await api.getMapById(mapId);
-            if(response.data.success){
+            if (response.data.success) {
                 let obj1 = {
                     disliked: true
                 }
                 let obj2 = {
                     disliked: false
                 }
-                
-                let map = {...response.data.map};
+
+                let map = { ...response.data.map };
                 let diff = jsondiffpatch.diff(obj1, obj2);
                 response = await api.updateMapById(mapId, diff);
-                if(response.data.success){
+                if (response.data.success) {
                     let pairsArray = response.data.idNamePairs;
                     storeReducer({
                         type: GlobalStoreActionType.PUBLISHED,
-                        payload:{ 
+                        payload: {
                             idNamePairs: pairsArray,
                             map: map
                         }
@@ -624,25 +624,25 @@ function GlobalStoreContextProvider(props) {
                     else {
                         console.log("browser");
                         store.loadPublishedIdNamePairs();
-                    }                
+                    }
                 }
             }
         }
         dislikeMap(mapId)
     }
-    
+
     store.addComment = (comment) => {
-        async function asyncAddComment(comment){
+        async function asyncAddComment(comment) {
             let diff = {
                 newComment: comment
             }
             store.currentMap.comments.push(comment);
             console.log("the diff is ", diff)
             let response = await api.updateMapById(store.currentMap._id, diff);
-            if(response.data.success){
+            if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.PUBLISHED,
-                    payload:{
+                    payload: {
                         map: store.currentMap
                     }
                 })
@@ -668,10 +668,10 @@ function GlobalStoreContextProvider(props) {
             dotOpacity,
             regionNameTextSize,
             selectedValue
-          };
-        
-          // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits
-          for (const key in updatedAttributes) {
+        };
+
+        // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits
+        for (const key in updatedAttributes) {
             if (Object.prototype.hasOwnProperty.call(updatedAttributes, key)) {
                 store.currentMap.mapFeatures.edits[key] = updatedAttributes[key];
             }
@@ -741,7 +741,7 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.UPDATE_SORT,
             payload: sort
-        }) 
+        })
     }
     store.updateSearch = (search) => {
         storeReducer({
@@ -764,15 +764,15 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.UPDATE_MAP,
             payload: updatedMapData
-        }) 
+        })
     }
-    
+
     //Transaction stack functions
     store.addMapFeaturesEditsTransaction = function (oldEdits, newEdits) {
         console.log('add transaction to stack')//Create transaction and add to stack
         let transaction = new MapFeaturesEdits_Transaction(store, oldEdits, newEdits);
         tps.addTransaction(transaction);
-        
+
     }
 
     store.undo = function () {

@@ -26,24 +26,24 @@ export default function MapEditor(props) {
       const { store } = useContext(GlobalStoreContext);
 
       let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor;
-    if (store.currentMap) {
-      mapColor = store.currentMap.mapFeatures.edits.mapColor;
-      borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
-      borderColor = store.currentMap.mapFeatures.edits.borderColor;
-      borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
-      regionNameSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
-      regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
-      backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
-    }
-    else {
-      mapColor = 'maroon';
-      borderSwitch = true;
-      borderColor = 'maroon';
-      borderWidth = 1;
-      regionNameSwitch = false;
-      regionNameColor = 'black';
-      backgroundColor = 'white';
-    }
+      if (store.currentMap) {
+         mapColor = store.currentMap.mapFeatures.edits.mapColor;
+         borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
+         borderColor = store.currentMap.mapFeatures.edits.borderColor;
+         borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
+         regionNameSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
+         regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
+         backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
+      }
+      else {
+         mapColor = 'maroon';
+         borderSwitch = true;
+         borderColor = 'maroon';
+         borderWidth = 1;
+         regionNameSwitch = false;
+         regionNameColor = 'black';
+         backgroundColor = 'white';
+      }
 
       //For Color
       //const setMapColor = props.setMapColor;
@@ -150,14 +150,14 @@ export default function MapEditor(props) {
          setTimeout(() => {
             setRegionNameSwitch(true);
           }, 25);*/
-          //temp fix 
-          let newEdits =  JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
-          newEdits.regionSwitch = false;
-          store.editMapAttributes(newEdits);
-          setTimeout(() => {
-             newEdits.regionSwitch = true;
-             store.editMapAttributes(newEdits);
-          }, 25);
+         //temp fix 
+         let newEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         newEdits.regionSwitch = false;
+         store.editMapAttributes(newEdits);
+         setTimeout(() => {
+            newEdits.regionSwitch = true;
+            store.editMapAttributes(newEdits);
+         }, 25);
       }
 
       //For Background Color
@@ -252,14 +252,14 @@ export default function MapEditor(props) {
          setTimeout(() => {
             setRegionNameSwitch(true);
           }, 25);*/
-          //temp fix: doesn't work with undo/redo
-         let newEdits =  JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
-          newEdits.regionSwitch = false;
-          store.editMapAttributes(newEdits);
-          setTimeout(() => {
-             newEdits.regionSwitch = true;
-             store.editMapAttributes(newEdits);
-          }, 25);
+         //temp fix: doesn't work with undo/redo
+         let newEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         newEdits.regionSwitch = false;
+         store.editMapAttributes(newEdits);
+         setTimeout(() => {
+            newEdits.regionSwitch = true;
+            store.editMapAttributes(newEdits);
+         }, 25);
       };
 
       const rows = [
