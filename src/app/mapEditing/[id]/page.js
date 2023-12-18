@@ -46,19 +46,22 @@ export default function MapEditingScreen() {
       const [borderColor, setBorderColor] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.borderColor ?? defaultValues.borderColor) : defaultValues.borderColor
       );
-      */
+      
       const [regionSwitch, setRegionSwitch] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.regionSwitch ?? defaultValues.regionSwitch) : defaultValues.regionSwitch
       );
+      
       const [regionNameColor, setRegionNameColor] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameColor ?? defaultValues.regionNameColor) : defaultValues.regionNameColor
-      );
+      );*/
       const [regionNameTextSize, setRegionNameTextSize] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameTextSize ?? defaultValues.regionNameTextSize) : defaultValues.regionNameTextSize
       );
-      const [backgroundColor, setBackgroundColor] = useState(() =>
+
+      /*const [backgroundColor, setBackgroundColor] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.backgroundColor ?? defaultValues.backgroundColor) : defaultValues.backgroundColor
-      );
+      );*/
+
       const [tempCenter, setTempCenter] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.tempCenter) : defaultValues.tempCenter
       );
@@ -127,7 +130,7 @@ export default function MapEditingScreen() {
                     borderWidth={borderWidth}
 
                     setBorderColor={setBorderColor}
-                    borderColor={borderColor}*/
+                    borderColor={borderColor}
 
                     setRegionSwitch={setRegionSwitch}
                     regionSwitch={regionSwitch}
@@ -136,7 +139,7 @@ export default function MapEditingScreen() {
                     regionNameColor = {regionNameColor}
 
                     setBackgroundColor={setBackgroundColor}
-                    backgroundColor={backgroundColor}
+                    backgroundColor={backgroundColor}*/
 
                     setCenter={setCenter}
                     center={tempCenter}
@@ -169,10 +172,9 @@ export default function MapEditingScreen() {
                                             borderSwitch={borderSwitch}
                                             borderWidth={borderWidth}
                                             borderColor={borderColor}
-                                            */
                                             regionSwitch={regionSwitch}
                                             regionNameColor={regionNameColor}
-                                            backgroundColor={backgroundColor}
+                                            backgroundColor={backgroundColor}*/
                                             center={center}
                                             zoom={zoom}
                                             radius={radius}
@@ -192,12 +194,12 @@ export default function MapEditingScreen() {
                     />
                     <Leafletmap 
                         mapGeo={mapData}
-                        //borderSwitch={borderSwitch}
-                        //borderWidth={borderWidth}
-                        //borderColor={borderColor}
+                        /*borderSwitch={borderSwitch}
+                        borderWidth={borderWidth}
+                        borderColor={borderColor}
                         regionSwitch={regionSwitch}
                         regionNameColor={regionNameColor}
-                        backgroundColor={backgroundColor}
+                        backgroundColor={backgroundColor}*/
                         center={center}
                         zoom={zoom}
                         setTempCenter={setTempCenter}

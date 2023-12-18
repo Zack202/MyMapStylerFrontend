@@ -48,7 +48,7 @@ const LeafletmapInside = (props) => {
   const { store } = useContext(GlobalStoreContext);
   const countryStyle = props.countryStyle;
   const geoJSONData = props.geoJSONData;
-  const regionSwitch = props.regionSwitch;
+  const regionNameSwitch = props.regionSwitch;
   const setTempCenter = props.setTempCenter;
   const setTempZoom = props.setTempZoom;
   const backgroundColor = props.backgroundColor;
@@ -57,26 +57,12 @@ const LeafletmapInside = (props) => {
   const dotOpacity = props.dotOpacity;
   const cursorModes = props.cursorModes;
   const colorRegion = props.colorRegion;
-  //const mapColor = props.mapColor;
-  //const borderColor = props.borderColor;
-  //const borderSwitch = props.borderSwitch;
+  const mapColor = props.mapColor;
+  const borderColor = props.borderColor;
+  const borderSwitch = props.borderSwitch;
   const selectedValue = props.selectedValue;
   const regionNameColor = props.regionNameColor;
   const regionNameTextSize = props.regionNameTextSize;
-
-  let mapColor, borderSwitch, borderColor, borderWidth;
-  if (store.currentMap) {
-    mapColor = store.currentMap.mapFeatures.edits.mapColor;
-    borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
-    borderColor = store.currentMap.mapFeatures.edits.borderColor;
-    borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
-  }
-  else {
-    mapColor = 'maroon';
-    borderSwitch = true;
-    borderColor = 'maroon';
-    borderWidth = 1;
-  }
 
   const map = useMap();
 
@@ -170,21 +156,21 @@ const LeafletmapInside = (props) => {
   }, [map, cursorModes, colorRegion]);
 
   const getRegionColor = (regionName) => {
-  //Clean region name
-  regionName = regionName.replace(/\./g, '');
-  if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
-    const regionColors = store.currentMap.mapFeatures.ADV;
-    if (regionColors[regionName]) {
-      if(regionColors[regionName][0]){
-      const color = regionColors[regionName][0].color;
-      if (color) {
-        return color;
-      } else {
-        return mapColor;
+    //Clean region name
+    regionName = regionName.replace(/\./g, '');
+    if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
+      const regionColors = store.currentMap.mapFeatures.ADV;
+      if (regionColors[regionName]) {
+        if (regionColors[regionName][0]) {
+          const color = regionColors[regionName][0].color;
+          if (color) {
+            return color;
+          } else {
+            return mapColor;
+          }
+        }
       }
-    }
-    }
-  }return mapColor
+    } return mapColor
   }
 
   return (
@@ -200,100 +186,105 @@ const LeafletmapInside = (props) => {
         />
       ))}
 
-<FeatureGroup>
-  {regionSwitch &&
-    geoJSONData &&
-    selectedValue === "" &&
-    geoJSONData.features.map((feature, index) => (
-      <GeoJSON
-        pane="markerPane"
-        style={(feature) => ({
-          fillColor: getRegionColor(feature.properties.name),
-          color: 'transparent',
-          fillOpacity: 0,
-        })}
-        key={index}
-        data={feature}
-        onEachFeature={(feature, layer) => {
-          let content = `<div style="color: ${regionNameColor}; font-size: ${regionNameTextSize}px">${feature.properties.name}</div>`;
-          layer.bindTooltip(content, { permanent: true});
-        }}
-      />
-    ))
-  }
+      <FeatureGroup>
+        {regionNameSwitch &&
+          geoJSONData &&
+          selectedValue === "" &&
+          geoJSONData.features.map((feature, index) => (
+            <GeoJSON
+              pane="markerPane"
+              style={(feature) => ({
+                fillColor: getRegionColor(feature.properties.name),
+                color: 'transparent',
+                fillOpacity: 0,
+              })}
+              key={index}
+              data={feature}
+              onEachFeature={(feature, layer) => {
+                let content = `<div style="color: ${regionNameColor}; font-size: ${regionNameTextSize}px">${feature.properties.name}</div>`;
+                layer.bindTooltip(content, { permanent: true });
+              }}
+            />
+          ))
+        }
 
-{regionSwitch && selectedValue !== "" && store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV &&
-    geoJSONData.features.map((feature, index) => (
-      <GeoJSON
-        pane="markerPane"
-        style={(feature) => ({
-          fillColor: getRegionColor(feature.properties.name),
-          color: 'transparent',
-          fillOpacity: 0,
-        })}
-        key={index}
-        data={feature}
-        onEachFeature={(feature, layer) => {
-          let cleanRegionName = feature.properties.name.replace(/\./g, '');
-          const advData = store.currentMap.mapFeatures.ADV[cleanRegionName];
-          if (advData) {
-              const regionProperties = advData[0];
-              if (selectedValue in regionProperties) {
-                  const featurePropertyValue = regionProperties[selectedValue];
-                  let content = `<div style="color: ${regionNameColor}; font-size: ${regionNameTextSize}px">${featurePropertyValue}</div>`;
-                  layer.bindTooltip(content, { permanent: true });
-              }
-          }
-      }}
-      />
-    ))
-  }
-</FeatureGroup>
+        {regionNameSwitch && selectedValue !== "" && store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV &&
+          geoJSONData.features.map((feature, index) => (
+            <GeoJSON
+              pane="markerPane"
+              style={(feature) => ({
+                fillColor: getRegionColor(feature.properties.name),
+                color: 'transparent',
+                fillOpacity: 0,
+              })}
+              key={index}
+              data={feature}
+              onEachFeature={(feature, layer) => {
+                let cleanRegionName = feature.properties.name.replace(/\./g, '');
+                const advData = store.currentMap.mapFeatures.ADV[cleanRegionName];
+                if (advData) {
+                  const regionProperties = advData[0];
+                  if (selectedValue in regionProperties) {
+                    const featurePropertyValue = regionProperties[selectedValue];
+                    let content = `<div style="color: ${regionNameColor}; font-size: ${regionNameTextSize}px">${featurePropertyValue}</div>`;
+                    layer.bindTooltip(content, { permanent: true });
+                  }
+                }
+              }}
+            />
+          ))
+        }
+      </FeatureGroup>
 
-<FeatureGroup>
-  {geoJSONData &&
-    geoJSONData.features.map((feature, index) => (
-      <GeoJSON
-        style={(feature) => ({
-          fillColor: getRegionColor(feature.properties.name),
-          fillOpacity: 1,
-          color: 'transparent',
-        })}
-        key={index}
-        data={feature}
-      />
-    ))}
-</FeatureGroup>
-</div>
-)
+      <FeatureGroup>
+        {geoJSONData &&
+          geoJSONData.features.map((feature, index) => (
+            <GeoJSON
+              style={(feature) => ({
+                fillColor: getRegionColor(feature.properties.name),
+                fillOpacity: 1,
+                color: 'transparent',
+              })}
+              key={index}
+              data={feature}
+            />
+          ))}
+      </FeatureGroup>
+    </div>
+  )
 
 
 }
 
 export default function Leafletmap(props) {
   const { store } = useContext(GlobalStoreContext);
-  let mapColor, borderSwitch, borderColor, borderWidth;
+  let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor;
   if (store.currentMap) {
     mapColor = store.currentMap.mapFeatures.edits.mapColor;
     borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
     borderColor = store.currentMap.mapFeatures.edits.borderColor;
     borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
+    regionNameSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
+    regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
+    backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
   }
   else {
     mapColor = 'maroon';
     borderSwitch = true;
     borderColor = 'maroon';
     borderWidth = 1;
+    regionNameSwitch = false;
+    regionNameColor = 'black';
+    backgroundColor = 'white';
   }
 
   const mapGeo = props.mapGeo;
   //const borderSwitch = props.borderSwitch;
   //const borderWidth = props.borderWidth;
   //const borderColor = props.borderColor;
-  const regionSwitch = props.regionSwitch;
-  const regionNameColor = props.regionNameColor;
-
-  const backgroundColor = props.backgroundColor;
+  //const regionSwitch = props.regionSwitch;
+  //const regionNameColor = props.regionNameColor;
+  //const backgroundColor = props.backgroundColor;
   const center = props.center;
   const zoom = props.zoom;
   const setTempCenter = props.setTempCenter;
@@ -320,6 +311,25 @@ export default function Leafletmap(props) {
     return (
       <div>
         <MapContainer ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
+
+          <LeafletmapInside
+            geoJSONData={geoJSONData}
+            regionSwitch={regionNameSwitch}
+            setTempCenter={setTempCenter}
+            setTempZoom={setTempZoom}
+            backgroundColor={backgroundColor}
+            radius={radius}
+            dotColor={dotColor}
+            dotOpacity={dotOpacity}
+            cursorModes={cursorModes}
+            colorRegion={colorRegion}
+            mapColor={mapColor}
+            borderColor={borderColor}
+            borderSwitch={borderSwitch}
+            selectedValue={selectedValue}
+            regionNameColor={regionNameColor}
+            regionNameTextSize={regionNameTextSize}
+          />
           {borderSwitch && (
             <FeatureGroup>
               <GeoJSON
@@ -332,28 +342,10 @@ export default function Leafletmap(props) {
               />
             </FeatureGroup>
           )}
-      <LeafletmapInside 
-      geoJSONData={geoJSONData}
-      regionSwitch={regionSwitch}
-      setTempCenter={setTempCenter}
-      setTempZoom={setTempZoom}
-      backgroundColor={backgroundColor}
-      radius={radius}
-      dotColor={dotColor}
-      dotOpacity={dotOpacity}
-      cursorModes={cursorModes}
-      colorRegion={colorRegion}
-      mapColor={mapColor}
-      borderColor={borderColor}
-      borderSwitch={borderSwitch}
-      selectedValue={selectedValue}
-      regionNameColor={regionNameColor}
-      regionNameTextSize={regionNameTextSize}
-      />
-      </MapContainer>
-    </div>
-  );
-  }else{
+        </MapContainer>
+      </div>
+    );
+  } else {
 
     return null
   }

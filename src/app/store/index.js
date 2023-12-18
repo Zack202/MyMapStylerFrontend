@@ -699,9 +699,9 @@ function GlobalStoreContextProvider(props) {
             payload: map
         })
         console.log('store.editMapAttributes')
-        console.log('recieved:' + newMapEdits.mapColor)
-        console.log('set store to' + map.mapFeatures.edits.mapColor)
-        console.log('store is now' + store.currentMap.mapFeatures.edits.mapColor)
+        //console.log('recieved:' + newMapEdits.mapColor)
+        //console.log('set store to' + map.mapFeatures.edits.mapColor)
+        //console.log('store is now' + store.currentMap.mapFeatures.edits.mapColor)
     }
 
 
