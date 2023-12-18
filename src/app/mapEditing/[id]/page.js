@@ -87,9 +87,9 @@ export default function MapEditingScreen() {
       const [radius, setRadius] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.radius ?? defaultValues.radius) : defaultValues.radius
       );
-      const [dotColor, setDotColor] = useState(() =>
+      /*const [dotColor, setDotColor] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.dotColor ?? defaultValues.dotColor) : defaultValues.dotColor
-      );
+      );*/
       const [dotOpacity, setDotOpacity] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.dotOpacity ?? defaultValues.dotOpacity) : defaultValues.dotOpacity
       );
@@ -183,8 +183,8 @@ export default function MapEditingScreen() {
                     setRadius={setRadius}
                     radius={radius}
 
-                    setDotColor={setDotColor}
-                    dotColor={dotColor}
+                    /*setDotColor={setDotColor}
+                    dotColor={dotColor}*/
 
                     setDotOpacity={setDotOpacity}
                     dotOpacity={dotOpacity}
@@ -235,7 +235,7 @@ export default function MapEditingScreen() {
                                             center={center}
                                             zoom={zoom}
                                             radius={radius}
-                                            dotColor={dotColor}
+                                            //dotColor={dotColor}
                                             dotOpacity={dotOpacity}
                                             cursorModes={cursorModes}
                                             setCursorModes={setCursorModes}
@@ -274,7 +274,7 @@ export default function MapEditingScreen() {
                         setTempZoom={setTempZoom}
                         //mapColor={mapColor}
                         radius={radius}
-                        dotColor={dotColor}
+                        //dotColor={dotColor}
                         dotOpacity={dotOpacity}
                         cursorModes={cursorModes}
                         colorRegion={colorRegion}

@@ -32,7 +32,7 @@ export default function MapEditor(props) {
 
       const { store } = useContext(GlobalStoreContext);
 
-      let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor;
+      let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor, dotColor;
       if (store.currentMap) {
          mapColor = store.currentMap.mapFeatures.edits.mapColor;
          borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
@@ -41,6 +41,7 @@ export default function MapEditor(props) {
          regionNameSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
          regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
          backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
+         dotColor = store.currentMap.mapFeatures.edits.dotColor;
       }
       else {
          mapColor = 'maroon';
@@ -50,6 +51,7 @@ export default function MapEditor(props) {
          regionNameSwitch = false;
          regionNameColor = 'black';
          backgroundColor = 'white';
+         dotColor = 'black';
       }
 
       //For Color
@@ -207,11 +209,15 @@ export default function MapEditor(props) {
       }
 
       //For Dot Color
-      const setDotColor = props.setDotColor;
-      const dotColor = props.dotColor;
+      //const setDotColor = props.setDotColor;
+      //const dotColor = props.dotColor;
       const handleColorChangeDot = (color) => {
          setTimeout(() => {
-            setDotColor(color);
+            //setDotColor(color);
+            let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+            let newEdits = JSON.parse(JSON.stringify(oldEdits));
+            newEdits.dotColor = color;
+            store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
          }, colorTimeOut);
       }
 
