@@ -32,7 +32,6 @@ export const GlobalStoreActionType = {
     UPDATE_SORT: 'UPDATE_SORT',
     UPDATE_SEARCH: 'UPDATE_SEARCH',
     UPDATE_FILTER: 'UPDATE_FILTER',
-    UPDATE_MAP_EDITS: 'UPDATE_MAP_EDITS'
 
 }
 
@@ -72,7 +71,6 @@ function GlobalStoreContextProvider(props) {
         currentMapIndex: -1,
         currentMapType: -1,
         search: "",
-        edits: null,
 
     });
 
@@ -97,7 +95,6 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1,
                     currentMapType: -1,
                     search: "",
-                    edits: null,
                 })
             }
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
@@ -117,11 +114,10 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1,
                     currentMapType: -1,
                     search: "",
-                    edits: store.edits,
 
                 })
             }
-            case GlobalStoreActionType.MARK_MAP_FOR_DELETION: {
+            case GlobalStoreActionType.MARK_MAP_FOR_DELETION:{
                 return setStore({
                 currentModal: null,
                 idNamePairs: store.idNamePairs,
@@ -132,28 +128,12 @@ function GlobalStoreContextProvider(props) {
                 mapMarkedForDeletion: null,
                 mapIdMarkedForExport: null,
                 mapMarkedForExport: null,
-                sort: "name",
-                filter: [],
+                sort: store.sort,
+                filter: store.filter,
                 currentEditColor: null,
                 currentMapIndex: -1,
                 currentMapType: -1,
-                search: "",
-                edits: null,
-                    currentModal: null,
-                    idNamePairs: store.idNamePairs,
-                    currentMap: null, //change
-                    currentMapFeatures: JSON,
-                    currentMapGeometry: JSON,
-                    mapIdMarkedForDeletion: payload,
-                    mapMarkedForDeletion: null,
-                    mapIdMarkedForExport: null,
-                    mapMarkedForExport: null,
-                    sort: "Likes",
-                    filter: [],
-                    currentEditColor: null,
-                    currentMapIndex: -1,
-                    currentMapType: -1,
-                    search: "",
+                search: store.search,
                 })
             }
 
@@ -175,7 +155,6 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: payload.mapType,
                     search: "",
-                    edits: JSON.parse(JSON.stringify(payload.mapFeatures.edits))
                 });
             }
             case GlobalStoreActionType.PUBLISHED: {
@@ -195,7 +174,6 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: payload.mapType,
                     search: "",
-                    edits: store.edits,
                 });
             }
             case GlobalStoreActionType.UPDATE_MAP: {
@@ -215,7 +193,6 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
                     search: "",
-                    edits: JSON.parse(JSON.stringify(payload.mapFeatures.edits))
                 });
             }
             case GlobalStoreActionType.UPDATE_SORT:{
@@ -254,7 +231,6 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
                     search: payload,
-                    edits: store.edits,
                 });
             }
             case GlobalStoreActionType.UPDATE_FILTER: {
@@ -274,7 +250,6 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
                     search: store.search, // ?!?
-                    edits: store.edits
                 });
             }
             case GlobalStoreActionType.UPDATE_MAP_EDITS:{
@@ -294,7 +269,6 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: -1,
                     search: "",
-                    edits: payload.edits,
                 });
             }
             default:
@@ -811,8 +785,8 @@ function GlobalStoreContextProvider(props) {
                 let map = response.data.map;
                 map.mapFeatures.edits.mapColor = priColor
                 storeReducer({
-                    type: GlobalStoreActionType.UPDATE_MAP_EDITS,
-                    payload: {map: map, edits: map.mapFeatures.edits}
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: map
                 });
             }
         }
