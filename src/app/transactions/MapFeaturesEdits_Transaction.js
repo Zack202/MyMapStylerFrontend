@@ -6,24 +6,22 @@ import jsTPS_Transaction from "../common/jsTPS.js"
  * @author McKilla Gorilla
  * @author ?
  */
-export default class ChangePriColor_Transaction extends jsTPS_Transaction {
-    constructor(initStore, initOldColor, initNewColor) {
+export default class MapFeatureEdits_Transaction extends jsTPS_Transaction {
+    constructor(initStore, initOldEdits, initNewEdits) {
         super();
         this.store = initStore;
-        this.oldColor = initOldColor;
-        this.newColor = initNewColor;
+        this.oldEdits = initOldEdits;
+        this.newEdits = initNewEdits;
     }
 
     doTransaction() {
         //store.updateMapFeatures = function (id, mapZoom, mapCenter, priColor)
-        this.store.updateMapFeatures(this.newColor)
-        console.log(this.newColor)
+        this.store.editMapAttributes(this.newEdits)
         console.log('after do in transaction class')
     }
     
     undoTransaction() {
-        this.store.updateMapFeatures( this.oldColor)
-        console.log(this.oldColor)
+        this.store.editMapAttributes( this.oldEdits)
         console.log('after undo in transaction class')
     }
 }
