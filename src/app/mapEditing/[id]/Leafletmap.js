@@ -9,6 +9,7 @@ import { GlobalStoreContext } from '../../store'
 import pointInPolygon from '@turf/boolean-point-in-polygon';
 import { featureCollection, point } from '@turf/helpers';
 import { useRef } from 'react';
+import Legend from './Legend';
 
 const BackgroundOverlay = ({ backgroundColor }) => {
   const style = {
@@ -63,6 +64,9 @@ const LeafletmapInside = (props) => {
   const selectedValue = props.selectedValue;
   const regionNameColor = props.regionNameColor;
   const regionNameTextSize = props.regionNameTextSize;
+  const legendColors = props.legendColors;
+  const legendValues = props.legendValues;
+  
 
   const map = useMap();
 
@@ -106,6 +110,7 @@ const LeafletmapInside = (props) => {
         setTempCenter(tempCenter);
       });
       if (cursorModes === 'dot') {
+        map.off('click');
         map.on('click', (e) => {
           if (cursorModes === 'dot') {
             let lat = e.latlng.lat;
@@ -122,6 +127,7 @@ const LeafletmapInside = (props) => {
           }
         });
       } else if (cursorModes === 'color') {
+        map.off('click');
         map.on('click', (e) => {
           if (cursorModes === 'color' && store.currentMap && store.currentMap.mapFeatures) {
             let lat = e.latlng.lat;
@@ -133,16 +139,18 @@ const LeafletmapInside = (props) => {
               let tempColors = { ...store.currentMap.mapFeatures.ADV };
 
               Object.keys(tempColors).forEach(region => {
-                if (!tempColors[region].some(obj => obj.hasOwnProperty('color'))) {
-                  tempColors[region].push({ color: "" });
+                if (!Array.isArray(tempColors[region])) {
+                  tempColors[region] = [{}]; //shouldnt be necessary but just in case
+                } else if (!tempColors[region][0]) {
+                  tempColors[region][0] = {}; 
+                }
+              
+                if (!tempColors[region][0].hasOwnProperty('color')) {
+                  tempColors[region][0].color = ""; // Add the 'color' property if it doesn't exist
                 }
               });
 
-              if (!tempColors[clickedRegion].some(obj => obj.hasOwnProperty('color'))) {
-                tempColors[clickedRegion].push({ color: colorRegion });
-              } else {
-                tempColors[clickedRegion] = [{ color: colorRegion }];
-              }
+                tempColors[clickedRegion][0].color = colorRegion;
 
               updatedMap.mapFeatures.ADV = tempColors;
               store.updateCurrentMapLocally(updatedMap);
@@ -156,22 +164,23 @@ const LeafletmapInside = (props) => {
   }, [map, cursorModes, colorRegion]);
 
   const getRegionColor = (regionName) => {
-    //Clean region name
-    regionName = regionName.replace(/\./g, '');
-    if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
-      const regionColors = store.currentMap.mapFeatures.ADV;
-      if (regionColors[regionName]) {
-        if (regionColors[regionName][0]) {
-          const color = regionColors[regionName][0].color;
-          if (color) {
-            return color;
-          } else {
-            return mapColor;
-          }
-        }
+
+  //Clean region name
+  regionName = regionName.replace(/\./g, '');
+  if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
+    const regionColors = store.currentMap.mapFeatures.ADV;
+    if (regionColors[regionName] && regionColors[regionName].length > 0) {
+      const color = regionColors[regionName][0].color;
+      if (color) {
+        return color;
+      } else {
+        return mapColor;
       }
-    } return mapColor
+    } else {
+      return mapColor;
   }
+  }
+}
 
   return (
     <div>
@@ -297,6 +306,10 @@ export default function Leafletmap(props) {
   const colorRegion = props.colorRegion;
   const selectedValue = props.selectedValue;
   const regionNameTextSize = props.regionNameTextSize;
+  const legendColors = props.legendColors;
+  const legendValues = props.legendValues;
+  const legendOn = props.legendOn;
+  const legendName = props.legendName;
 
   if (typeof window !== 'undefined') {
     const mapRef = useRef(null);
@@ -312,24 +325,34 @@ export default function Leafletmap(props) {
       <div>
         <MapContainer ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
 
-          <LeafletmapInside
-            geoJSONData={geoJSONData}
-            regionSwitch={regionNameSwitch}
-            setTempCenter={setTempCenter}
-            setTempZoom={setTempZoom}
-            backgroundColor={backgroundColor}
-            radius={radius}
-            dotColor={dotColor}
-            dotOpacity={dotOpacity}
-            cursorModes={cursorModes}
-            colorRegion={colorRegion}
-            mapColor={mapColor}
-            borderColor={borderColor}
-            borderSwitch={borderSwitch}
-            selectedValue={selectedValue}
-            regionNameColor={regionNameColor}
-            regionNameTextSize={regionNameTextSize}
-          />
+          <LeafletmapInside 
+      geoJSONData={geoJSONData}
+      regionSwitch={regionSwitch}
+      setTempCenter={setTempCenter}
+      setTempZoom={setTempZoom}
+      backgroundColor={backgroundColor}
+      radius={radius}
+      dotColor={dotColor}
+      dotOpacity={dotOpacity}
+      cursorModes={cursorModes}
+      colorRegion={colorRegion}
+      mapColor={mapColor}
+      borderColor={borderColor}
+      borderSwitch={borderSwitch}
+      selectedValue={selectedValue}
+      regionNameColor={regionNameColor}
+      regionNameTextSize={regionNameTextSize}
+      legendColors={legendColors}
+      legendValues={legendValues}
+
+      />
+      {legendOn &&(
+      <Legend
+      legendColors={legendColors}
+      legendValues={legendValues}
+      mapColor={mapColor}
+      legendName={legendName}
+      />)}
           {borderSwitch && (
             <FeatureGroup>
               <GeoJSON
@@ -342,10 +365,11 @@ export default function Leafletmap(props) {
               />
             </FeatureGroup>
           )}
-        </MapContainer>
-      </div>
-    );
-  } else {
+      
+      </MapContainer>
+    </div>
+  );
+  }else{
 
     return null
   }

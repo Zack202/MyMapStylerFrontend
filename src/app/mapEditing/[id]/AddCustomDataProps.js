@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Grid, IconButton } from '@mui/material';
 import { useEffect } from 'react';
+import { StoreRounded } from '@mui/icons-material';
 
 
 
@@ -55,7 +56,9 @@ export default function AddCustomDataProps(props) {
 
     const { store }  = useContext(GlobalStoreContext);
 
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(() =>
+      (store.currentMap && (store.currentMap.mapType === 2 || store.currentMap.mapType === 3)) ? 1 : 0
+    );
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [newPropertyName, setNewPropertyName] = useState('');
 
@@ -127,17 +130,10 @@ export default function AddCustomDataProps(props) {
       useEffect(() => {
         if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
           const advData = store.currentMap.mapFeatures.ADV;
-          const extractedData = Object.entries(advData).map(([region, properties]) => {
-            const regionProperties = properties.map(property => {
-              if (typeof property === 'object') {
-                return property; //Use if has value
-              } else {
-                return {
-                  [property]: '' //Set default value
-                };
-              }
-            });
-            return { region, properties: regionProperties };
+          const extractedData = Object.entries(advData).map(([region, propertiesArray]) => {
+            const properties = propertiesArray.length > 0 && typeof propertiesArray[0] === 'object' ? propertiesArray[0] : {};
+      
+            return { region, properties };
           });
       
           setData(extractedData);
@@ -146,33 +142,38 @@ export default function AddCustomDataProps(props) {
 
       const handlePropertyChange = (countryIndex, regionIndex, optionIndex, value) => {
         const newData = [...data];
-        newData[countryIndex].properties[regionIndex][optionIndex] = value;
+        const regionToUpdate = newData[countryIndex];
+        const regionProperties = { ...regionToUpdate.properties };
+        const propertiesArray = Object.keys(regionProperties);
+        const propertyToUpdate = propertiesArray[regionIndex];
+        regionProperties[propertyToUpdate] = value;
+        regionToUpdate.properties = regionProperties;
+        newData[countryIndex] = regionToUpdate;
         setData(newData);
       };
 
-    const handleAddProperty = (propertyName) => {
+      const handleAddProperty = (propertyName) => {
         if (propertyName === '') {
-            return;
-          }
+          return;
+        }
+      
         const newData = data.map((region) => {
-            const existingPropertyNames = region.properties.map(prop => Object.keys(prop)[0]);
-        
-            if (!existingPropertyNames.includes(propertyName)) {
-              const updatedProperties = [
-                ...region.properties.slice(0), //Copy existing properties to new array
-                { [propertyName]: '' }
-              ];
-              return {
-                ...region,
-                properties: updatedProperties
-              };
-            }
-            return region;
-          });
-          setData(newData);
-          console.log(data);
-          setNewPropertyName('');
-    }
+          if (!Object.keys(region.properties).includes(propertyName)) {
+            const updatedProperties = {
+              ...region.properties,
+              [propertyName]: '',
+            };
+            return {
+              ...region,
+              properties: updatedProperties,
+            };
+          }
+          return region;
+        });
+      
+        setData(newData);
+        setNewPropertyName('');
+      };
 
     const handleDeleteProperty = (propertyName) => {
       if (propertyName === '') {
@@ -180,37 +181,49 @@ export default function AddCustomDataProps(props) {
       }
     
       const updatedData = data.map(region => {
-        const updatedProperties = region.properties.map(property => {
-          if (property.hasOwnProperty(propertyName)) {
-            delete property[propertyName];
-          }
-          return property;
-        });
+        const updatedProperties = { ...region.properties };
+        if (updatedProperties.hasOwnProperty(propertyName)) {
+          delete updatedProperties[propertyName];
+        }
         return { ...region, properties: updatedProperties };
       });
-    
+      
       setData(updatedData);
     }
 
 
     const copyDataToStoreADV = () => {
-        if (store.currentMap && store.currentMap.mapFeatures) {
-          const updatedMap = { ...store.currentMap }
-          updatedMap.mapFeatures = { ...updatedMap.mapFeatures }
-      
-          updatedMap.mapFeatures.ADV = data.reduce((acc, region) => { //change from stored form to desired form
-            const properties = region.properties.reduce((propAcc, property) => {
-              const [key, value] = Object.entries(property)[0]; //Extract  current key-value pair
-              propAcc[key] = value; //Assign key-value pair to new object
-              return propAcc;
-            }, {});
-            acc[region.region] = [properties]
-            return acc;
-          }, {});
-      
-          store.updateCurrentMapLocally(updatedMap)
-        }
-      };
+      if (store.currentMap && store.currentMap.mapFeatures) {
+        const updatedMap = { ...store.currentMap };
+        updatedMap.mapFeatures = { ...updatedMap.mapFeatures };
+    
+        data.forEach((regionData) => {
+          const { region, properties } = regionData;
+          if (region && properties) {
+            if (!updatedMap.mapFeatures.ADV[region]) {
+              updatedMap.mapFeatures.ADV[region] = [properties];
+            } else {
+              const regionProperties = updatedMap.mapFeatures.ADV[region][0];
+              for (const [key, value] of Object.entries(regionProperties)) {
+                if (!properties.hasOwnProperty(key)) {
+                  delete regionProperties[key]; 
+                } else {
+                  regionProperties[key] = properties[key]; 
+                }
+              }
+    
+              for (const [key, value] of Object.entries(properties)) {
+                if (!regionProperties.hasOwnProperty(key)) {
+                  regionProperties[key] = value;
+                }
+              }
+            }
+          }
+        });
+    
+        store.updateCurrentMapLocally(updatedMap); //Local update
+      }
+    };
 
     const handleRegionClick = (regionIndex) => {
         setSelectedRegion((prevSelectedRegion) => {
@@ -226,8 +239,10 @@ return(
     <div style={{ maxHeight: '90vh', overflowY: 'auto' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Additional Properties" />
-            <Tab label="Data Points" />
+            {store.currentMap && (store.currentMap.mapType === 0 || store.currentMap.mapType === 1 || store.currentMap.mapType === 2 || store.currentMap.mapType === 4) &&
+              (<Tab label="Additional Properties" />)}
+            {store.currentMap && (store.currentMap.mapType === 2 || store.currentMap.mapType === 3) &&
+            (<Tab label="Data Points" />)}
         </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
@@ -245,9 +260,8 @@ return(
           {/* Display properties of the selected region */}
           <ul>
             {region.properties.length === 0 && <h4>No properties found.</h4>}
-            {region.properties.map((property, propertyIndex) => (
+            {Object.entries(region.properties).map(([key, value], propertyIndex) => (
               <li key={`property-${propertyIndex}`}>
-                {Object.entries(property).map(([key, value]) => (
                   <div key={`property-${key}`}>
                     <TextField
                       key={`textfield-${key}`}
@@ -256,7 +270,6 @@ return(
                       onChange={(e) => handlePropertyChange(regionIndex, propertyIndex, key, e.target.value)}
                     />
                   </div>
-                ))}
               </li>
             ))}
           </ul>
@@ -267,16 +280,18 @@ return(
   <h3><u>All Current Additional Properties</u></h3>
   {/*List current data props in a list, should be able to take from one region since they
     should always be the same*/}
-  {data.length > 0 && data[0].properties.length > 0 && Object.keys(data[0].properties[0]).length > 0 && (
-    <ul>
-      {Object.keys(data[0].properties[0]).map((property, index) => (
-        <li key={`current-${index}`}>
-          {property}
-          <IconButton onClick={() => handleDeleteProperty(property)}><DeleteForeverIcon/></IconButton>
-        </li>
-      ))}
-    </ul>
-  )}
+{data.length > 0 && data[0].properties && Object.entries(data[0].properties).length > 0 && (
+  <ul>
+    {Object.keys(data[0].properties).map((property, index) => (
+      <li key={`current-${index}`}>
+        {property}
+        <IconButton onClick={() => handleDeleteProperty(property)}>
+          <DeleteForeverIcon />
+        </IconButton>
+      </li>
+    ))}
+  </ul>
+)}
   <h2>Add New Property</h2>
     <TextField
     label="New Property Name"

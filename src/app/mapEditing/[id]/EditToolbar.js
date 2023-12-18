@@ -49,6 +49,7 @@ function EditToolbar(props) {
     //const regionSwitch = props.regionSwitch;
     //const regionNameColor = props.regionNameColor;
     //const backgroundColor = props.backgroundColor;
+    const regionNameTextSize = props.regionNameTextSize;
     const center = props.center;
     const zoom = props.zoom;
     const radius = props.radius;
@@ -58,24 +59,14 @@ function EditToolbar(props) {
     const setCursorModes = props.setCursorModes;
     const setColorRegion = props.setColorRegion;
     const colorRegion = props.colorRegion;
-
-
-    const [showAlert, setShowAlert] = useState(false);
-
-    const handleCloseAlert = () => {
-      setShowAlert(false);
-    };
-    const handleSaveAttributes = () => {
-      store.updateMapAttributes(mapColor, borderSwitch, borderWidth, borderColor, regionNameSwitch, regionNameColor, backgroundColor, center, zoom, radius, dotColor, dotOpacity);
-      //add a alert to show that the map has been saved
-      setTimeout(() => {
-        setShowAlert(true);
-        //close the alert after 3 seconds
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 3000);
-      }, 1000);
-    }
+    const selectedValue = props.selectedValue;
+    const lowColorChoro = props.lowColorChoro;
+    const highColorChoro = props.highColorChoro;
+    const levelsChoro = props.levelsChoro;
+    const legendColors = props.legendColors;
+    const legendValues = props.legendValues;
+    const legendOn = props.legendOn;
+    const legendName = props.legendName;
 
 
     const handleDoubleClick = () => {
@@ -89,6 +80,43 @@ function EditToolbar(props) {
         store.updateMapName(editedName);
       }
     };
+            const [showAlert, setShowAlert] = useState(false);
+            
+            const handleCloseAlert = () => {
+              setShowAlert(false);
+            };
+            const handleSaveAttributes = () => {
+                store.updateMapAttributes(mapColor,
+                  borderSwitch, 
+                  borderWidth, 
+                  borderColor, 
+                  regionSwitch, 
+                  regionNameColor, 
+                  backgroundColor, 
+                  center, zoom, radius,
+                  dotColor, 
+                  dotOpacity, 
+                  regionNameTextSize, 
+                  selectedValue,
+                  lowColorChoro,
+                  highColorChoro,
+                  levelsChoro,
+                  legendColors,
+                  legendValues,
+                  legendOn,
+                  legendName
+
+
+                  );
+                //add a alert to show that the map has been saved
+                setTimeout(() => {
+                  setShowAlert(true); 
+                  //close the alert after 3 seconds
+                  setTimeout(() => {
+                    setShowAlert(false);
+                  }, 3000);
+                }, 1000);
+              }
 
 
     console.log("name: " + name);
