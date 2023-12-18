@@ -66,6 +66,7 @@ const LeafletmapInside = (props) => {
   const regionNameTextSize = props.regionNameTextSize;
   const legendColors = props.legendColors;
   const legendValues = props.legendValues;
+  const regionNameToDisplay = props.regionNameToDisplay;
   
 
   const map = useMap();
@@ -191,7 +192,7 @@ const LeafletmapInside = (props) => {
       <FeatureGroup>
         {regionNameSwitch &&
           geoJSONData &&
-          selectedValue === "" &&
+          regionNameToDisplay === "" &&
           geoJSONData.features.map((feature, index) => (
             <GeoJSON
               pane="markerPane"
@@ -210,7 +211,7 @@ const LeafletmapInside = (props) => {
           ))
         }
 
-        {regionNameSwitch && selectedValue !== "" && store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV &&
+        {regionNameSwitch && regionNameToDisplay !== "" && store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV &&
           geoJSONData.features.map((feature, index) => (
             <GeoJSON
               pane="markerPane"
@@ -226,8 +227,8 @@ const LeafletmapInside = (props) => {
                 const advData = store.currentMap.mapFeatures.ADV[cleanRegionName];
                 if (advData) {
                   const regionProperties = advData[0];
-                  if (selectedValue in regionProperties) {
-                    const featurePropertyValue = regionProperties[selectedValue];
+                  if (regionNameToDisplay in regionProperties) {
+                    const featurePropertyValue = regionProperties[regionNameToDisplay];
                     let content = `<div style="color: ${regionNameColor}; font-size: ${regionNameTextSize}px">${featurePropertyValue}</div>`;
                     layer.bindTooltip(content, { permanent: true });
                   }
@@ -312,6 +313,7 @@ export default function Leafletmap(props) {
   const legendValues = props.legendValues;
   const legendOn = props.legendOn;
   const legendName = props.legendName;
+  const regionNameToDisplay = props.regionNameToDisplay;
 
   if (typeof window !== 'undefined') {
     const mapRef = useRef(null);
@@ -346,6 +348,7 @@ export default function Leafletmap(props) {
       regionNameTextSize={regionNameTextSize}
       legendColors={legendColors}
       legendValues={legendValues}
+      regionNameToDisplay={regionNameToDisplay}
 
       />
       {legendOn &&(

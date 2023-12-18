@@ -442,6 +442,9 @@ export default function MapEditor(props) {
       const selectedValue = props.selectedValue;
       const setSelectedValue = props.setSelectedValue;
 
+      const regionNameToDisplay = props.regionNameToDisplay;
+      const setRegionNameToDisplay = props.setRegionNameToDisplay;
+
       const [options, setOptions] = useState([]);
 
       useEffect(() => {
@@ -459,10 +462,10 @@ export default function MapEditor(props) {
 
       const handleSelectChange = (event) => {
          setSelectedValue(event.target.value);
-         setRegionNameSwitch(false); //temp fix for region name switch not updating
-         setTimeout(() => {
-            setRegionNameSwitch(true);
-         }, 25);
+      };
+
+      const handleSelectChangeRegion = (event) => {
+         setRegionNameToDisplay(event.target.value);
       };
 
       const [rows, setRows] = useState(legendValues.map((value, index) => ({
@@ -581,14 +584,14 @@ export default function MapEditor(props) {
                   ></TextField>
                </Typography>
                </Box>
-               { store.currentMap && (store.currentMap.mapType === 5 || store.currentMap.mapType === 4 || store.currentMap.mapType === 1) && (
+               { store.currentMap && (store.currentMap.mapType === 4 || store.currentMap.mapType === 1) && (
                <div>
                <FormControl fullWidth>
         <InputLabel id="select-label">Select a property</InputLabel>
         <Select
           labelId="select-label"
-          value={selectedValue}
-          onChange={handleSelectChange}
+          value={regionNameToDisplay}
+          onChange={handleSelectChangeRegion}
           label="Select a region"
         >
           <MenuItem value="">
@@ -790,7 +793,25 @@ export default function MapEditor(props) {
                <div style={{ display: 'flex', justifyContent: 'center', padding: '10px'}}>
                <ImportMapDataModal />
                </div>
-               <div style={{ height: '30px', overflowY: 'auto' }}>
+               <div>
+               <FormControl fullWidth style={{marginBottom: '15px'}}>
+                  <InputLabel id="select-label" >Select a property for legend</InputLabel>
+                  <Select
+                     labelId="select-label"
+                     value={selectedValue}
+                     onChange={handleSelectChange}
+                     label="Select a region"
+                  >
+                     <MenuItem value="">
+                        Names
+                     </MenuItem>
+                     {options.map((option, index) => (
+                        <MenuItem key={index} value={option}>
+                        {option}
+                        </MenuItem>
+                     ))}
+                  </Select>
+                  </FormControl>
                </div>
                <div style={{margin: '10px', background: "darkgrey", padding: "10px", margin: "-10px"}}>
                <Typography className= {styles.text_color} component="h1" variant="h6">
@@ -881,18 +902,8 @@ export default function MapEditor(props) {
               />
               {store.currentMap && store.currentMap.mapType && (
                 <>
-                  {store.currentMap.mapType === 2 || store.currentMap.mapType === 4 ? (
-                    <>
-                      {row.id === 1 && <span style={{ marginLeft: '5px' }}>{'<'}</span>}
-                      {row.id !== 1 && row.id !== rows.length && (
-                        <span style={{ marginLeft: '5px' }}>x<sub>{`${row.id - 1}`}</sub>-x<sub>{`${row.id}`}</sub></span>
-                      )}
-                      {row.id === rows.length && <span style={{ marginLeft: '5px' }}>{'>'}</span>}
-                    </>
-                  ) : (
-                    store.currentMap.mapType === 5 || store.currentMap.mapType === 1 && (
+                  {store.currentMap.mapType === 5 || store.currentMap.mapType === 1 && (
                       <span style={{ marginLeft: '5px' }}>{'='}</span>
-                    )
                   )}
                 </>
               )}
@@ -931,6 +942,17 @@ export default function MapEditor(props) {
 
 
          {store.currentMap && store.currentMap.mapType === 5 && (
+            <Box className = {styles.item_box}>
+                  <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
+                     handleGenerateColor();
+                  }
+                  }>
+                     Generate Colors using Legend
+                  </Button>
+               </Box>
+        )}
+
+         {store.currentMap && store.currentMap.mapType === 1 && (
             <Box className = {styles.item_box}>
                   <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
                      handleGenerateColor();

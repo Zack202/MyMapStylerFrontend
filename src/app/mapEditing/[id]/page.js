@@ -41,6 +41,7 @@ export default function MapEditingScreen() {
         legendColors: ["#FFFFFF", "#000000"],
         legendValues: ['', ''],
         legendName: 'Legend',
+        legendOn: false,
       };
       
       /*const [borderSwitch, setBorderSwitch] = useState(() =>
@@ -100,6 +101,10 @@ export default function MapEditingScreen() {
 
       const [selectedValue, setSelectedValue] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.selectedValue ?? "") : ""
+      );
+
+      const [regionNameToDisplay, setRegionNameToDisplay] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameToDisplay ?? "") : ""
       );
 
       const [lowColorChoro, setLowColorChoro] = useState(() =>
@@ -218,6 +223,9 @@ export default function MapEditingScreen() {
                     setLegendName={setLegendName}
                     legendName={legendName}
 
+                    regionNameToDisplay={regionNameToDisplay}
+                    setRegionNameToDisplay={setRegionNameToDisplay}
+
 
 
                     />
@@ -243,6 +251,7 @@ export default function MapEditingScreen() {
                                             setColorRegion={setColorRegion}
                                             regionNameTextSize={regionNameTextSize}
                                             selectedValue={selectedValue}
+                                            regionNameToDisplay={regionNameToDisplay}
 
                                             //For choropleth map
                                             lowColorChoro={lowColorChoro}
@@ -278,6 +287,7 @@ export default function MapEditingScreen() {
                         dotOpacity={dotOpacity}
                         cursorModes={cursorModes}
                         colorRegion={colorRegion}
+                        regionNameToDisplay={regionNameToDisplay}
                         selectedValue={selectedValue}
                         regionNameTextSize={regionNameTextSize}
 

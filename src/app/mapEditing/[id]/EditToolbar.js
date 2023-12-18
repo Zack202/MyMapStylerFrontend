@@ -59,6 +59,7 @@ function EditToolbar(props) {
     const setCursorModes = props.setCursorModes;
     const setColorRegion = props.setColorRegion;
     const colorRegion = props.colorRegion;
+    const regionNameToDisplay = props.regionNameToDisplay;
     const selectedValue = props.selectedValue;
     const lowColorChoro = props.lowColorChoro;
     const highColorChoro = props.highColorChoro;
@@ -104,7 +105,8 @@ function EditToolbar(props) {
                   legendColors,
                   legendValues,
                   legendOn,
-                  legendName
+                  legendName,
+                  regionNameToDisplay
 
 
                   );
