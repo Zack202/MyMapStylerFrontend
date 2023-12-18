@@ -604,7 +604,7 @@ export default function MapEditor(props) {
                      </Typography>
                   </Box>
                   <i>Zoom: ({realZoom}) { }</i>
-                  {store.currentMap && store.currentMap.mapType === 3 || store.currentMap.mapType === 2 && (
+                  {store.currentMap && (store.currentMap.mapType === 3 || store.currentMap.mapType === 2) && (
                      <div>
                         <Box className={styles.item_box}>
                            <Typography className={styles.text_color} component="h1" variant="h6">
