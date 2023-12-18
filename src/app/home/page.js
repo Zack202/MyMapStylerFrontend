@@ -1,6 +1,6 @@
 // Import dependencies
 'use client'
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import TopAppBanner from '../Utils/TopAppBanner';
 import HomeBanner from '../Utils/HomeBanner';
 import BottomAppBanner from '../Utils/BottomAppBanner';
@@ -12,6 +12,7 @@ import { GlobalStoreContext } from '../store'
 import List from '@mui/material/List';
 import AuthContext from "../auth";
 import CreateMapModal from "../components/CreateMapModal";
+import { ElevatorSharp } from "@mui/icons-material";
 
 const backgroundStyle = {
     backgroundImage: 'url("./topology_art.jpeg")',
@@ -31,18 +32,18 @@ export default function Home() {
 
     const [shownMaps, setShownMaps] = useState(false);
     const [temporaryFilter, setTemporaryFilter] = useState("NEVER SET");
+    const [isGuest, setIsGuest] = useState(false);
+
+    useEffect(() => {
+        if(auth.user){
+            if(auth.user.userName === "GUEST"){
+                setIsGuest(true);
+            }
+        }
+    }, [auth]);
 
     let mapCard = "mapCard is never defined, AKA generateMapCard never ran";
 
-    let isGuest = true;
-    if (auth.loggedIn) {
-        if (auth.user.userName === "GUEST") {
-            isGuest = true;
-        }
-        else {
-            isGuest = false;
-        }
-    }
 
     useEffect(() => {
         // idNamePair actually has a ton of the actually map data too.
@@ -215,7 +216,7 @@ export default function Home() {
         <Grid container >
 
             <Grid item xs={12}>
-                <TopAppBanner />
+                <TopAppBanner link={"/home"}/>
             </Grid>
             <Grid item xs={12}>
                 <HomeBanner />
@@ -230,7 +231,12 @@ export default function Home() {
             }} style={backgroundStyle}>
                 
                 {shownMaps /* shows all the map cards*/} 
+                <Typography sx={{display: !isGuest ? "none" : "default"}}
+                 variant="h1" align="center" backgroundColor="grey" color="black" paragraph>
+                            {"Log in to create maps and utalize the home screen"}
+                </Typography>
             </Box>
+           
             <Grid item xs={12}>
                 <BottomAppBanner />
             </Grid>

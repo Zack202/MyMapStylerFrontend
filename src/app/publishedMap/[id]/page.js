@@ -43,6 +43,17 @@ const defaultTheme = createTheme({
 export default function specificMapScreen(){
 
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+
+    const [isGuest, setIsGuest] = useState(false);
+
+    useEffect(() => {
+      if(auth.user){
+          if(auth.user.userName === "GUEST"){
+              setIsGuest(true);
+          }
+      }
+  }, [auth]);
 
     const defaultValues = {
         borderSwitch: true,
@@ -113,7 +124,7 @@ export default function specificMapScreen(){
         <div>
         <div>
         <Grid item xs={12}>
-            <TopAppBanner />
+            <TopAppBanner link={"/browser"}/>
         </Grid>
         </div>
     <ThemeProvider theme={defaultTheme}>
@@ -165,7 +176,7 @@ export default function specificMapScreen(){
                             />
                             </Box>
                             <Box sx={{ gridArea: 'comments', bgcolor: '#800000'}}>Comments
-                                <CommentSection />
+                                <CommentSection isGuest={isGuest}/>
                             </Box>
                             <Box sx={{ gridArea: 'describe', bgcolor: '#800000' }}>Description
                             <Typography variant="h5" align="center" color="white" paragraph>

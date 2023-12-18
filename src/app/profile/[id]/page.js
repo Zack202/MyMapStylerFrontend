@@ -117,7 +117,7 @@ export default function Profile() {
     <div>
       <Grid container align={'center'} >
         <Grid item xs={12} >
-          <TopAppBanner />
+          <TopAppBanner link={"/home"}/>
         </Grid>
 
         <div>

@@ -31,7 +31,7 @@ function PublishedCard(props) {
 
     const router = useRouter()
 
-    const { idNamePair, selected, location } = props;
+    const { idNamePair, selected, location, isGuest } = props;
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
@@ -53,27 +53,25 @@ function PublishedCard(props) {
 
     function handleLikeMap(event){
         event.stopPropagation();
-        setDisliked(false);
-        setLiked(!liked);
-        store.likeMap(idNamePair._id, location);
+        if (!isGuest) {
+            setDisliked(false);
+            setLiked(!liked);
+            store.likeMap(idNamePair._id, location);
+        }
     }
 
 
     let likeB = "";
 
-    useEffect(() => {
-        if(auth.loggedIn){ 
-            if(idNamePair.ownerEmail === auth.user.email){
-               setDeletable(true);
-            }
-       }
-    }, [auth]);
+
 
     function handleDislikeMap(event){
         event.stopPropagation();
-        setLiked(false);
-        setDisliked(!disliked);
-        store.dislikeMap(idNamePair._id, location);
+        if (!isGuest){
+            setLiked(false);
+            setDisliked(!disliked);
+            store.dislikeMap(idNamePair._id, location);
+        }
     }
     
 
@@ -229,7 +227,8 @@ function PublishedCard(props) {
                 // disabled={!store.canUndo()}
                 id='duplicate-button'
                 variant="contained"
-                sx={{margin: 1, backgroundColor: "maroon"}}
+                sx={{margin: 1, backgroundColor: "maroon",
+                display: isGuest ?  "none"  : "default"}}
                 onClick={handleFork}
                 >
                 Fork

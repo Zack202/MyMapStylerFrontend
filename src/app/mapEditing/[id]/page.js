@@ -147,7 +147,7 @@ export default function MapEditingScreen() {
         <div className={styles.container}>
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <TopAppBanner />
+                    <TopAppBanner link={"/home"}/>
                 </Grid>
                 <Grid item xs={3}>
                     <MapEditor 
