@@ -47,7 +47,9 @@ function PublishedCard(props) {
     }
 
     let isItLiked = idNamePair.likes.includes(userName);
-    const [liked, setLiked] = useState(isItLiked);
+    let isItDisliked = idNamePair.dislikes.includes(userName);
+
+    const [liked, setLiked] = useState(idNamePair.likes.includes(userName))
     const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
     
 
@@ -80,7 +82,7 @@ function PublishedCard(props) {
 
     let dislikeButton =  "";
 
-    if(liked){
+    if(isItLiked || liked){
         likeButton = 
         <IconButton onClick={(event) => {
             handleLikeMap(event)
@@ -101,7 +103,7 @@ function PublishedCard(props) {
     }
 
 
-    if(disliked){
+    if(isItDisliked || disliked){
         dislikeButton = 
             <IconButton onClick={(event) => {
                 handleDislikeMap(event)
@@ -210,7 +212,7 @@ function PublishedCard(props) {
                 {likeButton}
                 {dislikeButton}
                 
-                <IconButton aria-label='comments'>
+                <IconButton aria-label='comments' onClick={() => handleClickForPublishedMap()}>
                     <CommentIcon style={{fontSize:'30pt', color: "white"}} />
                                                                                         {/* still have to work on comments */}
                     <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.comments.length}</Typography>
