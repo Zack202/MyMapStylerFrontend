@@ -11,13 +11,25 @@ import AuthContext from '../../auth';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { GlobalStoreContext } from '../../store/index.js'
-import customA from './customA.geo.json'
 import { useState } from 'react';
 import AddCustomDataProps from './AddCustomDataProps';
+import { useEffect } from 'react';
+
+import { usePathname } from 'next/navigation';
+
+
 
 
 export default function MapEditingScreen() {
     const { store } = useContext(GlobalStoreContext);
+    const pathname = usePathname()
+    useEffect(() => {
+      const mapIdFromURL = pathname.split('/').pop();
+      if (mapIdFromURL) {
+      store.setCurrentMap(mapIdFromURL);
+      }
+  
+    }, [pathname]);
 
     const defaultValues = {
         borderSwitch: true,
@@ -138,7 +150,6 @@ export default function MapEditingScreen() {
 
     let mapData;
     if (store.currentMap == null){
-        mapData = customA
     }
     else {
         mapData = store.currentMap.mapGeometry
@@ -226,6 +237,8 @@ export default function MapEditingScreen() {
                     regionNameToDisplay={regionNameToDisplay}
                     setRegionNameToDisplay={setRegionNameToDisplay}
 
+                    cursorModes={cursorModes}
+
 
 
                     />
@@ -269,6 +282,7 @@ export default function MapEditingScreen() {
 
 
                     />
+                    <div key={randomKey}>
                     <Leafletmap 
                         mapGeo={mapData}
                         //borderSwitch={borderSwitch}
@@ -302,7 +316,10 @@ export default function MapEditingScreen() {
                         legendOn={legendOn}
                         legendName={legendName}
 
+                        randomKey={randomKey}
+
                     />
+                    </div>
                 </Grid>
                 <Grid item xs={2}>
                     <AddCustomDataProps 

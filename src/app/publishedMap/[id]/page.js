@@ -21,8 +21,8 @@ import { useRouter } from 'next/navigation';
 import AuthContext from '../../auth'
 import { useContext } from 'react';
 import { GlobalStoreContext } from '../../store/index.js'
-import customA from './customA.geo.json'
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 //import "leaflet/dist/leaflet.css"
 
@@ -43,6 +43,13 @@ const defaultTheme = createTheme({
 export default function specificMapScreen(){
 
     const { store } = useContext(GlobalStoreContext);
+    const pathname = usePathname()
+    useEffect(() => {
+      const mapIdFromURL = pathname.split('/').pop();
+      if (mapIdFromURL) {
+      store.setCurrentMap(mapIdFromURL);
+      }
+    }, [pathname]);
     const { auth } = useContext(AuthContext);
 
     const [isGuest, setIsGuest] = useState(false);
@@ -115,7 +122,6 @@ export default function specificMapScreen(){
         }
         let mapData;
         if (store.currentMap == null){
-            mapData = customA
         }
         else {
             mapData = store.currentMap.mapGeometry

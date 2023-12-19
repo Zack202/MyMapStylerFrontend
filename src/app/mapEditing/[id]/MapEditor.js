@@ -33,20 +33,20 @@ export default function MapEditor(props) {
       const { store } = useContext(GlobalStoreContext);
 
       let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor, radius, dotColor, dotOpacity;
-      if (store.currentMap) {
-         mapColor = store.currentMap.mapFeatures.edits.mapColor;
-         borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
-         borderColor = store.currentMap.mapFeatures.edits.borderColor;
-         borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
-         regionNameSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
-         regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
-         backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
-         radius = store.currentMap.mapFeatures.edits.radius;
-         dotColor = store.currentMap.mapFeatures.edits.dotColor;
-         dotOpacity = store.currentMap.mapFeatures.edits.dotOpacity;
-         
-      }
-      else {
+      if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.edits) {
+         const { edits } = store.currentMap.mapFeatures;
+       
+         mapColor = edits.mapColor || 'maroon';
+         borderSwitch = edits.borderSwitch !== undefined ? edits.borderSwitch : true;
+         borderColor = edits.borderColor || 'maroon';
+         borderWidth = edits.borderWidth || 1;
+         regionNameSwitch = edits.regionSwitch !== undefined ? edits.regionSwitch : false;
+         regionNameColor = edits.regionNameColor || 'black';
+         backgroundColor = edits.backgroundColor || 'white';
+         radius = edits.radius || 5;
+         dotColor = edits.dotColor || 'black';
+         dotOpacity = edits.dotOpacity || 1;
+       } else {
          mapColor = 'maroon';
          borderSwitch = true;
          borderColor = 'maroon';
@@ -54,11 +54,10 @@ export default function MapEditor(props) {
          regionNameSwitch = false;
          regionNameColor = 'black';
          backgroundColor = 'white';
-         radius = 2;
+         radius = 5;
          dotColor = 'black';
          dotOpacity = 1;
-
-      }
+       }
 
       //For Color
       //const setMapColor = props.setMapColor;
@@ -208,7 +207,7 @@ export default function MapEditor(props) {
       //const setRadius = props.setRadius;
       //const radius = props.radius;
       const handleRadiusChange = (event) => {
-         const newRadius = event.target.value.trim();
+         const newRadius = parseInt(event.target.value.trim());
          if (newRadius === '' || !isNaN(newRadius)) {
             //setRadius(newRadius === '' ? "" : parseFloat(newRadius));
             let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
@@ -244,6 +243,9 @@ export default function MapEditor(props) {
             store.addMapFeaturesEditsTransaction(oldEdits, newEdits);
          }
       }
+
+      //For Cursor Modes
+      const cursorModes = props.cursorModes;
 
       //FOR CHOROPLETH ____________________________________________________________
       //For Choropleth Low Color
@@ -562,6 +564,7 @@ export default function MapEditor(props) {
                      className={styles.color_box}
                      value={mapColor || 'maroon'}
                      onChange={(e) => handleColorChange(e.target.value)}
+                     disabled={cursorModes !== ''}
                   />
                </Typography>
                </Box>
@@ -571,7 +574,7 @@ export default function MapEditor(props) {
                   <FormControlLabel 
                   value="start"
                   control={
-                  <Switch id="border" checked={borderSwitch} onChange={handleBorderSwitchChange}color="primary" />
+                  <Switch id="border" checked={borderSwitch} onChange={handleBorderSwitchChange}color="primary" disabled={cursorModes !== ''}/>
                   }
                   />
                </Typography>
@@ -583,6 +586,7 @@ export default function MapEditor(props) {
                      className={styles.color_box}
                      value={borderColor}
                      onChange={(e) => handleColorChangeBorders(e.target.value)}
+                     disabled={cursorModes !== ''}
                   />
                </Typography>
                </Box>
@@ -596,6 +600,7 @@ export default function MapEditor(props) {
                   sx={{ width: 100 }}
                   value={borderWidth}
                   onChange={handleBorderWidthChange}
+                  disabled={cursorModes !== ''}
                   InputProps={{
                   endAdornment: 
                   <InputAdornment position="end">px</InputAdornment>
@@ -613,6 +618,7 @@ export default function MapEditor(props) {
           value={regionNameToDisplay}
           onChange={handleSelectChangeRegion}
           label="Select a region"
+          disabled={cursorModes !== ''}
         >
           <MenuItem value="">
             Names
@@ -630,6 +636,7 @@ export default function MapEditor(props) {
                   <i>Show Regions Names:</i> { }
                   <FormControlLabel
                   value="start"
+                  disabled={cursorModes !== ''}
                   control={
                   <Switch id="toggleNames" checked={regionNameSwitch} color="primary" onChange={handleRegionNameSwitchChange}/>
                   }
@@ -642,6 +649,7 @@ export default function MapEditor(props) {
                      type="color"
                      className={styles.color_box}
                      value={regionNameColor}
+                     disabled={cursorModes !== ''}
                      onChange={(e) => handleColorChangeRegionName(e.target.value)}
                   />
                </Typography>
@@ -655,6 +663,7 @@ export default function MapEditor(props) {
                   size="small"
                   sx={{ width: 100 }}
                   value={regionNameTextSize}
+                  disabled={cursorModes !== ''}
                   onChange={handleRegionNameTextSizeChange}
                   InputProps={{
                   endAdornment:
@@ -670,6 +679,7 @@ export default function MapEditor(props) {
                      type="color"
                      className={styles.color_box}
                      value={backgroundColor}
+                     disabled={cursorModes !== ''}
                      onChange={(e) => handleColorChangeBackground(e.target.value)}
                   />
                </Typography>
@@ -680,6 +690,7 @@ export default function MapEditor(props) {
                   <Button
                      style={{ color: 'black', backgroundColor: 'white' }}
                      onClick={handleCenterChange}
+                     disabled={cursorModes !== ''}
                      >
                      Set
                   </Button>
@@ -692,6 +703,7 @@ export default function MapEditor(props) {
                   <Button
                      style={{ color: 'black', backgroundColor: 'white' }}
                      onClick={handleZoomChange}
+                     disabled={cursorModes !== ''}
                   >
                      Set
                   </Button>
@@ -709,6 +721,7 @@ export default function MapEditor(props) {
                   size="small"
                   sx={{ width: 100 }}
                   value={radius}
+                  disabled={cursorModes !== ''}
                   onChange={handleRadiusChange}
                   InputProps={{
                   endAdornment: 
@@ -724,6 +737,7 @@ export default function MapEditor(props) {
                      type="color"
                      className={styles.color_box}
                      value={dotColor}
+                     disabled={cursorModes !== ''}
                      onChange={(e) => handleColorChangeDot(e.target.value)}
                   />
                </Typography>
@@ -737,6 +751,7 @@ export default function MapEditor(props) {
                   size="small"
                   sx={{ width: 100 }}
                   value={dotOpacity * 100}
+                  disabled={cursorModes !== ''}
                   onChange={handleDotOpacityChange}
                   InputProps={{
                   endAdornment: 
@@ -755,6 +770,7 @@ export default function MapEditor(props) {
                   <Select
                      labelId="select-label"
                      value={selectedValue}
+                     disabled={cursorModes !== ''}
                      onChange={handleSelectChange}
                      label="Select a region"
                   >
@@ -774,6 +790,7 @@ export default function MapEditor(props) {
                      type="color"
                      className={styles.color_box}
                      value={lowColorChoro}
+                     disabled={cursorModes !== ''}
                      onChange={(e) => handleColorChangeLowChoro(e.target.value)}
                   />
                </Typography>
@@ -784,6 +801,7 @@ export default function MapEditor(props) {
                      type="color"
                      className={styles.color_box}
                      value={highColorChoro}
+                     disabled={cursorModes !== ''}
                      onChange={(e) => handleColorChangeHighChoro(e.target.value)}
                   />
                </Typography>
@@ -797,12 +815,13 @@ export default function MapEditor(props) {
                   size="small"
                   sx={{ width: 100 }}
                   value={levelsChoro}
+                  disabled={cursorModes !== ''}
                   onChange={handleLevelsChoroChange}
                   ></TextField>
                </Typography>
                </Box>
                <Box className = {styles.item_box}>
-                  <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
+                  <Button style={{ color: 'black', backgroundColor: 'white' }} disabled={cursorModes !== ''} onClick={() => {
                      handleGenerateGradient();
                   }
                   }>
@@ -819,6 +838,7 @@ export default function MapEditor(props) {
                   <Select
                      labelId="select-label"
                      value={selectedValue}
+                     disabled={cursorModes !== ''}
                      onChange={handleSelectChange}
                      label="Select a region"
                   >
@@ -841,6 +861,7 @@ export default function MapEditor(props) {
                   control={
                   <Switch color="primary" 
                   checked={legendOn}
+                  disabled={cursorModes !== ''}
                   onChange={handleLegendSwitchChange}
                   />
                   }
@@ -853,6 +874,7 @@ export default function MapEditor(props) {
                   defaultValue={"Legend"}
                   label={"Enter Legend Name"}
                   value={legendName}
+                  disabled={cursorModes !== ''}
                   onChange={handleLegendNameChange}
                   sx={{ width: 260, borderRadius: 1, marginBottom: '5px'}}>
                   
@@ -892,6 +914,7 @@ export default function MapEditor(props) {
                 variant="outlined"
                 size="small"
                 value={row.label}
+                disabled={cursorModes !== ''}
                 onChange={(e) => {
                   handleCellEdit(row.id, 'label', e.target.value);
                 }}
@@ -909,6 +932,7 @@ export default function MapEditor(props) {
               <input
                 type="color"
                 value={legendColors[row.id - 1]}
+                disabled={cursorModes !== ''}
                 onChange={(e) => {
                   handleLegendColorEdit(row.id, e.target.value);
                 }}
@@ -932,26 +956,27 @@ export default function MapEditor(props) {
                 variant="outlined"
                 size="small"
                 value={row.label}
+                disabled={cursorModes !== ''}
                 onChange={(e) => {
                   handleCellEdit(row.id, 'label', e.target.value);
                 }}
                 style={{ marginLeft: 'auto' }}
               />
 
-              <IconButton onClick={() => handleDeleteRow(row.id)}>
+              <IconButton  disabled={cursorModes !== ''} onClick={() => handleDeleteRow(row.id)}>
                 <DeleteIcon />
               </IconButton>
             </div>
           ))}
 
-          <IconButton onClick={handleAddRow}>
+          <IconButton  disabled={cursorModes !== ''} onClick={handleAddRow}>
             <AddIcon />
           </IconButton>
         </Box>
       )}
         {store.currentMap && store.currentMap.mapType === 4 && ( // Only show the button if the map is a choropleth
             <Box className = {styles.item_box}>
-                  <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
+                  <Button disabled={cursorModes !== ''} style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
                      handleGenerateCloropleth();
                   }
                   }>
@@ -963,7 +988,7 @@ export default function MapEditor(props) {
 
          {store.currentMap && store.currentMap.mapType === 5 && (
             <Box className = {styles.item_box}>
-                  <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
+                  <Button disabled={cursorModes !== ''} style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
                      handleGenerateColor();
                   }
                   }>
@@ -974,7 +999,7 @@ export default function MapEditor(props) {
 
          {store.currentMap && store.currentMap.mapType === 1 && (
             <Box className = {styles.item_box}>
-                  <Button style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
+                  <Button disabled={cursorModes !== ''} style={{ color: 'black', backgroundColor: 'white' }} onClick={() => {
                      handleGenerateColor();
                   }
                   }>

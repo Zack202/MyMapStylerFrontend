@@ -98,7 +98,7 @@ const CommentSection = (props) => {
   return (
 <Card >
    <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: '80%'}}>
-
+      {store.currentMap && store.currentMap.comments && store.currentMap.comments.length > 0 && (
       <List >
          {store.currentMap.comments.map((comment) => (
          <React.Fragment key={comment.id}>
@@ -151,7 +151,7 @@ const CommentSection = (props) => {
             )}
          </React.Fragment>
          ))}
-      </List>
+      </List>)}
    </CardContent>
    <Box style= {{margin:'5px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
    <TextField multiline placeholder='Add Comment' onChange={handleInputChange} value={comment} 

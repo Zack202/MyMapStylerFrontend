@@ -4,7 +4,6 @@ import { MapContainer, GeoJSON, FeatureGroup, Tooltip, useMap, Rectangle, Marker
 
 import "./Leafletmap.css"
 import { useEffect, useState, useContext } from 'react';
-import customA from './customA.geo.json'
 import { GlobalStoreContext } from '../../store'
 import pointInPolygon from '@turf/boolean-point-in-polygon';
 import { featureCollection, point } from '@turf/helpers';
@@ -320,6 +319,7 @@ export default function Leafletmap(props) {
   const legendOn = props.legendOn;
   const legendName = props.legendName;
   const regionNameToDisplay = props.regionNameToDisplay;
+  const randomKey = props.randomKey;
 
   if (typeof window !== 'undefined') {
     const mapRef = useRef(null);
@@ -332,8 +332,8 @@ export default function Leafletmap(props) {
 
 
     return (
-      <div>
-        <MapContainer ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
+      <div key={randomKey}>
+        <MapContainer  ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
 
           <LeafletmapInside 
       geoJSONData={geoJSONData}
