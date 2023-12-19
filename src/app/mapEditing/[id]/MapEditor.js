@@ -257,6 +257,15 @@ export default function MapEditor(props) {
          }, colorTimeOut);
       }
 
+         //For Choropleth Low Color
+         const setHighColorChoro = props.setHighColorChoro;
+         const highColorChoro = props.highColorChoro;
+         const handleColorChangeHighChoro = (color) => {
+            setTimeout(() => {
+               setHighColorChoro(color);
+            }, colorTimeOut);
+         }
+
    //For Legend Colors
    const setLegendColors = props.setLegendColors;
    const legendColors = props.legendColors;

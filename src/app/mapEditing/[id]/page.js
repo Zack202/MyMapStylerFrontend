@@ -282,7 +282,7 @@ export default function MapEditingScreen() {
 
 
                     />
-                    <div key={randomKey}>
+                    <div>
                     <Leafletmap 
                         mapGeo={mapData}
                         //borderSwitch={borderSwitch}
@@ -316,7 +316,6 @@ export default function MapEditingScreen() {
                         legendOn={legendOn}
                         legendName={legendName}
 
-                        randomKey={randomKey}
 
                     />
                     </div>

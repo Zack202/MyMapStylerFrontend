@@ -319,7 +319,6 @@ export default function Leafletmap(props) {
   const legendOn = props.legendOn;
   const legendName = props.legendName;
   const regionNameToDisplay = props.regionNameToDisplay;
-  const randomKey = props.randomKey;
 
   if (typeof window !== 'undefined') {
     const mapRef = useRef(null);
@@ -332,7 +331,7 @@ export default function Leafletmap(props) {
 
 
     return (
-      <div key={randomKey}>
+      <div>
         <MapContainer  ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
 
           <LeafletmapInside 
