@@ -595,15 +595,17 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
-    store.likeMap = function (mapId, location) {
+    store.likeMap = function (mapId, location, userName) {
         async function likeMap(mapId) {
             let response = await api.getMapById(mapId);
             if (response.data.success) {
                 let obj1 = {
-                    liked: true
+                    liked: true,
+                    userName: userName
                 }
                 let obj2 = {
-                    liked: false
+                    liked: false,
+                    userName: ""
                 }
 
                 let map = { ...response.data.map };
@@ -632,15 +634,17 @@ function GlobalStoreContextProvider(props) {
         likeMap(mapId)
     }
 
-    store.dislikeMap = function (mapId, location) {
+    store.dislikeMap = function (mapId, location, userName) {
         async function dislikeMap(mapId) {
             let response = await api.getMapById(mapId);
             if (response.data.success) {
                 let obj1 = {
-                    disliked: true
+                    disliked: true,
+                    userName: userName
                 }
                 let obj2 = {
-                    disliked: false
+                    disliked: false,
+                    userName: ""
                 }
 
                 let map = { ...response.data.map };

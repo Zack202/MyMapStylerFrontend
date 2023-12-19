@@ -48,8 +48,9 @@ function PublishedCard(props) {
 
     let isItLiked = idNamePair.likes.includes(userName);
     let isItDisliked = idNamePair.dislikes.includes(userName);
+    console.log(idNamePair.likes);
+    const [liked, setLiked] = useState(isItLiked);
 
-    const [liked, setLiked] = useState(idNamePair.likes.includes(userName))
     const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
     
 
@@ -58,7 +59,7 @@ function PublishedCard(props) {
         if (!isGuest) {
             setDisliked(false);
             setLiked(!liked);
-            store.likeMap(idNamePair._id, location);
+            store.likeMap(idNamePair._id, location, userName);
         }
     }
 
@@ -72,7 +73,7 @@ function PublishedCard(props) {
         if (!isGuest){
             setLiked(false);
             setDisliked(!disliked);
-            store.dislikeMap(idNamePair._id, location);
+            store.dislikeMap(idNamePair._id, location, userName);
         }
     }
     
@@ -82,7 +83,8 @@ function PublishedCard(props) {
 
     let dislikeButton =  "";
 
-    if(isItLiked || liked){
+    if(isItLiked){
+        console.log("are we hree");
         likeButton = 
         <IconButton onClick={(event) => {
             handleLikeMap(event)
@@ -103,7 +105,7 @@ function PublishedCard(props) {
     }
 
 
-    if(isItDisliked || disliked){
+    if(isItDisliked){
         dislikeButton = 
             <IconButton onClick={(event) => {
                 handleDislikeMap(event)
