@@ -158,7 +158,7 @@ export default function CreateMapModal() {
             <Grid container sx={{maxHeight: "80%"}}>
                 
             <Grid item xs={12}>
-                <TopAppBanner />
+                <TopAppBanner  link={"/home"}/>
             </Grid>
 
             <ThemeProvider theme={defaultTheme}>
@@ -178,7 +178,7 @@ export default function CreateMapModal() {
                         
                         <Box sx={{marginTop: 1, marginBottom: 5, position: "absolute"}}>
                         <div id="middle-container">
-                            <input type="file" accept="" id="import-map-button" onChange={handleFileChange} />
+                            <input type="file" accept=".zip, .json, .kml" id="import-map-button" onChange={handleFileChange} />
                         </div>
                         </Box>
 
@@ -219,9 +219,9 @@ export default function CreateMapModal() {
                             >
                                 <MenuItem value={5}>Color Categorized Map</MenuItem>
                                 <MenuItem value={1}>Textual Map</MenuItem>
-                                <MenuItem value={2}>Heat Map</MenuItem>
+                                <MenuItem value={4}>Choropleth Map</MenuItem>
                                 <MenuItem value={3}>Dot Map</MenuItem>
-                                <MenuItem value={4}>Choropleth</MenuItem>
+                                <MenuItem value={2}>Sized Dot Map</MenuItem>
                             </Select>
                         </FormControl>
                         </Box>
@@ -244,7 +244,7 @@ export default function CreateMapModal() {
                             color="primary"
                             variant="contained"
                             sx={{marginRight: 5, marginLeft: 1}}
-                            href="home_browser"
+                            href="home"
                             className="modal-button"
                         >Cancel</Button>
                     </div>
