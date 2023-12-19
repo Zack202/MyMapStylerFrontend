@@ -221,15 +221,16 @@ function EditToolbar(props) {
           <AdjustIcon sx={{ fontSize: "40pt", color: cursorModes === 'dot' ? 'green' : 'black' }} />
         </IconButton>)}
 
+        {store.currentMap && store.currentMap.mapType && store.currentMap.mapType == 2 && (
         <IconButton onClick={handleTurnOnSizedDotMode}>
-          <BlurCircularIcon sx={{ fontSize: "40pt", color: cursorModes === 'dot' ? 'green' : 'black' }} />
-        </IconButton>
+          <BlurCircularIcon sx={{ fontSize: "40pt", color: cursorModes === 'sized dot' ? 'green' : 'black' }} />
+        </IconButton>)}
 
         <IconButton onClick={handleTurnOnColorMode}>
           {/*Change color to green if color mode is on*/}
           <ColorLensIcon sx={{ fontSize: "40pt", color: cursorModes === 'color' ? 'green' : 'black' }} />
         </IconButton>
-        
+
         {cursorModes === 'color' && (
           <input
             type="color"
