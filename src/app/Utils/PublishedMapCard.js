@@ -236,7 +236,7 @@ function PublishedCard(props) {
                 >
                 Fork
             </Button>
-            <ExportMapModal />
+            <ExportMapModal map={idNamePair}/>
 
         <Box 
             sx={{display: 'inline-block',  p: 1,}}
