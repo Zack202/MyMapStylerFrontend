@@ -175,18 +175,24 @@ export default function MapEditor(props) {
 
       //For Center
       const realCenter = props.realCenter;
-      const setCenter = props.setCenter;
+      // const setCenter = props.setCenter;
       const center = props.center;
       const handleCenterChange = (event) => {
-         setCenter(center);
+         let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         let newEdits = JSON.parse(JSON.stringify(oldEdits));
+         newEdits.center = center;
+         store.addMapFeaturesEditsTransaction(oldEdits, newEdits)      
       }
 
       //For Zoom
       const realZoom = props.realZoom;
-      const setZoom = props.setZoom;
+      // const setZoom = props.setZoom;
       const zoom = props.zoom;
       const handleZoomChange = (event) => {
-         setZoom(zoom);
+         let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         let newEdits = JSON.parse(JSON.stringify(oldEdits));
+         newEdits.zoom = zoom;
+         store.addMapFeaturesEditsTransaction(oldEdits, newEdits)      
       }
 
       //For Radius
