@@ -18,6 +18,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContext from '../auth'
+import GlobalStoreContext from '../store';
 
 const defaultTheme = createTheme({
     palette: {
@@ -40,6 +41,7 @@ export default function TopAppBanner(props) {
     const [profileOpen, setProfileOpen] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
     const handleProfileOpen = () => setProfileOpen(true);
     const handleProfileClose = () => setProfileOpen(false);
@@ -59,6 +61,7 @@ export default function TopAppBanner(props) {
     };
 
     const handleMenuClose = () => {
+        store.clearTransactionStack();
         setAnchorEl(null);
     };
 

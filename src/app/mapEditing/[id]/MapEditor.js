@@ -36,16 +36,16 @@ export default function MapEditor(props) {
       if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.edits) {
          const { edits } = store.currentMap.mapFeatures;
        
-         mapColor = edits.mapColor || 'maroon';
-         borderSwitch = edits.borderSwitch !== undefined ? edits.borderSwitch : true;
-         borderColor = edits.borderColor || 'maroon';
-         borderWidth = edits.borderWidth || 1;
-         regionNameSwitch = edits.regionSwitch !== undefined ? edits.regionSwitch : false;
-         regionNameColor = edits.regionNameColor || 'black';
-         backgroundColor = edits.backgroundColor || 'white';
-         radius = edits.radius || 5;
-         dotColor = edits.dotColor || 'black';
-         dotOpacity = edits.dotOpacity || 1;
+         mapColor = edits.mapColor 
+         borderSwitch = edits.borderSwitch 
+         borderColor = edits.borderColor 
+         borderWidth = edits.borderWidth 
+         regionNameSwitch = edits.regionSwitch !== undefined
+         regionNameColor = edits.regionNameColor 
+         backgroundColor = edits.backgroundColor 
+         radius = edits.radius 
+         dotColor = edits.dotColor 
+         dotOpacity = edits.dotOpacity 
        } else {
          mapColor = 'maroon';
          borderSwitch = true;
@@ -207,15 +207,17 @@ export default function MapEditor(props) {
       //const setRadius = props.setRadius;
       //const radius = props.radius;
       const handleRadiusChange = (event) => {
-         const newRadius = parseInt(event.target.value.trim());
-         if (newRadius === '' || !isNaN(newRadius)) {
-            //setRadius(newRadius === '' ? "" : parseFloat(newRadius));
-            let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
-            let newEdits = JSON.parse(JSON.stringify(oldEdits));
-            newEdits.radius = newRadius === '' ? "" : parseFloat(newRadius);
-            store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
+         const newRadius = event.target.value.trim();
+         let parsedRadius = parseInt(newRadius);
+       
+         if (newRadius === '' || (!isNaN(parsedRadius) && parsedRadius >= 0)) {
+           let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+           let newEdits = JSON.parse(JSON.stringify(oldEdits));
+       
+           newEdits.radius = newRadius === '' ? 0 : parsedRadius;
+           store.addMapFeaturesEditsTransaction(oldEdits, newEdits);
          }
-      }
+       };
 
       //For Dot Color
       //const setDotColor = props.setDotColor;
