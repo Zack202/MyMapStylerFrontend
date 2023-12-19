@@ -134,7 +134,7 @@ const LeafletmapInside = (props) => {
           if (cursorModes === 'sized dot') {
             let lat = e.latlng.lat;
             let lng = e.latlng.lng;
-            let val = 0;
+            let val = 5;
             let tempDot = [lat, lng, val];
             //update store
             if (store.currentMap && store.currentMap.mapFeatures) {

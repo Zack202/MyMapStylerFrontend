@@ -81,7 +81,7 @@ export default function PrimarySearchAppBar() {
   const mapTypes = [
     'Color',
     'Text',
-    'Heat',
+    'Choropleth',
     'Dot',
     'Sized Dot',
   ];
