@@ -7,8 +7,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import styles from './ExportMapModal.module.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { toDataURL } from 'mapbox-gl-utils';
-import { GlobalStoreContext} from '../store';
 
 const modalStyle = {
   position: 'absolute',
@@ -35,30 +33,14 @@ const backdropStyle = {
   backgroundColor: 'transparent',
 };
 
-export default function TransitionsModal(props) {
+export default function TransitionsModal() {
   const [open, setOpen] = React.useState();
-  const {store} = React.useContext(GlobalStoreContext);
   const handleOpen = (event) => {
     event.stopPropagation();
     setOpen(true);}
   const handleClose = (event) => {
     event.stopPropagation();
     setOpen(false);
-  }
-
-
-  let printer = L.easyPrint({
-    tileLayer: tiles,
-    sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
-    filename: 'myMap',
-    exportOnly: true,
-    hideControlContainer: true
-  }).addTo(props.map);
-
-  const handleConvertToPNG = (event) => {
-
-    printer.printMap('CurrentSize', props.map.name);
-
   }
 
   return (
@@ -95,7 +77,7 @@ export default function TransitionsModal(props) {
             </Typography>
             </Box>
             <Box  sx = {{display: 'flex', justifyContent: 'center',  mt: 2}} >
-            <Button variant="contained" color="primary"  className={styles.button} onClick={handleConvertToPNG}>.PNG</Button>
+            <Button variant="contained" color="primary"  className={styles.button}>.PNG</Button>
             <Button variant="contained" color="primary"  className={styles.button}>.JPG</Button>
             <Button variant="contained" color="primary"  className={styles.button}>.JSON</Button>
             </Box>
