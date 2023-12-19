@@ -446,40 +446,57 @@ function GlobalStoreContextProvider(props) {
             reader.onload = function (e) {
                 const content = e.target.result;
                 const rows = content.split("\n");
-                const columns = rows[0].split(",").map(column => column.trim()); // Extract and clean column labels
-
-                const mapGeometry = store.currentMap.mapGeometry;
-                const featuresADV = store.currentMap.mapFeatures.ADV;
-                const featuresADVToAppend = JSON.parse(JSON.stringify(featuresADV)); // Create a deep copy
-
-                const regionNamesFromGeo = mapGeometry.features.map((feature) => feature.properties.name);
-
-                for (let i = 1; i < rows.length; i++) {
-                    const data = rows[i].split(",");
-
-                    // Ensure the row contains data for each columns
-                    if (data.length === columns.length) {
-                        const region = data[0].trim();
-
-                        if (regionNamesFromGeo.includes(region) || featuresADV[region]) {
-                            if (!featuresADVToAppend[region]) {
-                                featuresADVToAppend[region] = {};
-                            }
-
-                            for (let j = 1; j < columns.length; j++) {
-                                const column = columns[j];
-                                const value = data[j] ? data[j].trim() : '';
-
-                                if (!featuresADVToAppend[region]) {
-                                    featuresADVToAppend[region] = {};
-                                }
-                                featuresADVToAppend[region][column] = value;
+                const columns = rows[0].split(",").map(column => column.trim()); //Extract column
+            
+                const featuresADV = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.ADV));
+            
+                //Populate all regions props
+                for (const region in featuresADV) {
+                    if (Object.prototype.hasOwnProperty.call(featuresADV, region)) {
+                        if (!featuresADV[region][0]) {
+                            featuresADV[region][0] = {}; // If no properties, create an empty object
+                        }
+                        for (let j = 1; j < columns.length; j++) {
+                            const column = columns[j];
+                            if (!featuresADV[region][0].hasOwnProperty(column)) {
+                                featuresADV[region][0][column] = ''; //'' if no value
                             }
                         }
                     }
                 }
-                const featuresArray = Object.entries(featuresADVToAppend).map(([region, ADV]) => ({ [region]: ADV }));
-                //store.updateMapWithData(featuresArray, selectedOption);
+            
+                // Update properties for regions listed in the CSV
+                for (let i = 1; i < rows.length; i++) {
+                    const data = rows[i].split(",");
+            
+                    //Row contains data
+                    if (data.length === columns.length) {
+                        const region = data[0].trim();
+            
+                        if (featuresADV[region]) {
+                            if (!featuresADV[region][0]) {
+                                featuresADV[region][0] = {};
+                            }
+            
+                            for (let j = 1; j < columns.length; j++) {
+                                const column = columns[j];
+                                const value = data[j] ? data[j].trim() : '';
+            
+                                //Update property only if it exists in the current map
+                                if (featuresADV[region][0].hasOwnProperty(column)) {
+                                    featuresADV[region][0][column] = value;
+                                }
+                            }
+                        }
+                    }
+                }
+            
+                let updatedMap = { ...store.currentMap };
+                updatedMap.mapFeatures.DP = store.currentMap.mapFeatures.DP;
+                updatedMap.mapFeatures.edits = store.currentMap.mapFeatures.edits;
+                updatedMap.mapFeatures.ADV = featuresADV
+
+                store.updateCurrentMapLocally(updatedMap);
             }
         } else {
             reader.onload = function (e) {
