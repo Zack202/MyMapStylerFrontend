@@ -23,46 +23,19 @@ function EditToolbar(props) {
     const [editing, setEditing] = useState(false);
     const [editedName, setEditedName] = useState(name);
 
-    let mapColor, borderSwitch, borderColor, borderWidth, regionSwitch, regionNameColor, backgroundColor, radius,  dotColor, dotOpacity;
-    if (store.currentMap) {
-      mapColor = store.currentMap.mapFeatures.edits.mapColor;
-      borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
-      borderColor = store.currentMap.mapFeatures.edits.borderColor;
-      borderWidth = store.currentMap.mapFeatures.edits.borderWidth;
-      regionSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
-      regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
-      backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
-      radius = store.currentMap.mapFeatures.edits.radius;
-      dotColor = store.currentMap.mapFeatures.edits.dotColor;
-      dotOpacity = store.currentMap.mapFeatures.edits.dotOpacity;
-      
-    }
-    else {
-      mapColor = 'maroon';
-      borderSwitch = true;
-      borderColor = 'maroon';
-      borderWidth = 1;
-      regionSwitch = false;
-      regionNameColor = 'black';
-      backgroundColor = 'white';
-      radius = 2;
-      dotColor = 'black';
-      dotOpacity = 1;
-    }
-
-    //const mapColor = props.mapColor;
-    //const borderSwitch = props.borderSwitch;
-    //const borderWidth = props.borderWidth;
-    //const borderColor = props.borderColor;
-    //const regionSwitch = props.regionSwitch;
-    //const regionNameColor = props.regionNameColor;
-    //const backgroundColor = props.backgroundColor;
+    const mapColor = props.mapColor;
+    const borderSwitch = props.borderSwitch;
+    const borderWidth = props.borderWidth;
+    const borderColor = props.borderColor;
+    const regionSwitch = props.regionSwitch;
+    const regionNameColor = props.regionNameColor;
+    const backgroundColor = props.backgroundColor;
     const regionNameTextSize = props.regionNameTextSize;
     const center = props.center;
     const zoom = props.zoom;
-    //const radius = props.radius;
-    //const dotColor = props.dotColor;
-    //const dotOpacity = props.dotOpacity;
+    const radius = props.radius;
+    const dotColor = props.dotColor;
+    const dotOpacity = props.dotOpacity;
     const cursorModes = props.cursorModes;
     const setCursorModes = props.setCursorModes;
     const setColorRegion = props.setColorRegion;
