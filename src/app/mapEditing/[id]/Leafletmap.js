@@ -372,6 +372,8 @@ export default function Leafletmap(props) {
               legendValues={legendValues}
               mapColor={mapColor}
               legendName={legendName}
+              dotColor={dotColor}
+              radius={radius}
             />)}
           {borderSwitch && (
             <FeatureGroup>
