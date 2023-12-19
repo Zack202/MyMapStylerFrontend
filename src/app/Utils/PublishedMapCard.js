@@ -45,6 +45,15 @@ function PublishedCard(props) {
     if(auth.loggedIn){
         userName = auth.user.userName;
     }
+    useEffect(() => {
+        if(auth.user){
+            userName = auth.user.userName;
+            if(userName === idNamePair.userName){
+                setDeletable(true);
+            }
+        }
+    }, [auth]);
+
 
     let isItLiked = idNamePair.likes.includes(userName);
     const [liked, setLiked] = useState(isItLiked);
@@ -60,10 +69,7 @@ function PublishedCard(props) {
         }
     }
 
-
     let likeB = "";
-
-
 
     function handleDislikeMap(event){
         event.stopPropagation();
