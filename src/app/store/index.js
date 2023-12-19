@@ -812,6 +812,18 @@ function GlobalStoreContextProvider(props) {
     store.redo = function () {
         tps.doTransaction();
     }
+    store.canUndo = function () {
+        return tps.hasTransactionToUndo();
+    }
+    store.canRedo = function () {
+        return tps.hasTransactionToRedo();
+    }
+    store.clearTransactionStack = function () {
+        tps.clearAllTransactions();
+    }
+    store.hasAnyTransactions = function () {
+        return tps.hasTransactionToUndo() || tps.hasTransactionToRedo();
+    }
 
     return (
         <GlobalStoreContext.Provider value={{

@@ -126,6 +126,8 @@ function EditToolbar(props) {
                     setShowAlert(false);
                   }, 3000);
                 }, 1000);
+
+                store.clearTransactionStack();
               }
 
 
@@ -194,7 +196,7 @@ function EditToolbar(props) {
           )}
         </div>
         <IconButton onClick={handleSaveAttributes}>
-          <SaveIcon sx={{ fontSize: "40pt" }} />
+          <SaveIcon sx={{ fontSize: "40pt" , color: store.hasAnyTransactions() ? 'black' : 'green'}} />
         </IconButton>
 
         {/* <Alert
@@ -210,13 +212,14 @@ function EditToolbar(props) {
           <BackHandIcon sx={{ fontSize: "40pt", color: cursorModes === '' ? 'green' : 'black' }} />
         </IconButton>
 
-        <IconButton>
+        {/* <IconButton>
           <TextFieldsIcon sx={{ fontSize: "40pt" }} />
-        </IconButton>
+        </IconButton> */}
 
+        {store.currentMap && store.currentMap.mapType && store.currentMap.mapType == 3 && (
         <IconButton onClick={handleTurnOnDotMode}>
           <AdjustIcon sx={{ fontSize: "40pt", color: cursorModes === 'dot' ? 'green' : 'black' }} />
-        </IconButton>
+        </IconButton>)}
 
         <IconButton onClick={handleTurnOnSizedDotMode}>
           <BlurCircularIcon sx={{ fontSize: "40pt", color: cursorModes === 'dot' ? 'green' : 'black' }} />
@@ -226,6 +229,7 @@ function EditToolbar(props) {
           {/*Change color to green if color mode is on*/}
           <ColorLensIcon sx={{ fontSize: "40pt", color: cursorModes === 'color' ? 'green' : 'black' }} />
         </IconButton>
+        
         {cursorModes === 'color' && (
           <input
             type="color"
@@ -234,12 +238,12 @@ function EditToolbar(props) {
           />)
         }
 
-        <IconButton onClick={handleUndo}>
-          <UndoIcon sx={{ fontSize: "40pt" }} />
+        <IconButton onClick={handleUndo} disabled={!store.canUndo()}>
+          <UndoIcon sx={{ fontSize: "40pt", color: store.canUndo() ? 'black' : 'gray' }} />
         </IconButton>
 
-        <IconButton onClick={handleRedo}>
-          <RedoIcon sx={{ fontSize: "40pt" }} />
+        <IconButton onClick={handleRedo} disabled={!store.canRedo()}>
+          <RedoIcon sx={{ fontSize: "40pt", color: store.canRedo() ? 'black' : 'gray' }} />
         </IconButton>
       </div>
 
