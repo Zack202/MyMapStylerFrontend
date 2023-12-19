@@ -103,13 +103,31 @@ function ListCard(props) {
         toggleEdit();
     }
 
+    const [description ,setDescription] = useState(idNamePair.description);
+
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            //store.setIsListNameEditActive();
+            setDescription(idNamePair.description);
         }
         setEditActive(newActive);
     }
+
+    function handleSaveDescription(event, oldDescription) {
+        event.stopPropagation();
+        if (oldDescription === description) {
+            toggleEdit();
+            return;
+        }
+        store.updateMapDescription(idNamePair._id, description, oldDescription);
+        idNamePair.description = description;
+        toggleEdit();
+    }
+
+    function handleDescriptionChange(newDescription) {
+        setDescription(newDescription);
+    }
+
 
     const [exportModal, setExportModal] = useState(false);
 
@@ -194,9 +212,6 @@ function ListCard(props) {
             id={"map-card"}
             key={"map-card"}
             // button
-            onDoubleClick={(event) => {
-                handleToggleEdit(event)
-            }}
             // onClick={(event) => {
             //     handleLoadList(event, idNamePair._id)
             // }}  
@@ -218,22 +233,50 @@ function ListCard(props) {
         <Box sx={{ float:"left", display: "inline-block", width: "70%", marginTop: 5, marginLeft: 10, height: "80%"}}>
         
             <div>
-            <Typography sx={{top: 0, position: "absolute", width: "15%", height: "10%", display: "flex", fontWeight: "900"}}>
+            <Typography  sx={{top: 0, position: "absolute", width: "15%", height: "10%", display: "flex", fontWeight: "900"}}>
                 Description: 
             </Typography>
             </div>
 
-            <div>
-            <Typography sx={{top: 20, position: "absolute", width: "25%"}}>
-            {idNamePair.description}
-            </Typography>
-            </div>
+            {!editActive ? (
+                <div>
+                    <Typography
+                        onDoubleClick={(event) => {
+                            handleToggleEdit(event)
+                        }}
+                        sx={{ top: 20, position: "absolute", width: "25%" }}
+                    >
+                        {idNamePair.description}
+                    </Typography>
+                </div>
+            ) : (
+                <div>
+                    <TextField
+                        value={description}
+                        onChange={(event) => {
+                            handleDescriptionChange(event.target.value);
+                        }}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                event.preventDefault();
+                                handleSaveDescription(event, idNamePair.description);
+                            }
+                        }}
+                        onBlur={(event) => {
+                            handleSaveDescription(event, idNamePair.description);
+                        }}
+                        sx={{ top: 20, position: "absolute", width: "25%" }}
+                        multiline
+                        variant="outlined"
+                    />
+                </div>
+            )}
         </Box>
         <Box
         border={1}
         borderRadius={3}
         padding={1}
-        margin="50px 0 0 50px" // Adjust these values to move the Box down and to the right
+        margin="50px 0 0 50px"
         borderColor="maroon"
         bgcolor="background.paper"
         fontSize={16}
@@ -279,25 +322,7 @@ function ListCard(props) {
   </div>
     }
 
-    if (editActive) {
-        cardElement =
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id={"list-" + idNamePair._id}
-                label="Playlist Name"
-                name="name"
-                autoComplete="Playlist Name"
-                className='list-card'
-                onKeyPress={handleKeyPress}
-                onChange={handleUpdateText}
-                defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 48}}}
-                InputLabelProps={{style: {fontSize: 24}}}
-                autoFocus
-            />
-    }
+
     const style = {
         position: 'absolute',
         top: '50%',
