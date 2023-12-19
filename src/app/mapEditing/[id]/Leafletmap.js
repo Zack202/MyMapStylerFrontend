@@ -269,7 +269,7 @@ const LeafletmapInside = (props) => {
 
 export default function Leafletmap(props) {
   const { store } = useContext(GlobalStoreContext);
-  let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor;
+  let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor, radius, dotColor, dotOpacity;
   if (store.currentMap) {
     mapColor = store.currentMap.mapFeatures.edits.mapColor;
     borderSwitch = store.currentMap.mapFeatures.edits.borderSwitch;
@@ -278,6 +278,9 @@ export default function Leafletmap(props) {
     regionNameSwitch = store.currentMap.mapFeatures.edits.regionSwitch;
     regionNameColor = store.currentMap.mapFeatures.edits.regionNameColor;
     backgroundColor = store.currentMap.mapFeatures.edits.backgroundColor;
+    radius = store.currentMap.mapFeatures.edits.radius;
+    dotColor = store.currentMap.mapFeatures.edits.dotColor;
+    dotOpacity = store.currentMap.mapFeatures.edits.dotOpacity;
   }
   else {
     mapColor = 'maroon';
@@ -287,6 +290,9 @@ export default function Leafletmap(props) {
     regionNameSwitch = false;
     regionNameColor = 'black';
     backgroundColor = 'white';
+    dotColor = 'black';
+    radius = 2;
+    dotOpacity = 1;
   }
 
   const mapGeo = props.mapGeo;
@@ -301,9 +307,9 @@ export default function Leafletmap(props) {
   const setTempCenter = props.setTempCenter;
   const setTempZoom = props.setTempZoom;
   //const mapColor = props.mapColor;
-  const radius = props.radius;
-  const dotColor = props.dotColor;
-  const dotOpacity = props.dotOpacity;
+  //const radius = props.radius;
+  //const dotColor = props.dotColor;
+  //const dotOpacity = props.dotOpacity;
   const cursorModes = props.cursorModes;
   const colorRegion = props.colorRegion;
   const selectedValue = props.selectedValue;
