@@ -256,12 +256,13 @@ return(
     <div style={{ maxHeight: '90vh', overflowY: 'auto' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            {store.currentMap && (store.currentMap.mapType === 5 || store.currentMap.mapType === 1 || store.currentMap.mapType === 2 || store.currentMap.mapType === 4) &&
-              (<Tab label="Additional Properties" />)}
-            {store.currentMap && (store.currentMap.mapType === 2 || store.currentMap.mapType === 3) &&
-            (<Tab label="Data Points" />)}
+            
+            <Tab label="Additional Properties" />
+            
+            <Tab label="Data Points" />
         </Tabs>
         </Box>
+        {value === 0 && store.currentMap && (store.currentMap.mapType === 5 || store.currentMap.mapType === 1 || store.currentMap.mapType === 2 || store.currentMap.mapType === 4) ? (
         <CustomTabPanel value={value} index={0}>
   {/* Rendering dynamic components for 'Additional Props' */}
   {data.length === 0 && <h2>No data found. File may be corrupt.</h2>}
@@ -321,6 +322,11 @@ return(
       Set Properties
     </Button>
 </CustomTabPanel>
+) : (
+  value === 0 && (
+    <h3 style={{ textAlign: 'center' }}>No options available for this map type</h3>)
+)}
+{store.currentMap && (store.currentMap.mapType === 2 || store.currentMap.mapType === 3) ? (
 <CustomTabPanel value={value} index={1}>
 {dataPoints.length === 0 && <h2>No data points found.</h2>}
     {dataPoints.map((point, index) => (
@@ -382,9 +388,10 @@ return(
   </Grid>
 </Grid>
 
-  </CustomTabPanel>
-
-
+  </CustomTabPanel>) : (
+     value === 1 && (
+      <h3 style={{ textAlign: 'center' }}>No options available for this map type</h3>
+    ))}
     </div>
 )
 }
