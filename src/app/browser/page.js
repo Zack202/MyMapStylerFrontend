@@ -164,15 +164,15 @@ export default function Browser() {
                 for (let i = 0; i < store.filter.length; i++) {
                     switch (store.filter[i]) {
                         case "Color": {
-                            filter2.push(0);
+                            filter2.push(5);
                             break;
                         }
                         case "Text": {
                             filter2.push(1);
                             break;
                         }
-                        case "Heat": {
-                            filter2.push(2);
+                        case "Choropleth": {
+                            filter2.push(4);
                             break;
                         }
                         case "Dot": {
@@ -180,7 +180,7 @@ export default function Browser() {
                             break;
                         }
                         case "Sized Dot": {
-                            filter2.push(4);
+                            filter2.push(2);
                             break;
                         }
                         default: {

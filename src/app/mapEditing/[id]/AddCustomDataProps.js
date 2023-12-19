@@ -98,7 +98,7 @@ export default function AddCustomDataProps(props) {
       const handleAddSizedPoint = () => {
         setDataPoints([
           ...dataPoints,
-          [ 0, 0, 0 ]
+          [ 0, 0, 5 ]
         ]);
       };
 
