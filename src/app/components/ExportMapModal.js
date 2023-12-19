@@ -9,6 +9,8 @@ import styles from './ExportMapModal.module.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { toDataURL } from 'mapbox-gl-utils';
 import { GlobalStoreContext} from '../store';
+import L from 'leaflet';
+import 'leaflet-easyprint';
 
 const modalStyle = {
   position: 'absolute',
@@ -49,8 +51,19 @@ export default function TransitionsModal(props) {
 
 
   const handleConvertToPNG = (event) => {
-
-    // printer.printMap('CurrentSize', props.map.name);
+    event.stopPropagation();
+    let mapData = {
+      geo: {...props.map.mapGeometry},
+      mapFeatures: {...props.map.mapFeatures}
+    }
+    let printer = L.easyPrint({
+      // tileLayer: tiles,
+      sizeModes: ['Current'],
+      filename: 'myMap',
+      exportOnly: true,
+      hideControlContainer: true
+  }).addTo(mapData);
+    printer.printMap('CurrentSize', props.map.name);
 
   }
 

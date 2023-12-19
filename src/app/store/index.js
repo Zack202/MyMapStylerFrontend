@@ -690,6 +690,28 @@ function GlobalStoreContextProvider(props) {
         asyncAddComment(comment);
     }
 
+    store.deleteComment = (comment) => {
+        async function asyncdeleteComment(comment) {
+            let diff = {
+                removeComment: comment
+            }
+            const index = store.currentMap.comments.indexOf(comment);
+            store.currentMap.comments.splice(index, 1);
+            console.log("the diff is ", diff)
+            let response = await api.updateMapById(store.currentMap._id, diff);
+            if (response.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.PUBLISHED,
+                    payload: {
+                        map: store.currentMap
+                    }
+                })
+            }
+            store.loadIdNamePairs();
+        }
+        asyncdeleteComment(comment);
+    }
+
     store.updateMapAttributes = (
         mapColor, 
         borderSwitch, 
