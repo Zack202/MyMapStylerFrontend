@@ -230,16 +230,16 @@ function ListCard(props) {
             </div>
         </Box>
         <Box
-  border={1}
-  borderRadius={3}
-  padding={1}
-  margin="50px 0 0 50px" // Adjust these values to move the Box down and to the right
-  borderColor="maroon"
-  bgcolor="background.paper"
-  fontSize={16}
->
-  Map Type: {idMapping[idNamePair.mapType]}
-</Box>
+        border={1}
+        borderRadius={3}
+        padding={1}
+        margin="50px 0 0 50px" // Adjust these values to move the Box down and to the right
+        borderColor="maroon"
+        bgcolor="background.paper"
+        fontSize={16}
+        >
+        Map Type: {idMapping[idNamePair.mapType]}
+        </Box>
 
 
             <Box sx={{ p: 1, flexGrow: 1, right:"0", position: "absolute", top: 0}}>

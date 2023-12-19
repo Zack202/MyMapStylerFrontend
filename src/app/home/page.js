@@ -15,7 +15,7 @@ import CreateMapModal from "../components/CreateMapModal";
 import { ElevatorSharp } from "@mui/icons-material";
 
 const backgroundStyle = {
-    backgroundImage: 'url("./topology_art.jpeg")',
+    backgroundImage: 'url("./0dd0bbbc6c38a555d0817e8051ef2b12.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '100vh',
