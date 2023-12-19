@@ -32,36 +32,10 @@ export default function MapEditor(props) {
 
       const { store } = useContext(GlobalStoreContext);
 
-      let mapColor, borderSwitch, borderColor, borderWidth, regionNameSwitch, regionNameColor, backgroundColor, radius, dotColor, dotOpacity;
-      if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.edits) {
-         const { edits } = store.currentMap.mapFeatures;
-       
-         mapColor = edits.mapColor 
-         borderSwitch = edits.borderSwitch 
-         borderColor = edits.borderColor 
-         borderWidth = edits.borderWidth 
-         regionNameSwitch = edits.regionSwitch
-         regionNameColor = edits.regionNameColor 
-         backgroundColor = edits.backgroundColor 
-         radius = edits.radius 
-         dotColor = edits.dotColor 
-         dotOpacity = edits.dotOpacity 
-       } else {
-         mapColor = 'maroon';
-         borderSwitch = true;
-         borderColor = 'maroon';
-         borderWidth = 1;
-         regionNameSwitch = false;
-         regionNameColor = 'black';
-         backgroundColor = 'white';
-         radius = 5;
-         dotColor = 'black';
-         dotOpacity = 1;
-       }
 
       //For Color
       //const setMapColor = props.setMapColor;
-      //const mapColor = props.mapColor;
+      const mapColor = props.mapColor;
       let colorTimeOut = 300;
       const handleColorChange = (color) => {
          setTimeout(() => {
@@ -76,7 +50,7 @@ export default function MapEditor(props) {
 
       //For border Switch
       //const setBorderSwitch = props.setBorderSwitch;
-      //const borderSwitch = props.borderSwitch;
+      const borderSwitch = props.borderSwitch;
       const handleBorderSwitchChange = (event) => {
          //setBorderSwitch(event.target.checked);
          console.log(event.target.checked)
@@ -88,7 +62,7 @@ export default function MapEditor(props) {
 
       //For Border Color
       //const setBorderColor = props.setBorderColor;
-      //const borderColor = props.borderColor;
+      const borderColor = props.borderColor;
       const handleColorChangeBorders = (color) => {
          setTimeout(() => {
             //setBorderColor(color);
@@ -101,7 +75,7 @@ export default function MapEditor(props) {
 
       //For Border Width
       //const setborderWidth = props.setBorderWidth;
-      //const borderWidth = props.borderWidth;
+      const borderWidth = props.borderWidth;
       const handleBorderWidthChange = (event) => {
          const newWidth = event.target.value.trim();;
          if (newWidth === '' || !isNaN(newWidth)) {
@@ -114,7 +88,7 @@ export default function MapEditor(props) {
       }
 
       //For Region Name Switch
-      //const regionNameSwitch = props.regionSwitch;
+      const regionNameSwitch = props.regionSwitch;
       //const setRegionNameSwitch = props.setRegionSwitch;
       const handleRegionNameSwitchChange = (event) => {
          //setRegionNameSwitch(event.target.checked);
@@ -127,7 +101,7 @@ export default function MapEditor(props) {
 
       //For Region Name Color
       //const setRegionNameColor = props.setRegionNameColor;
-      //const regionNameColor = props.regionNameColor;
+      const regionNameColor = props.regionNameColor;
       const handleColorChangeRegionName = (color) => {
          setTimeout(() => {
             //setRegionNameColor(color);
@@ -158,7 +132,11 @@ export default function MapEditor(props) {
       const handleRegionNameTextSizeChange = (event) => {
          const newTextSize = event.target.value.trim();
          if (newTextSize === '' || !isNaN(newTextSize)) {
-            setRegionNameTextSize(newTextSize === '' ? "" : parseFloat(newTextSize));
+           setRegionNameTextSize(newTextSize === '' ? "" : parseFloat(newTextSize));
+           /* let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+            let newEdits = JSON.parse(JSON.stringify(oldEdits));
+            newEdits.regionNameTextSize = newTextSize === '' ? "" : parseFloat(newTextSize);
+            store.addMapFeaturesEditsTransaction(oldEdits, newEdits)*/
          }
          /*setRegionNameSwitch(false); //temp fix for region name switch not updating
          setTimeout(() => {
@@ -176,7 +154,7 @@ export default function MapEditor(props) {
 
       //For Background Color
       //const setBackgroundColor = props.setBackgroundColor;
-      //const backgroundColor = props.backgroundColor;
+      const backgroundColor = props.backgroundColor;
       const handleColorChangeBackground = (color) => {
          setTimeout(() => {
             //setBackgroundColor(color);
@@ -205,7 +183,7 @@ export default function MapEditor(props) {
 
       //For Radius
       //const setRadius = props.setRadius;
-      //const radius = props.radius;
+      let radius = props.radius;
       const handleRadiusChange = (event) => {
          const newRadius = event.target.value.trim();
          let parsedRadius = parseInt(newRadius);
@@ -221,7 +199,7 @@ export default function MapEditor(props) {
 
       //For Dot Color
       //const setDotColor = props.setDotColor;
-      //const dotColor = props.dotColor;
+      const dotColor = props.dotColor;
       const handleColorChangeDot = (color) => {
          setTimeout(() => {
             //setDotColor(color);
@@ -234,7 +212,7 @@ export default function MapEditor(props) {
 
       //For Dot Opacity
       //const setDotOpacity = props.setDotOpacity;
-      //const dotOpacity = props.dotOpacity;
+      const dotOpacity = props.dotOpacity;
       const handleDotOpacityChange = (event) => {
          const newOpacity = event.target.value.trim();
          if (newOpacity === '' || !isNaN(newOpacity)) {
