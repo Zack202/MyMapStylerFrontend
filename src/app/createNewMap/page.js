@@ -79,6 +79,7 @@ export default function CreateMapModal() {
     const { store } = useContext(GlobalStoreContext);
 
     const [mapData, setMapData] = useState(null);
+    const [mapFeatures, setMapFeatures] = useState(null);
     const [validFileMessage, setValidFileMessage] = useState("Waiting for file")
     const [ext, setExt] = useState("");
     var shapefile = require("shapefile");
@@ -87,6 +88,7 @@ export default function CreateMapModal() {
 
     const handleFileChange = async (event) => { // Handle file input, here is where to add other file types
         const selectedFile = event.target.files[0];
+
         if (selectedFile) {
             try {
 
@@ -100,8 +102,9 @@ export default function CreateMapModal() {
                 } else {
                     setValidFileMessage("It is NOT a valid file")
                 }
-                const fileContent = await selectedFile.text();
 
+                const fileContent = await selectedFile.text();
+                // console.log(fileContent)
                 if (fileExt === "kml") {
                     console.log("kml was recognized");
                     const xmldom = new DOMParser().parseFromString(fileContent, "text/xml"); // create xml dom object
@@ -136,7 +139,16 @@ export default function CreateMapModal() {
 
                     // Parse JSON file
                     const parsedData = JSON.parse(fileContent);
-                    setMapData(parsedData);
+                    if(parsedData.geo) {
+                        setMapData(parsedData.geo);
+                    }
+                    else{
+                        setMapData(parsedData);
+                    }
+
+                    if(parsedData.mapFeatures){
+                        setMapFeatures(parsedData.mapFeatures);
+                    }
                 }
 
 
@@ -148,8 +160,8 @@ export default function CreateMapModal() {
     };
 
     const handleCreateMap = (event) => {
-        console.log(mapType)
-        store.createNewMap(mapName, mapData, mapType, mapDesc)
+        console.log(mapType);
+        store.createNewMap(mapName, mapData, mapType, mapDesc, mapFeatures);
         store.loadIdNamePairs();
     };
 

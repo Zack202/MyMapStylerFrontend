@@ -47,17 +47,30 @@ export default function TransitionsModal(props) {
   }
 
 
-  let printer = L.easyPrint({
-    tileLayer: tiles,
-    sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
-    filename: 'myMap',
-    exportOnly: true,
-    hideControlContainer: true
-  }).addTo(props.map);
 
   const handleConvertToPNG = (event) => {
 
-    printer.printMap('CurrentSize', props.map.name);
+    // printer.printMap('CurrentSize', props.map.name);
+
+  }
+
+  const handleConvertToJSON = (event) => {
+    let mapData = {
+      geo: {...props.map.mapGeometry},
+      mapFeatures: {...props.map.mapFeatures}
+    }
+    
+
+    const jsonMapData = JSON.stringify(mapData);
+
+    // Create a Blob from the JSON data
+    const blob = new Blob([jsonMapData], { type: 'application/json' });
+
+    // Create a download link and trigger a click event
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = props.map.name + '.json';
+    link.click();
 
   }
 
@@ -97,7 +110,7 @@ export default function TransitionsModal(props) {
             <Box  sx = {{display: 'flex', justifyContent: 'center',  mt: 2}} >
             <Button variant="contained" color="primary"  className={styles.button} onClick={handleConvertToPNG}>.PNG</Button>
             <Button variant="contained" color="primary"  className={styles.button}>.JPG</Button>
-            <Button variant="contained" color="primary"  className={styles.button}>.JSON</Button>
+            <Button variant="contained" color="primary"  className={styles.button} onClick={handleConvertToJSON}>.JSON</Button>
             </Box>
           </Box>
         </Fade>
