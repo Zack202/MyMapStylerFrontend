@@ -1,4 +1,4 @@
-import { useContext} from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -12,16 +12,19 @@ export default function BrowserBanner() {
 
     const { auth } = useContext(AuthContext);
 
-    let isGuest = false;
-    if (auth.loggedIn) {
-        if (auth.user.userName === "GUEST") {
-            isGuest = true;
-        }
-        else {
-            isGuest = false;
-        }
-    }
+    const [showGuest, setShowGuest] = useState(false);
+    const [showHome, setShowHome] = useState(false);
 
+    useEffect(() => {
+        if(auth.user){
+            if(auth.user.userName === "GUEST"){
+                setShowGuest(true);
+            }
+            else{
+                setShowHome(true);
+            }
+        }
+    }, [auth]);
 
     return (
         <div>
@@ -34,17 +37,17 @@ export default function BrowserBanner() {
                     
                 <Button href="/home" variant='contained'
                 sx ={{ display:
-                    isGuest
-                        ? "none"
-                        : "inline-block",}}>
+                    showHome
+                        ? "inline-block"
+                        : "none"}}>
                     HOME
                 </Button>
                 <Typography 
                 style= {{fontWeight: 'bold', fontSize: '20px'}}
                 sx ={{ display:
-                    !isGuest
-                        ? "none"
-                        : "inline-block",}}>
+                    showGuest
+                        ? "inline-block"
+                        : "none"}}>
                     Guest 
                 </Typography>
 

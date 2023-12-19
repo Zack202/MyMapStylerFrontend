@@ -83,7 +83,7 @@ export default function MapEditingScreen() {
         //store.currentMap ? (store.currentMap.mapFeatures.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
         //store.edits ? (store.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
         store.edits ? (store.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
-        );*/
+        );
 
       const [radius, setRadius] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.radius ?? defaultValues.radius) : defaultValues.radius
@@ -93,7 +93,7 @@ export default function MapEditingScreen() {
       );
       const [dotOpacity, setDotOpacity] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.dotOpacity ?? defaultValues.dotOpacity) : defaultValues.dotOpacity
-      );
+      );*/
       const [cursorModes, setCursorModes] = useState('');
 
 
@@ -152,7 +152,7 @@ export default function MapEditingScreen() {
         <div className={styles.container}>
             <Grid container spacing={0}>
                 <Grid item xs={12}>
-                    <TopAppBanner />
+                    <TopAppBanner link={"/home"}/>
                 </Grid>
                 <Grid item xs={3}>
                     <MapEditor 
@@ -185,14 +185,14 @@ export default function MapEditingScreen() {
                     zoom={tempZoom}
                     realZoom={zoom}
 
-                    setRadius={setRadius}
+                    /*setRadius={setRadius}
                     radius={radius}
 
                     setDotColor={setDotColor}
                     dotColor={dotColor}
 
                     setDotOpacity={setDotOpacity}
-                    dotOpacity={dotOpacity}
+                    dotOpacity={dotOpacity}*/
 
                     selectedValue={selectedValue}
                     setSelectedValue={setSelectedValue}
@@ -242,9 +242,9 @@ export default function MapEditingScreen() {
                                             backgroundColor={backgroundColor}
                                             center={center}
                                             zoom={zoom}
-                                            radius={radius}
+                                            /*radius={radius}
                                             dotColor={dotColor}
-                                            dotOpacity={dotOpacity}
+                                            dotOpacity={dotOpacity}*/
                                             cursorModes={cursorModes}
                                             setCursorModes={setCursorModes}
                                             colorRegion={colorRegion}
@@ -281,10 +281,10 @@ export default function MapEditingScreen() {
                         zoom={zoom}
                         setTempCenter={setTempCenter}
                         setTempZoom={setTempZoom}
-                        //mapColor={mapColor}
+                        /*mapColor={mapColor}
                         radius={radius}
                         dotColor={dotColor}
-                        dotOpacity={dotOpacity}
+                        dotOpacity={dotOpacity}*/
                         cursorModes={cursorModes}
                         colorRegion={colorRegion}
                         regionNameToDisplay={regionNameToDisplay}

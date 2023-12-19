@@ -30,16 +30,15 @@ export default function Browser() {
 
     const [shownMaps, setShownMaps] = useState(false);
     const [temporaryFilter, setTemporaryFilter] = useState("NEVER SET");
+    const [isGuest, setIsGuest] = useState(false);
 
-    let isGuest = true;
-    if (auth.loggedIn) {
-        if (auth.user.userName === "GUEST") {
-            isGuest = true;
+    useEffect(() => {
+        if(auth.user){
+            if(auth.user.userName === "GUEST"){
+                setIsGuest(true);
+            }
         }
-        else {
-            isGuest = false;
-        }
-    }
+    }, [auth]);
 
     useEffect(() => {
         // idNamePair actually has a ton of the actually map data too.
@@ -96,6 +95,7 @@ export default function Browser() {
                             idNamePair={pair}
                             selected={false}
                             location={"browser"}
+                            isGuest={isGuest}
                         />
                     ))
                 }
@@ -118,7 +118,7 @@ export default function Browser() {
                 case "Dislikes": {
                     store.idNamePairs.sort((p1, p2) => p1.dislikes.length > p2.dislikes.length ? -
                     1 : (p1.dislikes.length < p2.dislikes.length) ? 1 : 0);
-                    store.updateSort("Disikes");
+                    store.updateSort("Dislikes");
                     break;
                 }
                 case "Date": {
@@ -212,7 +212,7 @@ export default function Browser() {
         <Grid container >
 
             <Grid item xs={12}>
-                <TopAppBanner />
+                <TopAppBanner link={"/browser"} />
             </Grid>
             <Grid item xs={12}>
                 <BrowserBanner />
@@ -231,14 +231,7 @@ export default function Browser() {
             <Box item xs={12} sx={{
                 position: "absolute", width: "100%",
             }}>
-                <Button sx={{
-                    marginLeft: 15, marginRight: 0, marginTop: .75, display:
-                        isGuest
-                            ? "none"
-                            : "inline-block",
-                }} href="/createNewMap" variant='contained'>
-                    Create New Map
-                </Button>
+               
             </Box>
             <Grid item xs={12}>
                 <BottomAppBanner />

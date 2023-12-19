@@ -33,8 +33,9 @@ const defaultTheme = createTheme({
     }
   },);
 
-export default function TopAppBanner() {
+export default function TopAppBanner(props) {
 
+    const { link } = props;
     const [anchorEl, setAnchorEl] = useState(null);
     const [profileOpen, setProfileOpen] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
@@ -150,7 +151,7 @@ export default function TopAppBanner() {
                         component="div"
                         sx={{ position: 'relative', display: { xs: 'none', sm: 'block' }, zIndex: "2"}}
                     >
-                        <a href="/home"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <a href={link}><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
                     </Box>
                     

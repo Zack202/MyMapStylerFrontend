@@ -175,7 +175,7 @@ function ListCard(props) {
     else{
     cardElement =
     <div id='cards'>
-    <Card onClick={() => handleClickForMapEdit()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
+    <Card sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
     >
         
     <CardContent sx={{p: 0}}/>
@@ -198,8 +198,9 @@ function ListCard(props) {
             {idNamePair.name}
             </Link>
             
-            <Box sx={{flexGrow: 1, display: "inline-block", float:'left',}}>
-
+            <Box sx={{flexGrow: 1, display: "inline-block", float:'left', cursor:"pointer"}}
+            onClick={() => handleClickForMapEdit()}
+            >
             
             <div>
             <img src={'test_map.jpg'} alt="image" height={'100px'} style={{marginTop: 10, position:'absolute'}} />    

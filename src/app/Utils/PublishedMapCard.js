@@ -31,7 +31,7 @@ function PublishedCard(props) {
 
     const router = useRouter()
 
-    const { idNamePair, selected, location } = props;
+    const { idNamePair, selected, location, isGuest } = props;
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
@@ -53,27 +53,25 @@ function PublishedCard(props) {
 
     function handleLikeMap(event){
         event.stopPropagation();
-        setDisliked(false);
-        setLiked(!liked);
-        store.likeMap(idNamePair._id, location);
+        if (!isGuest) {
+            setDisliked(false);
+            setLiked(!liked);
+            store.likeMap(idNamePair._id, location);
+        }
     }
 
 
     let likeB = "";
 
-    useEffect(() => {
-        if(auth.loggedIn){ 
-            if(idNamePair.ownerEmail === auth.user.email){
-               setDeletable(true);
-            }
-       }
-    }, [auth]);
+
 
     function handleDislikeMap(event){
         event.stopPropagation();
-        setLiked(false);
-        setDisliked(!disliked);
-        store.dislikeMap(idNamePair._id, location);
+        if (!isGuest){
+            setLiked(false);
+            setDisliked(!disliked);
+            store.dislikeMap(idNamePair._id, location);
+        }
     }
     
 
@@ -169,7 +167,9 @@ function PublishedCard(props) {
             key={"map-card"}
             // button
             >
-            <Link style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder", cursor: "pointer"}}
+            onClick={() => handleClickForPublishedMap()}
+            >
             {idNamePair.name}
             </Link>
             
@@ -229,7 +229,8 @@ function PublishedCard(props) {
                 // disabled={!store.canUndo()}
                 id='duplicate-button'
                 variant="contained"
-                sx={{margin: 1, backgroundColor: "maroon"}}
+                sx={{margin: 1, backgroundColor: "maroon",
+                display: isGuest ?  "none"  : "default"}}
                 onClick={handleFork}
                 >
                 Fork
@@ -239,7 +240,7 @@ function PublishedCard(props) {
         <Box 
             sx={{display: 'inline-block',  p: 1,}}
             >
-                <Typography fontSize="12pt"> Views: {idNamePair.views ? idNamePair.views : 0} </Typography>
+                
         </Box>
         </div>
     </div>

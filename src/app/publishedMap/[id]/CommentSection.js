@@ -18,7 +18,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-const CommentSection = () => {
+const CommentSection = (props) => {
+
+   const { isGuest } = props;
+
   const commentsData = [
     {
       id: 1,
@@ -151,8 +154,12 @@ const CommentSection = () => {
       </List>
    </CardContent>
    <Box style= {{margin:'5px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-   <TextField multiline placeholder='Add Comment' onChange={handleInputChange} value={comment} style={{color:'white', width: '70%'}}></TextField>
-   <Button onClick={handleAddComment} style={{backgroundColor: "#BE8585", marginLeft: 5,}}>Comment</Button>
+   <TextField multiline placeholder='Add Comment' onChange={handleInputChange} value={comment} 
+   style={{color:'white', width: '70%',
+   display: isGuest ?  "none"  : "default"}}></TextField>
+   <Button onClick={handleAddComment} 
+   style={{backgroundColor: "#BE8585", marginLeft: 5,
+   display: isGuest ?  "none"  : "default"}}>Comment</Button>
    </Box>
 </Card>
   );
