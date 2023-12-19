@@ -297,6 +297,7 @@ export default function MapEditingScreen() {
               legendOn={legendOn}
               legendName={legendName}
 
+
                                             ttDirection={ttDirection}
 
 
@@ -339,6 +340,7 @@ export default function MapEditingScreen() {
                 legendName={legendName}
 
                         ttDirection={ttDirection}
+                        mapName={mapName}
 
 
               />
