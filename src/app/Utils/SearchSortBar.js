@@ -17,7 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import GlobalStoreContext from '../store';
 import AuthContext from '../auth';
 
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 // Filter UI and functionality
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -103,15 +103,15 @@ export default function PrimarySearchAppBar() {
     }
   };
 
-  let isGuest = true;
-    if (auth.loggedIn) {
-        if (auth.user.userName === "GUEST") {
-            isGuest = true;
-        }
-        else {
-            isGuest = false;
-        }
-    }
+  const [isGuest, setIsGuest] = useState(false);
+
+  useEffect(() => {
+      if(auth.user){
+          if(auth.user.userName === "GUEST"){
+              setIsGuest(true);
+          }
+      }
+  }, [auth]);
 
   const handleFilterChange = async (event) => {
     setFilter(event.target.value);

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // import AuthContext from '../auth';
 // import { GlobalStoreContext } from '../store';
@@ -46,15 +46,22 @@ export default function TopAppBanner(props) {
     const handleProfileOpen = () => setProfileOpen(true);
     const handleProfileClose = () => setProfileOpen(false);
 
-    let isGuest = true;
-    if (auth.loggedIn) {
-        if (auth.user.userName === "GUEST") {
-            isGuest = true;
+    const [isGuest, setIsGuest] = useState(false);
+    const [profileLink, setProfileLink] = useState("/profile/");
+
+
+    useEffect(() => {
+        if(auth.user){
+            setProfileLink("/profile/" + auth.user.userName);
+            
+            if(auth.user.userName === "GUEST"){
+                setIsGuest(true);
+            }
         }
-        else {
-            isGuest = false;
+        if(auth.loggedIn){
         }
-    }
+    
+    }, [auth]);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -74,12 +81,6 @@ export default function TopAppBanner(props) {
     const homeclearTransactions = () => {
         store.clearTransactions();
     }
-    let profileLink = "/profile/"
-
-    if(auth.loggedIn){
-        profileLink = "/profile/" + auth.user.userName
-    }
-
 
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
