@@ -9,10 +9,6 @@ import customA from './customA.geo.json'
 export default function Leafletmap() {
     const [geoJSONData, setGeoJSONData] = useState(null);
 
-    useEffect(() => {
-      setGeoJSONData(customA);
-    }, []);
-
   const countryStyle = {
     fillColor: "maroon",
     fillOpacity: 1,

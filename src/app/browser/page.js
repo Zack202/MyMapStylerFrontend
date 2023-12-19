@@ -30,16 +30,15 @@ export default function Browser() {
 
     const [shownMaps, setShownMaps] = useState(false);
     const [temporaryFilter, setTemporaryFilter] = useState("NEVER SET");
+    const [isGuest, setIsGuest] = useState(false);
 
-    let isGuest = true;
-    if (auth.loggedIn) {
-        if (auth.user.userName === "GUEST") {
-            isGuest = true;
+    useEffect(() => {
+        if(auth.user){
+            if(auth.user.userName === "GUEST"){
+                setIsGuest(true);
+            }
         }
-        else {
-            isGuest = false;
-        }
-    }
+    }, [auth]);
 
     useEffect(() => {
         // idNamePair actually has a ton of the actually map data too.
@@ -48,13 +47,10 @@ export default function Browser() {
 
     // after store.idNamePairs, generate
     useEffect(() => {
-        generateDefaultMapCard();
+        if(store.search === "" && store.filter.length === 0){
+            generateDefaultMapCard();
+        }
     }, [store.idNamePairs]);
-
-    // if store's filter is changed, update
-    useEffect(() => {
-        runFilters();
-    }, [store.filter]);
 
     // if temporary filter is changed, update
     useEffect(() => {
@@ -65,10 +61,21 @@ export default function Browser() {
             
     }, [temporaryFilter]); 
 
+        // if sort is changed, update
+    useEffect(() => {
+        runFilters();
+    }, [store.sort]);
+
+    // if store's filter is changed, update
+    useEffect(() => {
+        runFilters();
+    }, [store.filter]);
+
     // if search is changed, update
     useEffect(() => {
         runFilters();
     }, [store.search]);
+
 
     let mapCard = "mapCard is never defined, AKA generateMapCard never ran";
 
@@ -87,6 +94,8 @@ export default function Browser() {
                             key={pair._id}
                             idNamePair={pair}
                             selected={false}
+                            location={"browser"}
+                            isGuest={isGuest}
                         />
                     ))
                 }
@@ -96,6 +105,38 @@ export default function Browser() {
     const runFilters = async () => {
         if (store) {
             let searchedMaps = [];
+
+            // Sorting
+            switch (store.sort) {
+                case "Likes": {
+                    store.idNamePairs.sort((p1, p2) => p1.likes.length > p2.likes.length ? -
+                    1 : (p1.likes.length < p2.likes.length) ? 1 : 0);
+                    store.updateSort("Likes");
+
+                    break;
+                }
+                case "Dislikes": {
+                    store.idNamePairs.sort((p1, p2) => p1.dislikes.length > p2.dislikes.length ? -
+                    1 : (p1.dislikes.length < p2.dislikes.length) ? 1 : 0);
+                    store.updateSort("Dislikes");
+                    break;
+                }
+                case "Date": {
+                    store.idNamePairs.sort((p1, p2) => p1.createdAt < p2.createdAt ? -
+                    1 : (p1.createdAt > p2.createdAt) ? 1 : 0);
+                    store.updateSort("Date");
+                    break;
+                }
+                case "Name": {
+                    store.idNamePairs.sort((p1, p2) => p1.name.toUpperCase() < p2.name.toUpperCase() ? -
+                    1 : (p1.name.toUpperCase() > p2.name.toUpperCase()) ? 1 : 0);
+                    store.updateSort("Name");
+                    break;
+                }
+                default: {
+                    console.log("SORTING ERROR");
+                }
+            }
 
             // Searching
             if (store.search === "") {
@@ -123,15 +164,15 @@ export default function Browser() {
                 for (let i = 0; i < store.filter.length; i++) {
                     switch (store.filter[i]) {
                         case "Color": {
-                            filter2.push(0);
+                            filter2.push(5);
                             break;
                         }
                         case "Text": {
                             filter2.push(1);
                             break;
                         }
-                        case "Heat": {
-                            filter2.push(2);
+                        case "Choropleth": {
+                            filter2.push(4);
                             break;
                         }
                         case "Dot": {
@@ -139,7 +180,7 @@ export default function Browser() {
                             break;
                         }
                         case "Sized Dot": {
-                            filter2.push(4);
+                            filter2.push(2);
                             break;
                         }
                         default: {
@@ -171,7 +212,7 @@ export default function Browser() {
         <Grid container >
 
             <Grid item xs={12}>
-                <TopAppBanner />
+                <TopAppBanner link={"/browser"} />
             </Grid>
             <Grid item xs={12}>
                 <BrowserBanner />
@@ -190,14 +231,7 @@ export default function Browser() {
             <Box item xs={12} sx={{
                 position: "absolute", width: "100%",
             }}>
-                <Button sx={{
-                    marginLeft: 15, marginRight: 0, marginTop: .75, display:
-                        isGuest
-                            ? "none"
-                            : "inline-block",
-                }} href="/createNewMap" variant='contained'>
-                    Create New Map
-                </Button>
+               
             </Box>
             <Grid item xs={12}>
                 <BottomAppBanner />
@@ -206,27 +240,3 @@ export default function Browser() {
 
     )
 }
-
-/*
-function handleSortName() {
-    let sortedProducts = store.idNamePairs.sort((p1, p2)
-     => p1.name.toUpperCase() < p2.name.toUpperCase() ? -1 :
-     (p1.name.toUpperCase() > p2.name.toUpperCase()) ? 1 : 0 );
-     console.log(sortedProducts);
-     handleMenuClose();
-}
-function handleSortLikes() {
-    let sortedProducts = store.idNamePairs.sort((p1, p2)
-     => p1.likes < p2.likes ? 1 :
-     (p1.likes > p2.likes) ? -1 : 0 );
-     console.log(sortedProducts);
-     handleMenuClose();
-}
-function handleSortDisikes() {
-    let sortedProducts = store.idNamePairs.sort((p1, p2)
-     => p1.dislikes < p2.dislikes ? 1 :
-     (p1.dislikes > p2.dislikes) ? -1 : 0 );
-     console.log(sortedProducts);
-     handleMenuClose();
-}
-*/

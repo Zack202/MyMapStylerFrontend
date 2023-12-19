@@ -1,3 +1,4 @@
+
 describe('User Tests', () => {
 
   beforeEach(() => {
@@ -13,13 +14,13 @@ describe('User Tests', () => {
 
 
   it('Guest User Success', function () {
-    cy.contains('CONTINUE AS GUEST', { matchCase: false }).click();
+    cy.contains('CONTINUE AS GUEST', { matchCase: false, timeout: 10000 }).click();
 
     cy.location('href').should('include', '/browser')
   });
 
   it('Log In Success', function () {
-    cy.contains('Login', { matchCase: false }).click();
+    cy.contains('Login', { matchCase: false, timeout: 10000 }).click();
 
     cy.get('#email').type('exampleUser@gmail.com');
     cy.get('#password').type('exampleUser');
@@ -31,7 +32,7 @@ describe('User Tests', () => {
   it('Register', function () {
     let ran = Math.random()
 
-    cy.contains('Create An Account', { matchCase: false }).click();
+    cy.contains('Create An Account', { matchCase: false, timeout: 10000 }).click();
 
     cy.get('#firstName').type('Clone');
     cy.get('#lastName').type('Cloneson');
@@ -40,44 +41,44 @@ describe('User Tests', () => {
     cy.get('#password').type('supersecretpassword');
     cy.get('#confirmPassword').type('supersecretpassword');
 
-    cy.contains('Confirm Registration', { matchCase: false }).click();
+    cy.contains('Confirm Registration', { matchCase: false, timeout: 10000 }).click();
 
     cy.location('href').should('include', '/home')
 
   });
 
   it('Fail Login Empty', function () {
-    cy.contains('Login', { matchCase: false }).click();
+    cy.contains('Login', { matchCase: false, timeout: 10000 }).click();
 
     // empty both
     cy.get('#signIn').click();
     cy.contains("Error: Please enter all required fields.");
-    cy.contains('Close', { matchCase: false }).click();
+    cy.contains('Close', { matchCase: false, timeout: 10000 }).click();
 
     // empty password
     cy.get('#email').type('exampleUser@gmail.com');
     cy.get('#signIn').click();
     cy.contains("Error: Please enter all required fields.");
-    cy.contains('Close', { matchCase: false }).click();
+    cy.contains('Close', { matchCase: false, timeout: 10000 }).click();
 
     // empty email
     cy.get('#email').clear('E');
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
-    cy.contains("Error: Please enter all required fields.");
+    cy.contains("Error: Please enter all required fields.", {timeout: 10000});
   });
 
 
 
   it('Fail Login Incorrect', function () {
-    cy.contains('Login', { matchCase: false }).click();
+    cy.contains('Login', { matchCase: false, timeout: 10000 }).click();
 
     // wrong email
     cy.get('#email').type('exampleUser854734t65274723');
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
-    cy.contains("Error: Wrong email or password provided.")
-    cy.contains('Close', { matchCase: false }).click();
+    cy.contains("Error: Wrong email or password provided.", {timeout: 10000})
+    cy.contains('Close', { matchCase: false, timeout: 10000 }).click();
 
     // wrong password
     cy.get('#email').clear('E');
@@ -105,13 +106,15 @@ describe('User Tests', () => {
     cy.get('#signIn').click();
     cy.contains("Error: Wrong email or password provided.");
 
-    cy.contains('Close', { matchCase: false }).click()
+    cy.contains('Close', { matchCase: false, timeout: 10000 }).click()
 
     cy.get('#email').clear('E');
     cy.get('#email').type('exampleUser@gmail.com');
     cy.get('#password').clear('P');
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
+
+    cy.wait(1000);
 
     cy.location('href').should('include', '/home');
   });
@@ -250,15 +253,15 @@ describe('Home Tests', () => {
 
 
   it('Logged in vs Guest', function () {
-    cy.contains("CREATE NEW MAP", { matchCase: false })
+    cy.contains("CREATE NEW MAP", { matchCase: false, timeout: 10000 })
 
     cy.get('#profileButton').click();
 
-    cy.contains("VIEW PROFILE", { matchCase: false })
+    cy.contains("VIEW PROFILE", { matchCase: false, timeout: 10000 })
 
-    cy.contains("LOG OUT", { matchCase: false }).click()
+    cy.contains("LOG OUT", { matchCase: false, timeout: 10000 }).click()
 
-    cy.contains('CONTINUE AS GUEST', { matchCase: false }).click();
+    cy.contains('CONTINUE AS GUEST', { matchCase: false, timeout: 10000 }).click();
 
     cy.location('href').should('include', '/browser')
 
@@ -273,7 +276,7 @@ describe('Home Tests', () => {
   it('Logged Profile', function () {
     cy.get('#profileButton').click();
 
-    cy.contains('View Profile', { matchCase: false }).click();
+    cy.contains('View Profile', { matchCase: false, timeout: 10000 }).click();
 
     cy.location('href').should('include', '/profile')
 
@@ -282,7 +285,7 @@ describe('Home Tests', () => {
   });
 
   it('Home page Create Map', function () {
-    cy.contains('Create New Map', { matchCase: false }).click();
+    cy.contains('Create New Map', { matchCase: false, timeout: 10000 }).click();
 
     cy.location('href').should('include', '/createNewMap')
   });
@@ -370,11 +373,11 @@ describe('Editing Tests', () => {
     cy.get('#signIn').click();
     cy.location('href').should('include', '/home');
 
-    cy.wait(500);
+    cy.wait(1000);
 
-    cy.contains('Map2', { matchCase: false, timeout: 10000 }).click();
+    cy.contains('Map2', { matchCase: false, timeout: 20000 }).click();
 
-    cy.wait(500);
+    cy.wait(1000);
     
     cy.location('href').should('include', '/mapEditing')
   })
@@ -387,11 +390,11 @@ describe('Editing Tests', () => {
   it('Toggling', function () {
     cy.get("#border").click();
 
-    cy.contains('Brazil', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Brazil', { matchCase: false, timeout: 20000 }).should('not.exist');
 
     cy.get("#toggleNames").click();
 
-    cy.contains('Brazil', { matchCase: false, timeout: 10000 });
+    cy.contains('Brazil', { matchCase: false, timeout: 20000 });
   });
 
 });

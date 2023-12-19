@@ -9,3 +9,7 @@
   filter: none !important; 
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
 }
+
+.crosshair-cursor {
+  cursor: crosshair !important;
+}

@@ -18,6 +18,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContext from '../auth'
+import GlobalStoreContext from '../store';
 
 const defaultTheme = createTheme({
     palette: {
@@ -33,12 +34,14 @@ const defaultTheme = createTheme({
     }
   },);
 
-export default function TopAppBanner() {
+export default function TopAppBanner(props) {
 
+    const { link } = props;
     const [anchorEl, setAnchorEl] = useState(null);
     const [profileOpen, setProfileOpen] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
     const handleProfileOpen = () => setProfileOpen(true);
     const handleProfileClose = () => setProfileOpen(false);
@@ -58,6 +61,7 @@ export default function TopAppBanner() {
     };
 
     const handleMenuClose = () => {
+        store.clearTransactionStack();
         setAnchorEl(null);
     };
 
@@ -150,7 +154,7 @@ export default function TopAppBanner() {
                         component="div"
                         sx={{ position: 'relative', display: { xs: 'none', sm: 'block' }, zIndex: "2"}}
                     >
-                        <a href="/home"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <a href={link}><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
                     </Box>
                     
