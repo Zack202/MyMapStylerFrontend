@@ -89,10 +89,10 @@ export default function MapEditingScreen() {
       );
       const [dotColor, setDotColor] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.dotColor ?? defaultValues.dotColor) : defaultValues.dotColor
-      );*/
+      );
       const [dotOpacity, setDotOpacity] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.dotOpacity ?? defaultValues.dotOpacity) : defaultValues.dotOpacity
-      );
+      );*/
       const [cursorModes, setCursorModes] = useState('');
 
 
@@ -184,10 +184,10 @@ export default function MapEditingScreen() {
                     radius={radius}
 
                     setDotColor={setDotColor}
-                    dotColor={dotColor}*/
+                    dotColor={dotColor}
 
                     setDotOpacity={setDotOpacity}
-                    dotOpacity={dotOpacity}
+                    dotOpacity={dotOpacity}*/
 
                     selectedValue={selectedValue}
                     setSelectedValue={setSelectedValue}
@@ -235,8 +235,8 @@ export default function MapEditingScreen() {
                                             center={center}
                                             zoom={zoom}
                                             /*radius={radius}
-                                            dotColor={dotColor}*/
-                                            dotOpacity={dotOpacity}
+                                            dotColor={dotColor}
+                                            dotOpacity={dotOpacity}*/
                                             cursorModes={cursorModes}
                                             setCursorModes={setCursorModes}
                                             colorRegion={colorRegion}
@@ -274,8 +274,8 @@ export default function MapEditingScreen() {
                         setTempZoom={setTempZoom}
                         /*mapColor={mapColor}
                         radius={radius}
-                        dotColor={dotColor}*/
-                        dotOpacity={dotOpacity}
+                        dotColor={dotColor}
+                        dotOpacity={dotOpacity}*/
                         cursorModes={cursorModes}
                         colorRegion={colorRegion}
                         selectedValue={selectedValue}
