@@ -167,7 +167,9 @@ function PublishedCard(props) {
             key={"map-card"}
             // button
             >
-            <Link style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder", cursor: "pointer"}}
+            onClick={() => handleClickForPublishedMap()}
+            >
             {idNamePair.name}
             </Link>
             
@@ -238,7 +240,7 @@ function PublishedCard(props) {
         <Box 
             sx={{display: 'inline-block',  p: 1,}}
             >
-                <Typography fontSize="12pt"> Views: {idNamePair.views ? idNamePair.views : 0} </Typography>
+                
         </Box>
         </div>
     </div>

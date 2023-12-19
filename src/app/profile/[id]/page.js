@@ -187,15 +187,7 @@ export default function Profile() {
                         <Typography textAlign='left'>Email: {exampleUser.email}</Typography>
                       </Box>
 
-                      <Box sx={{ marginRight: 1, gridArea: 'community', bgcolor: '#800000' }}>
-                        <Typography variant="h5"> Community Statistics </Typography>
-                        <Typography textAlign='left'>Total Maps Made: 5</Typography>
-                        <Typography textAlign='left'>Total Map Views: 100</Typography>
-                        <Typography textAlign='left'>Total Map Likes: 50</Typography>
-                        <Typography textAlign='left'>Total Maps Dislikes: 6</Typography>
-                        <Typography textAlign='left'>Total Comment Likes: 0</Typography>
-                        <Typography textAlign='left'>Total Comment Dislikes: 0</Typography>
-                      </Box>
+
 
 
                     </Box>
