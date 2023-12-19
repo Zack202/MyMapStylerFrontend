@@ -820,7 +820,7 @@ export default function MapEditor(props) {
                   value="start"
                   control={
                   <Switch color="primary" 
-                  value={legendOn}
+                  checked={legendOn}
                   onChange={handleLegendSwitchChange}
                   />
                   }
