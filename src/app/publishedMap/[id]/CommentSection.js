@@ -17,6 +17,7 @@ import ReplyIcon from '@mui/icons-material/Reply';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import SendIcon from '@mui/icons-material/Send';
 
 const CommentSection = (props) => {
 
@@ -87,7 +88,7 @@ const CommentSection = (props) => {
             </Box>
             <Avatar src={comment.userImage} alt={comment.author} style={{margin: '10px'}}/>
             <div>
-               <Typography variant="subtitle1" color="textSecondary" width="80%">
+               <Typography variant="subtitle1" color="textSecondary">
                   <b>{comment.userName} </b>
                   <b style={{color: 'black'}}>{comment.date} </b>
                </Typography>
@@ -126,9 +127,12 @@ const CommentSection = (props) => {
    <TextField multiline placeholder='Add Comment' onChange={handleInputChange} value={comment} 
    style={{color:'white', width: '70%',
    display: isGuest ?  "none"  : "default"}}></TextField>
-   <Button onClick={handleAddComment} 
+   <IconButton onClick={handleAddComment} 
+   disabled={comment.length === 0}
    style={{backgroundColor: "#BE8585", marginLeft: 5,
-   display: isGuest ?  "none"  : "default", diabled: comment.length > 0 ? true : false}}>Comment</Button>
+   display: isGuest ?  "none"  : "default"}}>
+      <SendIcon />
+   </IconButton>
    </Box>
 </Card>
   );
