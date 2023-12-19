@@ -40,7 +40,7 @@ export default function MapEditor(props) {
          borderSwitch = edits.borderSwitch 
          borderColor = edits.borderColor 
          borderWidth = edits.borderWidth 
-         regionNameSwitch = edits.regionSwitch !== undefined
+         regionNameSwitch = edits.regionSwitch
          regionNameColor = edits.regionNameColor 
          backgroundColor = edits.backgroundColor 
          radius = edits.radius 
