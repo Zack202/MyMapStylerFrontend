@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import jsondiffpatch from 'jsondiffpatch'
 import jsTPS from '../common/jsTPS'
 import MapFeaturesEdits_Transaction from '../transactions/MapFeaturesEdits_Transaction'
+import MapFeaturesEdits_TransactionADV from '../transactions/MapADVEdits_Transation.js'
 
 export const GlobalStoreContext = createContext({});
 console.log("create GlobalStoreContext");
@@ -782,7 +783,7 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapAttributes(store.currentMap.mapFeatures);
     }
 
-    //will be using this for all mapfeature edit transaction stuff
+    // will be using this for all mapfeature edit transaction stuff
     store.editMapAttributes = function (newMapEdits) {
         let map = JSON.parse(JSON.stringify(store.currentMap));
         map.mapFeatures.edits = newMapEdits;
@@ -796,6 +797,22 @@ function GlobalStoreContextProvider(props) {
         //console.log('set store to' + map.mapFeatures.edits.mapColor)
         //console.log('store is now' + store.currentMap.mapFeatures.edits.mapColor)
     }
+
+        // will be using this for ADV edit transaction stuff
+        store.editMapAttributesADV = function (newMapEdits) {
+            let map = JSON.parse(JSON.stringify(store.currentMap));
+            map.mapFeatures.ADV = newMapEdits;
+            //update store
+            storeReducer({
+                type: GlobalStoreActionType.UPDATE_MAP,
+                payload: map
+            })
+            console.log('store.editMapAttributesADV')
+            //console.log('recieved:' + newMapEdits.mapColor)
+            //console.log('set store to' + map.mapFeatures.edits.mapColor)
+            //console.log('store is now' + store.currentMap.mapFeatures.edits.mapColor)
+        }
+    
 
 
     store.publishMap = function (id) {
@@ -868,12 +885,21 @@ function GlobalStoreContextProvider(props) {
 
     }
 
+    store.addMapFeaturesEditsTransactionADV = function (oldEdits, newEdits) {
+        console.log('add transaction to stack')//Create transaction and add to stack
+        let transaction = new MapFeaturesEdits_TransactionADV(store, oldEdits, newEdits);
+        tps.addTransaction(transaction);
+    }
+
     store.undo = function () {
         tps.undoTransaction();
     }
     store.redo = function () {
         tps.doTransaction();
     }
+    /*store.redo2 = function () {
+        tps.doTransaction2();
+    }*/
     store.canUndo = function () {
         return tps.hasTransactionToUndo();
     }

@@ -38,7 +38,7 @@ function EditToolbar(props) {
     const dotOpacity = props.dotOpacity;
     const cursorModes = props.cursorModes;
     const setCursorModes = props.setCursorModes;
-    const setColorRegion = props.setColorRegion;
+    // const setColorRegion = props.setColorRegion;
     const colorRegion = props.colorRegion;
     const regionNameToDisplay = props.regionNameToDisplay;
     const selectedValue = props.selectedValue;
@@ -131,7 +131,10 @@ function EditToolbar(props) {
 
     const handleColorChangeRegions = (color) => {
       setTimeout(() => {
-        setColorRegion(color);
+         let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         let newEdits = JSON.parse(JSON.stringify(oldEdits));
+         newEdits.colorRegion = color;
+         store.addMapFeaturesEditsTransaction(oldEdits, newEdits)    
       }, 300);
     }
 

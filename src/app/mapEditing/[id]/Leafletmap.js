@@ -177,6 +177,13 @@ const LeafletmapInside = (props) => {
 
               updatedMap.mapFeatures.ADV = tempColors;
               store.updateCurrentMapLocally(updatedMap);
+
+              
+              let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+              let newEdits = JSON.parse(JSON.stringify(oldEdits));
+              newEdits.colorRegion = colorRegion;
+              store.addMapFeaturesEditsTransactionADV(oldEdits, newEdits)
+              
             }
           }
         });

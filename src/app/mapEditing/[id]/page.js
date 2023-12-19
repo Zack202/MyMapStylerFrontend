@@ -54,6 +54,7 @@ export default function MapEditingScreen() {
     legendValues: ['', ''],
     legendName: 'Legend',
     legendOn: false,
+    colorRegion: "#000000"
   };
 
   /*const [borderSwitch, setBorderSwitch] = useState(() =>
@@ -134,8 +135,10 @@ export default function MapEditingScreen() {
   // good as a state
   const [cursorModes, setCursorModes] = useState('');
 
-  // good as a state??
-  const [colorRegion, setColorRegion] = useState("#000000");
+  // The color picker for cursor, not the actual region changing color
+  // const [colorRegion, setColorRegion] = useState("#000000");
+  const colorRegion = store.currentMap ? (store.currentMap.mapFeatures.edits?.colorRegion ?? defaultValues.colorRegion) : defaultValues.colorRegion
+
 
   const [selectedValue, setSelectedValue] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.selectedValue ?? "") : ""
@@ -291,7 +294,7 @@ export default function MapEditingScreen() {
               cursorModes={cursorModes}
               setCursorModes={setCursorModes}
               colorRegion={colorRegion}
-              setColorRegion={setColorRegion}
+              // setColorRegion={setColorRegion}
               regionNameTextSize={regionNameTextSize}
               selectedValue={selectedValue}
               regionNameToDisplay={regionNameToDisplay}
