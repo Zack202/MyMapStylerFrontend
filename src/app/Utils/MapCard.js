@@ -160,6 +160,13 @@ function ListCard(props) {
 
     let cardElement = ""
 
+    const idMapping = {
+        5: 'Color Categorized ',
+        1: 'Textual',
+        2: 'Sized Dot',
+        3: 'Dot',
+        4: 'Choropleth'
+      };
 
     //published card
     if(idNamePair.published){
@@ -208,7 +215,7 @@ function ListCard(props) {
 
             </Box>
         
-        <Box sx={{ float:"left", display: "inline-block", width: "80%", marginTop: 5, marginLeft: 10, height: "100%"}}>
+        <Box sx={{ float:"left", display: "inline-block", width: "70%", marginTop: 5, marginLeft: 10, height: "80%"}}>
         
             <div>
             <Typography sx={{top: 0, position: "absolute", width: "15%", height: "10%", display: "flex", fontWeight: "900"}}>
@@ -222,6 +229,18 @@ function ListCard(props) {
             </Typography>
             </div>
         </Box>
+        <Box
+  border={1}
+  borderRadius={3}
+  padding={1}
+  margin="50px 0 0 50px" // Adjust these values to move the Box down and to the right
+  borderColor="maroon"
+  bgcolor="background.paper"
+  fontSize={16}
+>
+  Map Type: {idMapping[idNamePair.mapType]}
+</Box>
+
 
             <Box sx={{ p: 1, flexGrow: 1, right:"0", position: "absolute", top: 0}}>
                 <Typography variant='h7' fontSize="12pt">Created By: {idNamePair.userName}</Typography>
