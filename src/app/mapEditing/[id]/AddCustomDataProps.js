@@ -262,7 +262,7 @@ return(
             <Tab label="Data Points" />
         </Tabs>
         </Box>
-        {value === 0 && store.currentMap && (store.currentMap.mapType === 5 || store.currentMap.mapType === 1 || store.currentMap.mapType === 2 || store.currentMap.mapType === 4) ? (
+        {value === 0  ? (
         <CustomTabPanel value={value} index={0}>
   {/* Rendering dynamic components for 'Additional Props' */}
   {data.length === 0 && <h2>No data found. File may be corrupt.</h2>}

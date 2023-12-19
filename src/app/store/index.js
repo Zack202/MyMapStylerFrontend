@@ -479,24 +479,39 @@ function GlobalStoreContextProvider(props) {
                     }
                 }
                 const featuresArray = Object.entries(featuresADVToAppend).map(([region, ADV]) => ({ [region]: ADV }));
-                store.updateMapWithData(featuresArray, selectedOption);
+                //store.updateMapWithData(featuresArray, selectedOption);
             }
         } else {
             reader.onload = function (e) {
                 const content = e.target.result;
                 const rows = content.split("\n");
 
-                const dataPoints = [];
+                const dataPoints = store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.DP ? store.currentMap.mapFeatures.DP : [];
                 for (let i = 0; i < rows.length; i++) {
                     const columns = rows[i].split(",");
                     if (columns.length >= 2) {
                         const latitude = parseFloat(columns[0].trim());
                         const longitude = parseFloat(columns[1].trim());
-
+                        
+                        if( store.currentMap && store.currentMap.mapType && store.currentMap.mapType === 2){ //size dot map
+                            if(columns[3].trim() !== undefined){
+                                const value = parseFloat(columns[3].trim());
+                                if(!isNaN(value)&& !isNaN(latitude) && !isNaN(longitude)){
+                                    dataPoints.push([latitude, longitude, value]);
+                                }
+                            } else {
+                                console.log("no value for sized dot map")
+                                const value = 0;
+                                if(!isNaN(value)&& !isNaN(latitude) && !isNaN(longitude)){
+                                    dataPoints.push([latitude, longitude, value]);
+                                }
+                            }
+                        }else{
 
                         if (!isNaN(latitude) && !isNaN(longitude)) {
-                            dataPoints.push({ latitude, longitude });
+                            dataPoints.push([ latitude, longitude ]);
                         }
+                    }
                     }
                 }
 
@@ -505,13 +520,18 @@ function GlobalStoreContextProvider(props) {
                     store.currentMapFeatures = {
                         features: {
                             DP: [],
-                            ADV: {}
+                            ADV: {},
+                            edits: {}
                         },
                     };
                 }
+                let updatedMap = { ...store.currentMap };
+                updatedMap.mapFeatures.DP = dataPoints;
+                updatedMap.mapFeatures.edits = store.currentMap.mapFeatures.edits;
+                updatedMap.mapFeatures.ADV = store.currentMap.mapFeatures.ADV;
 
-
-                store.currentMapFeatures.features.DP.push(...dataPoints);
+                store.updateCurrentMapLocally(updatedMap)
+                //store.currentMapFeatures.features.DP.push(...dataPoints);
             }
         }
         reader.readAsText(file);

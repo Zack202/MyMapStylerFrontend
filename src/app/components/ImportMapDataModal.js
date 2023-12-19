@@ -124,6 +124,7 @@ export default function ImportMapDataModal() {
             <b>Note: Only .CSV are supported at this time. </b><br></br>
             If uploading <b>additional region data</b> please ensure the first collumn is the name of the region, and the proceeding collumns are the properties you wish to add with their label as the collumn name. <br></br>
             If uploading <b>data points</b> please ensure the first collumn of your data latitude and the second collumn is longitude. <br></br>
+            If uploading <b>data points for sized dot maps</b> please follow the format above and add a third collumn with the size of the dot. <br></br>
             Information will only be added to <b>regions that already exist</b> on the map.
             </Typography>
             </Box>
@@ -143,7 +144,7 @@ export default function ImportMapDataModal() {
                 id="fileInput"
                 onChange={handleFileChange}
                 style={{ display: 'none' }}
-                accept=".csv, .json"
+                accept=".csv"
               />
               <label htmlFor='fileInput' style={cursorStyle} >
                 Click or drag files here to upload
@@ -165,6 +166,10 @@ export default function ImportMapDataModal() {
           value="Data points"
           control={<Radio />}
           label="Data points"
+          disabled={
+            store.currentMap && store.currentMap.mapType &&
+            (store.currentMap.mapType === 5 || store.currentMap.mapType === 1 || store.currentMap.mapType === 4)
+          }
         />
       </RadioGroup>
 
