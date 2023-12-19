@@ -10,6 +10,8 @@ const Legend = (props) => {
   const legendValues = props.legendValues || [];
   const mapColor = props.mapColor || '#000000';
   const legendName = props.legendName || 'Legend';
+  const dotColor = props.dotColor || '#000000';
+  const radius = props.radius || 5;
 
   const getColor = (value) => {
     const index = legendValues.indexOf(value);
@@ -35,6 +37,20 @@ const Legend = (props) => {
       />
     );
 
+    const renderColorCircle = (
+        <div
+        key={`color-circle-${index}`}
+        style={{
+        width: radius * 2,
+        height: radius * 2,
+          backgroundColor: dotColor,
+          marginRight: '5px',
+          borderRadius: "50%"
+        }}
+
+      />
+    );
+
 
     let label;
     if (store.currentMap && store.currentMap.mapType === 4){
@@ -51,19 +67,37 @@ const Legend = (props) => {
     }
 
     return (
-      <div key={`legend-item-${index}`} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-        {renderColorSquare}
-        <span>{label}</span>
-      </div>
-    );
+        <div key={`legend-item-${index}`} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
+          {store.currentMap && store.currentMap.mapType && (
+            store.currentMap.mapType === 2 || store.currentMap.mapType === 3
+          ) ? (
+            <>
+              {renderColorCircle}
+              <span>{label}</span>
+            </>
+          ) : (
+            <>
+              {renderColorSquare}
+              <span>{label}</span>
+            </>
+          )}
+        </div>
+      );
   });
 
   return (
     <div className="legend" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000, background:'lightgrey', padding:'5px', borderRadius:'5px'}}>
       <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>{legendName}</div>
-      {legendItems}
+      {store.currentMap && store.currentMap.mapType && (
+        store.currentMap.mapType === 2 || store.currentMap.mapType === 3
+      ) ? (
+        legendItems.slice(0, 1)
+      ) : (
+        legendItems
+      )}
     </div>
   );
-};
+}
+
 
 export default Legend;

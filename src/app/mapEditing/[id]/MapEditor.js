@@ -902,8 +902,8 @@ export default function MapEditor(props) {
                   </TextField>
 
             </Typography>
-            {/*FOR CHOROPLETH AND HEAT____________________________________________________________*/}
-            { store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 4 || store.currentMap.mapType === 2) && (
+            {/*FOR CHOROPLETH ____________________________________________________________*/}
+            { store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 4) && (
             <Box backgroundColor="white" borderRadius={'5px'}>
           {rows.map((row) => (
             <div key={row.id} style={{ display: 'flex', alignItems: 'center', padding: '5px', marginLeft: '50px'}}>
@@ -993,6 +993,34 @@ export default function MapEditor(props) {
             <AddIcon />
           </IconButton>
         </Box>
+      )}
+      {/*______________________________________________________________________________________*/}
+      {store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 2 || store.currentMap.mapType === 3) && (
+         <Box backgroundColor="white" borderRadius={'5px'}>
+         <div style={{ display: 'flex', alignItems: 'center', padding: '5px', marginLeft: '50px' }}>
+           <div
+             style={{
+               width: radius *2,
+               height: radius *2,
+               backgroundColor: dotColor,
+               border: '1px solid black',
+               marginRight: '10px',
+               borderRadius: '50%',
+             }}
+           ></div>
+            <span style={{ marginLeft: '5px',  marginRight: '5px' }}>{'='}</span>
+           <TextField
+             variant="outlined"
+             size="small"
+             value={legendValues[0]} // Set your label variable here
+             disabled={cursorModes !== ''}
+             onChange={(e) => {
+               handleCellEdit(1,'label', e.target.value);
+             }}
+             style={{ marginLeft: 'auto' }}
+           />
+         </div>
+       </Box>
       )}
         {store.currentMap && store.currentMap.mapType === 4 && ( // Only show the button if the map is a choropleth
             <Box className = {styles.item_box}>
