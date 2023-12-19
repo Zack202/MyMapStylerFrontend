@@ -54,6 +54,7 @@ export default function MapEditingScreen() {
         legendValues: ['', ''],
         legendName: 'Legend',
         legendOn: false,
+        ttDirection: 'center'
       };
       
       /*const [borderSwitch, setBorderSwitch] = useState(() =>
@@ -145,6 +146,10 @@ export default function MapEditingScreen() {
 
       const [legendName, setLegendName] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.legendName ?? defaultValues.legendName) : defaultValues.legendName
+      );
+
+      const [ttDirection, setTtDirection] = useState(() =>
+        store.currentMap ? (store.currentMap.mapFeatures.edits?.ttDirection ?? defaultValues.ttDirection) : defaultValues.ttDirection
       );
 
 
@@ -239,6 +244,9 @@ export default function MapEditingScreen() {
 
                     cursorModes={cursorModes}
 
+                    ttDirection={ttDirection}
+                    setTtDirection={setTtDirection}
+
 
 
                     />
@@ -276,6 +284,8 @@ export default function MapEditingScreen() {
 
                                             legendOn={legendOn}
                                             legendName={legendName}
+
+                                            ttDirection={ttDirection}
 
 
 
@@ -315,6 +325,8 @@ export default function MapEditingScreen() {
 
                         legendOn={legendOn}
                         legendName={legendName}
+
+                        ttDirection={ttDirection}
 
 
                     />

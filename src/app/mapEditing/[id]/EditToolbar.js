@@ -76,6 +76,7 @@ function EditToolbar(props) {
     const legendValues = props.legendValues;
     const legendOn = props.legendOn;
     const legendName = props.legendName;
+    const ttDirection = props.ttDirection;
 
 
     const handleDoubleClick = () => {
@@ -114,7 +115,8 @@ function EditToolbar(props) {
                   legendValues,
                   legendOn,
                   legendName,
-                  regionNameToDisplay
+                  regionNameToDisplay,
+                  ttDirection
 
 
                   );

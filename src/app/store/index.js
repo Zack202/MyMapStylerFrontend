@@ -711,7 +711,8 @@ function GlobalStoreContextProvider(props) {
         legendValues,
         legendOn,
         legendName,
-        regionNameToDisplay
+        regionNameToDisplay,
+        ttDirection
         ) => {
         const updatedAttributes = {
             mapColor,
@@ -735,7 +736,8 @@ function GlobalStoreContextProvider(props) {
             legendValues,
             legendOn,
             legendName,
-            regionNameToDisplay
+            regionNameToDisplay,
+            ttDirection
           };
         
           // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits

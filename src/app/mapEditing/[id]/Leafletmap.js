@@ -66,6 +66,7 @@ const LeafletmapInside = (props) => {
   const legendColors = props.legendColors;
   const legendValues = props.legendValues;
   const regionNameToDisplay = props.regionNameToDisplay;
+  const ttDirection = props.ttDirection;
 
 
   const map = useMap();
@@ -226,7 +227,7 @@ const LeafletmapInside = (props) => {
               data={feature}
               onEachFeature={(feature, layer) => {
                 let content = `<div style="color: ${regionNameColor}; font-size: ${regionNameTextSize}px">${feature.properties.name}</div>`;
-                layer.bindTooltip(content, { permanent: true });
+                layer.bindTooltip(content, { permanent: true, direction: ttDirection });
               }}
             />
           ))
@@ -251,7 +252,7 @@ const LeafletmapInside = (props) => {
                   if (regionNameToDisplay in regionProperties) {
                     const featurePropertyValue = regionProperties[regionNameToDisplay];
                     let content = `<div style="color: ${regionNameColor}; font-size: ${regionNameTextSize}px">${featurePropertyValue}</div>`;
-                    layer.bindTooltip(content, { permanent: true });
+                    layer.bindTooltip(content, { permanent: true, direction: ttDirection });
                   }
                 }
               }}
@@ -351,6 +352,7 @@ export default function Leafletmap(props) {
   const legendOn = props.legendOn;
   const legendName = props.legendName;
   const regionNameToDisplay = props.regionNameToDisplay;
+  const ttDirection = props.ttDirection;
 
   if (typeof window !== 'undefined') {
     const mapRef = useRef(null);
@@ -386,6 +388,7 @@ export default function Leafletmap(props) {
             legendColors={legendColors}
             legendValues={legendValues}
             regionNameToDisplay={regionNameToDisplay}
+            ttDirection={props.ttDirection}
 
           />
           {legendOn && (

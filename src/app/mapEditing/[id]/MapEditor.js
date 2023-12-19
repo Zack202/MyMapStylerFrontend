@@ -125,6 +125,14 @@ export default function MapEditor(props) {
          store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
       }
 
+      const ttDirection = props.ttDirection;
+      const setTtDirection = props.setTtDirection;
+      const handleTtDirectionChange = (event) => {
+         //dropdown
+         setTtDirection(event.target.value);
+         //add temp fix here when doing undo redo
+      }
+
       //For Region Name Color
       //const setRegionNameColor = props.setRegionNameColor;
       //const regionNameColor = props.regionNameColor;
@@ -653,6 +661,23 @@ export default function MapEditor(props) {
                   }
                   />
                </Typography>
+               </Box>
+               <Box className = {styles.item_box}>
+               <FormControl fullWidth>
+                  <InputLabel id="select-label">Select a tooltip direction</InputLabel>
+                  <Select
+                     labelId="select-label"
+                     value={ttDirection}
+                     onChange={handleTtDirectionChange}
+                     label="Select a tooltip direction"
+                  >
+                     <MenuItem value="center">Center</MenuItem>
+                     <MenuItem value="top">Top</MenuItem>
+                     <MenuItem value="bottom">Bottom</MenuItem>
+                     <MenuItem value="left">Left</MenuItem>
+                     <MenuItem value="right">Right</MenuItem>
+                  </Select>
+               </FormControl>
                </Box>
                 <Box className = {styles.item_box}>
                <Typography className= {styles.text_color} component="h1" variant="h6"><i>Region Name Colors:</i> { }
