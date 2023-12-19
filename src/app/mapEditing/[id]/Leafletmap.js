@@ -66,7 +66,7 @@ const LeafletmapInside = (props) => {
   const legendColors = props.legendColors;
   const legendValues = props.legendValues;
   const regionNameToDisplay = props.regionNameToDisplay;
-  
+
 
   const map = useMap();
 
@@ -109,6 +109,7 @@ const LeafletmapInside = (props) => {
         let tempCenter = [lat, lng];
         setTempCenter(tempCenter);
       });
+
       if (cursorModes === 'dot') {
         map.off('click');
         map.on('click', (e) => {
@@ -126,7 +127,28 @@ const LeafletmapInside = (props) => {
             }
           }
         });
-      } else if (cursorModes === 'color') {
+      }
+      else if (cursorModes === 'sized dot') {
+        map.off('click');
+        map.on('click', (e) => {
+          if (cursorModes === 'sized dot') {
+            let lat = e.latlng.lat;
+            let lng = e.latlng.lng;
+            let val = 0;
+            let tempDot = [lat, lng, val];
+            //update store
+            if (store.currentMap && store.currentMap.mapFeatures) {
+              let updatedMap = { ...store.currentMap }
+              let tempDataPoints = [...store.currentMap.mapFeatures.DP]
+              tempDataPoints.push(tempDot)
+              updatedMap.mapFeatures.DP = tempDataPoints
+              store.updateCurrentMapLocally(updatedMap)
+            }
+          }
+        });
+
+      }
+      else if (cursorModes === 'color') {
         map.off('click');
         map.on('click', (e) => {
           if (cursorModes === 'color' && store.currentMap && store.currentMap.mapFeatures) {
@@ -142,15 +164,15 @@ const LeafletmapInside = (props) => {
                 if (!Array.isArray(tempColors[region])) {
                   tempColors[region] = [{}]; //shouldnt be necessary but just in case
                 } else if (!tempColors[region][0]) {
-                  tempColors[region][0] = {}; 
+                  tempColors[region][0] = {};
                 }
-              
+
                 if (!tempColors[region][0].hasOwnProperty('color')) {
                   tempColors[region][0].color = ""; // Add the 'color' property if it doesn't exist
                 }
               });
 
-                tempColors[clickedRegion][0].color = colorRegion;
+              tempColors[clickedRegion][0].color = colorRegion;
 
               updatedMap.mapFeatures.ADV = tempColors;
               store.updateCurrentMapLocally(updatedMap);
@@ -165,28 +187,28 @@ const LeafletmapInside = (props) => {
 
   const getRegionColor = (regionName) => {
 
-  //Clean region name
-  regionName = regionName.replace(/\./g, '');
-  if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
-    const regionColors = store.currentMap.mapFeatures.ADV;
-    if (regionColors[regionName] && regionColors[regionName].length > 0) {
-      const color = regionColors[regionName][0].color;
-      if (color) {
-        return color;
+    //Clean region name
+    regionName = regionName.replace(/\./g, '');
+    if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.ADV) {
+      const regionColors = store.currentMap.mapFeatures.ADV;
+      if (regionColors[regionName] && regionColors[regionName].length > 0) {
+        const color = regionColors[regionName][0].color;
+        if (color) {
+          return color;
+        } else {
+          return mapColor;
+        }
       } else {
         return mapColor;
       }
-    } else {
-      return mapColor;
+    }
   }
-  }
-}
 
   return (
     <div>
       <BackgroundOverlay backgroundColor={backgroundColor} />
       <GeoJSON style={countryStyle} data={geoJSONData} />
-      
+
 
       <FeatureGroup>
         {regionNameSwitch &&
@@ -252,12 +274,22 @@ const LeafletmapInside = (props) => {
             />
           ))}
       </FeatureGroup>
-      
-      {store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.DP && store.currentMap.mapFeatures.DP.map((coord, index) => (
+
+      {store.currentMap && store.currentMap.mapType && store.currentMap.mapType === 3 && store.currentMap.mapFeatures && store.currentMap.mapFeatures.DP && store.currentMap.mapFeatures.DP.map((coord, index) => (
         <CircleMarker
           key={index}
           center={coord}
           radius={radius}
+          pathOptions={{ color: 'transparent', fillColor: dotColor, fillOpacity: dotOpacity, opacity: dotOpacity }}
+        />
+      ))}
+
+      {store.currentMap && store.currentMap.mapType && store.currentMap.mapType === 2 && store.currentMap.mapFeatures && store.currentMap.mapFeatures.DP && store.currentMap.mapFeatures.DP.map(
+        (coord, index) => (
+        <CircleMarker
+          key={index}
+          center={[coord[0], coord[1]]}
+          radius={coord[2]}
           pathOptions={{ color: 'transparent', fillColor: dotColor, fillOpacity: dotOpacity, opacity: dotOpacity }}
         />
       ))}
@@ -332,37 +364,37 @@ export default function Leafletmap(props) {
 
     return (
       <div>
-        <MapContainer  ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
+        <MapContainer ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
 
-          <LeafletmapInside 
-      geoJSONData={geoJSONData}
-      regionSwitch={regionNameSwitch}
-      setTempCenter={setTempCenter}
-      setTempZoom={setTempZoom}
-      backgroundColor={backgroundColor}
-      radius={radius}
-      dotColor={dotColor}
-      dotOpacity={dotOpacity}
-      cursorModes={cursorModes}
-      colorRegion={colorRegion}
-      mapColor={mapColor}
-      borderColor={borderColor}
-      borderSwitch={borderSwitch}
-      selectedValue={selectedValue}
-      regionNameColor={regionNameColor}
-      regionNameTextSize={regionNameTextSize}
-      legendColors={legendColors}
-      legendValues={legendValues}
-      regionNameToDisplay={regionNameToDisplay}
+          <LeafletmapInside
+            geoJSONData={geoJSONData}
+            regionSwitch={regionNameSwitch}
+            setTempCenter={setTempCenter}
+            setTempZoom={setTempZoom}
+            backgroundColor={backgroundColor}
+            radius={radius}
+            dotColor={dotColor}
+            dotOpacity={dotOpacity}
+            cursorModes={cursorModes}
+            colorRegion={colorRegion}
+            mapColor={mapColor}
+            borderColor={borderColor}
+            borderSwitch={borderSwitch}
+            selectedValue={selectedValue}
+            regionNameColor={regionNameColor}
+            regionNameTextSize={regionNameTextSize}
+            legendColors={legendColors}
+            legendValues={legendValues}
+            regionNameToDisplay={regionNameToDisplay}
 
-      />
-      {legendOn &&(
-      <Legend
-      legendColors={legendColors}
-      legendValues={legendValues}
-      mapColor={mapColor}
-      legendName={legendName}
-      />)}
+          />
+          {legendOn && (
+            <Legend
+              legendColors={legendColors}
+              legendValues={legendValues}
+              mapColor={mapColor}
+              legendName={legendName}
+            />)}
           {borderSwitch && (
             <FeatureGroup>
               <GeoJSON
@@ -375,11 +407,11 @@ export default function Leafletmap(props) {
               />
             </FeatureGroup>
           )}
-      
-      </MapContainer>
-    </div>
-  );
-  }else{
+
+        </MapContainer>
+      </div>
+    );
+  } else {
 
     return null
   }

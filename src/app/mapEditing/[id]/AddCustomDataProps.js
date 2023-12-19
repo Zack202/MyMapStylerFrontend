@@ -75,7 +75,16 @@ export default function AddCustomDataProps(props) {
 
       const handlePointChange = (index, field, value) => {
         const newDataPoints = [...dataPoints];
-        newDataPoints[index][field === 'latitude' ? 0 : 1] = value;
+        if (field === 'latitude') {
+          newDataPoints[index][0] = value;
+        }
+        else if(field === 'longitude') {
+          newDataPoints[index][1] = value;
+        }
+        else {
+          newDataPoints[index][2] = value;
+        }
+        
         setDataPoints(newDataPoints); 
       };
 
@@ -83,6 +92,13 @@ export default function AddCustomDataProps(props) {
         setDataPoints([
           ...dataPoints,
           [ 0, 0 ]
+        ]);
+      };
+
+      const handleAddSizedPoint = () => {
+        setDataPoints([
+          ...dataPoints,
+          [ 0, 0, 0 ]
         ]);
       };
 
@@ -106,7 +122,7 @@ export default function AddCustomDataProps(props) {
           const updatedMap = { ...store.currentMap };
           updatedMap.mapFeatures = { ...updatedMap.mapFeatures };
       
-          updatedMap.mapFeatures.DP = dataPoints.map(point => [point[0], point[1]]);
+          updatedMap.mapFeatures.DP = dataPoints.map(point => point.length > 2 ? [point[0], point[1], point[2]] : [point[0], point[1]]);
       
           store.updateCurrentMapLocally(updatedMap);
         }
@@ -327,6 +343,12 @@ return(
             value={point[1]}
             onChange={(e) => handlePointChange(index, 'longitude', e.target.value)}
           />
+          <TextField
+            sx={{display: point.length > 2 ? "default" : "none"}}
+            label="Size"
+            value={point[2]}
+            onChange={(e) => handlePointChange(index, 'size', e.target.value)}
+          />
         </div>
       </div>
     ))}
@@ -336,6 +358,9 @@ return(
       <h2><u>Add points manually</u></h2>
       <Button variant="contained" color="primary" onClick={handleAddPoint} fullWidth style={{ margin: '8px 0' }}>
         Add New Point by Coordinates
+      </Button>
+      <Button variant="contained" color="primary" onClick={handleAddSizedPoint} fullWidth style={{ margin: '8px 0' }}>
+        Add New Sized Point by Coordinates
       </Button>
       <Button variant="contained" onClick={copyDataToStoreDP} fullWidth style={{ margin: '8px 0' }}>
         Set Data Points

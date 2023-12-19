@@ -13,6 +13,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import Alert from '@mui/material/Alert';
 import BackHandIcon from '@mui/icons-material/BackHand';
 import AdjustIcon from '@mui/icons-material/Adjust';
+import BlurCircularIcon from '@mui/icons-material/BlurCircular';
 
 function EditToolbar(props) {
 
@@ -173,6 +174,11 @@ function EditToolbar(props) {
       setCursorModes('dot')
     }
 
+    const handleTurnOnSizedDotMode = () => {
+      console.log('sized dot mode')
+      setCursorModes('sized dot')
+    }
+
     return (
       <div id={styles.edit - toolbar} >
         <div id={styles.editheader} onDoubleClick={handleDoubleClick}>
@@ -210,6 +216,10 @@ function EditToolbar(props) {
 
         <IconButton onClick={handleTurnOnDotMode}>
           <AdjustIcon sx={{ fontSize: "40pt", color: cursorModes === 'dot' ? 'green' : 'black' }} />
+        </IconButton>
+
+        <IconButton onClick={handleTurnOnSizedDotMode}>
+          <BlurCircularIcon sx={{ fontSize: "40pt", color: cursorModes === 'dot' ? 'green' : 'black' }} />
         </IconButton>
 
         <IconButton onClick={handleTurnOnColorMode}>
