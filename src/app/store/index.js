@@ -349,22 +349,12 @@ function GlobalStoreContextProvider(props) {
 
         if (response.data.success) {
             dupMap = response.data.map;
-            let counter = 2;
-            let check = true;
-            // new name for the dup map with a system of [name](2) -> [name](3) and so on
-            let dupName = dupMap.name + "(" + counter.toString() + ")";
-            while (check) {
-                if (this.idNamePairs.length === 0)
-                    break;
-                for (let i = 0; i < this.idNamePairs.length; i++) {
-                    if (this.idNamePairs[i].name === dupName) {
-                        counter += 1;
-                        dupName = dupMap.name + "(" + counter.toString() + ")";
-                        break;
-                    }
-                    else if (i === this.idNamePairs.length - 1) check = false
-                }
-
+            const regex = /\(\d+\)$/; 
+            let newName;
+            if (regex.test(dupMap.name)) {
+              newName = dupMap.name.replace(regex, (match) => `(${parseInt(match.slice(1, -1)) + 1})`);
+            } else {
+              newName = `${dupMap.name}(1)`;
             }
             let userName = auth.user.userName //MMM
             let ownerEmail = auth.user.email //mango@gmail.com
@@ -374,7 +364,7 @@ function GlobalStoreContextProvider(props) {
             let mapType = dupMap.mapType;
             let mapDesc = dupMap.description;
 
-            response = await api.createNewMap(dupName, userName, ownerEmail, mapData, mapType, mapDesc, mapFeatures);
+            response = await api.createNewMap(newName, userName, ownerEmail, mapData, mapType, mapDesc, mapFeatures);
             console.log("createNewList response: " + response);
             if (response.status === 201) {
                 console.log('success')
