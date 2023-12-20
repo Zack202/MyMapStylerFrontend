@@ -128,8 +128,8 @@ export default function Home() {
                     break;
                 }
                 case "Date": {
-                    store.idNamePairs.sort((p1, p2) => p1.createdAt < p2.createdAt ? -
-                    1 : (p1.createdAt > p2.createdAt) ? 1 : 0);
+                    store.idNamePairs.sort((p1, p2) => p1.createdAt > p2.createdAt ? -
+                    1 : (p1.createdAt < p2.createdAt) ? 1 : 0);
                     store.updateSort("Date");
                     break;
                 }
