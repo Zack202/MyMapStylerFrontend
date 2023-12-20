@@ -14,7 +14,7 @@ const Legend = (props) => {
   const radius = props.radius || 5;
 
   const getColor = (value) => {
-    const index = legendValues.indexOf(value);
+    const index = value;//legendValues.indexOf(value); //old code makes the legend all the same color(was using cholo map idk abt other maps)
     if (index !== -1 && index < legendColors.length) {
       return legendColors[index];
     }
@@ -22,7 +22,7 @@ const Legend = (props) => {
   };
 
   const legendItems = legendValues.map((value, index) => {
-    const legendColor = getColor(value);
+    const legendColor = getColor(index);//value); // old code makes legend all the same color (was using cholo map idk abt other maps)
 
     const renderColorSquare = (
       <div
