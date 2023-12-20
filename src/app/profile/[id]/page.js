@@ -26,6 +26,7 @@ import AuthContext from '../../auth';
 import { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import GlobalStoreContext from '../../store';
+import MUIErrorModal from '../../components/MUIErrorModal';
 
 
 const defaultTheme = createTheme({
@@ -41,6 +42,19 @@ const defaultTheme = createTheme({
     },
   }
 },);
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'maroon',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p:1,
+  color: 'white'
+};
 
 
 
@@ -86,6 +100,9 @@ export default function Profile() {
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
 
+  const [errorModal, setErrorModal] = React.useState(false);
+
+
 
   const [formData, setFormData] = useState("");
 
@@ -110,19 +127,28 @@ export default function Profile() {
   const handleSubmit = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    /*const data = new FormData(event.currentTarget);
-    console.log({
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
-    });*/
-    let data = {
-      firstName: formData.firstName,
-      lastName: formData.lastName
+
+    if(formData.firstName === "" || formData.lastName === ""){
+      setErrorModal(true);
     }
+    else{
+      let data = {
+        firstName: formData.firstName,
+        lastName: formData.lastName
+      }
+
+      console.log("DATA:", data);
     
-    auth.updateUserInfo(data);
-    handleCloseEdit();
+      auth.updateUserInfo(data);
+      handleCloseEdit();
+    }
   };
+
+  function handleCloseErrorModal(event) {
+    event.stopPropagation();
+
+    setErrorModal(false);
+}
 
   const handleCloseConfirm = () => {
     console.log("Delete Profile");
@@ -131,88 +157,43 @@ export default function Profile() {
   }
 
 
-
   return (
-    <div>
       <Grid container align={'center'} >
+
         <Grid item xs={12} >
           <TopAppBanner link={"/home"}/>
         </Grid>
 
-        <div>
-          <ThemeProvider theme={defaultTheme}>
-            <CssBaseline />
-            <main>
-              <div>
-                <Grid item>
-                  <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
+        <Grid item xs={12} >
+         <ThemeProvider theme={defaultTheme}>
+          <CssBaseline />
+
+          <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
                     Profile
-                  </Typography>
-                  </Grid>
-                 
-                  <Grid item>
-                  <Box
-                    sx={{
-                      width: '100%',
-                      height: '400px',
-                      color: '#fff',
-                      '& > .MuiBox-root > .MuiBox-root': {
-                        p: 1,
-                        borderRadius: 2,
-                        fontSize: '0.875rem',
-                        fontWeight: '700',
-                        alignItems: 'center'
-                      },
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        gridTemplateRows: 'auto',
-                        gap: 1,
-                        gridTemplateAreas: `"profile account account"
-        "profile community community"
-        "profile community community"`,
-                      }}
-                    >
-                      <Box sx={{ marginLeft: 1, gridArea: 'profile', bgcolor: '#e8e8e8' }} align={"center"}>
+          </Typography>
 
-
-                        <Avatar sx={{ width: 175, height: 175 }} src={'/profile image.png'} alt="Profile Picture" />
-
-
-                        <Grid container spacing={1} align="center" sx={{marginTop: 2}}>
-                          <Grid item>
+          <Box sx={{ marginRight: 1, marginBottom: '120px', height: '250px', textAlign: 'center', borderRadius: '10px',
+           width: ".80", bgcolor: '#f2b8b8' }}>
+              <Typography variant="h5"> Account Settings </Typography>
+              <Typography textAlign='center'>First Name: {exampleUser.firstName}</Typography>
+              <Typography textAlign='center'>Last Name: {exampleUser.lastName}</Typography>
+              <Typography textAlign='center'>User Name: {exampleUser.userName}</Typography>
+              <Typography textAlign='center'>Email: {exampleUser.email}</Typography>
+              <Grid container spacing={1} align="center" sx={{marginTop: 2}}>
+                          <Grid item xs={12}>
                             <Button onClick={handleOpenEdit} variant="contained" color="primary" >
                               Edit Account Information
                             </Button>
                           </Grid>
-                          <Grid item>
+                          <Grid item xs={12}>
                             <Button onClick={handleOpenDelete} variant="contained" color="primary">
                               Delete Profile
                             </Button>
-                          </Grid>
+                           </Grid>
+              </Grid>
+           </Box>
 
-                        </Grid>
-
-                      </Box>
-
-                      <Box sx={{ marginRight: 1, gridArea: 'account', bgcolor: '#800000' }}>
-                        <Typography variant="h5"> Account Settings </Typography>
-                        <Typography textAlign='left'>First Name: {exampleUser.firstName}</Typography>
-                        <Typography textAlign='left'>Last Name: {exampleUser.lastName}</Typography>
-                        <Typography textAlign='left'>User Name: {exampleUser.userName}</Typography>
-                        <Typography textAlign='left'>Email: {exampleUser.email}</Typography>
-                      </Box>
-
-
-
-
-                    </Box>
-                  </Box>
-                  </Grid>
-                  <Modal
+           <Modal
                   open={openDelete}
                   onClose={handleCloseDelete}
                 >
@@ -232,13 +213,13 @@ export default function Profile() {
                       <Typography component="h1" variant="h5">
                         Are you sure you want to delete your account?
                       </Typography>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                      <Grid container align="center" >
+                        <Grid item xs={6}>
                       <Button onClick={handleCloseDelete} variant="contained" color="primary" sx={{marginTop: 1}}>
                         Cancel
                       </Button>
                       </Grid>
-                      <Grid item xs={12} sm={6}>
+                      <Grid item xs={6} >
                       <Button onClick={handleCloseConfirm} variant="contained" color="primary" sx={{marginTop: 1}}>
                         Delete
                       </Button>
@@ -297,49 +278,8 @@ export default function Profile() {
                               onChange={handleInputChange}
                             />
                           </Grid>
-                          {/* <Grid item xs={12}>
-                            <TextField
-                              required
-                              fullWidth
-                              id="username"
-                              label="Username"
-                              name="username"
-                              autoComplete="username"
-                            />
-                          </Grid> */}
-                          {/* <Grid item xs={12}>
-                            <TextField
-                              required
-                              fullWidth
-                              id="email"
-                              label="Email Address"
-                              name="email"
-                              autoComplete="email"
-                            />
-                          </Grid> */}
-                          {/* <Grid item xs={12}>
-                            <TextField
-                              required
-                              fullWidth
-                              name="password"
-                              label="Password"
-                              type="password"
-                              id="password"
-                              autoComplete="new-password"
-                            />
-                          </Grid>
-                          <Grid item xs={12}>
-                            <TextField
-                              required
-                              fullWidth
-                              name="confirmpassword"
-                              label="Confirm Password"
-                              type="confirmpassword"
-                              id="confirmpassword"
-                              autoComplete="confirm-password"
-                            />
-                          </Grid> */}
                         </Grid>
+
                         <Button
                           type="submit"
                           fullWidth
@@ -350,17 +290,38 @@ export default function Profile() {
                         </Button>
                       </Box>
                     </Box>
-                    {/* <Copyright sx={{ mt: 5 }} /> */}
                   </Container>
                 </Modal>
-              </div>
-            </main>
+
+                <Modal
+            open={errorModal}
+            >
+            <Box sx={style}>
+                <div className="modal-dialog">
+                <header className="dialog-header">
+                    Error: {"Both Fields Must Be Filled To Submit."}
+                </header>
+                <div id="confirm-cancel-container">
+                    <button
+                        id="dialog-no-button"
+                        className="modal-button"
+                        onClick={handleCloseErrorModal}
+                    >Close</button>
+                </div>
+            </div>
+            </Box>
+        </Modal>
+
+
           </ThemeProvider>
-        </div>
-        <Grid item xs={12}>
+        </Grid>
+
+        <Grid item xs={12} >
           <BottomAppBanner />
         </Grid>
-      </Grid>
-    </div>
+  
+
+    </Grid>
+
   );
-}
+}  

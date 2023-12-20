@@ -71,10 +71,10 @@ export default function SplashScreen() {
       <Typography className={styles.center} style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '110px' }}>
         <b><u>My Map Styler</u></b>
       </Typography>
-      <Box sx={{ height: 250, background: '#BE8585', textAlign: 'center', borderRadius: '10px' }}>
+      <Box sx={{ height: 250, background: '#f2b8b8', textAlign: 'center', borderRadius: '10px' }}>
         <Box sx={{ height: 100, width: 800, display: 'flex', flexDirection: 'column' }}>
           <Box>
-            <Typography variant="h6" style={{ color: 'white', margin: '40px' }}>
+            <Typography variant="h6" style={{ color: 'black', margin: '40px' }}>
               Welcome to <b>My Map Styler</b>. Here you can upload and edit maps, which can be later shared and downloaded. See a map you like and want to talk about it? Simply start a thread and get to discussing. Let's get started.
             </Typography>
             <Button href="/login" variant="contained" className={styles.buttons} style={{ background: 'maroon', margin: '10px' }}>Login</Button>

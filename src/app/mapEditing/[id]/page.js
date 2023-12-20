@@ -58,29 +58,24 @@ export default function MapEditingScreen() {
 
   /*const [borderSwitch, setBorderSwitch] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.borderSwitch ?? defaultValues.borderSwitch) : defaultValues.borderSwitch
-  );*/
-  
-
-  /*
+  );
   const [borderWidth, setBorderWidth] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.borderWidth ?? defaultValues.borderWidth) : defaultValues.borderWidth
   );
   const [borderColor, setBorderColor] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.borderColor ?? defaultValues.borderColor) : defaultValues.borderColor
   );
-  
   const [regionSwitch, setRegionSwitch] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.regionSwitch ?? defaultValues.regionSwitch) : defaultValues.regionSwitch
   );
   const [regionNameColor, setRegionNameColor] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameColor ?? defaultValues.regionNameColor) : defaultValues.regionNameColor
-  );*/
-  const [regionNameTextSize, setRegionNameTextSize] = useState(() =>
-    store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameTextSize ?? defaultValues.regionNameTextSize) : defaultValues.regionNameTextSize
   );
-  /*
   const [backgroundColor, setBackgroundColor] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.backgroundColor ?? defaultValues.backgroundColor) : defaultValues.backgroundColor
+  );
+  const [regionNameTextSize, setRegionNameTextSize] = useState(() =>
+    store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameTextSize ?? defaultValues.regionNameTextSize) : defaultValues.regionNameTextSize
   );*/
   
   const borderSwitch = store.currentMap ? (store.currentMap.mapFeatures.edits?.borderSwitch ?? defaultValues.borderSwitch) : defaultValues.borderSwitch
@@ -89,8 +84,8 @@ export default function MapEditingScreen() {
   const regionSwitch = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionSwitch ?? defaultValues.regionSwitch) : defaultValues.regionSwitch
   const regionNameColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameColor ?? defaultValues.regionNameColor) : defaultValues.regionNameColor
   const backgroundColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.backgroundColor ?? defaultValues.backgroundColor) : defaultValues.backgroundColor
-  //const regionNameTextSize = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameTextSize ?? defaultValues.regionNameTextSize) : defaultValues.regionNameTextSize
-  
+  const regionNameTextSize = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameTextSize ?? defaultValues.regionNameTextSize) : defaultValues.regionNameTextSize
+
   // Is good like this
   const [tempCenter, setTempCenter] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.tempCenter) : defaultValues.tempCenter
@@ -98,8 +93,8 @@ export default function MapEditingScreen() {
   const center = store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.center) : defaultValues.center
   // Is good like this
   const [tempZoom, setTempZoom] = useState(() =>
-     store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.tempZoom) : defaultValues.tempZoom
-   );
+    store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.tempZoom) : defaultValues.tempZoom
+  );
   const zoom = store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.zoom) : defaultValues.zoom
 
   // should be undo-able
@@ -137,14 +132,20 @@ export default function MapEditingScreen() {
   // good as a state??
   const [colorRegion, setColorRegion] = useState("#000000");
 
-  const [selectedValue, setSelectedValue] = useState(() =>
+  const selectedValue = store.currentMap ? (store.currentMap.mapFeatures.edits?.selectedValue ?? "") : ""
+  const regionNameToDisplay = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameToDisplay ?? "") : ""
+  const lowColorChoro = store.currentMap ? (store.currentMap.mapFeatures.edits?.lowColorChoro ?? defaultValues.lowColorChoro) : defaultValues.lowColorChoro
+  const highColorChoro = store.currentMap ? (store.currentMap.mapFeatures.edits?.highColorChoro ?? defaultValues.highColorChoro) : defaultValues.highColorChoro
+  const levelsChoro = store.currentMap ? (store.currentMap.mapFeatures.edits?.levelsChoro ?? defaultValues.levelsChoro) : defaultValues.levelsChoro
+
+  /*const [selectedValue, setSelectedValue] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.selectedValue ?? "") : ""
   );
 
   const [regionNameToDisplay, setRegionNameToDisplay] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameToDisplay ?? "") : ""
   );
-
+  
   const [lowColorChoro, setLowColorChoro] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.lowColorChoro ?? defaultValues.lowColorChoro) : defaultValues.lowColorChoro
   );
@@ -155,9 +156,9 @@ export default function MapEditingScreen() {
 
   const [levelsChoro, setLevelsChoro] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.levelsChoro ?? defaultValues.levelsChoro) : defaultValues.levelsChoro
-  );
+  );*/
 
-  const [legendColors, setLegendColors] = useState(() =>
+  /*const [legendColors, setLegendColors] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.legendColors ?? defaultValues.legendColors) : defaultValues.legendColors
   );
 
@@ -168,14 +169,20 @@ export default function MapEditingScreen() {
   const [legendOn, setLegendOn] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.legendOn ?? defaultValues.legendOn) : defaultValues.legendOn
   );
-
-  const [legendName, setLegendName] = useState(() =>
+   const [legendName, setLegendName] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.legendName ?? defaultValues.legendName) : defaultValues.legendName
-  );
-
-      const [ttDirection, setTtDirection] = useState(() =>
+  );const [ttDirection, setTtDirection] = useState(() =>
         store.currentMap ? (store.currentMap.mapFeatures.edits?.ttDirection ?? defaultValues.ttDirection) : defaultValues.ttDirection
       );
+      */
+  const legendColors = store.currentMap ? (store.currentMap.mapFeatures.edits?.legendColors ?? defaultValues.legendColors) : defaultValues.legendColors
+  const legendValues = store.currentMap ? (store.currentMap.mapFeatures.edits?.legendValues ?? defaultValues.legendValues) : defaultValues.legendValues
+  const legendOn = store.currentMap ? (store.currentMap.mapFeatures.edits?.legendOn ?? defaultValues.legendOn) : defaultValues.legendOn
+  const legendName = store.currentMap ? (store.currentMap.mapFeatures.edits?.legendName ?? defaultValues.legendName) : defaultValues.legendName
+  const ttDirection = store.currentMap ? (store.currentMap.mapFeatures.edits?.ttDirection ?? defaultValues.ttDirection) : defaultValues.ttDirection
+
+
+
 
 
   let mapData;
@@ -236,39 +243,39 @@ export default function MapEditingScreen() {
               dotOpacity={dotOpacity}
 
               selectedValue={selectedValue}
-              setSelectedValue={setSelectedValue}
+              //setSelectedValue={setSelectedValue}
 
-              setRegionNameTextSize={setRegionNameTextSize}
+              //setRegionNameTextSize={setRegionNameTextSize}
               regionNameTextSize={regionNameTextSize}
 
               //For choropleth map
-              setLowColorChoro={setLowColorChoro}
+              //setLowColorChoro={setLowColorChoro}
               lowColorChoro={lowColorChoro}
 
-              setHighColorChoro={setHighColorChoro}
+              //setHighColorChoro={setHighColorChoro}
               highColorChoro={highColorChoro}
 
-              setLevelsChoro={setLevelsChoro}
+              //setLevelsChoro={setLevelsChoro}
               levelsChoro={levelsChoro}
 
-              setLegendColors={setLegendColors}
+              //setLegendColors={setLegendColors}
               legendColors={legendColors}
 
-              setLegendValues={setLegendValues}
+              //setLegendValues={setLegendValues}
               legendValues={legendValues}
               //For choropleth map
 
-              setLegendOn={setLegendOn}
+              //setLegendOn={setLegendOn}
               legendOn={legendOn}
 
-              setLegendName={setLegendName}
+              //setLegendName={setLegendName}
               legendName={legendName}
 
-                    ttDirection={ttDirection}
-                    setTtDirection={setTtDirection}
+              ttDirection={ttDirection}
+              //setTtDirection={setTtDirection}
 
               regionNameToDisplay={regionNameToDisplay}
-              setRegionNameToDisplay={setRegionNameToDisplay}
+              //setRegionNameToDisplay={setRegionNameToDisplay}
 
               cursorModes={cursorModes}
             />
@@ -308,7 +315,7 @@ export default function MapEditingScreen() {
               legendName={legendName}
 
 
-                                            ttDirection={ttDirection}
+              ttDirection={ttDirection}
 
 
 
@@ -349,8 +356,8 @@ export default function MapEditingScreen() {
                 legendOn={legendOn}
                 legendName={legendName}
 
-                        ttDirection={ttDirection}
-                        mapName={mapName}
+                ttDirection={ttDirection}
+                mapName={mapName}
 
 
               />

@@ -14,7 +14,7 @@ export default function HomeBanner() {
             width: '100%'
           }}
         >
-          <AppBar position="static" sx={{ height: '50%', bgcolor: "#BE8585" }}>
+          <AppBar position="static" sx={{ height: '50%', bgcolor: "#f2b8b8" }}>
             <Toolbar variant='dense' sx={{ justifyContent: 'space-between' }}>
               <Button href="/browser" variant='contained' style={{ width: "15%", background: 'maroon', color: "white", }}>
                 Switch to Browse
@@ -28,7 +28,7 @@ export default function HomeBanner() {
                   flexGrow: 1,
                 }}
               >
-                <Typography style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '20px', marginRight: '17.5%' }}>
+                <Typography style={{ color: 'black', fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '20px', marginRight: '17.5%' }}>
                   <b><u>YOUR MAPS</u></b>
                 </Typography>
               </Box>
