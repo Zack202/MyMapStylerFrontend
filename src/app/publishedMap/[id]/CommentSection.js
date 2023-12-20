@@ -73,7 +73,7 @@ const CommentSection = (props) => {
             handleDeleteComment(event, comment)
              }} 
             style={{ position: 'absolute', top: 0, right: 0, 
-            visibility: (comment.userName === auth.user.userName) || (store.currentMap.userName === auth.user.userName) ? "visible" : "hidden" }}
+            visibility: (auth.user && (comment.userName === auth.user.userName)) || (auth.user && (store.currentMap.userName === auth.user.userName)) ? "visible" : "hidden" }}
             >
                <DeleteIcon style={{color:'maroon'}}/>
             </IconButton>

@@ -1,29 +1,21 @@
 'use client'
 import styles from './SplashScreen.module.css'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import AuthContext from './auth'
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 
-const backgroundStyle = {
-  backgroundImage: 'url("./hckgavj2l7871.webp")',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  height: '100vh',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-};
 
 export default function SplashScreen() {
   const { auth } = useContext(AuthContext);
+  const router = useRouter();
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   if (auth.loggedIn) {
-    const router = useRouter();
     if (auth.user.userName === "GUEST") {
       router.push('/browser');
     }
@@ -32,6 +24,37 @@ export default function SplashScreen() {
     }
 
   }
+
+  useEffect(() => {
+    const loadImage = async () => {
+      const img = new Image();
+      img.src = './hckgavj2l7871.webp';
+      img.onload = () => {
+        setImageLoaded(true);
+        if (auth.loggedIn) {
+          if (auth.user.userName === "GUEST") {
+            router.push('/browser');
+          } else {
+            router.push('/home');
+          }
+        }
+      };
+    };
+
+    loadImage();
+  }, [auth, router]);
+
+  const backgroundStyle = {
+    backgroundImage: imageLoaded ? 'url("./hckgavj2l7871.webp")' : 'url("./placeholder.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+  };
 
   const handleGuest = (event) => {
     event.preventDefault();
