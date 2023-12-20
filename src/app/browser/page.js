@@ -26,6 +26,7 @@ const backgroundStyle = {
 
 export default function Browser() {
 
+
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
 

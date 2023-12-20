@@ -211,7 +211,9 @@ export default function CreateAccountScreen() {
                             type="button"
                             fullWidth
                             variant="contained"
-                            sx={{ backgroundColor: 'maroon', mt: 3, mb: 1, height: '40px'}}
+                            sx={{ backgroundColor: 'maroon', mt: 3, mb: 1, height: '40px', '&:hover': {
+                                backgroundColor: 'maroon',
+                                },}}
                             onClick={handleSubmit}
                             >
                             Confirm Registration
