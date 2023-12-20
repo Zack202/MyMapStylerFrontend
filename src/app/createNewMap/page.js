@@ -61,8 +61,16 @@ export default function CreateMapModal() {
 
     const [mapType, setMapType] = React.useState('');
     const handleChange = (event) => {
+        if(event.target.value === defaultMapType){
+            setMapTypeExists(true);
+            setDiffMapType(false);
+        }
         setMapType(event.target.value);
-        setMapTypeExists(false);
+        if(mapTypeExists){
+            setDiffMapType(true);
+            setMapTypeExists(false);
+        }
+        
     };
 
     const [open, setOpen] = React.useState(false);
@@ -85,7 +93,11 @@ export default function CreateMapModal() {
     const [mapFeatures, setMapFeatures] = useState(null);
     const [validFileMessage, setValidFileMessage] = useState("Waiting for file")
     const [ext, setExt] = useState("");
+
     const [mapTypeExists, setMapTypeExists] = useState(false);
+    const [diffMapType, setDiffMapType] = useState(false);
+    const [defaultMapType, setDefaultMapType] = useState('');
+
     var shapefile = require("shapefile");
 
     const correctTypes = ['kml', 'json', 'zip', 'shp'];
@@ -160,6 +172,8 @@ export default function CreateMapModal() {
                         console.log('map uploaded')
                         setMapTypeExists(true);
                         setMapType(parsedData.mapType);
+                        setDiffMapType(false);
+                        setDefaultMapType(parsedData.mapType);
                     }
                     else{
                         setMapTypeExists(false);
@@ -175,8 +189,13 @@ export default function CreateMapModal() {
     };
 
     const handleCreateMap = (event) => {
-        console.log(mapType)
-        store.createNewMap(mapName, mapData, mapType, mapDesc)
+        //reset features
+        console.log(mapFeatures);
+        if(mapType !== defaultMapType){
+            console.log('not the same map type');
+            setMapFeatures(null);
+        }
+        store.createNewMap(mapName, mapData, mapType, mapDesc, mapFeatures);
     };
 
     return (
@@ -204,7 +223,7 @@ export default function CreateMapModal() {
                         
                         <Box sx={{marginTop: 1, marginBottom: 5, position: "absolute"}}>
                         <div id="middle-container">
-                            <input type="file" accept=".zip, .json, .kml" id="import-map-button" onChange={handleFileChange} />
+                            <input type="file" accept=".zip, .json, .kml" id="import-map-button"  onChange={handleFileChange} />
                         </div>
                         </Box>
 
@@ -236,6 +255,10 @@ export default function CreateMapModal() {
                         <Box sx={{marginTop: 5}}>
                         <Typography visibility={mapTypeExists ? 'none' : 'hidden'} color='red'>
                             *This was the type found in your file
+                        </Typography>
+
+                        <Typography visibility={diffMapType ? 'none' : 'hidden'} color='red'>
+                            *The edits won't carry over due to confliciting types.
                         </Typography>
 
                         <FormControl fullWidth>
