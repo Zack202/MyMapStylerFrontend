@@ -299,16 +299,19 @@ function ListCard(props) {
                 // disabled={!store.canUndo()}
                 id='duplicate-button'
                 variant="contained"
-                sx={{margin: 1, backgroundColor: "maroon"}}
+                sx={{margin: 1, backgroundColor: "maroon", '&:hover': {
+                    backgroundColor: 'maroon',
+                    },}}
                 onClick={handleFork}
                 >
                 Fork
             </Button>
-            <ExportMapModal />
             <Button 
                 id='publish-button'
                 variant="contained"
-                sx={{margin: 1, visibility: actionButtons, backgroundColor: "maroon"}}
+                sx={{margin: 1, visibility: actionButtons, backgroundColor: "maroon",'&:hover': {
+                    backgroundColor: 'maroon',
+                    },}}
                 onClick={handlePublish}
                 >
                 Publish

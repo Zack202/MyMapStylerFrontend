@@ -12,6 +12,7 @@ import Legend from './Legend';
 import L from 'leaflet';
 import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { Button } from '@mui/material';
 
 const BackgroundOverlay = ({ backgroundColor }) => {
   const style = {
@@ -384,10 +385,29 @@ export default function Leafletmap(props) {
     });
 };
 
+  const downloadAsJSON = () => {
+    let mapData = {
+      geo: {...store.currentMap.mapGeometry},
+      mapFeatures: {...store.currentMap.mapFeatures}
+    }
+    
+
+    const jsonMapData = JSON.stringify(mapData);
+
+    // Create a Blob from the JSON data
+    const blob = new Blob([jsonMapData], { type: 'application/json' });
+
+    // Create a download link and trigger a click event
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = store.currentMap.name + '.json';
+    link.click();
+  }
+
 
     return (
       <div>
-        <MapContainer id='mapC' ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
+        <MapContainer id='mapC' ref={mapRef} style={{ height: "71vh" }} center={center} zoom={zoom}>
 
           <LeafletmapInside
             geoJSONData={geoJSONData}
@@ -435,8 +455,23 @@ export default function Leafletmap(props) {
           )}
 
         </MapContainer>
-        <button onClick={captureMapAsPNG}>Capture Map PNG</button>
-        <button onClick={captureMapAsJPG}>Capture Map JPG</button>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', background: '#d4d4d4', padding: '12px' }}>
+        <Button onClick={captureMapAsPNG} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF','&:hover': {
+                backgroundColor: 'maroon',
+                }, }}>
+          Export as PNG
+        </Button>
+        <Button onClick={captureMapAsJPG} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF','&:hover': {
+                backgroundColor: 'maroon',
+                }, }}>
+          Export as JPG
+        </Button>
+        <Button onClick={downloadAsJSON} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF','&:hover': {
+                backgroundColor: 'maroon',
+                }, }}>
+          Export as json
+        </Button>
+      </div>
       </div>
     );
   } else {

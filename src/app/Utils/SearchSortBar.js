@@ -248,8 +248,12 @@ export default function PrimarySearchAppBar() {
           </Search>
           {/* <CreateMapModal /> */}
           <Box item xs={12} sx={{}}>
-                <Button sx={{
-                    marginLeft: 5, marginRight: 0, marginTop: .75, display:
+                <Button sx={{ backgroundColor: "maroon", color: "white",
+                    marginLeft: 5, marginRight: 0, marginTop: .75,
+                    '&:hover': {
+                      backgroundColor: 'maroon',
+                      },
+                    display:
                         isGuest
                             ? "none"
                             : "inline-block",
@@ -286,6 +290,7 @@ export default function PrimarySearchAppBar() {
             variant="contained"
             onClick={handleSubmitFilter}
             id="applyFilter"
+            style={{backgroundColor: "maroon", color: "white"}}
           >
             Apply Filter
           </Button>

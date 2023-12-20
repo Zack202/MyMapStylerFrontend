@@ -56,7 +56,10 @@ function PublishedCard(props) {
 
 
     let isItLiked = idNamePair.likes.includes(userName);
+    let isItDisliked = idNamePair.dislikes.includes(userName);
+    console.log(idNamePair.likes);
     const [liked, setLiked] = useState(isItLiked);
+
     const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
     
 
@@ -65,7 +68,7 @@ function PublishedCard(props) {
         if (!isGuest) {
             setDisliked(false);
             setLiked(!liked);
-            store.likeMap(idNamePair._id, location);
+            store.likeMap(idNamePair._id, location, userName);
         }
     }
 
@@ -76,7 +79,7 @@ function PublishedCard(props) {
         if (!isGuest){
             setLiked(false);
             setDisliked(!disliked);
-            store.dislikeMap(idNamePair._id, location);
+            store.dislikeMap(idNamePair._id, location, userName);
         }
     }
     
@@ -86,7 +89,8 @@ function PublishedCard(props) {
 
     let dislikeButton =  "";
 
-    if(liked){
+    if(isItLiked){
+        console.log("are we hree");
         likeButton = 
         <IconButton onClick={(event) => {
             handleLikeMap(event)
@@ -107,7 +111,7 @@ function PublishedCard(props) {
     }
 
 
-    if(disliked){
+    if(isItDisliked){
         dislikeButton = 
             <IconButton onClick={(event) => {
                 handleDislikeMap(event)
@@ -224,7 +228,7 @@ function PublishedCard(props) {
                 {likeButton}
                 {dislikeButton}
                 
-                <IconButton aria-label='comments'>
+                <IconButton aria-label='comments' onClick={() => handleClickForPublishedMap()}>
                     <CommentIcon style={{fontSize:'30pt', color: "white"}} />
                                                                                         {/* still have to work on comments */}
                     <Typography sx={{margin: 1, fontSize: '22pt', color: "white"}}>{idNamePair.comments.length}</Typography>
@@ -245,13 +249,14 @@ function PublishedCard(props) {
                 // disabled={!store.canUndo()}
                 id='duplicate-button'
                 variant="contained"
-                sx={{margin: 1, backgroundColor: "maroon",
+                sx={{margin: 1, backgroundColor: "maroon",'&:hover': {
+                    backgroundColor: 'maroon',
+                    },
                 display: isGuest ?  "none"  : "default"}}
                 onClick={handleFork}
                 >
                 Fork
             </Button>
-            <ExportMapModal />
 
         <Box 
             sx={{display: 'inline-block',  p: 1,}}

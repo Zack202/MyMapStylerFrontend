@@ -253,17 +253,17 @@ export default function AddCustomDataProps(props) {
       };
 
 return(
-    <div style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+    <div style={{ height: '89.5vh',maxHeight: '90vh', overflowY: 'auto', background:'#d4d4d4'}}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
             
-            <Tab label="Additional Properties" />
+            <Tab label="Additional Properties" style={{ color: '#000000', indicatorColor:"maroon" }}/>
             
-            <Tab label="Data Points" />
+            <Tab label="Data Points" style={{ color: '#000000', indicatorColor:"maroon" }}/>
         </Tabs>
         </Box>
         {value === 0  ? (
-        <CustomTabPanel value={value} index={0}>
+        <CustomTabPanel value={value} index={0} >
   {/* Rendering dynamic components for 'Additional Props' */}
   {data.length === 0 && <h2>No data found. File may be corrupt.</h2>}
   <h3><u>Edit Properties</u></h3>
@@ -294,11 +294,11 @@ return(
         </div>
       )}
     </div>
-  ))}
+  ))}<br></br>
   <h3><u>All Current Additional Properties</u></h3>
   {/*List current data props in a list, should be able to take from one region since they
     should always be the same*/}
-{data.length > 0 && data[0].properties && Object.entries(data[0].properties).length > 0 && (
+{data.length > 0 && data[0].properties && Object.entries(data[0].properties).length > 0 ? (
   <ul>
     {Object.keys(data[0].properties).map((property, index) => (
       <li key={`current-${index}`}>
@@ -309,7 +309,10 @@ return(
       </li>
     ))}
   </ul>
+) : (
+  <p>No properties found</p>
 )}
+<br></br>
   <h2>Add New Property</h2>
     <TextField
     label="New Property Name"
@@ -317,8 +320,10 @@ return(
     onChange={(e) => setNewPropertyName(e.target.value)}
     fullWidth= {true}
   />
-  <Button variant="contained" onClick={() => handleAddProperty(newPropertyName)}>Add New Property</Button>
-  <Button variant="contained" onClick={copyDataToStoreADV}>
+    <Button variant="contained" onClick={() => handleAddProperty(newPropertyName)} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
+      Add New Property
+    </Button>
+    <Button variant="contained" onClick={copyDataToStoreADV} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
       Set Properties
     </Button>
 </CustomTabPanel>
@@ -362,13 +367,13 @@ return(
   <Grid item xs={12}>
     <div>
       <h2><u>Add points manually</u></h2>
-      <Button variant="contained" color="primary" onClick={handleAddPoint} fullWidth style={{ margin: '8px 0' }}>
+      <Button variant="contained" color="primary" onClick={handleAddPoint} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
         Add New Point by Coordinates
       </Button>
-      <Button variant="contained" color="primary" onClick={handleAddSizedPoint} fullWidth style={{ margin: '8px 0' }}>
+      <Button variant="contained" color="primary" onClick={handleAddSizedPoint} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
         Add New Sized Point by Coordinates
       </Button>
-      <Button variant="contained" onClick={copyDataToStoreDP} fullWidth style={{ margin: '8px 0' }}>
+      <Button variant="contained" onClick={copyDataToStoreDP} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
         Set Data Points
       </Button>
     </div>
@@ -377,11 +382,11 @@ return(
     <h4>or</h4>
   <h2><u>Add points by click</u></h2>
     {cursorModes == 'dot' ? (
-      <Button variant="contained" onClick={handleCancelAddPoint} fullWidth style={{ marginTop: '8px' }}>
+      <Button variant="contained" onClick={handleCancelAddPoint} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
         Stop Adding Points
       </Button>
     ) : (
-      <Button variant="contained" onClick={handleAddPointByClick} fullWidth style={{ marginTop: '8px' }}>
+      <Button variant="contained" onClick={handleAddPointByClick} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
         Add New Point by Click
       </Button>
     )}
