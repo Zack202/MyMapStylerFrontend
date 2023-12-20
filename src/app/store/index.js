@@ -31,6 +31,7 @@ export const GlobalStoreActionType = {
     UPDATE_SORT: 'UPDATE_SORT',
     UPDATE_SEARCH: 'UPDATE_SEARCH',
     UPDATE_FILTER: 'UPDATE_FILTER',
+    CREATE_MAP_ERROR: 'CREATE_MAP_ERROR'
 
 }
 
@@ -70,7 +71,7 @@ function GlobalStoreContextProvider(props) {
         currentMapIndex: -1,
         currentMapType: -1,
         search: "",
-
+        errorFound: ""
     });
 
 
@@ -94,6 +95,7 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1,
                     currentMapType: -1,
                     search: store.search,
+                    errorFound: store.errorFound,
                 })
             }
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
@@ -113,6 +115,7 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1,
                     currentMapType: -1,
                     search: store.search,
+                    errorFound: store.errorFound,
                 })
             }
             case GlobalStoreActionType.MARK_MAP_FOR_DELETION: {
@@ -132,6 +135,7 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1,
                     currentMapType: -1,
                     search: store.search,
+                    errorFound: "",
                 })
             }
 
@@ -153,6 +157,7 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: payload.mapType,
                     search: store.search,
+                    errorFound: "",
                 });
             }
             case GlobalStoreActionType.PUBLISHED: {
@@ -171,7 +176,8 @@ function GlobalStoreContextProvider(props) {
                     currentEditColor: null,///???
                     currentMapIndex: -1, ///???? 
                     currentMapType: payload.mapType,
-                    search: store.search
+                    search: store.search,
+                    errorFound: "",
                 });
             }
             case GlobalStoreActionType.UPDATE_MAP: {
@@ -191,6 +197,7 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
                     search: store.search,
+                    errorFound: "",
                 });
             }
             case GlobalStoreActionType.UPDATE_SORT: {
@@ -210,6 +217,7 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
                     search: store.search,
+                    errorFound: "",
                 });
             }
             case GlobalStoreActionType.UPDATE_SEARCH: {
@@ -229,6 +237,7 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
                     search: payload,
+                    errorFound: "",
                 });
             }
             case GlobalStoreActionType.UPDATE_FILTER: {
@@ -248,6 +257,27 @@ function GlobalStoreContextProvider(props) {
                     currentMapIndex: -1, ///????
                     currentMapType: store.currentMapType,
                     search: store.search, // ?!?
+                    errorFound: "",
+                });
+            }
+            case GlobalStoreActionType.CREATE_MAP_ERROR: {
+                return setStore({
+                    currentModal: null,
+                    idNamePairs: store.idNamePairs,
+                    currentMap: null, //change
+                    currentMapFeatures: JSON, //might need to change this
+                    currentMapGeometry: JSON, //might need to change this
+                    mapIdMarkedForDeletion: null,
+                    mapMarkedForDeletion: null,
+                    mapIdMarkedForExport: null,
+                    mapMarkedForExport: null,
+                    sort: store.sort,
+                    filter: store.filter,
+                    currentEditColor: null,///???
+                    currentMapIndex: -1, ///????
+                    currentMapType: store.currentMapType,
+                    search: store.search, // ?!?
+                    errorFound: payload.errorMessage,
                 });
             }
             default:
@@ -255,32 +285,62 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
+    store.unErrorFound = async function (){
+        storeReducer({
+            type: GlobalStoreActionType.CREATE_MAP_ERROR,
+            payload: {
+                errorMessage: ""
+            }
+            }
+        );
+    }
+
     // create a new map                                             
     store.createNewMap = async function (mapName, mapData, mapType, mapDesc, mapFeatures) { //input map data and map type
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
         //creat new map
-            let newMapName = mapName
-            let newMapDesc = mapDesc
-            let userName = auth.user.userName //MMM
-            let ownerEmail = auth.user.email //mango@gmail.com
-            let newmapFeatures = mapFeatures;
-            const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc, mapFeatures);
-            console.log("createNewList response: " + response);
-            if (response.status === 201) {
-                console.log('success')
+        try {
+        let newMapName = mapName
+        let newMapDesc = mapDesc
+        let userName = auth.user.userName //MMM
+        let ownerEmail = auth.user.email //mango@gmail.com
+        const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc);
+        console.log("createNewList response: " + response);
+        if (response.status === 201) {
+            console.log('success')
+            storeReducer({
+                type: GlobalStoreActionType.SET_CURRENT_MAP,
+                payload: response.data.map
+            });
+            // if success bring to map editing screen
+            router.push('/mapEditing/' + response.data.map._id)
+
+        }
+    } catch (error) { 
+            console.log("ERROR:", error);
+            try{
                 storeReducer({
-                    type: GlobalStoreActionType.SET_CURRENT_MAP,
-                    payload: response.data.map
-                });
-                // if success bring to map editing screen
-                router.push('/mapEditing/'+ response.data.map._id)
+                    type: GlobalStoreActionType.CREATE_MAP_ERROR,
+                    payload: {
+                        errorMessage: error.response.data.errorMessage
+                    }
+                })
+            }
+            catch (error2) {
+                storeReducer({
+                    type: GlobalStoreActionType.CREATE_MAP_ERROR,
+                    payload: {
+                        errorMessage: "Please Fill Out All Sections of the Form"
+                    }
+                })
+            }
+                
+        }
+
             
-        }
-        else {
-            console.log("API FAILED TO CREATE A NEW MAP");
-        }
     }
+    
 
     store.forkMap = async function (dupMap) {
         //duplicate a map
@@ -324,6 +384,7 @@ function GlobalStoreContextProvider(props) {
                 });
                 // if success bring to map editing screen
                 router.push('/mapEditing/' + response.data.map._id)
+                store.loadIdNamePairs();
 
             }
             else {
@@ -762,7 +823,8 @@ function GlobalStoreContextProvider(props) {
         legendOn,
         legendName,
         regionNameToDisplay,
-        ttDirection
+        ttDirection,
+        thumbNail
         ) => {
         const updatedAttributes = {
             mapColor,
@@ -787,7 +849,8 @@ function GlobalStoreContextProvider(props) {
             legendOn,
             legendName,
             regionNameToDisplay,
-            ttDirection
+            ttDirection,
+            thumbNail
           };
         
           // Loop through the updated attributes and store them in store.currentMap.mapFeatures.edits

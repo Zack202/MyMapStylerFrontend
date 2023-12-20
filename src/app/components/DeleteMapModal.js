@@ -20,7 +20,7 @@ const modalStyle = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  backgroundImage: 'url("./contour-lines.svg")',
+  background : 'white',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   padding: '50px',
@@ -72,7 +72,9 @@ export default function DeleteMapModal(props) {
                 // disabled={!store.canRedo()}
                 id='delete-button'
                 variant="contained"
-                sx={{margin: 1, backgroundColor: "maroon",
+                sx={{margin: 1, backgroundColor: "maroon",'&:hover': {
+                  backgroundColor: 'maroon',
+                  },
               display: props.show ? "default"  : "none"}}
                 onClick = {handleOpen}
                 value={props.id}
@@ -96,7 +98,9 @@ export default function DeleteMapModal(props) {
         <Fade in={open}>
           <Box sx={modalStyle}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant="contained" color="primary" onClick={handleClose} className={styles.closeButton}>
+          <Button variant="contained" color="primary" sx={{backgroundColor: 'maroon', height: '40px', '&:hover': {
+                            backgroundColor: 'maroon',
+                            }, }}onClick={handleClose} className={styles.closeButton}>
               <CloseIcon />
             </Button>
             </Box>
@@ -108,9 +112,14 @@ export default function DeleteMapModal(props) {
             Note: This action cannot be undone. Maps are permanently deleted.
             </Typography>
             </Box>
-            <Box  sx = {{display: 'flex', justifyContent: 'center', padding: "70px", paddingTop: '20px'}} >
-            <Button onClick={handleCancelDelete} variant="contained" color="primary"  className={styles.button}>Cancel</Button>
-            <Button onClick={handleConfirmDelete} variant="contained" color="primary"  className={styles.button}>Confirm</Button>
+            <Box  sx = {{display: 'flex', justifyContent: 'center', padding: "70px", paddingTop: '20px', gap: '10px'}} >
+            <Button onClick={handleCancelDelete} variant="contained" color="primary"  className={styles.button} sx={{backgroundColor: 'maroon', height: '40px', '&:hover': {
+                            backgroundColor: 'maroon',
+                            }, }}>Cancel</Button>
+            <Button onClick={handleConfirmDelete} variant="contained" color="primary"  className={styles.button} sx={{backgroundColor: 'maroon', height: '40px', '&:hover': {
+                            backgroundColor: 'maroon',
+                            }, }}
+                            >Confirm</Button>
             </Box>
           </Box>
         </Fade>

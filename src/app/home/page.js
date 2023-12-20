@@ -6,19 +6,17 @@ import HomeBanner from '../Utils/HomeBanner';
 import BottomAppBanner from '../Utils/BottomAppBanner';
 import SearchSortBar from '../Utils/SearchSortBar';
 import MapCard from '../Utils/MapCard';
-import Button from '@mui/material/Button';
 import React, { useState, useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import List from '@mui/material/List';
 import AuthContext from "../auth";
-import CreateMapModal from "../components/CreateMapModal";
-import { ElevatorSharp } from "@mui/icons-material";
+import { CircularProgress } from "@mui/material";
 
 const backgroundStyle = {
     backgroundImage: 'url("./0dd0bbbc6c38a555d0817e8051ef2b12.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    height: '100vh',
+    height: '76.5vh',
     display: 'flex',
     flexDirection: 'column',
     width: '100%'
@@ -26,6 +24,8 @@ const backgroundStyle = {
 
 
 export default function Home() {
+
+
 
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
@@ -92,7 +92,7 @@ export default function Home() {
 
     const generateMapCard = (maps) => {
         mapCard =
-            <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
+            <List sx={{ width: '90%', left: '5%', bgcolor: '' }}>{/* bgcolor: 'background.paper' */}
                 {
                     maps.map((pair) => (
                         <MapCard
@@ -230,7 +230,15 @@ export default function Home() {
                 display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
             }} style={backgroundStyle}>
                 
-                {shownMaps /* shows all the map cards*/} 
+                <div>
+                {shownMaps === false ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
+                    <CircularProgress sx={{ color: 'maroon' }} size={100} thickness={5} />
+                </div>
+                ) : (
+                shownMaps
+                )}
+            </div>
                 <Typography sx={{display: !isGuest ? "none" : "default"}}
                  variant="h1" align="center" backgroundColor="grey" color="black" paragraph>
                             {"Log in to create maps and utilize the home screen"}

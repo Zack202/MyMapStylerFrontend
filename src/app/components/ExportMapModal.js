@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import styles from './ExportMapModal.module.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { toDataURL } from 'mapbox-gl-utils';
 import { GlobalStoreContext} from '../store';
 import L from 'leaflet';
 import 'leaflet-easyprint';

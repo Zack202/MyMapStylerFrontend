@@ -188,7 +188,9 @@ export default function SignIn() {
                           type="button"
                           fullWidth
                           variant="contained"
-                          sx={{ backgroundColor: 'maroon', mt: 3, mb: 1, height: '40px' }}
+                          sx={{ backgroundColor: 'maroon', mt: 3, mb: 1, height: '40px', '&:hover': {
+                            backgroundColor: 'maroon',
+                            }, }}
                           id="signIn"
                           onClick={handleSubmit}
                         >
@@ -217,16 +219,16 @@ export default function SignIn() {
         </Grid>
 
         <Modal open={open} onClose={handleClose}>
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
+          <Container maxWidth="xs">
             <Box
               sx={{
                 marginTop: 8,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                bgcolor: 'background.paper',
+                bgcolor: 'white',
                 p: 2,
+                borderRadius: '10px',
               }}
             >
               <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -238,7 +240,7 @@ export default function SignIn() {
               <Typography>
                 Enter the email address associated with your account, and we'll send you a link to reset your password
               </Typography>
-              <Box component="form" noValidate onSubmit={handleSubmitPassword} sx={{ mt: 3 }}>
+              <Box component="form" noValidate onSubmit={handleSubmitPassword}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <TextField
@@ -251,7 +253,9 @@ export default function SignIn() {
                     />
                   </Grid>
                 </Grid>
-                <Button type="submit" fullWidth variant="contained" sx={{ backgroundColor: 'maroon', mt: 3, mb: 2 }}>
+                <Button type="submit" fullWidth variant="contained" sx={{ backgroundColor: 'maroon', mt: 3, mb: 2, '&:hover': {
+                backgroundColor: 'maroon',
+                }, }}>
                   Continue
                 </Button>
               </Box>

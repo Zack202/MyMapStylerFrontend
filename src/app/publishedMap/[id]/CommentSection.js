@@ -59,8 +59,8 @@ const CommentSection = (props) => {
   }
 
   return (
-<Card >
-   <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", height: "450px", maxHeight: "450px", overflowX: "hidden"}}>
+<Card style={{height:'700px'}}>
+   <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", height: "65vh", maxHeight: "80vh", overflowX: "hidden"}}>
       {store.currentMap && store.currentMap.comments && store.currentMap.comments.length > 0 && (
       <List >
          {store.currentMap.comments.map((comment) => (
@@ -73,7 +73,7 @@ const CommentSection = (props) => {
             handleDeleteComment(event, comment)
              }} 
             style={{ position: 'absolute', top: 0, right: 0, 
-            visibility: (comment.userName === auth.user.userName) || (store.currentMap.userName === auth.user.userName) ? "visible" : "hidden" }}
+            visibility: (auth.user && (comment.userName === auth.user.userName)) || (auth.user && (store.currentMap.userName === auth.user.userName)) ? "visible" : "hidden" }}
             >
                <DeleteIcon style={{color:'maroon'}}/>
             </IconButton>

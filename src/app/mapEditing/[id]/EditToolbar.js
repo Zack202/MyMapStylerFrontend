@@ -10,10 +10,13 @@ import { TextField } from '@mui/material';
 import GlobalStoreContext from '../../store';
 import { useContext } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
-import Alert from '@mui/material/Alert';
 import BackHandIcon from '@mui/icons-material/BackHand';
 import AdjustIcon from '@mui/icons-material/Adjust';
 import BlurCircularIcon from '@mui/icons-material/BlurCircular';
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 
 function EditToolbar(props) {
 
@@ -68,7 +71,56 @@ function EditToolbar(props) {
             const handleCloseAlert = () => {
               setShowAlert(false);
             };
-            const handleSaveAttributes = () => {
+
+
+            const captureMapAsJPGBlob = () => {
+              return new Promise((resolve, reject) => {
+                const mapContainer = document.getElementById('mapC');
+                if (!mapContainer) {
+                  reject('Map container not found');
+                  return;
+                }
+            
+                htmlToImage.toJpeg(mapContainer)
+                  .then(function (dataUrl) {
+                    const img = new Image();
+                    img.onload = function () {
+                      const canvas = document.createElement('canvas');
+                      canvas.width = img.width;
+                      canvas.height = img.height;
+                      const ctx = canvas.getContext('2d');
+                      ctx.drawImage(img, 0, 0);
+            
+                      // Convert canvas to a buffer
+                      canvas.toBlob(function (blob) {
+                        const reader = new FileReader();
+                        reader.readAsArrayBuffer(blob);
+                        reader.onloadend = function () {
+                          const buffer = Buffer.from(reader.result);
+                          resolve(buffer);
+                        };
+                      }, 'image/jpeg');
+                    };
+            
+                    img.src = dataUrl;
+                  })
+                  .catch(function (error) {
+                    reject('Something went wrong!', error);
+                  });
+              });
+            };
+
+            const handleSaveAttributes = async () => {
+                //Generate a thumbnail
+                let thumbNail = null;
+                try {
+                  thumbNail = await captureMapAsJPGBlob();
+                  console.log('Image buffer:', thumbNail);
+                  // Use the buffer as needed (e.g., send it to the server)
+                } catch (error) {
+                  console.error('Error:', error);
+                }
+
                 store.updateMapAttributes(mapColor,
                   borderSwitch, 
                   borderWidth, 
@@ -89,9 +141,8 @@ function EditToolbar(props) {
                   legendOn,
                   legendName,
                   regionNameToDisplay,
-                  ttDirection
-
-
+                  ttDirection,
+                  thumbNail
                   );
                 //add a alert to show that the map has been saved
                 setTimeout(() => {
@@ -99,7 +150,7 @@ function EditToolbar(props) {
                   //close the alert after 3 seconds
                   setTimeout(() => {
                     setShowAlert(false);
-                  }, 3000);
+                  }, 5000);
                 }, 1000);
 
                 store.clearTransactionStack();
@@ -170,6 +221,12 @@ function EditToolbar(props) {
             <div>{name}</div>
           )}
         </div>
+
+        <Alert sx={{display: showAlert ? "default" : "none"}}
+        icon={<CheckIcon fontSize="inherit" />} severity="success"  onClose={handleCloseAlert}>
+          Map Saved 
+        </Alert>
+
         <IconButton onClick={handleSaveAttributes}>
           <SaveIcon sx={{ fontSize: "40pt" , color: store.hasAnyTransactions() ? 'black' : 'green'}} />
         </IconButton>

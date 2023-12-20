@@ -2,30 +2,26 @@ import { useEffect, useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import AuthContext from '../auth';
 import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
-import TextField from '@mui/material/TextField';
-import { Typography, Card, CardContent, CardActions, Collapse } from '@mui/material';
+import { Typography, Card, CardContent, CardActions } from '@mui/material';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import CommentIcon from '@mui/icons-material/Comment';
 // import WorkspaceScreen from './WorkspaceScreen';
 import {Modal, Button} from '@mui/material';
 // import EditToolbar from './EditToolbar';
-import TestMap from "public/test_map.jpg"
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
-import ExportMapModal from '../components/ExportMapModal.js';
 import DeleteMapModal from '../components/DeleteMapModal.js';
 
 
 
 function PublishedCard(props) {
+
+    if (typeof window !== 'undefined') {
     
     const authContext = useContext(AuthContext);
 
@@ -62,6 +58,11 @@ function PublishedCard(props) {
 
     const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
     
+    let base64Image = "";
+    if (idNamePair.mapFeatures && idNamePair.mapFeatures.edits && idNamePair.mapFeatures.edits.thumbNail && idNamePair.mapFeatures.edits.thumbNail.data) {
+        const thumbNailBuffer = idNamePair.mapFeatures.edits.thumbNail.data; // Assuming thumbNail is the Buffer object
+        base64Image = Buffer.from(thumbNailBuffer).toString('base64');
+    }
 
     function handleLikeMap(event){
         event.stopPropagation();
@@ -196,7 +197,22 @@ function PublishedCard(props) {
             >
 
             <div>
-            <img src={'test_map.jpg'} alt="image" height={'100px'} style={{marginTop: 10, position:'absolute'}} />    
+            {idNamePair.mapFeatures && idNamePair.mapFeatures.edits && idNamePair.mapFeatures.edits.thumbNail ? (
+                <img
+                src={`data:image/jpeg;base64,${base64Image}`}
+                alt="Thumbnail"
+                height={'100px'}
+                style={{ position: 'absolute',borderRadius: '10px' }}
+                />
+            ) : (
+                <img
+                src={'No_map.png'}
+                alt="image"
+                height={'100px'}
+                width={'170px'}
+                style={{ position: 'absolute',borderRadius: '10px' }}
+                />
+            )}
             </div>
 
             </Box>
@@ -249,7 +265,9 @@ function PublishedCard(props) {
                 // disabled={!store.canUndo()}
                 id='duplicate-button'
                 variant="contained"
-                sx={{margin: 1, backgroundColor: "maroon",
+                sx={{margin: 1, backgroundColor: "maroon",'&:hover': {
+                    backgroundColor: 'maroon',
+                    },
                 display: isGuest ?  "none"  : "default"}}
                 onClick={handleFork}
                 >
@@ -317,6 +335,9 @@ function PublishedCard(props) {
         </Modal>
         </div>
     );
+    }else{
+        return null
+    }
 }
 
 export default PublishedCard;

@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import AuthContext from '../auth';
+import GlobalStoreContext from '../store';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -19,18 +20,30 @@ const style = {
 
 export default function MUIErrorModal() {
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
+
     let errorDescription = "";
-    if (auth.errorFound !=="") {
+    if (auth.errorFound !== "") {
         errorDescription = auth.errorFound;
+    }
+    if(store.errorFound !== "") {
+        errorDescription = store.errorFound;
     }
     function handleCloseModal(event) {
         event.stopPropagation();
-        auth.unErrorFound();
+        if (auth.errorFound !== "") {
+            auth.unErrorFound();
+        }
+        else if (store.errorFound !== "") {
+            store.unErrorFound();
+        }
+
+        store.unErrorFound();
     }
 
     return (
         <Modal
-            open={auth.errorFound !== ""}
+            open={auth.errorFound !== "" || store.errorFound !== ""}
         >
             <Box sx={style}>
                 <div className="modal-dialog">
