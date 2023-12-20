@@ -88,7 +88,7 @@ export default function Browser() {
 
     const generateMapCard = (maps) => {
         mapCard =
-            <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }}>
+            <List sx={{ width: '90%', left: '5%', bgcolor: '' }}>
                 {
                     maps.map((pair) => (
                         <PublishedMapCard
