@@ -54,6 +54,7 @@ export default function MapEditingScreen() {
     legendValues: ['', ''],
     legendName: 'Legend',
     legendOn: false,
+    ttDirection: '',
   };
 
   /*const [borderSwitch, setBorderSwitch] = useState(() =>
