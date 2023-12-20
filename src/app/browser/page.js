@@ -26,7 +26,6 @@ const backgroundStyle = {
 
 export default function Browser() {
 
-    if (typeof window !== 'undefined') {
 
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
@@ -250,11 +249,4 @@ export default function Browser() {
         </Grid>
 
     )
-        } else {
-            return (
-                <div>
-                    <h1> Loading... </h1>
-                </div>
-            )
-        }
 }

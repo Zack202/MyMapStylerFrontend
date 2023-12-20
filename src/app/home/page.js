@@ -25,7 +25,7 @@ const backgroundStyle = {
 
 export default function Home() {
 
-    if (typeof window !== 'undefined') {
+
 
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
@@ -251,7 +251,4 @@ export default function Home() {
         </Grid>
 
     )
-                }else{
-                    return null;
-                }
 }
