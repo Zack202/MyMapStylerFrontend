@@ -7,6 +7,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import styles from './ExportMapModal.module.css';
 import CloseIcon from '@mui/icons-material/Close';
+import { GlobalStoreContext} from '../store';
+import L from 'leaflet';
+import 'leaflet-easyprint';
 
 const modalStyle = {
   position: 'absolute',
@@ -33,14 +36,54 @@ const backdropStyle = {
   backgroundColor: 'transparent',
 };
 
-export default function TransitionsModal() {
+export default function TransitionsModal(props) {
   const [open, setOpen] = React.useState();
+  const {store} = React.useContext(GlobalStoreContext);
   const handleOpen = (event) => {
     event.stopPropagation();
     setOpen(true);}
   const handleClose = (event) => {
     event.stopPropagation();
     setOpen(false);
+  }
+
+
+
+  const handleConvertToPNG = (event) => {
+    event.stopPropagation();
+    let mapData = {
+      geo: {...props.map.mapGeometry},
+      mapFeatures: {...props.map.mapFeatures}
+    }
+    let printer = L.easyPrint({
+      // tileLayer: tiles,
+      sizeModes: ['Current'],
+      filename: 'myMap',
+      exportOnly: true,
+      hideControlContainer: true
+  }).addTo(mapData);
+    printer.printMap('CurrentSize', props.map.name);
+
+  }
+
+  const handleConvertToJSON = (event) => {
+    let mapData = {
+      geo: {...props.map.mapGeometry},
+      mapFeatures: {...props.map.mapFeatures}
+    }
+    
+
+    const jsonMapData = JSON.stringify(mapData);
+
+    // Create a Blob from the JSON data
+    const blob = new Blob([jsonMapData], { type: 'application/json' });
+
+    // Create a download link and trigger a click event
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = props.map.name + '.json';
+    link.click();
+
   }
 
   return (
@@ -77,9 +120,9 @@ export default function TransitionsModal() {
             </Typography>
             </Box>
             <Box  sx = {{display: 'flex', justifyContent: 'center',  mt: 2}} >
-            <Button variant="contained" color="primary"  className={styles.button}>.PNG</Button>
+            <Button variant="contained" color="primary"  className={styles.button} onClick={handleConvertToPNG}>.PNG</Button>
             <Button variant="contained" color="primary"  className={styles.button}>.JPG</Button>
-            <Button variant="contained" color="primary"  className={styles.button}>.JSON</Button>
+            <Button variant="contained" color="primary"  className={styles.button} onClick={handleConvertToJSON}>.JSON</Button>
             </Box>
           </Box>
         </Fade>

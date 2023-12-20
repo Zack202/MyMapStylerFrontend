@@ -7,6 +7,10 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import styles from './ImportMapDataModal.module.css';
 import CloseIcon from '@mui/icons-material/Close';
+import { RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { useState } from 'react';
+import GlobalStoreContext from '../store';
+import { useContext } from 'react';
 
 const modalStyle = {
   position: 'absolute',
@@ -34,9 +38,57 @@ const backdropStyle = {
 };
 
 export default function ImportMapDataModal() {
+  const { store } = useContext(GlobalStoreContext);
+  const cursorStyle = {
+    cursor: 'pointer', 
+  };
+
+  const [selectedOption, setSelectedOption] = useState('Additional Region Data');
+
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => {
+    setFile(null);
+    setButtonEnable(true);
+    setOpen(true); 
+    }
+  const handleClose = () => {
+    setOpen(false);
+  }
+    
+
+  const [file, setFile] = useState(null);
+  const [buttonEnable, setButtonEnable] = useState(true);
+  const [invalidFile, setInvalidFile] = useState(false);
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+    setButtonEnable(false);
+    console.log(selectedFile);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const droppedFile = event.dataTransfer.files[0];
+    setFile(droppedFile);
+    setButtonEnable(false);
+    console.log(droppedFile);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const handleSubmitFile = (event) => {
+    event.preventDefault();
+    store.takeAdditionalData(file, selectedOption);
+    handleClose();
+  }
 
   return (
     <div>
@@ -58,7 +110,7 @@ export default function ImportMapDataModal() {
         }}
       >
         <Fade in={open}>
-          <Box sx={modalStyle}>
+          <Box         className={styles.centeredcontainer}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button variant="contained" color="primary" onClick={handleClose} className={styles.closeButton}>
               <CloseIcon />
@@ -69,11 +121,61 @@ export default function ImportMapDataModal() {
             <b>Drag your map data into the box below.</b>
             </Typography>
             <Typography id="transition-modal-description" sx={{ mt: 2 }} className={styles.text}>
-            Note: Only .CSV and .JSON files are allowed
+            <b>Note: Only .CSV are supported at this time. </b><br></br>
+            If uploading <b>additional region data</b> please ensure the first collumn is the name of the region, and the proceeding collumns are the properties you wish to add with their label as the collumn name. <br></br>
+            If uploading <b>data points</b> please ensure the first collumn of your data latitude and the second collumn is longitude. <br></br>
+            If uploading <b>data points for sized dot maps</b> please follow the format above and add a third collumn with the size of the dot. <br></br>
+            Information will only be added to <b>regions that already exist</b> on the map.
             </Typography>
             </Box>
+            <label htmlFor='fileInput' style={cursorStyle} >
+                    <div 
+              style={{
+                border: '4px dashed #ccc',
+                padding: '20px',
+                textAlign: 'center',
+                color: '#000000',
+              }}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+            >
+              <input
+                type="file"
+                id="fileInput"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+                accept=".csv"
+              />
+              <label htmlFor='fileInput' style={cursorStyle} >
+                Click or drag files here to upload
+              </label>
+              <p>Selected file: {file ? file.name : 'None'}</p>
+            </div>
+            </label>
+            <RadioGroup
+        value={selectedOption}
+        onChange={handleOptionChange}
+        row
+      >
+        <FormControlLabel
+          value="Additional Region Data"
+          control={<Radio />}
+          label="Additional Region Data"
+        />
+        <FormControlLabel
+          value="Data points"
+          control={<Radio />}
+          label="Data points"
+          disabled={
+            store.currentMap && store.currentMap.mapType &&
+            (store.currentMap.mapType === 5 || store.currentMap.mapType === 1 || store.currentMap.mapType === 4)
+          }
+        />
+      </RadioGroup>
+
             <Box  sx = {{display: 'flex', justifyContent: 'center',  mt: 2}} >
-            <Button variant="contained" color="primary"  className={styles.button}>Upload Here</Button>
+              <p className={styles.text}>{invalidFile ? "File could not be parsed" : ""}</p>
+            <Button onClick={handleSubmitFile} variant="contained" color="primary"  disabled={buttonEnable} className={styles.button}>{file ? "Confirm Upload" : "Please Upload a Valid File"}</Button>
             </Box>
           </Box>
         </Fade>

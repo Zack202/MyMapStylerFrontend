@@ -17,6 +17,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
+import MUIErrorModal from '../components/MUIErrorModal';
+
 
 const shp = require('shpjs');
 
@@ -59,7 +61,16 @@ export default function CreateMapModal() {
 
     const [mapType, setMapType] = React.useState('');
     const handleChange = (event) => {
+        if(event.target.value === defaultMapType){
+            setMapTypeExists(true);
+            setDiffMapType(false);
+        }
         setMapType(event.target.value);
+        if(mapTypeExists){
+            setDiffMapType(true);
+            setMapTypeExists(false);
+        }
+        
     };
 
     const [open, setOpen] = React.useState(false);
@@ -79,14 +90,21 @@ export default function CreateMapModal() {
     const { store } = useContext(GlobalStoreContext);
 
     const [mapData, setMapData] = useState(null);
+    const [mapFeatures, setMapFeatures] = useState(null);
     const [validFileMessage, setValidFileMessage] = useState("Waiting for file")
     const [ext, setExt] = useState("");
+
+    const [mapTypeExists, setMapTypeExists] = useState(false);
+    const [diffMapType, setDiffMapType] = useState(false);
+    const [defaultMapType, setDefaultMapType] = useState('');
+
     var shapefile = require("shapefile");
 
     const correctTypes = ['kml', 'json', 'zip', 'shp'];
 
     const handleFileChange = async (event) => { // Handle file input, here is where to add other file types
         const selectedFile = event.target.files[0];
+
         if (selectedFile) {
             try {
 
@@ -100,8 +118,9 @@ export default function CreateMapModal() {
                 } else {
                     setValidFileMessage("It is NOT a valid file")
                 }
-                const fileContent = await selectedFile.text();
 
+                const fileContent = await selectedFile.text();
+                // console.log(fileContent)
                 if (fileExt === "kml") {
                     console.log("kml was recognized");
                     const xmldom = new DOMParser().parseFromString(fileContent, "text/xml"); // create xml dom object
@@ -133,10 +152,32 @@ export default function CreateMapModal() {
 
                 } else {
 
-
+                    console.log('arrived here');
                     // Parse JSON file
                     const parsedData = JSON.parse(fileContent);
-                    setMapData(parsedData);
+                    if(parsedData.geo) {
+                        setMapData(parsedData.geo);
+                    }
+                    else{
+                        setMapData(parsedData);
+                    }
+
+                    if(parsedData.mapFeatures){
+                        setMapFeatures(parsedData.mapFeatures);
+                    } else{
+                        setMapFeatures(null);
+                    }
+
+                    if(parsedData.mapType){
+                        console.log('map uploaded')
+                        setMapTypeExists(true);
+                        setMapType(parsedData.mapType);
+                        setDiffMapType(false);
+                        setDefaultMapType(parsedData.mapType);
+                    }
+                    else{
+                        setMapTypeExists(false);
+                    }
                 }
 
 
@@ -148,9 +189,13 @@ export default function CreateMapModal() {
     };
 
     const handleCreateMap = (event) => {
-        console.log(mapType)
-        store.createNewMap(mapName, mapData, mapType, mapDesc)
-        store.loadIdNamePairs();
+        //reset features
+        console.log(mapFeatures);
+        if(mapType !== defaultMapType){
+            console.log('not the same map type');
+            setMapFeatures(null);
+        }
+        store.createNewMap(mapName, mapData, mapType, mapDesc, mapFeatures);
     };
 
     return (
@@ -158,7 +203,7 @@ export default function CreateMapModal() {
             <Grid container sx={{maxHeight: "80%"}}>
                 
             <Grid item xs={12}>
-                <TopAppBanner />
+                <TopAppBanner  link={"/home"}/>
             </Grid>
 
             <ThemeProvider theme={defaultTheme}>
@@ -178,7 +223,7 @@ export default function CreateMapModal() {
                         
                         <Box sx={{marginTop: 1, marginBottom: 5, position: "absolute"}}>
                         <div id="middle-container">
-                            <input type="file" accept="" id="import-map-button" onChange={handleFileChange} />
+                            <input type="file" accept=".zip, .json, .kml" id="import-map-button"  onChange={handleFileChange} />
                         </div>
                         </Box>
 
@@ -208,6 +253,14 @@ export default function CreateMapModal() {
                     </Box>
                     <Grid item xs={12}>
                         <Box sx={{marginTop: 5}}>
+                        <Typography visibility={mapTypeExists ? 'none' : 'hidden'} color='red'>
+                            *This was the type found in your file
+                        </Typography>
+
+                        <Typography visibility={diffMapType ? 'none' : 'hidden'} color='red'>
+                            *The edits won't carry over due to confliciting types.
+                        </Typography>
+
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Map Type</InputLabel>
                             <Select
@@ -217,11 +270,11 @@ export default function CreateMapModal() {
                                 label="Age"
                                 onChange={handleChange}
                             >
-                                <MenuItem value={0}>Color Categorized Map</MenuItem>
+                                <MenuItem value={5}>Color Categorized Map</MenuItem>
                                 <MenuItem value={1}>Textual Map</MenuItem>
-                                <MenuItem value={2}>Heat Map</MenuItem>
+                                <MenuItem value={4}>Choropleth Map</MenuItem>
                                 <MenuItem value={3}>Dot Map</MenuItem>
-                                <MenuItem value={4}>Sized Dot Map</MenuItem>
+                                <MenuItem value={2}>Sized Dot Map</MenuItem>
                             </Select>
                         </FormControl>
                         </Box>
@@ -244,7 +297,7 @@ export default function CreateMapModal() {
                             color="primary"
                             variant="contained"
                             sx={{marginRight: 5, marginLeft: 1}}
-                            href="home_browser"
+                            href="home"
                             className="modal-button"
                         >Cancel</Button>
                     </div>
@@ -259,6 +312,7 @@ export default function CreateMapModal() {
                     <BottomAppBanner />
                 </Grid>
             </Grid>
+            <MUIErrorModal />
         </div>
 
     );

@@ -15,7 +15,8 @@ export const AuthActionType = {
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
     REGISTER_USER_ERROR: "REGISTER_USER_ERROR",
-    UPDATE_USER_INFO: "UPDATE_USER_INFO"
+    UPDATE_USER_INFO: "UPDATE_USER_INFO",
+    UPDATE_USER_INFO_ERROR: "UPDATE_USER_INFO_ERROR"
 }
 
 function AuthContextProvider(props) {
@@ -76,6 +77,13 @@ function AuthContextProvider(props) {
                     errorFound: ""
                 })
             }
+            case AuthActionType.UPDATE_USER_INFO_ERROR: {
+                return setAuth({
+                    user: null,
+                    loggedIn: true,
+                    errorFound: payload.errorMessage
+                })
+            }
             default:
                 return auth;
         }
@@ -114,7 +122,7 @@ function AuthContextProvider(props) {
                 }
             })
             console.log("successfully registered user")
-            router.push("/home_browser");
+            router.push("/home");
         }
     } catch(error) { 
         authReducer({
@@ -138,7 +146,6 @@ function AuthContextProvider(props) {
                 }
             })
             console.log(response.data.user)
-            router.push("/home_browser");
         }
     } catch(error) { 
         authReducer({
@@ -190,7 +197,7 @@ function AuthContextProvider(props) {
                     }
                 })
                 console.log("succesfully reset password")
-                router.push("/home_browser");
+                // router.push("/home_browser");
             }
         } catch(error) { 
             authReducer({
@@ -239,7 +246,7 @@ function AuthContextProvider(props) {
             }
         }catch(error){
             authReducer({
-                type: AuthActionType.UPDATE_INFO_ERROR,
+                type: AuthActionType.UPDATE_USER_INFO_ERROR,
                 payload: {
                     errorMessage: error.response.data.errorMessage
                 }

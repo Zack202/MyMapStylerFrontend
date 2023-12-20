@@ -1,26 +1,15 @@
-import { Fragment, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 // import AuthContext from '../auth';
 import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
-import { Typography, Card, CardContent, CardActions, Collapse } from '@mui/material';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
-import CommentIcon from '@mui/icons-material/Comment';
+import { Typography, Card, CardContent, CardActions } from '@mui/material';
 // import WorkspaceScreen from './WorkspaceScreen';
 import {Modal, Button} from '@mui/material';
 // import EditToolbar from './EditToolbar';
-import TestMap from "public/test_map.jpg"
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
-import ExportMapModal from '../components/ExportMapModal.js'
 import DeleteMapModal from '../components/DeleteMapModal.js'
 import PublishedCard from './PublishedMapCard';
 
@@ -28,10 +17,12 @@ import PublishedCard from './PublishedMapCard';
 
 function ListCard(props) {
     
+    if (typeof window !== 'undefined') {
+    
 
     const router = useRouter()
 
-    const { idNamePair, selected } = props;
+    const { idNamePair, selected, location } = props;
 
     const { store } = useContext(GlobalStoreContext);
     // const {auth} = useContext(AuthContext);
@@ -103,13 +94,31 @@ function ListCard(props) {
         toggleEdit();
     }
 
+    const [description ,setDescription] = useState(idNamePair.description);
+
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            //store.setIsListNameEditActive();
+            setDescription(idNamePair.description);
         }
         setEditActive(newActive);
     }
+
+    function handleSaveDescription(event, oldDescription) {
+        event.stopPropagation();
+        if (oldDescription === description) {
+            toggleEdit();
+            return;
+        }
+        store.updateMapDescription(idNamePair._id, description, oldDescription);
+        idNamePair.description = description;
+        toggleEdit();
+    }
+
+    function handleDescriptionChange(newDescription) {
+        setDescription(newDescription);
+    }
+
 
     const [exportModal, setExportModal] = useState(false);
 
@@ -160,7 +169,19 @@ function ListCard(props) {
 
     let cardElement = ""
 
+    const idMapping = {
+        5: 'Color Categorized ',
+        1: 'Textual',
+        2: 'Sized Dot',
+        3: 'Dot',
+        4: 'Choropleth'
+      };
 
+      let base64Image = "";
+      if (idNamePair.mapFeatures && idNamePair.mapFeatures.edits && idNamePair.mapFeatures.edits.thumbNail && idNamePair.mapFeatures.edits.thumbNail.data) {
+          const thumbNailBuffer = idNamePair.mapFeatures.edits.thumbNail.data; // Assuming thumbNail is the Buffer object
+          base64Image = Buffer.from(thumbNailBuffer).toString('base64');
+      }
     //published card
     if(idNamePair.published){
         cardElement = 
@@ -168,13 +189,14 @@ function ListCard(props) {
         key={idNamePair._id}
         idNamePair={idNamePair}
         selected={false}
+        location={location}
         />
     }
     //unpublished Card
     else{
     cardElement =
     <div id='cards'>
-    <Card onClick={() => handleClickForMapEdit()} sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
+    <Card sx={{margin: 1, borderColor: 'purple', backgroundColor: '#D3D3D3'}}
     >
         
     <CardContent sx={{p: 0}}/>
@@ -186,43 +208,96 @@ function ListCard(props) {
             id={"map-card"}
             key={"map-card"}
             // button
-            onDoubleClick={(event) => {
-                handleToggleEdit(event)
-            }}
             // onClick={(event) => {
             //     handleLoadList(event, idNamePair._id)
             // }}  
             >
-            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder"}}>
+            <Link /*/href="/specificMap"*/ onClick={() => handleClickForMapEdit()} style={{top: 0, width: 200, display: "flex", position: "absolute", fontWeight: "bolder", cursor: "pointer"}}>
             {idNamePair.name}
             </Link>
             
-            <Box sx={{flexGrow: 1, display: "inline-block", float:'left',}}>
-
+            <Box sx={{flexGrow: 1, display: "inline-block", float:'left', cursor:"pointer"}}
+            onClick={() => handleClickForMapEdit()}
+            >
             
             <div>
-            <img src={'test_map.jpg'} alt="image" height={'100px'} style={{marginTop: 10, position:'absolute'}} />    
+            {idNamePair.mapFeatures && idNamePair.mapFeatures.edits && idNamePair.mapFeatures.edits.thumbNail ? (
+                <img
+                src={`data:image/jpeg;base64,${base64Image}`}
+                alt="Thumbnail"
+                height={'100px'}
+                style={{ position: 'absolute',borderRadius: '10px' }}
+                />
+            ) : (
+                <img
+                src={'No_map.png'}
+                alt="image"
+                height={'100px'}
+                width={'170px'}
+                style={{ position: 'absolute',borderRadius: '10px' }}
+                />
+            )}
             </div>
 
             </Box>
         
-        <Box sx={{ float:"left", display: "inline-block", width: "80%", marginTop: 5, marginLeft: 10, height: "100%"}}>
+        <Box sx={{ float:"left", display: "inline-block", width: "70%", marginTop: 5, marginLeft: 10, height: "80%"}}>
         
             <div>
-            <Typography sx={{top: 0, position: "absolute", width: "15%", height: "10%", display: "flex", fontWeight: "900"}}>
+            <Typography  sx={{top: 0, position: "absolute", width: "15%", height: "10%", display: "flex", fontWeight: "900"}}>
                 Description: 
             </Typography>
             </div>
 
-            <div>
-            <Typography sx={{top: 20, position: "absolute", width: "25%"}}>
-            {idNamePair.description}
-            </Typography>
-            </div>
+            {!editActive ? (
+                <div>
+                    <Typography
+                        onDoubleClick={(event) => {
+                            handleToggleEdit(event)
+                        }}
+                        sx={{ top: 20, position: "absolute", width: "25%" }}
+                    >
+                        {idNamePair.description}
+                    </Typography>
+                </div>
+            ) : (
+                <div>
+                    <TextField
+                        value={description}
+                        onChange={(event) => {
+                            handleDescriptionChange(event.target.value);
+                        }}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                event.preventDefault();
+                                handleSaveDescription(event, idNamePair.description);
+                            }
+                        }}
+                        onBlur={(event) => {
+                            handleSaveDescription(event, idNamePair.description);
+                        }}
+                        sx={{ top: 20, position: "absolute", width: "25%" }}
+                        multiline
+                        variant="outlined"
+                    />
+                </div>
+            )}
+        </Box>
+        <Box
+        border={1}
+        borderRadius={3}
+        padding={1}
+        margin="50px 0 0 50px"
+        borderColor="maroon"
+        bgcolor="background.paper"
+        fontSize={16}
+        >
+        Map Type: {idMapping[idNamePair.mapType]}
         </Box>
 
+
             <Box sx={{ p: 1, flexGrow: 1, right:"0", position: "absolute", top: 0}}>
-                <Typography variant='h7' fontSize="12pt">Created By: {idNamePair.userName}</Typography>
+                <Typography variant='h7' fontSize="12pt">Created By: <b>{idNamePair.userName}</b></Typography>
             </Box>    
                   
         </ListItem>
@@ -230,21 +305,24 @@ function ListCard(props) {
     </CardActions>
     <div style={{width: "50%", float: 'right', position: "relative"}}>
         <div style={{ float: 'right', position: "relative", display: "flex"}}>
-            <DeleteMapModal id={idNamePair._id}/>
+            <DeleteMapModal id={idNamePair._id} show={true}/>
             <Button 
                 // disabled={!store.canUndo()}
                 id='duplicate-button'
                 variant="contained"
-                sx={{margin: 1, backgroundColor: "maroon"}}
+                sx={{margin: 1, backgroundColor: "maroon", '&:hover': {
+                    backgroundColor: 'maroon',
+                    },}}
                 onClick={handleFork}
                 >
                 Fork
             </Button>
-            <ExportMapModal />
             <Button 
                 id='publish-button'
                 variant="contained"
-                sx={{margin: 1, visibility: actionButtons, backgroundColor: "maroon"}}
+                sx={{margin: 1, visibility: actionButtons, backgroundColor: "maroon",'&:hover': {
+                    backgroundColor: 'maroon',
+                    },}}
                 onClick={handlePublish}
                 >
                 Publish
@@ -258,25 +336,7 @@ function ListCard(props) {
   </div>
     }
 
-    if (editActive) {
-        cardElement =
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id={"list-" + idNamePair._id}
-                label="Playlist Name"
-                name="name"
-                autoComplete="Playlist Name"
-                className='list-card'
-                onKeyPress={handleKeyPress}
-                onChange={handleUpdateText}
-                defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 48}}}
-                InputLabelProps={{style: {fontSize: 24}}}
-                autoFocus
-            />
-    }
+
     const style = {
         position: 'absolute',
         top: '50%',
@@ -311,6 +371,9 @@ function ListCard(props) {
         </Modal>
         </div>
     );
+    } else {
+        return null;
+    }
 }
 
 export default ListCard;

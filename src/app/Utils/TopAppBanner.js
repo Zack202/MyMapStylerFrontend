@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // import AuthContext from '../auth';
 // import { GlobalStoreContext } from '../store';
@@ -18,6 +18,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AuthContext from '../auth'
+import GlobalStoreContext from '../store';
 
 const defaultTheme = createTheme({
     palette: {
@@ -33,31 +34,41 @@ const defaultTheme = createTheme({
     }
   },);
 
-export default function TopAppBanner() {
+export default function TopAppBanner(props) {
 
+    const { link } = props;
     const [anchorEl, setAnchorEl] = useState(null);
     const [profileOpen, setProfileOpen] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
 
     const handleProfileOpen = () => setProfileOpen(true);
     const handleProfileClose = () => setProfileOpen(false);
 
-    let isGuest = true;
-    if (auth.loggedIn) {
-        if (auth.user.userName === "GUEST") {
-            isGuest = true;
+    const [isGuest, setIsGuest] = useState(false);
+    const [profileLink, setProfileLink] = useState("/profile/");
+
+
+    useEffect(() => {
+        if(auth.user){
+            setProfileLink("/profile/" + auth.user.userName);
+            
+            if(auth.user.userName === "GUEST"){
+                setIsGuest(true);
+            }
         }
-        else {
-            isGuest = false;
+        if(auth.loggedIn){
         }
-    }
+    
+    }, [auth]);
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleMenuClose = () => {
+        store.clearTransactionStack();
         setAnchorEl(null);
     };
 
@@ -70,12 +81,6 @@ export default function TopAppBanner() {
     const homeclearTransactions = () => {
         store.clearTransactions();
     }
-    let profileLink = "/profile/"
-
-    if(auth.loggedIn){
-        profileLink = "/profile/" + auth.user.userName
-    }
-
 
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
@@ -143,14 +148,14 @@ export default function TopAppBanner() {
             }}>
             <AppBar position="static" sx={{ bgcolor: "#800000" }}>
                 <Toolbar variant='dense'>
-                    <Box bgcolor={'#e8e8e8'}>
+                    <Box bgcolor={'#e8e8e8'} >
                     <Typography
                         variant="h4"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' }, zIndex: "2" }}
+                        sx={{ position: 'relative', display: { xs: 'none', sm: 'block' }, zIndex: "2"}}
                     >
-                        <a href="/home_browser"><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
+                        <a href={link}><img style={{ height: "40px", }} src={'/logo_maroon.png'} alt="logo" /></a>
                     </Typography>
                     </Box>
                     
@@ -160,6 +165,7 @@ export default function TopAppBanner() {
                             justifyContent: 'center',
                             alignItems: 'center',
                             width: '100%',
+                            marginRight: 5
                         }}
                     >
                         <Typography style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '20px' }}>

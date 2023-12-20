@@ -72,7 +72,12 @@ export default function SignIn() {
   if (typeof window !== 'undefined') {
     if (auth.loggedIn) {
       const router = useRouter();
-      router.push('/home_browser');
+      if (auth.user.userName === "GUEST") {
+        router.push('/browser');
+      }
+      else {
+        router.push('/home');
+      }
     }
   }
 
@@ -125,138 +130,142 @@ export default function SignIn() {
   };
 
   return (
-<div>
-  <NavBar />
-  <div className={`${styles.backgroundContainer}`}>
-    <CssBaseline />
-    <Grid container align="center">
-      <Grid item xs>
-        <Box sx={{ borderRadius: '10px', padding: '10px', border: '1px solid #000000'}} 
-         bgcolor={'white'} maxWidth='md' padding='5%'>
-          <Container component="main" maxWidth="md">
+    <div>
+      <NavBar />
+      <div className={`${styles.backgroundContainer}`}>
+        <CssBaseline />
+        <Grid container align="center">
+          <Grid item xs>
+            <Box sx={{ borderRadius: '10px', padding: '10px', border: '1px solid #000000' }}
+              bgcolor={'white'} maxWidth='md' padding='5%'>
+              <Container component="main" maxWidth="md">
+                <Box
+                  sx={{
+                    marginTop: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography sx={{ color: 'maroon' }} component="h1" variant="h3">
+                    Welcome back to <span style={{ fontWeight: 'bold' }}>My Map Styler</span>
+                  </Typography>
+                  <Typography sx={{ color: 'maroon' }} component="h1" variant="h5">
+                    Sign in to continue exploring and creating amazing maps!
+                  </Typography>
+                  <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <InputLabel sx={{ color: 'maroon' }}>Email Address</InputLabel>
+                        <TextField
+                          required
+                          fullWidth
+                          id="email"
+                          label="Enter Your Email Address"
+                          name="email"
+                          autoComplete="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <InputLabel sx={{ color: 'maroon' }}>Password</InputLabel>
+                        <TextField
+                          required
+                          fullWidth
+                          id="password"
+                          label="Enter Your Password"
+                          name="password"
+                          type='password'
+                          autoComplete="password"
+                          value={formData.password}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          type="button"
+                          fullWidth
+                          variant="contained"
+                          sx={{ backgroundColor: 'maroon', mt: 3, mb: 1, height: '40px', '&:hover': {
+                            backgroundColor: 'maroon',
+                            }, }}
+                          id="signIn"
+                          onClick={handleSubmit}
+                        >
+                          Sign In
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Box>
+                <Grid container>
+                  <Grid item xs={6}>
+                    <Link onClick={handleOpen} variant="body2" sx={{ color: 'maroon', cursor: "pointer" }}>
+                      {"Forgot password?"}
+                    </Link>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Link href="/createAccount" variant="body2" sx={{ color: 'maroon' }}>
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Container>
+            </Box>
+          </Grid>
+
+        </Grid>
+
+        <Modal open={open} onClose={handleClose}>
+          <Container maxWidth="xs">
             <Box
               sx={{
-                marginTop: 4,
+                marginTop: 8,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                bgcolor: 'white',
+                p: 2,
+                borderRadius: '10px',
               }}
             >
-              <Typography sx={{color: 'maroon'}} component="h1" variant="h3">
-                Welcome back to <span style={{ fontWeight: 'bold' }}>My Map Styler</span>
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Forgot Password
               </Typography>
-              <Typography sx={{color: 'maroon'}} component="h1" variant="h5">
-                Sign in to continue exploring and creating amazing maps!
+              <Typography>
+                Enter the email address associated with your account, and we'll send you a link to reset your password
               </Typography>
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Box component="form" noValidate onSubmit={handleSubmitPassword}>
                 <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <InputLabel sx={{color: 'maroon'}}>Email Address</InputLabel>
-                    <TextField
-                      required
-                      fullWidth
-                      id="email"
-                      label="Enter Your Email Address"
-                      name="email"
-                      autoComplete="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      autoFocus
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <InputLabel sx={{color: 'maroon'}}>Password</InputLabel>
-                    <TextField
-                      required
-                      fullWidth
-                      id="password"
-                      label="Enter Your Password"
-                      name="password"
-                      type='password'
-                      autoComplete="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                    />
-                  </Grid>
                   <Grid item xs={12}>
-                    <Button
-                      type="button"
+                    <TextField
                       fullWidth
-                      variant="contained"
-                      sx={{ backgroundColor: 'maroon', mt: 3, mb: 1, height: '40px' }}
-                      id="signIn"
-                      onClick={handleSubmit}
-                    >
-                      Sign In
-                    </Button>
+                      id="emailForgot"
+                      label="Email Address"
+                      name="emailForgot"
+                      autoComplete="email"
+                      onChange={handleInputChange}
+                    />
                   </Grid>
                 </Grid>
+                <Button type="submit" fullWidth variant="contained" sx={{ backgroundColor: 'maroon', mt: 3, mb: 2, '&:hover': {
+                backgroundColor: 'maroon',
+                }, }}>
+                  Continue
+                </Button>
               </Box>
             </Box>
-            <Grid container>
-              <Grid item xs={6}>
-                <Link onClick={handleOpen} variant="body2" sx={{color: 'maroon', cursor: "pointer"}}>
-                  {"Forgot password?"}
-                </Link>
-              </Grid>
-              <Grid item xs={6}>
-                <Link href="/createAccount" variant="body2" sx={{color: 'maroon'}}>
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
           </Container>
-        </Box>
-      </Grid>
-      
-    </Grid>
-
-    <Modal open={open} onClose={handleClose}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            bgcolor: 'background.paper',
-            p: 2,
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Forgot Password
-          </Typography>
-          <Typography>
-            Enter the email address associated with your account, and we'll send you a link to reset your password
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmitPassword} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="emailForgot"
-                  label="Email Address"
-                  name="emailForgot"
-                  autoComplete="email"
-                  onChange={handleInputChange}
-                />
-              </Grid>
-            </Grid>
-            <Button type="submit" fullWidth variant="contained" sx={{backgroundColor: 'maroon', mt: 3, mb: 2 }}>
-              Continue
-            </Button>
-          </Box>
-        </Box>
-      </Container>
-    </Modal>
-    {/* Error Modal */}
-    <MUIErrorModal />
-  </div>
-</div>
+        </Modal>
+        {/* Error Modal */}
+        <MUIErrorModal />
+      </div>
+    </div>
 
 
   );
