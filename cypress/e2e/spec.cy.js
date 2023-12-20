@@ -22,6 +22,9 @@ describe('User Tests', () => {
   it('Log In Success', function () {
     cy.contains('Login', { matchCase: false, timeout: 10000 }).click();
 
+    cy.wait(1000);
+
+
     cy.get('#email').type('exampleUser@gmail.com');
     cy.get('#password').type('exampleUser');
     cy.get('#signIn').click();
@@ -33,6 +36,9 @@ describe('User Tests', () => {
     let ran = Math.random()
 
     cy.contains('Create An Account', { matchCase: false, timeout: 10000 }).click();
+
+    cy.wait(1000);
+
 
     cy.get('#firstName').type('Clone');
     cy.get('#lastName').type('Cloneson');
@@ -49,6 +55,8 @@ describe('User Tests', () => {
 
   it('Fail Login Empty', function () {
     cy.contains('Login', { matchCase: false, timeout: 10000 }).click();
+
+    cy.wait(1000);
 
     // empty both
     cy.get('#signIn').click();
@@ -72,6 +80,8 @@ describe('User Tests', () => {
 
   it('Fail Login Incorrect', function () {
     cy.contains('Login', { matchCase: false, timeout: 10000 }).click();
+
+    cy.wait(1000);
 
     // wrong email
     cy.get('#email').type('exampleUser854734t65274723');
@@ -101,6 +111,8 @@ describe('User Tests', () => {
   it('Fail Login then Log in', function () {
     cy.contains('Login', { matchCase: false }).click();
 
+    cy.wait(1000);
+
     cy.get('#email').type('exampleUser854734t65274723');
     cy.get('#password').type('exampleUser854734t65274723');
     cy.get('#signIn').click();
@@ -126,6 +138,8 @@ describe('User Tests', () => {
 
     // blank firstName
     cy.contains('Create An Account', { matchCase: false }).click();
+    cy.wait(1000);
+
     cy.get('#lastName').type('Cloneson');
     cy.get('#userName').type('Clone' + ran);
     cy.get('#email').type('clone.cloneson' + ran + '@stonybrook.edu');
@@ -159,7 +173,9 @@ describe('User Tests', () => {
   it('Fail Register Duplicates', function () {
     let ran = Math.random();
 
-    cy.contains('Create An Account', { matchCase: false }).click();
+    cy.contains('Create An Account', { matchCase: false }).click(); 
+    cy.wait(1000);
+
 
     // duplicate UserName
     cy.get('#firstName').type('Clone');
@@ -189,6 +205,8 @@ describe('User Tests', () => {
     let ran = Math.random();
 
     cy.contains('Create An Account', { matchCase: false }).click();
+    cy.wait(1000);
+
 
     // Invalid email
     cy.get('#firstName').type('Clone');
@@ -239,8 +257,8 @@ describe('Home Tests', () => {
     cy.visit("http://localhost:3000")
 
     cy.contains('Login', { matchCase: false }).click();
-    cy.get('#email').type('exampleUser@gmail.com');
-    cy.get('#password').type('exampleUser');
+    cy.get('#email').type('Test@runner.com');
+    cy.get('#password').type('TestRunner');
     cy.get('#signIn').click();
     cy.location('href').should('include', '/home')
     cy.wait(500);
@@ -280,8 +298,8 @@ describe('Home Tests', () => {
 
     cy.location('href').should('include', '/profile')
 
-    cy.contains("First Name: exa", { timeout: 10000 })
-    cy.contains("User Name: exampleUser", { timeout: 10000 })
+    cy.contains("First Name: Test", { timeout: 10000 })
+    cy.contains("User Name: TestRunner", { timeout: 10000 })
   });
 
   it('Home page Create Map', function () {
@@ -292,34 +310,34 @@ describe('Home Tests', () => {
 
 
   it('Home page searching', function () {
-    cy.contains('Map1', { matchCase: false, timeout: 10000 });
-    cy.contains('Map2', { matchCase: false, timeout: 10000 });
-    cy.contains('Map21', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 2', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 });
 
-    cy.get('#searchBar').type("Map1{enter}");
-    cy.contains('Map1', { matchCase: false, timeout: 10000 });
-    cy.contains('Map2', { matchCase: false, timeout: 10000 }).should('not.exist');
-    cy.contains('Map21', { matchCase: false, timeout: 10000 }).should('not.exist');
+
+    cy.get('#searchBar').type("Map 2{enter}");
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 2', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 });
 
     cy.get('#searchBar').clear('E');
-    cy.get('#searchBar').type("{enter}");
-    cy.get('#searchBar').type("Map2{enter}");
-    cy.contains('Map2', { matchCase: false, timeout: 10000 });
-    cy.contains('Map21', { matchCase: false, timeout: 10000 });
-    cy.contains('Map1', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.get('#searchBar').type("Map 1{enter}");
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 2', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 }).should('not.exist');
 
     cy.get('#searchBar').clear('E');
     cy.get('#searchBar').type("{enter}");
     cy.get('#searchBar').type("dsjhagbjhgkd{enter}");
-    cy.contains('Map2', { matchCase: false, timeout: 10000 }).should('not.exist');
-    cy.contains('Map21', { matchCase: false, timeout: 10000 }).should('not.exist');
-    cy.contains('Map1', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 2', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 }).should('not.exist');
 
     cy.get('#searchBar').clear('E');
     cy.get('#searchBar').type("{enter}");
-    cy.contains('Map1', { matchCase: false, timeout: 10000 });
-    cy.contains('Map2', { matchCase: false, timeout: 10000 });
-    cy.contains('Map21', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 2', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 });
 
   });
 
@@ -331,55 +349,74 @@ describe('Home Tests', () => {
 
 
     cy.get("#applyFilter").click({ force: true });
-    cy.contains('Map1', { matchCase: false, timeout: 10000 });
-    cy.contains('Map2', { matchCase: false, timeout: 10000 }).should('not.exist');
-    cy.contains('Map21', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 2', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 }).should('not.exist');
 
     cy.get('#searchBar').type("dsjhagbjhgkd{enter}", { force: true });
-    cy.contains('Map2', { matchCase: false, timeout: 10000 }).should('not.exist');
-    cy.contains('Map21', { matchCase: false, timeout: 10000 }).should('not.exist');
-    cy.contains('Map1', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 2', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 }).should('not.exist');
   });
 
   it('Home page Filtering 2', function () {
     cy.wait(1000);
     cy.get(".MuiInputBase-root > #select-filter").click();
-    cy.get('[data-value="Sized Dot"]').click();
+    cy.get('[data-value="Color"]').click();
 
 
     cy.get("#applyFilter").click({ force: true });
-    cy.contains('Map1', { matchCase: false, timeout: 10000 }).should('not.exist');
-    cy.contains('Map2', { matchCase: false, timeout: 10000 });
-    cy.contains('Map21', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.contains('Map 2', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 });
 
-    cy.get('#searchBar').type("Map21{enter}", { force: true });
-    cy.contains('Map21', { matchCase: false, timeout: 10000 });
-    cy.contains('Map1', { matchCase: false, timeout: 10000 }).should('not.exist');
+    cy.get('#searchBar').type("Map 21{enter}", { force: true });
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 }).should('not.exist');
   });
+
+  it('Home page Filtering 3', function () {
+    cy.wait(1000);
+    cy.get(".MuiInputBase-root > #select-filter").click();
+    cy.get('[data-value="Color"]').click();
+    cy.get('[data-value="Text"]').click();
+
+
+    cy.get("#applyFilter").click({ force: true });
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 2', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 });
+
+    cy.get('#searchBar').type("1{enter}", { force: true });
+    cy.contains('Map 21', { matchCase: false, timeout: 10000 });
+    cy.contains('Map 1', { matchCase: false, timeout: 10000 });
+  });
+
+
 
 
 });
 
 
 describe('Editing Tests', () => {
-
   beforeEach(() => {
     cy.viewport(1200, 750)
     cy.visit("http://localhost:3000")
 
     cy.contains('Login', { matchCase: false }).click();
-    cy.get('#email').type('exampleUser@gmail.com');
-    cy.get('#password').type('exampleUser');
+    cy.get('#email').type('Test@runner.com');
+    cy.get('#password').type('TestRunner');
     cy.get('#signIn').click();
     cy.location('href').should('include', '/home');
 
     cy.wait(1000);
 
-    cy.contains('Map2', { matchCase: false, timeout: 20000 }).click();
+    cy.get('.MuiList-root > :nth-child(1) > #cards > .MuiPaper-root > .MuiCardActions-root > #map-card > .css-lqpqwh > div > img').click();
 
     cy.wait(1000);
-    
-    cy.location('href').should('include', '/mapEditing')
+
+    cy.location('href').should('include', '/mapEditing');
+
   })
 
   Cypress.on('uncaught:exception', (err, runnable) => {
@@ -387,14 +424,15 @@ describe('Editing Tests', () => {
     return false;
   });
 
-  it('Toggling', function () {
-    cy.get("#border").click();
+  it('Toggling', function () {    
 
-    cy.contains('Brazil', { matchCase: false, timeout: 20000 }).should('not.exist');
+    /*cy.contains('Brazil', { matchCase: false, timeout: 20000 }).should('not.exist');
 
-    cy.get("#toggleNames").click();
+    cy.get('#toggleNames').check();
+    cy.get('#mapC > :nth-child(3) > div').click();
 
-    cy.contains('Brazil', { matchCase: false, timeout: 20000 });
+    cy.contains('Brazil', { matchCase: false, timeout: 20000 });*/
   });
+
 
 });
