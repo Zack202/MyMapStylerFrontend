@@ -24,7 +24,7 @@ const ResetPassword = () => {
     if (typeof window !== 'undefined') {
     if (auth.loggedIn) {
         const router = useRouter();
-        router.push('/home_browser');
+        router.push('/home');
       }
     }
     const router = useRouter();
