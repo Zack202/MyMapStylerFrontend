@@ -388,7 +388,8 @@ export default function Leafletmap(props) {
   const downloadAsJSON = () => {
     let mapData = {
       geo: {...store.currentMap.mapGeometry},
-      mapFeatures: {...store.currentMap.mapFeatures}
+      mapFeatures: {...store.currentMap.mapFeatures},
+      mapType: store.currentMap.mapType
     }
     
 

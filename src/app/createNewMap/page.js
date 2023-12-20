@@ -60,6 +60,7 @@ export default function CreateMapModal() {
     const [mapType, setMapType] = React.useState('');
     const handleChange = (event) => {
         setMapType(event.target.value);
+        setMapTypeExists(false);
     };
 
     const [open, setOpen] = React.useState(false);
@@ -82,6 +83,7 @@ export default function CreateMapModal() {
     const [mapFeatures, setMapFeatures] = useState(null);
     const [validFileMessage, setValidFileMessage] = useState("Waiting for file")
     const [ext, setExt] = useState("");
+    const [mapTypeExists, setMapTypeExists] = useState(false);
     var shapefile = require("shapefile");
 
     const correctTypes = ['kml', 'json', 'zip', 'shp'];
@@ -136,7 +138,7 @@ export default function CreateMapModal() {
 
                 } else {
 
-
+                    console.log('arrived here');
                     // Parse JSON file
                     const parsedData = JSON.parse(fileContent);
                     if(parsedData.geo) {
@@ -148,6 +150,17 @@ export default function CreateMapModal() {
 
                     if(parsedData.mapFeatures){
                         setMapFeatures(parsedData.mapFeatures);
+                    } else{
+                        setMapFeatures(null);
+                    }
+
+                    if(parsedData.mapType){
+                        console.log('map uploaded')
+                        setMapTypeExists(true);
+                        setMapType(parsedData.mapType);
+                    }
+                    else{
+                        setMapTypeExists(false);
                     }
                 }
 
@@ -220,6 +233,10 @@ export default function CreateMapModal() {
                     </Box>
                     <Grid item xs={12}>
                         <Box sx={{marginTop: 5}}>
+                        <Typography visibility={mapTypeExists ? 'none' : 'hidden'} color='red'>
+                            *This was the type found in your file
+                        </Typography>
+
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Map Type</InputLabel>
                             <Select
