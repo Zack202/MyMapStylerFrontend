@@ -416,6 +416,12 @@ export default function MapEditor(props) {
           mapFeatures[country] = updatedRegions;
         }
       }
+      const updatedMap = {
+         ...store.currentMap,
+         mapFeatures: { ...store.currentMap.mapFeatures, ADV: mapFeatures },
+       };
+     
+       store.updateCurrentMapLocally(updatedMap);
    }
 
       //For Choropleth Levels
