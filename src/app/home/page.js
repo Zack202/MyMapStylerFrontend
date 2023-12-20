@@ -61,6 +61,10 @@ export default function Home() {
         runFilters();
     }, [store.sort]);
 
+    useEffect(() => {
+        runFilters();
+    }, [store.idNamePairs]);
+
     // if store's filter is changed, update
     useEffect(() => {
         runFilters();
