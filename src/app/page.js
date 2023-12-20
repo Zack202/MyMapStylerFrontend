@@ -68,8 +68,9 @@ export default function SplashScreen() {
   return (
     <div style={backgroundStyle}>
 
-      <Typography className={styles.center} style={{ fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '110px' }}>
-        <b><u>My Map Styler</u></b>
+      <Typography className={styles.center}>
+        {/* <b><u>My Map Styler</u></b> */}
+        <img style={{ height: "425px", }} src={'/logo_maroon.png'} alt="logo" />
       </Typography>
       <Box sx={{ height: 250, background: '#f2b8b8', textAlign: 'center', borderRadius: '10px' }}>
         <Box sx={{ height: 100, width: 800, display: 'flex', flexDirection: 'column' }}>
