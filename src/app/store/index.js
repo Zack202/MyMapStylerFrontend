@@ -563,7 +563,7 @@ function GlobalStoreContextProvider(props) {
                         const longitude = parseFloat(columns[1].trim());
                         
                         if( store.currentMap && store.currentMap.mapType && store.currentMap.mapType === 2){ //size dot map
-                            if(columns[3].trim() !== undefined){
+                            if(columns[3] && columns[3].trim() !== undefined){
                                 const value = parseFloat(columns[3].trim());
                                 if(!isNaN(value)&& !isNaN(latitude) && !isNaN(longitude)){
                                     dataPoints.push([latitude, longitude, value]);

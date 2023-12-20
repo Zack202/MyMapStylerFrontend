@@ -61,6 +61,10 @@ export default function Home() {
         runFilters();
     }, [store.sort]);
 
+    useEffect(() => {
+        runFilters();
+    }, [store.idNamePairs]);
+
     // if store's filter is changed, update
     useEffect(() => {
         runFilters();
@@ -226,7 +230,7 @@ export default function Home() {
 
             <Box item xs={12} sx={{
                 position: "relative", width: "100%",
-                display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
+                display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%", overflowX: 'hidden'
             }} style={backgroundStyle}>
                 
                 <div>

@@ -627,7 +627,7 @@ export default function MapEditor(props) {
       }
     return(
       <Box item xs={12} sx={{position:"absolute", width: "25%", 
-            display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "89.5vh",}}>
+            display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "89.5vh", overflowX: 'hidden'}}>
          <Grid container>
             <Box className = {styles.rect_box}>
                <Box className = {styles.title_box}>
