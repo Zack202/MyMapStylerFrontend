@@ -407,23 +407,7 @@ export default function Leafletmap(props) {
 
 
     return (
-      <div> <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', background: '#d4d4d4', padding: '12px' }}>
-        <Button onClick={captureMapAsPNG} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF','&:hover': {
-                backgroundColor: 'maroon',
-                }, }}>
-          Export as PNG
-        </Button>
-        <Button onClick={captureMapAsJPG} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF','&:hover': {
-                backgroundColor: 'maroon',
-                }, }}>
-          Export as JPG
-        </Button>
-        <Button onClick={downloadAsJSON} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF','&:hover': {
-                backgroundColor: 'maroon',
-                }, }}>
-          Export as json
-        </Button>
-      </div>
+      <div> 
         <MapContainer id='mapC' ref={mapRef} style={{ height: "71vh" }} center={center} zoom={zoom}>
 
           <LeafletmapInside
@@ -472,7 +456,23 @@ export default function Leafletmap(props) {
           )}
 
         </MapContainer>
-       
+       <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', background: '#d4d4d4', padding: '12px' }}>
+        <Button onClick={captureMapAsPNG} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF','&:hover': {
+                backgroundColor: 'maroon',
+                }, }}>
+          Export as PNG
+        </Button>
+        <Button onClick={captureMapAsJPG} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF','&:hover': {
+                backgroundColor: 'maroon',
+                }, }}>
+          Export as JPG
+        </Button>
+        <Button onClick={downloadAsJSON} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF','&:hover': {
+                backgroundColor: 'maroon',
+                }, }}>
+          Export as json
+        </Button>
+      </div>
       </div>
     );
   } else {
