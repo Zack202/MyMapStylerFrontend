@@ -294,7 +294,7 @@ const LeafletmapInside = (props) => {
         <CircleMarker
           key={index}
           center={[coord[0], coord[1]]}
-          radius={coord[2]}
+          radius={coord[2] || radius}
           pathOptions={{ color: 'transparent', fillColor: dotColor, fillOpacity: dotOpacity, opacity: dotOpacity }}
         />
       ))}
