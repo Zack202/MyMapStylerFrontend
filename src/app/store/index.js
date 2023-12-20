@@ -256,25 +256,26 @@ function GlobalStoreContextProvider(props) {
     }
 
     // create a new map                                             
-    store.createNewMap = async function (mapName, mapData, mapType, mapDesc) { //input map data and map type
+    store.createNewMap = async function (mapName, mapData, mapType, mapDesc, mapFeatures) { //input map data and map type
         //let newMapName = "Untitled";//+ store.newListCounter;
         //name, userName, ownerEmail, mapData, mapType
         //creat new map
-        let newMapName = mapName
-        let newMapDesc = mapDesc
-        let userName = auth.user.userName //MMM
-        let ownerEmail = auth.user.email //mango@gmail.com
-        const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc);
-        console.log("createNewList response: " + response);
-        if (response.status === 201) {
-            console.log('success')
-            storeReducer({
-                type: GlobalStoreActionType.SET_CURRENT_MAP,
-                payload: response.data.map
-            });
-            // if success bring to map editing screen
-            router.push('/mapEditing/' + response.data.map._id)
-
+            let newMapName = mapName
+            let newMapDesc = mapDesc
+            let userName = auth.user.userName //MMM
+            let ownerEmail = auth.user.email //mango@gmail.com
+            let newmapFeatures = mapFeatures;
+            const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc, mapFeatures);
+            console.log("createNewList response: " + response);
+            if (response.status === 201) {
+                console.log('success')
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_MAP,
+                    payload: response.data.map
+                });
+                // if success bring to map editing screen
+                router.push('/mapEditing/'+ response.data.map._id)
+            
         }
         else {
             console.log("API FAILED TO CREATE A NEW MAP");
@@ -617,15 +618,17 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
-    store.likeMap = function (mapId, location) {
+    store.likeMap = function (mapId, location, userName) {
         async function likeMap(mapId) {
             let response = await api.getMapById(mapId);
             if (response.data.success) {
                 let obj1 = {
-                    liked: true
+                    liked: true,
+                    userName: userName
                 }
                 let obj2 = {
-                    liked: false
+                    liked: false,
+                    userName: ""
                 }
 
                 let map = { ...response.data.map };
@@ -654,15 +657,17 @@ function GlobalStoreContextProvider(props) {
         likeMap(mapId)
     }
 
-    store.dislikeMap = function (mapId, location) {
+    store.dislikeMap = function (mapId, location, userName) {
         async function dislikeMap(mapId) {
             let response = await api.getMapById(mapId);
             if (response.data.success) {
                 let obj1 = {
-                    disliked: true
+                    disliked: true,
+                    userName: userName
                 }
                 let obj2 = {
-                    disliked: false
+                    disliked: false,
+                    userName: ""
                 }
 
                 let map = { ...response.data.map };
@@ -710,6 +715,28 @@ function GlobalStoreContextProvider(props) {
             store.loadIdNamePairs();
         }
         asyncAddComment(comment);
+    }
+
+    store.deleteComment = (comment) => {
+        async function asyncdeleteComment(comment) {
+            let diff = {
+                removeComment: comment
+            }
+            const index = store.currentMap.comments.indexOf(comment);
+            store.currentMap.comments.splice(index, 1);
+            console.log("the diff is ", diff)
+            let response = await api.updateMapById(store.currentMap._id, diff);
+            if (response.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.PUBLISHED,
+                    payload: {
+                        map: store.currentMap
+                    }
+                })
+            }
+            store.loadIdNamePairs();
+        }
+        asyncdeleteComment(comment);
     }
 
     store.updateMapAttributes = (

@@ -385,6 +385,25 @@ export default function Leafletmap(props) {
     });
 };
 
+  const downloadAsJSON = () => {
+    let mapData = {
+      geo: {...store.currentMap.mapGeometry},
+      mapFeatures: {...store.currentMap.mapFeatures}
+    }
+    
+
+    const jsonMapData = JSON.stringify(mapData);
+
+    // Create a Blob from the JSON data
+    const blob = new Blob([jsonMapData], { type: 'application/json' });
+
+    // Create a download link and trigger a click event
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = store.currentMap.name + '.json';
+    link.click();
+  }
+
 
     return (
       <div>
@@ -443,8 +462,8 @@ export default function Leafletmap(props) {
         <Button onClick={captureMapAsJPG} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF' }}>
           Export as JPG
         </Button>
-        <Button onClick={captureMapAsJPG /*Change for kristians function*/} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF' }}>
-          Export as mms.json
+        <Button onClick={downloadAsJSON} variant="contained" sx={{ backgroundColor: 'maroon', color: '#FFFFFF' }}>
+          Export as json
         </Button>
       </div>
       </div>
