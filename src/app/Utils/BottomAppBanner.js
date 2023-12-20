@@ -11,7 +11,7 @@ import { Typography } from '@mui/material';
 export default function BottomAppBanner() {
 
     return (
-        <Box flex sx={{ width: "100%", bottom: 0}}>
+        <Box flex sx={{ width: "100%", bottom: 0, position: 'absolute'}}>
             <AppBar position="static" sx={{bgcolor: "#800000", height:"48px"}}>
             <Box
                         sx={{

@@ -59,7 +59,7 @@ const CommentSection = (props) => {
   }
 
   return (
-<Card style={{height:'700px'}}>
+<Card style={{height:'550px'}}>
    <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", height: "65vh", maxHeight: "80vh", overflowX: "hidden"}}>
       {store.currentMap && store.currentMap.comments && store.currentMap.comments.length > 0 && (
       <List >
@@ -123,9 +123,9 @@ const CommentSection = (props) => {
          ))}
       </List>)}
    </CardContent>
-   <Box style= {{margin:'5px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+   <Box style= {{marginTop:'5px', marginBottom: '0px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
    <TextField multiline placeholder='Add Comment' onChange={handleInputChange} value={comment} 
-   style={{color:'white', width: '70%',
+   style={{color:'white', width: '85%',
    display: isGuest ?  "none"  : "default"}}></TextField>
    <IconButton onClick={handleAddComment} 
    disabled={comment.length === 0}

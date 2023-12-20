@@ -305,7 +305,7 @@ function GlobalStoreContextProvider(props) {
         let newMapDesc = mapDesc
         let userName = auth.user.userName //MMM
         let ownerEmail = auth.user.email //mango@gmail.com
-        const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc);
+        const response = await api.createNewMap(newMapName, userName, ownerEmail, mapData, mapType, newMapDesc, mapFeatures);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             console.log('success')

@@ -172,6 +172,8 @@
   top: 50%;
   /* left: 50%; */
   position: absolute;
+  color: white;
+  border-radius: 5px;
 }
 
 #confirm-cancel-container {
