@@ -234,7 +234,7 @@ function PublishedCard(props) {
         </Box>
 
             <Box sx={{ p: 1, flexGrow: 1, right:"0", position: "absolute", top: 0}}>
-                <Typography variant='h7' fontSize="12pt">Created By: {idNamePair.userName}</Typography>
+                <Typography variant='h7' fontSize="12pt">Created By:<b> {idNamePair.userName} </b></Typography>
             </Box>
 
             {/* like dislike comments container */}
