@@ -11,9 +11,10 @@ import React, { useState, useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import List from '@mui/material/List';
 import AuthContext from "../auth";
+import { CircularProgress } from "@mui/material";
 
 const backgroundStyle = {
-    backgroundImage: 'url("./topology_art.jpeg")',
+    backgroundImage: 'url("./0dd0bbbc6c38a555d0817e8051ef2b12.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '100vh',
@@ -226,7 +227,15 @@ export default function Browser() {
                 display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
             }} style={backgroundStyle}>
 
-                {shownMaps /* shows all the map cards*/} 
+                <div>
+                {shownMaps === false ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
+                    <CircularProgress sx={{ color: 'maroon' }} size={100} thickness={5} />
+                </div>
+                ) : (
+                shownMaps
+                )}
+            </div>
             </Box>
             <Box item xs={12} sx={{
                 position: "absolute", width: "100%",

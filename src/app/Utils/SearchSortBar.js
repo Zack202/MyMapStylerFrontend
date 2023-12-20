@@ -248,7 +248,7 @@ export default function PrimarySearchAppBar() {
           </Search>
           {/* <CreateMapModal /> */}
           <Box item xs={12} sx={{}}>
-                <Button sx={{
+                <Button sx={{ backgroundColor: "maroon", color: "white",
                     marginLeft: 5, marginRight: 0, marginTop: .75, display:
                         isGuest
                             ? "none"
@@ -286,6 +286,7 @@ export default function PrimarySearchAppBar() {
             variant="contained"
             onClick={handleSubmitFilter}
             id="applyFilter"
+            style={{backgroundColor: "maroon", color: "white"}}
           >
             Apply Filter
           </Button>

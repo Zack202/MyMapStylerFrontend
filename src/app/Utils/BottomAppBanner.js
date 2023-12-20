@@ -21,9 +21,9 @@ export default function BottomAppBanner() {
                             width: '100%',
                         }}
                     >
-                        <Typography style={{ marginTop: 10, fontSize: '20px' }}>
-                        <Copyright>My Map Styler</Copyright>
+                        <Typography style={{ marginTop: 10, fontFamily: 'Michroma', fontWeight: 'bold', fontSize: '20px' }}>
                           My Map Styler
+                          <Copyright></Copyright>
                         </Typography>
                     </Box>
             </AppBar>
