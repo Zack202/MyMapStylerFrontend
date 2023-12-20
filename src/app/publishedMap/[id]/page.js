@@ -165,7 +165,7 @@ export default function specificMapScreen(){
                                 
                             </Box>
 
-                            <Box sx={{ gridArea: 'map', bgcolor: '#d49182' }}>
+                            <Box sx={{ gridArea: 'map', bgcolor: '#f2b8b8' }}>
                             <Leafletmap 
                                 mapGeo={mapData}
                                 borderSwitch={borderSwitch}

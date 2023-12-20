@@ -15,7 +15,8 @@ export const AuthActionType = {
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
     REGISTER_USER_ERROR: "REGISTER_USER_ERROR",
-    UPDATE_USER_INFO: "UPDATE_USER_INFO"
+    UPDATE_USER_INFO: "UPDATE_USER_INFO",
+    UPDATE_USER_INFO_ERROR: "UPDATE_USER_INFO_ERROR"
 }
 
 function AuthContextProvider(props) {
@@ -74,6 +75,13 @@ function AuthContextProvider(props) {
                     user: payload.user,
                     loggedIn: true,
                     errorFound: ""
+                })
+            }
+            case AuthActionType.UPDATE_USER_INFO_ERROR: {
+                return setAuth({
+                    user: null,
+                    loggedIn: true,
+                    errorFound: payload.errorMessage
                 })
             }
             default:
@@ -238,7 +246,7 @@ function AuthContextProvider(props) {
             }
         }catch(error){
             authReducer({
-                type: AuthActionType.UPDATE_INFO_ERROR,
+                type: AuthActionType.UPDATE_USER_INFO_ERROR,
                 payload: {
                     errorMessage: error.response.data.errorMessage
                 }

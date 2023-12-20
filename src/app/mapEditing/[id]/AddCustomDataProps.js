@@ -14,7 +14,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Grid, IconButton } from '@mui/material';
 import { useEffect } from 'react';
 import { StoreRounded } from '@mui/icons-material';
-
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 
 
 function CustomTabPanel(props) {
@@ -59,16 +60,16 @@ export default function AddCustomDataProps(props) {
     const [value, setValue] = useState(() =>
       (store.currentMap && (store.currentMap.mapType === 2 || store.currentMap.mapType === 3)) ? 1 : 0
     );
+
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [newPropertyName, setNewPropertyName] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
+    const [showDotAlert, setShowDotAlert] = useState(false);
+
 
     const cursorModes = props.cursorModes;
     const setCursorModes = props.setCursorModes;
     
-
-
-
-
       // Data points ***************************************************************************
 
       const [dataPoints, setDataPoints] = useState([]);
@@ -110,6 +111,13 @@ export default function AddCustomDataProps(props) {
         setCursorModes('')
       };
 
+      const handleCloseAlert = () => {
+        setShowAlert(false);
+      };
+      const handleCloseDotAlert = () => {
+        setShowDotAlert(false);
+      };
+
 
       useEffect(() => {
         if (store.currentMap && store.currentMap.mapFeatures && store.currentMap.mapFeatures.DP) {
@@ -123,7 +131,15 @@ export default function AddCustomDataProps(props) {
           updatedMap.mapFeatures = { ...updatedMap.mapFeatures };
       
           updatedMap.mapFeatures.DP = dataPoints.map(point => point.length > 2 ? [point[0], point[1], point[2]] : [point[0], point[1]]);
-      
+          
+
+          setTimeout(() => {
+            setShowDotAlert(true); 
+            //close the alert after 3 seconds
+            setTimeout(() => {
+              setShowDotAlert(false);
+            }, 3000);
+          }, 1000);
           store.updateCurrentMapLocally(updatedMap);
         }
       };
@@ -237,7 +253,14 @@ export default function AddCustomDataProps(props) {
             }
           }
         });
-    
+        
+        setTimeout(() => {
+          setShowAlert(true); 
+          //close the alert after 3 seconds
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 3000);
+        }, 1000);
         store.updateCurrentMapLocally(updatedMap); // Local update
       }
     };
@@ -323,6 +346,11 @@ return(
     <Button variant="contained" onClick={() => handleAddProperty(newPropertyName)} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
       Add New Property
     </Button>
+
+    <Alert sx={{display: showAlert ? "default" : "none"}}
+        icon={<CheckIcon fontSize="inherit" />} severity="success"  onClose={handleCloseAlert}>
+          Properties Set
+        </Alert>
     <Button variant="contained" onClick={copyDataToStoreADV} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
       Set Properties
     </Button>
@@ -373,6 +401,10 @@ return(
       <Button variant="contained" color="primary" onClick={handleAddSizedPoint} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
         Add New Sized Point by Coordinates
       </Button>
+      <Alert sx={{display: showDotAlert ? "default" : "none"}}
+        icon={<CheckIcon fontSize="inherit" />} severity="success"  onClose={handleCloseDotAlert}>
+          Data Points Set
+        </Alert>
       <Button variant="contained" onClick={copyDataToStoreDP} fullWidth style={{ margin: '8px 0', backgroundColor: 'maroon', color: '#ffffff' }}>
         Set Data Points
       </Button>
