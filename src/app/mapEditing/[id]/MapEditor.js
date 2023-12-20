@@ -100,11 +100,15 @@ export default function MapEditor(props) {
       }
 
       const ttDirection = props.ttDirection;
-      const setTtDirection = props.setTtDirection;
+      //const setTtDirection = props.setTtDirection;
       const handleTtDirectionChange = (event) => {
          //dropdown
-         setTtDirection(event.target.value);
+         //setTtDirection(event.target.value);
          //add temp fix here when doing undo redo
+         let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         let newEdits = JSON.parse(JSON.stringify(oldEdits));
+         newEdits.ttDirection = event.target.value;
+         store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
       }
 
       //For Region Name Color
@@ -136,28 +140,29 @@ export default function MapEditor(props) {
 
       //text size doesn't save, look into later , need to change store index and map controller 
       const regionNameTextSize = props.regionNameTextSize;
-      const setRegionNameTextSize = props.setRegionNameTextSize;
+      //const setRegionNameTextSize = props.setRegionNameTextSize;
       const handleRegionNameTextSizeChange = (event) => {
          const newTextSize = event.target.value.trim();
          if (newTextSize === '' || !isNaN(newTextSize)) {
-           setRegionNameTextSize(newTextSize === '' ? "" : parseFloat(newTextSize));
-           /* let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+           //setRegionNameTextSize(newTextSize === '' ? "" : parseFloat(newTextSize));
+           let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
             let newEdits = JSON.parse(JSON.stringify(oldEdits));
             newEdits.regionNameTextSize = newTextSize === '' ? "" : parseFloat(newTextSize);
-            store.addMapFeaturesEditsTransaction(oldEdits, newEdits)*/
+            store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
+             newEdits.regionSwitch = false;
+         store.editMapAttributes(newEdits);
+         setTimeout(() => {
+            newEdits.regionSwitch = true;
+            store.editMapAttributes(newEdits);
+         }, 25);
          }
          /*setRegionNameSwitch(false); //temp fix for region name switch not updating
          setTimeout(() => {
             setRegionNameSwitch(true);
           }, 25);*/
          //temp fix 
-         let newEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
-         newEdits.regionSwitch = false;
-         store.editMapAttributes(newEdits);
-         setTimeout(() => {
-            newEdits.regionSwitch = true;
-            store.editMapAttributes(newEdits);
-         }, 25);
+         //let newEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+        
       }
 
       //For Background Color
@@ -243,29 +248,39 @@ export default function MapEditor(props) {
 
       //FOR CHOROPLETH ____________________________________________________________
       //For Choropleth Low Color
-      const setLowColorChoro = props.setLowColorChoro;
+      //const setLowColorChoro = props.setLowColorChoro;
       const lowColorChoro = props.lowColorChoro;
       const handleColorChangeLowChoro = (color) => {
          setTimeout(() => {
-            setLowColorChoro(color);
+            //setLowColorChoro(color);
+            let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+            let newEdits = JSON.parse(JSON.stringify(oldEdits));
+            newEdits.lowColorChoro = color;
+            store.addMapFeaturesEditsTransaction(oldEdits, newEdits);
+            //store.editMapAttributes(newEdits)
          }, colorTimeOut);
       }
 
          //For Choropleth Low Color
-         const setHighColorChoro = props.setHighColorChoro;
+         //const setHighColorChoro = props.setHighColorChoro;
          const highColorChoro = props.highColorChoro;
          const handleColorChangeHighChoro = (color) => {
             setTimeout(() => {
-               setHighColorChoro(color);
+               //setHighColorChoro(color);
+               let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+            let newEdits = JSON.parse(JSON.stringify(oldEdits));
+            newEdits.highColorChoro = color;
+            store.addMapFeaturesEditsTransaction(oldEdits, newEdits);
+            //store.editMapAttributes(newEdits);
             }, colorTimeOut);
          }
 
    //For Legend Colors
-   const setLegendColors = props.setLegendColors;
+   //const setLegendColors = props.setLegendColors;
    const legendColors = props.legendColors;
 
    //For Legend Values
-   const setLegendValues = props.setLegendValues;
+   //const setLegendValues = props.setLegendValues;
    const legendValues = props.legendValues;
 
    //Legend Creation
@@ -273,15 +288,20 @@ export default function MapEditor(props) {
       //Just add new legend value and color to the end of the list
       const updatedLegendValues = [...legendValues, ''];
       const updatedLegendColors = [...legendColors, '#000000'];
-      setLegendValues(updatedLegendValues);
-      setLegendColors(updatedLegendColors);
+      //setLegendValues(updatedLegendValues);
+      //setLegendColors(updatedLegendColors);
+      let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      let newEdits = JSON.parse(JSON.stringify(oldEdits));
+      newEdits.legendValues = updatedLegendValues;
+      newEdits.legendColors = updatedLegendColors;
+      store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
 
-      const updatedRows = updatedLegendValues.map((value, index) => ({
+      /*const updatedRows = updatedLegendValues.map((value, index) => ({
          id: index + 1,
          color: updatedLegendColors[index],
          label: value || '',
        }))
-       setRows(updatedRows)
+       //setRows(updatedRows)*/
    }
 
    const handleDeleteRow = (id) => {
@@ -289,15 +309,20 @@ export default function MapEditor(props) {
       const index = id - 1;
       const updatedLegendValues = legendValues.filter((value, i) => i !== index);
       const updatedLegendColors = legendColors.filter((value, i) => i !== index);
-      setLegendValues(updatedLegendValues);
-      setLegendColors(updatedLegendColors);
+      //setLegendValues(updatedLegendValues);
+      //setLegendColors(updatedLegendColors);
+      let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      let newEdits = JSON.parse(JSON.stringify(oldEdits));
+      newEdits.legendValues = updatedLegendValues;
+      newEdits.legendColors = updatedLegendColors;
+      store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
 
-      const updatedRows = updatedLegendValues.map((value, index) => ({
+      /*const updatedRows = updatedLegendValues.map((value, index) => ({
          id: index + 1,
          color: updatedLegendColors[index],
          label: value || '',
        }))
-       setRows(updatedRows)
+       //setRows(updatedRows)*/
    }
 
    const handleLegendColorEdit = (id, color) => {
@@ -305,9 +330,15 @@ export default function MapEditor(props) {
       const index = id - 1;
       const updatedLegendColors = [...legendColors];
       updatedLegendColors[index] = color;
-      setLegendColors(updatedLegendColors);
+      //setLegendColors(updatedLegendColors);
+      let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      let newEdits = JSON.parse(JSON.stringify(oldEdits));
+      newEdits.legendColors = updatedLegendColors;
+      store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
    }
 
+   
+   //const [choroSnap, setChoroSnap] = useState(legendColors);
 
    function generateGradient(color1, color2, levels) {
       const gradient = chroma.scale([color1, color2]).colors(levels);
@@ -317,19 +348,24 @@ export default function MapEditor(props) {
    const handleGenerateGradient = () => {
       const gradient = generateGradient(lowColorChoro, highColorChoro, levelsChoro);
       console.log(gradient);
-      setLegendColors(gradient);
+      //setLegendColors(gradient);
       const blankValues = Array.from({ length: gradient.length }, () => '')
-      setLegendValues(blankValues)
+      //setLegendValues(blankValues)
+      let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      let newEdits = JSON.parse(JSON.stringify(oldEdits));
+      //oldEdits.legendColor = choroSnap;
+      newEdits.legendColors = gradient;
+      newEdits.legendValues = blankValues;
+      store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
+      //setChoroSnap(gradient)
 
-      const updatedRows = gradient.map((color, index) => ({
+      /*const updatedRows = gradient.map((color, index) => ({
          id: index + 1,
          color: color,
          label: '',
        }))
-       setRows(updatedRows)
+       //setRows(updatedRows)*/
    }
-
-   
 
    const handleGenerateCloropleth = () => {
       // needs to set values in store.currentMap.mapFeatures.ADV for colors
@@ -383,27 +419,40 @@ export default function MapEditor(props) {
    }
 
       //For Choropleth Levels
-      const setLevelsChoro = props.setLevelsChoro;
+      //const setLevelsChoro = props.setLevelsChoro;
       const levelsChoro = props.levelsChoro;
       const handleLevelsChoroChange = (event) => {
          const newLevels = event.target.value.trim();
          if (newLevels === '' || !isNaN(newLevels)) {
-            setLevelsChoro(newLevels === '' ? "" : parseInt(newLevels));
+            //setLevelsChoro(newLevels === '' ? "" : parseInt(newLevels));
+            let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+            let newEdits = JSON.parse(JSON.stringify(oldEdits));
+            newEdits.levelsChoro = newLevels === '' ? "" : parseInt(newLevels);
+            store.addMapFeaturesEditsTransaction(oldEdits, newEdits);
+            //store.editMapAttributes(newEdits);
          }
       }
 
    //For Legend
-   const setLegendOn = props.setLegendOn;
+   //const setLegendOn = props.setLegendOn;
    const legendOn = props.legendOn;
    const handleLegendSwitchChange = (event) => {
-      setLegendOn(event.target.checked);
+      //setLegendOn(event.target.checked);
+      let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      let newEdits = JSON.parse(JSON.stringify(oldEdits));
+      newEdits.legendOn = event.target.checked;
+      store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
    }
 
    //For Legend Name
-   const setLegendName = props.setLegendName;
+   //const setLegendName = props.setLegendName;
    const legendName = props.legendName;
    const handleLegendNameChange = (event) => {
-      setLegendName(event.target.value);
+      //setLegendName(event.target.value);
+      let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+      let newEdits = JSON.parse(JSON.stringify(oldEdits));
+      newEdits.legendName = event.target.value;
+      store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
    }
 
 
@@ -465,10 +514,10 @@ export default function MapEditor(props) {
 
 
       const selectedValue = props.selectedValue;
-      const setSelectedValue = props.setSelectedValue;
+      //const setSelectedValue = props.setSelectedValue;
 
       const regionNameToDisplay = props.regionNameToDisplay;
-      const setRegionNameToDisplay = props.setRegionNameToDisplay;
+      //const setRegionNameToDisplay = props.setRegionNameToDisplay;
 
       const [options, setOptions] = useState([]);
 
@@ -486,18 +535,32 @@ export default function MapEditor(props) {
 
 
       const handleSelectChange = (event) => {
-         setSelectedValue(event.target.value);
+         //setSelectedValue(event.target.value);
+         let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         let newEdits = JSON.parse(JSON.stringify(oldEdits));
+         newEdits.selectedValue = event.target.value;
+         store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
       };
 
       const handleSelectChangeRegion = (event) => {
-         setRegionNameToDisplay(event.target.value);
+         //setRegionNameToDisplay(event.target.value);
+         let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         let newEdits = JSON.parse(JSON.stringify(oldEdits));
+         newEdits.regionNameToDisplay = event.target.value;
+         store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
       };
 
-      const [rows, setRows] = useState(legendValues.map((value, index) => ({
+      const rows = legendValues.map((value, index) => ({
          id: index + 1,
          color: legendColors[index],
          label: value || '',
-      })));
+      }))
+
+     /* const [rows, setRows] = useState(legendValues.map((value, index) => ({
+         id: index + 1,
+         color: legendColors[index],
+         label: value || '',
+      })));*/
       const columns = [
          {
             field: 'color', headerName: 'Colors', width: 120,
@@ -546,11 +609,15 @@ export default function MapEditor(props) {
             return row;
          });
 
-         setRows(updatedRows);
+         //setRows(updatedRows);
 
          // Update legendValues based on the updatedRows
          const updatedLegendValues = updatedRows.map((row) => row.label);
-         setLegendValues(updatedLegendValues);
+         //setLegendValues(updatedLegendValues);
+         let oldEdits = JSON.parse(JSON.stringify(store.currentMap.mapFeatures.edits));
+         let newEdits = JSON.parse(JSON.stringify(oldEdits));
+         newEdits.legendValues = updatedLegendValues;
+         store.addMapFeaturesEditsTransaction(oldEdits, newEdits)
       }
     return(
       <Box item xs={12} sx={{position:"absolute", width: "25%", 
@@ -946,7 +1013,7 @@ export default function MapEditor(props) {
          {/*______________________________________________________________________________________*/}
          {/*FOR COLOR AND TEXT____________________________________________________________________________*/}
          {store.currentMap && store.currentMap.mapType && (store.currentMap.mapType === 1 || store.currentMap.mapType === 5) && (
-        <Box backgroundColor="white" borderRadius={'5px'}>
+        <Box backgroundColor='white' borderRadius={'5px'} >
           {rows.map((row) => (
             <div key={row.id} style={{ display: 'flex', alignItems: 'center', padding: '5px', marginLeft: '50px' }}>
               <input

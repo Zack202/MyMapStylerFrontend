@@ -62,53 +62,73 @@ export default function specificMapScreen(){
       }
   }, [auth]);
 
-    const defaultValues = {
-        borderSwitch: true,
-        borderWidth: 2,
-        borderColor: "black",
-        regionSwitch: false,
-        regionNameColor: "red",
-        backgroundColor: "white",
-        tempCenter: [0, 0],
-        center: [0, 0],
-        tempZoom: 1,
-        zoom: 1,
-        mapColor: "maroon",
-      };
-      
-      const [borderSwitch, setBorderSwitch] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.borderSwitch ?? defaultValues.borderSwitch) : defaultValues.borderSwitch
-      );
-      const [borderWidth, setBorderWidth] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.borderWidth ?? defaultValues.borderWidth) : defaultValues.borderWidth
-      );
-      const [borderColor, setBorderColor] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.borderColor ?? defaultValues.borderColor) : defaultValues.borderColor
-      );
-      const [regionSwitch, setRegionSwitch] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.regionSwitch ?? defaultValues.regionSwitch) : defaultValues.regionSwitch
-      );
-      const [regionNameColor, setRegionNameColor] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameColor ?? defaultValues.regionNameColor) : defaultValues.regionNameColor
-      );
-      const [backgroundColor, setBackgroundColor] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.backgroundColor ?? defaultValues.backgroundColor) : defaultValues.backgroundColor
-      );
-      const [tempCenter, setTempCenter] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.tempCenter) : defaultValues.tempCenter
-      );
-      const [center, setCenter] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.center) : defaultValues.center
-      );
-      const [tempZoom, setTempZoom] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.tempZoom) : defaultValues.tempZoom
-      );
-      const [zoom, setZoom] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.zoom) : defaultValues.zoom
-      );
-      const [mapColor, setMapColor] = useState(() =>
-        store.currentMap ? (store.currentMap.mapFeatures.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
-      );
+  const defaultValues = {
+    borderSwitch: true,
+    borderWidth: 2,
+    borderColor: "black",
+    regionSwitch: false,
+    regionNameColor: "red",
+    backgroundColor: "white",
+    tempCenter: [0, 0],
+    center: [0, 0],
+    tempZoom: 1,
+    zoom: 1,
+    mapColor: "maroon",
+    radius: 5,
+    dotColor: "black",
+    dotOpacity: 1,
+    regionNameTextSize: 10,
+    lowColorChoro: "#FFFFFF",
+    highColorChoro: "#000000",
+    levelsChoro: 2,
+    legendColors: ["#FFFFFF", "#000000"],
+    legendValues: ['', ''],
+    legendName: 'Legend',
+    legendOn: false,
+  };
+
+  
+  const borderSwitch = store.currentMap ? (store.currentMap.mapFeatures.edits?.borderSwitch ?? defaultValues.borderSwitch) : defaultValues.borderSwitch
+  const borderWidth = store.currentMap ? (store.currentMap.mapFeatures.edits?.borderWidth ?? defaultValues.borderWidth) : defaultValues.borderWidth
+  const borderColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.borderColor ?? defaultValues.borderColor) : defaultValues.borderColor
+  const regionSwitch = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionSwitch ?? defaultValues.regionSwitch) : defaultValues.regionSwitch
+  const regionNameColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameColor ?? defaultValues.regionNameColor) : defaultValues.regionNameColor
+  const backgroundColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.backgroundColor ?? defaultValues.backgroundColor) : defaultValues.backgroundColor
+  const regionNameTextSize = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameTextSize ?? defaultValues.regionNameTextSize) : defaultValues.regionNameTextSize
+
+  // Is good like this
+  const [tempCenter, setTempCenter] = useState(() =>
+    store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.tempCenter) : defaultValues.tempCenter
+  );
+  const center = store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.center) : defaultValues.center
+  // Is good like this
+  const [tempZoom, setTempZoom] = useState(() =>
+    store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.tempZoom) : defaultValues.tempZoom
+  );
+  const zoom = store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.zoom) : defaultValues.zoom
+  const mapColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
+  const radius = store.currentMap ? (store.currentMap.mapFeatures.edits?.radius ?? defaultValues.radius) : defaultValues.radius
+  const dotColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.dotColor ?? defaultValues.dotColor) : defaultValues.dotColor
+  const dotOpacity = store.currentMap ? (store.currentMap.mapFeatures.edits?.dotOpacity ?? defaultValues.dotOpacity) : defaultValues.dotOpacity
+ 
+
+  // good as a state
+  const [cursorModes, setCursorModes] = useState('');
+
+  // good as a state??
+  const [colorRegion, setColorRegion] = useState("#000000");
+
+  const selectedValue = store.currentMap ? (store.currentMap.mapFeatures.edits?.selectedValue ?? "") : ""
+  const regionNameToDisplay = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameToDisplay ?? "") : ""
+  const lowColorChoro = store.currentMap ? (store.currentMap.mapFeatures.edits?.lowColorChoro ?? defaultValues.lowColorChoro) : defaultValues.lowColorChoro
+  const highColorChoro = store.currentMap ? (store.currentMap.mapFeatures.edits?.highColorChoro ?? defaultValues.highColorChoro) : defaultValues.highColorChoro
+  const levelsChoro = store.currentMap ? (store.currentMap.mapFeatures.edits?.levelsChoro ?? defaultValues.levelsChoro) : defaultValues.levelsChoro
+  const legendColors = store.currentMap ? (store.currentMap.mapFeatures.edits?.legendColors ?? defaultValues.legendColors) : defaultValues.legendColors
+  const legendValues = store.currentMap ? (store.currentMap.mapFeatures.edits?.legendValues ?? defaultValues.legendValues) : defaultValues.legendValues
+  const legendOn = store.currentMap ? (store.currentMap.mapFeatures.edits?.legendOn ?? defaultValues.legendOn) : defaultValues.legendOn
+  const legendName = store.currentMap ? (store.currentMap.mapFeatures.edits?.legendName ?? defaultValues.legendName) : defaultValues.legendName
+  const ttDirection = store.currentMap ? (store.currentMap.mapFeatures.edits?.ttDirection ?? defaultValues.ttDirection) : defaultValues.ttDirection
+
       let description = "No description provided"
       if (store.currentMap != null){
         if (store.currentMap.description != null) {
@@ -179,6 +199,29 @@ export default function specificMapScreen(){
                                 setTempCenter={setTempCenter}
                                 setTempZoom={setTempZoom}
                                 mapColor={mapColor}
+                                radius={radius}
+                                dotColor={dotColor}
+                                dotOpacity={dotOpacity}
+                                cursorModes={cursorModes}
+                                colorRegion={colorRegion}
+                                regionNameToDisplay={regionNameToDisplay}
+                                selectedValue={selectedValue}
+                                regionNameTextSize={regionNameTextSize}
+                
+                                //For choropleth map
+                                lowColorChoro={lowColorChoro}
+                                highColorChoro={highColorChoro}
+                                levelsChoro={levelsChoro}
+                                legendColors={legendColors}
+                                legendValues={legendValues}
+                                //For choropleth map
+                
+                                legendOn={legendOn}
+                                legendName={legendName}
+                
+                                ttDirection={ttDirection}
+                                mapName={mapName}
+                
                             />
                             </Box>
                             <Box sx={{ gridArea: 'comments', bgcolor: '#800000'}}>Comments
