@@ -45,7 +45,7 @@ export default function SplashScreen() {
   }, [auth, router]);
 
   const backgroundStyle = {
-    backgroundImage: imageLoaded ? 'url("./hckgavj2l7871.webp")' : 'url("./placeholder.jpg")',
+    backgroundImage: imageLoaded ? 'url("./image.webp")' : 'url("./placeholder.jpg")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     height: '100vh',
