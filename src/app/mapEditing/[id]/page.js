@@ -91,18 +91,26 @@ export default function MapEditingScreen() {
   const backgroundColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.backgroundColor ?? defaultValues.backgroundColor) : defaultValues.backgroundColor
   //const regionNameTextSize = store.currentMap ? (store.currentMap.mapFeatures.edits?.regionNameTextSize ?? defaultValues.regionNameTextSize) : defaultValues.regionNameTextSize
   
+  // Is good like this
   const [tempCenter, setTempCenter] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.tempCenter) : defaultValues.tempCenter
   );
-  const [center, setCenter] = useState(() =>
+  const center = store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.center) : defaultValues.center
+  // Is good like this
+  const [tempZoom, setTempZoom] = useState(() =>
+     store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.tempZoom) : defaultValues.tempZoom
+   );
+  const zoom = store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.zoom) : defaultValues.zoom
+
+  // should be undo-able
+  /*const [center, setCenter] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.center ?? defaultValues.center) : defaultValues.center
   );
-  const [tempZoom, setTempZoom] = useState(() =>
-    store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.tempZoom) : defaultValues.tempZoom
-  );
+
   const [zoom, setZoom] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.zoom ?? defaultValues.zoom) : defaultValues.zoom
   );
+  */
   const mapColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.mapColor ?? defaultValues.mapColor) : defaultValues.mapColor
   const radius = store.currentMap ? (store.currentMap.mapFeatures.edits?.radius ?? defaultValues.radius) : defaultValues.radius
   const dotColor = store.currentMap ? (store.currentMap.mapFeatures.edits?.dotColor ?? defaultValues.dotColor) : defaultValues.dotColor
@@ -122,9 +130,11 @@ export default function MapEditingScreen() {
   const [dotOpacity, setDotOpacity] = useState(() =>
     store.currentMap ? (store.currentMap.mapFeatures.edits?.dotOpacity ?? defaultValues.dotOpacity) : defaultValues.dotOpacity
   );*/
+
+  // good as a state
   const [cursorModes, setCursorModes] = useState('');
 
-
+  // good as a state??
   const [colorRegion, setColorRegion] = useState("#000000");
 
   const [selectedValue, setSelectedValue] = useState(() =>
@@ -208,11 +218,11 @@ export default function MapEditingScreen() {
               //            setBackgroundColor={setBackgroundColor}
               backgroundColor={backgroundColor}
 
-              setCenter={setCenter}
+              // setCenter={setCenter}
               center={tempCenter}
               realCenter={center}
 
-              setZoom={setZoom}
+              // setZoom={setZoom}
               zoom={tempZoom}
               realZoom={zoom}
 
@@ -297,6 +307,7 @@ export default function MapEditingScreen() {
               legendOn={legendOn}
               legendName={legendName}
 
+
                                             ttDirection={ttDirection}
 
 
@@ -339,6 +350,7 @@ export default function MapEditingScreen() {
                 legendName={legendName}
 
                         ttDirection={ttDirection}
+                        mapName={mapName}
 
 
               />

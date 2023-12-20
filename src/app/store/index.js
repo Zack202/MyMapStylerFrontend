@@ -595,6 +595,29 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateMapName(diff);
     }
 
+    store.updateMapDescription = (id, description, oldDescription) => {
+        //Create diff of current map and new map
+        let newMap = { 
+            _id: id,
+            description: description,
+        }
+        let oldMap = {
+            _id: id,
+            description: oldDescription,
+        }
+        let diff = jsondiffpatch.diff(oldMap,newMap);
+        async function asyncUpdateMapName(nameDiff) {
+            let response = await api.updateMapById(id, nameDiff);
+            if (response.data.success) {
+                storeReducer({ //should not be updating map, already updated
+                    type: GlobalStoreActionType.UPDATE_MAP,
+                    payload: newMap
+                })
+            }
+        }
+        asyncUpdateMapName(diff);
+    }
+
     store.likeMap = function (mapId, location, userName) {
         async function likeMap(mapId) {
             let response = await api.getMapById(mapId);

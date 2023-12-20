@@ -45,6 +45,15 @@ function PublishedCard(props) {
     if(auth.loggedIn){
         userName = auth.user.userName;
     }
+    useEffect(() => {
+        if(auth.user){
+            userName = auth.user.userName;
+            if(userName === idNamePair.userName){
+                setDeletable(true);
+            }
+        }
+    }, [auth]);
+
 
     let isItLiked = idNamePair.likes.includes(userName);
     let isItDisliked = idNamePair.dislikes.includes(userName);
@@ -63,10 +72,7 @@ function PublishedCard(props) {
         }
     }
 
-
     let likeB = "";
-
-
 
     function handleDislikeMap(event){
         event.stopPropagation();
@@ -156,6 +162,14 @@ function PublishedCard(props) {
         router.push('/publishedMap/'+idNamePair._id)
     }
 
+    const idMapping = {
+        5: 'Color Categorized ',
+        1: 'Textual',
+        2: 'Sized Dot',
+        3: 'Dot',
+        4: 'Choropleth'
+      };
+
 
     let cardElement =
     <div id='cards'>
@@ -187,7 +201,7 @@ function PublishedCard(props) {
 
             </Box>
         
-        <Box sx={{ float:"left", display: "inline-block", width: "80%", marginTop: 5, marginLeft: 10, height: "100%"}}>
+        <Box sx={{ float:"left", display: "inline-block", width: "70%", marginTop: 5, marginLeft: 10, height: "100%"}}>
         
             <div>
             <Typography sx={{top: 0, position: "absolute", width: "15%", height: "10%", display: "flex", fontWeight: "900"}}>
@@ -227,6 +241,8 @@ function PublishedCard(props) {
         
     </CardActions>
     <div style={{width: "50%", float: 'right', position: "relative"}}>
+        
+
         <div style={{ float: 'right', position: "relative", display: "flex"}}>
             <DeleteMapModal id={idNamePair._id} show={deletable}/>
             <Button 
@@ -245,6 +261,20 @@ function PublishedCard(props) {
             sx={{display: 'inline-block',  p: 1,}}
             >
                 
+        </Box>
+        </div>
+        <div style={{ width: "50%", float: 'right', position: "relative", display: "flex"}}>
+        <Box
+        border={1}
+        borderRadius={3}
+        padding={1}
+        borderColor="maroon"
+        bgcolor="background.paper"
+        fontSize={16}
+        marginLeft={30}
+        marginTop={1}
+        >
+        Map Type: {idMapping[idNamePair.mapType]}
         </Box>
         </div>
     </div>

@@ -9,6 +9,9 @@ import pointInPolygon from '@turf/boolean-point-in-polygon';
 import { featureCollection, point } from '@turf/helpers';
 import { useRef } from 'react';
 import Legend from './Legend';
+import L from 'leaflet';
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 
 const BackgroundOverlay = ({ backgroundColor }) => {
   const style = {
@@ -328,6 +331,7 @@ export default function Leafletmap(props) {
   const legendName = props.legendName;
   const regionNameToDisplay = props.regionNameToDisplay;
   const ttDirection = props.ttDirection;
+  const mapName = props.mapName;
 
   if (typeof window !== 'undefined') {
     const mapRef = useRef(null);
@@ -338,10 +342,52 @@ export default function Leafletmap(props) {
       setGeoJSONData(mapGeo);
     }, [mapGeo]);
 
+    const captureMapAsPNG = () => {
+      const mapContainer = document.getElementById('mapC');
+      if (!mapContainer) {
+        console.error('Map container not found');
+        return;
+      }
+    
+      htmlToImage.toPng(mapContainer)
+      .then(function (dataUrl) {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = mapName + '_image.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link); 
+      })
+      .catch(function (error) {
+        console.error('Something went wrong!', error);
+      });
+  };
+
+  const captureMapAsJPG = () => {
+    const mapContainer = document.getElementById('mapC');
+    if (!mapContainer) {
+      console.error('Map container not found');
+      return;
+    }
+  
+    htmlToImage.toJpeg(mapContainer)
+    .then(function (dataUrl) {
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = mapName + '_image.jpg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch(function (error) {
+      console.error('Something went wrong!', error);
+    });
+};
+
 
     return (
       <div>
-        <MapContainer ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
+        <MapContainer id='mapC' ref={mapRef} style={{ height: "70vh" }} center={center} zoom={zoom}>
 
           <LeafletmapInside
             geoJSONData={geoJSONData}
@@ -363,7 +409,7 @@ export default function Leafletmap(props) {
             legendColors={legendColors}
             legendValues={legendValues}
             regionNameToDisplay={regionNameToDisplay}
-            ttDirection={props.ttDirection}
+            ttDirection={ttDirection}
 
           />
           {legendOn && (
@@ -389,6 +435,8 @@ export default function Leafletmap(props) {
           )}
 
         </MapContainer>
+        <button onClick={captureMapAsPNG}>Capture Map PNG</button>
+        <button onClick={captureMapAsJPG}>Capture Map JPG</button>
       </div>
     );
   } else {
