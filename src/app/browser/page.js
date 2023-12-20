@@ -3,7 +3,6 @@
 import { Grid, Box } from "@mui/material";
 import TopAppBanner from '../Utils/TopAppBanner';
 import BrowserBanner from '../Utils/BrowserBanner';
-import BottomAppBanner from '../Utils/BottomAppBanner';
 import SearchSortBar from '../Utils/SearchSortBar';
 import PublishedMapCard from '../Utils/PublishedMapCard';
 import Button from '@mui/material/Button';
@@ -243,9 +242,6 @@ export default function Browser() {
             }}>
                
             </Box>
-            <Grid item xs={12}>
-                <BottomAppBanner />
-            </Grid>
         </Grid>
 
     )

@@ -3,7 +3,6 @@
 import { Grid, Box, Typography } from "@mui/material";
 import TopAppBanner from '../Utils/TopAppBanner';
 import HomeBanner from '../Utils/HomeBanner';
-import BottomAppBanner from '../Utils/BottomAppBanner';
 import SearchSortBar from '../Utils/SearchSortBar';
 import MapCard from '../Utils/MapCard';
 import React, { useState, useContext, useEffect } from 'react'
@@ -245,9 +244,6 @@ export default function Home() {
                 </Typography>
             </Box>
            
-            <Grid item xs={12}>
-                <BottomAppBanner />
-            </Grid>
         </Grid>
 
     )
