@@ -14,60 +14,18 @@ import {
     TextField
 } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
-import MenuIcon from '@mui/icons-material/Menu';
+import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import SendIcon from '@mui/icons-material/Send';
 
 const CommentSection = (props) => {
 
    const { isGuest } = props;
 
-  const commentsData = [
-    {
-      id: 1,
-      author: 'John',
-      text: 'This is the first comment.',
-      date : '1/1/2023',
-      likes: 9,
-      userImage: 'url_to_user_image_1',
-      replies: [
-        {
-          id: 11,
-          author: 'Jane',
-          text: 'Reply to the first comment.',
-          date : '1/1/2023',
-          userImage: 'url_to_user_image_2',
-        },
-        {
-          id: 12,
-          author: 'Bob',
-          text: 'Another reply to the first comment.',
-          date : '1/1/2023',
-          userImage: 'url_to_user_image_3',
-        },
-      ],
-    },
-    {
-      id: 2,
-      author: 'Phil',
-      text: 'A second comment.',
-      date : '1/1/2023',
-      likes: 2,
-      userImage: 'url_to_user_image_4',
-    },
-    {
-      id: 3,
-      author: 'Phil',
-      text: 'A second comment.',
-      date : '1/1/2023',
-      likes: 2,
-      userImage: 'url_to_user_image_4',
-    },
-  ];
-
-  const { store } = useContext(GlobalStoreContext);
-  const{ auth } = useContext(AuthContext);
-  const [comment, setComment] = useState('');
+   const { store } = useContext(GlobalStoreContext);
+   const{ auth } = useContext(AuthContext);
+   const [comment, setComment] = useState('');
 
   const handleInputChange = (event) => {
    setComment(event.target.value)
@@ -82,51 +40,63 @@ const CommentSection = (props) => {
   function handleAddComment(event){
    console.log(comment)
    let date = new Date();
+   let dateStr = date.toLocaleDateString("en-US");
    let commentObject = {
       commentString: comment,
       userName: auth.user.userName,
       likes: 0,
       dislikes: 0,
       replies: [],
-      date: date.toLocaleDateString("en-US"),
+      date: dateStr
    }
    store.addComment(commentObject);
    setComment('');
 
   }
 
+  function handleDeleteComment(event, comment){
+   store.deleteComment(comment);
+  }
+
   return (
 <Card >
-   <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: '80%'}}>
+   <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", height: "450px", maxHeight: "450px", overflowX: "hidden"}}>
       {store.currentMap && store.currentMap.comments && store.currentMap.comments.length > 0 && (
       <List >
          {store.currentMap.comments.map((comment) => (
          <React.Fragment key={comment.id}>
             <ListItem style={{ marginLeft: getIndentation(0), position: 'relative', display: 'flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '8px', padding: '0px', marginBottom: '8px'}}>
-            <IconButton style={{ position: 'absolute', top: 0, right: 30 }}>
+            {/* <IconButton style={{ position: 'absolute', top: 0, right: 30 }}>
             <ReplyIcon style={{color:'maroon'}}/>
-            </IconButton>
-            <IconButton style={{ position: 'absolute', top: 0, right: 0 }}>
-            <MenuIcon style={{color:'maroon'}}/>
+            </IconButton> */}
+            <IconButton onClick = {(event) => {
+            handleDeleteComment(event, comment)
+             }} 
+            style={{ position: 'absolute', top: 0, right: 0, 
+            visibility: (comment.userName === auth.user.userName) || (store.currentMap.userName === auth.user.userName) ? "visible" : "hidden" }}
+            >
+               <DeleteIcon style={{color:'maroon'}}/>
             </IconButton>
             <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'maroon'}}>
-            <IconButton >
+            {/* <IconButton >
                <AddIcon style={{color:'maroon'}}/>
             </IconButton>
-            <Typography variant="body2" sx={{alignSelf: 'center'}}>{comment.likes}</Typography>
+            <Typography variant="body2" sx={{alignSelf: 'center'}}>{comment.likes}</Typography> */}
             <IconButton>
-               <RemoveIcon style={{color:'maroon'}}/>
+               {/* <RemoveIcon style={{color:'maroon'}}/> */}
             </IconButton>
             </Box>
             <Avatar src={comment.userImage} alt={comment.author} style={{margin: '10px'}}/>
             <div>
                <Typography variant="subtitle1" color="textSecondary">
-                  <b>{comment.userName} {comment.date}</b>
+                  <b>{comment.userName} </b>
+                  <b style={{color: 'black'}}>{comment.date} </b>
                </Typography>
+               
                <Typography>{comment.commentString}</Typography>
             </div>
             </ListItem>
-            {comment.replies && comment.replies.length > 0 && (
+            {/* {comment.replies && comment.replies.length > 0 && (
             <List>
                {comment.replies.map((reply) => (
                <React.Fragment key={reply.id}>
@@ -148,7 +118,7 @@ const CommentSection = (props) => {
                </React.Fragment>
                ))}
             </List>
-            )}
+            )} */}
          </React.Fragment>
          ))}
       </List>)}
@@ -157,9 +127,12 @@ const CommentSection = (props) => {
    <TextField multiline placeholder='Add Comment' onChange={handleInputChange} value={comment} 
    style={{color:'white', width: '70%',
    display: isGuest ?  "none"  : "default"}}></TextField>
-   <Button onClick={handleAddComment} 
+   <IconButton onClick={handleAddComment} 
+   disabled={comment.length === 0}
    style={{backgroundColor: "#BE8585", marginLeft: 5,
-   display: isGuest ?  "none"  : "default"}}>Comment</Button>
+   display: isGuest ?  "none"  : "default"}}>
+      <SendIcon />
+   </IconButton>
    </Box>
 </Card>
   );
