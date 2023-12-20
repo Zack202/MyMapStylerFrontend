@@ -155,7 +155,7 @@ export default function specificMapScreen(){
         </div>
     <ThemeProvider theme={defaultTheme}>
         <CssBaseline />
-        <Container  style={{ marginTop: '20px' }}>
+        <Container  style={{ marginTop: '20px' }} maxWidth={false}>
         <Box
                         sx={{
                             width: '100%',
