@@ -155,7 +155,7 @@ export default function specificMapScreen(){
         </div>
     <ThemeProvider theme={defaultTheme}>
         <CssBaseline />
-        <Container  style={{ marginTop: '20px' }} maxWidth={false}>
+        <Container  style={{ marginTop: '5px' }} maxWidth={false}>
         <Box
                         sx={{
                             width: '100%',
@@ -164,8 +164,9 @@ export default function specificMapScreen(){
                             '& > .MuiBox-root > .MuiBox-root': {
                                 p: 1,
                                 borderRadius: 2,
-                                fontSize: '0.875rem',
+                                fontSize: '1.2rem',
                                 fontWeight: '700',
+                                textAlign: 'center'
                             },
                         }}
                     >
