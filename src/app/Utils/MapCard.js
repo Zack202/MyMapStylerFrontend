@@ -304,7 +304,6 @@ function ListCard(props) {
                 >
                 Fork
             </Button>
-            <ExportMapModal map={idNamePair}/>
             <Button 
                 id='publish-button'
                 variant="contained"
