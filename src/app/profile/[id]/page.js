@@ -205,8 +205,9 @@ export default function Profile() {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        bgcolor: 'background.paper',
+                        bgcolor: "#d4d4d4",
                         p: 2,
+                        borderRadius: 2,
                       }}
                     >
                       <Typography component="h1" variant="h5">
@@ -239,8 +240,9 @@ export default function Profile() {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        bgcolor: 'background.paper',
+                        bgcolor: '#d4d4d4',
                         p: 2,
+                        borderRadius: 2,
                       }}
                     >
                       <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
