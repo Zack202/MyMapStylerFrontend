@@ -222,7 +222,7 @@ export default function PrimarySearchAppBar() {
     }}>
       <AppBar position="static" style={{ color: 'maroon', background: 'lightgrey' }}>
         <Toolbar variant="dense">
-          <IconButton
+          {/* <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -230,7 +230,7 @@ export default function PrimarySearchAppBar() {
             sx={{ mr: 1 }}
           >
             <UserIcon />
-          </IconButton>
+          </IconButton> */}
           <Search style={{ backgroundColor: "#F1F1F1" }}
           >
             <SearchIconWrapper>
