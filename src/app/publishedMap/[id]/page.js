@@ -135,11 +135,11 @@ export default function specificMapScreen(){
         </div>
     <ThemeProvider theme={defaultTheme}>
         <CssBaseline />
-        <Container maxwidth="sm" style={{ marginTop: '20px' }}>
+        <Container  style={{ marginTop: '20px' }}>
         <Box
                         sx={{
                             width: '100%',
-                            height: '400px',
+                            height: '100%',
                             color: '#fff',
                             '& > .MuiBox-root > .MuiBox-root': {
                                 p: 1,
@@ -156,9 +156,9 @@ export default function specificMapScreen(){
                                 gridTemplateRows: 'auto',
                                 gap: 1,
                                 gridTemplateAreas: `"maphead maphead maphead"
-    "map map comments"
-    "map map comments"
-    "describe describe describe"`,
+                                                    "map map comments"
+                                                    "map map comments"
+                                                    "describe describe describe"`,
                             }}
                         >
                             <Box sx={{ gridArea: 'maphead', bgcolor: '#a9a9a9' }}>{mapName}
@@ -184,8 +184,11 @@ export default function specificMapScreen(){
                             <Box sx={{ gridArea: 'comments', bgcolor: '#800000'}}>Comments
                                 <CommentSection isGuest={isGuest}/>
                             </Box>
-                            <Box sx={{ gridArea: 'describe', bgcolor: '#800000' }}>Description
-                            <Typography variant="h5" align="center" color="white" paragraph>
+                            <Box sx={{ gridArea: 'describe', bgcolor: '#800000' }}>
+                            <Typography variant="h6" color="white">
+                              <h4>Description</h4>
+                              </Typography>
+                            <Typography variant="h7" color="white" paragraph>
                             {description}
                             </Typography>
                                 

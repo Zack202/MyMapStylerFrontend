@@ -59,8 +59,8 @@ const CommentSection = (props) => {
   }
 
   return (
-<Card >
-   <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", height: "450px", maxHeight: "450px", overflowX: "hidden"}}>
+<Card style={{height:'700px'}}>
+   <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", height: "65vh", maxHeight: "80vh", overflowX: "hidden"}}>
       {store.currentMap && store.currentMap.comments && store.currentMap.comments.length > 0 && (
       <List >
          {store.currentMap.comments.map((comment) => (
