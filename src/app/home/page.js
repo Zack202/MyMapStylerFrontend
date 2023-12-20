@@ -6,13 +6,10 @@ import HomeBanner from '../Utils/HomeBanner';
 import BottomAppBanner from '../Utils/BottomAppBanner';
 import SearchSortBar from '../Utils/SearchSortBar';
 import MapCard from '../Utils/MapCard';
-import Button from '@mui/material/Button';
 import React, { useState, useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import List from '@mui/material/List';
 import AuthContext from "../auth";
-import CreateMapModal from "../components/CreateMapModal";
-import { ElevatorSharp } from "@mui/icons-material";
 import { CircularProgress } from "@mui/material";
 
 const backgroundStyle = {
@@ -27,6 +24,8 @@ const backgroundStyle = {
 
 
 export default function Home() {
+
+    if (typeof window !== 'undefined') {
 
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
@@ -252,4 +251,7 @@ export default function Home() {
         </Grid>
 
     )
+                }else{
+                    return null;
+                }
 }

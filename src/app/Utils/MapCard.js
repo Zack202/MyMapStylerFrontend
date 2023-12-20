@@ -1,31 +1,23 @@
-import { Fragment, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 // import AuthContext from '../auth';
 import Box from '@mui/material/Box';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
-import { Typography, Card, CardContent, CardActions, Collapse } from '@mui/material';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
-import CommentIcon from '@mui/icons-material/Comment';
+import { Typography, Card, CardContent, CardActions } from '@mui/material';
 // import WorkspaceScreen from './WorkspaceScreen';
 import {Modal, Button} from '@mui/material';
 // import EditToolbar from './EditToolbar';
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
-import ExportMapModal from '../components/ExportMapModal.js'
 import DeleteMapModal from '../components/DeleteMapModal.js'
 import PublishedCard from './PublishedMapCard';
 
 
 
 function ListCard(props) {
+    
+    if (typeof window !== 'undefined') {
     
 
     const router = useRouter()
@@ -379,6 +371,9 @@ function ListCard(props) {
         </Modal>
         </div>
     );
+    } else {
+        return null;
+    }
 }
 
 export default ListCard;
