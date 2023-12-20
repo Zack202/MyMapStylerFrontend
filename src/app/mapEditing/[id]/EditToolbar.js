@@ -10,12 +10,13 @@ import { TextField } from '@mui/material';
 import GlobalStoreContext from '../../store';
 import { useContext } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
-import Alert from '@mui/material/Alert';
 import BackHandIcon from '@mui/icons-material/BackHand';
 import AdjustIcon from '@mui/icons-material/Adjust';
 import BlurCircularIcon from '@mui/icons-material/BlurCircular';
 import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 
 function EditToolbar(props) {
 
@@ -149,7 +150,7 @@ function EditToolbar(props) {
                   //close the alert after 3 seconds
                   setTimeout(() => {
                     setShowAlert(false);
-                  }, 3000);
+                  }, 5000);
                 }, 1000);
 
                 store.clearTransactionStack();
@@ -220,6 +221,12 @@ function EditToolbar(props) {
             <div>{name}</div>
           )}
         </div>
+
+        <Alert sx={{display: showAlert ? "default" : "none"}}
+        icon={<CheckIcon fontSize="inherit" />} severity="success"  onClose={handleCloseAlert}>
+          Map Saved 
+        </Alert>
+
         <IconButton onClick={handleSaveAttributes}>
           <SaveIcon sx={{ fontSize: "40pt" , color: store.hasAnyTransactions() ? 'black' : 'green'}} />
         </IconButton>

@@ -17,6 +17,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
+import MUIErrorModal from '../components/MUIErrorModal';
+
 
 const shp = require('shpjs');
 
@@ -160,9 +162,8 @@ export default function CreateMapModal() {
     };
 
     const handleCreateMap = (event) => {
-        console.log(mapType);
-        store.createNewMap(mapName, mapData, mapType, mapDesc, mapFeatures);
-        store.loadIdNamePairs();
+        console.log(mapType)
+        store.createNewMap(mapName, mapData, mapType, mapDesc)
     };
 
     return (
@@ -271,6 +272,7 @@ export default function CreateMapModal() {
                     <BottomAppBanner />
                 </Grid>
             </Grid>
+            <MUIErrorModal />
         </div>
 
     );
