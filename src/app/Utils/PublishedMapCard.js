@@ -17,7 +17,6 @@ import CommentIcon from '@mui/icons-material/Comment';
 // import WorkspaceScreen from './WorkspaceScreen';
 import {Modal, Button} from '@mui/material';
 // import EditToolbar from './EditToolbar';
-import TestMap from "public/test_map.jpg"
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation';
 import ExportMapModal from '../components/ExportMapModal.js';
@@ -62,6 +61,11 @@ function PublishedCard(props) {
 
     const [disliked, setDisliked] = useState(idNamePair.dislikes.includes(userName));
     
+    let base64Image = "";
+    if (idNamePair.mapFeatures && idNamePair.mapFeatures.edits && idNamePair.mapFeatures.edits.thumbNail && idNamePair.mapFeatures.edits.thumbNail.data) {
+        const thumbNailBuffer = idNamePair.mapFeatures.edits.thumbNail.data; // Assuming thumbNail is the Buffer object
+        base64Image = Buffer.from(thumbNailBuffer).toString('base64');
+    }
 
     function handleLikeMap(event){
         event.stopPropagation();
@@ -196,7 +200,22 @@ function PublishedCard(props) {
             >
 
             <div>
-            <img src={'test_map.jpg'} alt="image" height={'100px'} style={{marginTop: 10, position:'absolute'}} />    
+            {idNamePair.mapFeatures && idNamePair.mapFeatures.edits && idNamePair.mapFeatures.edits.thumbNail ? (
+                <img
+                src={`data:image/jpeg;base64,${base64Image}`}
+                alt="Thumbnail"
+                height={'100px'}
+                style={{ position: 'absolute',borderRadius: '10px' }}
+                />
+            ) : (
+                <img
+                src={'No_map.png'}
+                alt="image"
+                height={'100px'}
+                width={'170px'}
+                style={{ position: 'absolute',borderRadius: '10px' }}
+                />
+            )}
             </div>
 
             </Box>
