@@ -21,7 +21,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 const CommentSection = (props) => {
 
-   const { isGuest } = props;
+   const { isGuest } = false;
 
    const { store } = useContext(GlobalStoreContext);
    const{ auth } = useContext(AuthContext);
@@ -59,8 +59,8 @@ const CommentSection = (props) => {
   }
 
   return (
-<Card style={{height:'550px'}}>
-   <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", height: "65vh", maxHeight: "80vh", overflowX: "hidden"}}>
+<Card >
+   <CardContent sx={{display: "flex", flexDirection: "column", overflow: "scroll", height: "65vh", maxHeight: "80vh", overflowX: "hidden", padding: "10px"}}>
       {store.currentMap && store.currentMap.comments && store.currentMap.comments.length > 0 && (
       <List >
          {store.currentMap.comments.map((comment) => (
