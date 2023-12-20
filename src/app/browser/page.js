@@ -1,6 +1,6 @@
 // Import dependencies
 'use client'
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import TopAppBanner from '../Utils/TopAppBanner';
 import BrowserBanner from '../Utils/BrowserBanner';
 import SearchSortBar from '../Utils/SearchSortBar';
@@ -224,7 +224,7 @@ export default function Browser() {
 
             <Box item xs={12} sx={{
                 position: "relative", width: "100%",
-                display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
+                display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%", overflowX: 'hidden'
             }} style={backgroundStyle}>
 
                 <div>
