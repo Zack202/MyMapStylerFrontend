@@ -249,7 +249,9 @@ function PublishedCard(props) {
                 // disabled={!store.canUndo()}
                 id='duplicate-button'
                 variant="contained"
-                sx={{margin: 1, backgroundColor: "maroon",
+                sx={{margin: 1, backgroundColor: "maroon",'&:hover': {
+                    backgroundColor: 'maroon',
+                    },
                 display: isGuest ?  "none"  : "default"}}
                 onClick={handleFork}
                 >

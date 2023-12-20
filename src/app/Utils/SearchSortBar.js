@@ -249,7 +249,11 @@ export default function PrimarySearchAppBar() {
           {/* <CreateMapModal /> */}
           <Box item xs={12} sx={{}}>
                 <Button sx={{ backgroundColor: "maroon", color: "white",
-                    marginLeft: 5, marginRight: 0, marginTop: .75, display:
+                    marginLeft: 5, marginRight: 0, marginTop: .75,
+                    '&:hover': {
+                      backgroundColor: 'maroon',
+                      },
+                    display:
                         isGuest
                             ? "none"
                             : "inline-block",
