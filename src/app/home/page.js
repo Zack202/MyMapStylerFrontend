@@ -226,7 +226,7 @@ export default function Home() {
 
             <Box item xs={12} sx={{
                 position: "relative", width: "100%",
-                display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%"
+                display: "flex", flexDirection: "column", overflow: "scroll", maxHeight: "75%", top: "17%", overflowX: 'hidden'
             }} style={backgroundStyle}>
                 
                 <div>
