@@ -23,7 +23,7 @@ import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Modal from '@mui/material/Modal';
 import AuthContext from '../../auth';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import GlobalStoreContext from '../../store';
 
@@ -43,20 +43,20 @@ const defaultTheme = createTheme({
 },);
 
 
-let exampleUser = {
-  userName: "",//"Mapy",
-  firstName: "",//"Jane",
-  lastName: "", //"Doe",
-  email: "",//"jd@stonybrook.edu",
-  //comments?????
-  maps: ["21321321", "02103021", "921321321"] //NEED METHODS FOR GETTING THEIR DATA
-}
+
 
 
 export default function Profile() {
 
   const { auth } = useContext(AuthContext);
   const { store } = useContext(GlobalStoreContext);
+
+  let exampleUser = {
+    userName: "",//"Mapy",
+    firstName: "",//"Jane",
+    lastName: "", //"Doe",
+    email: "",//"jd@stonybrook.edu",
+  }
 
   if(auth.loggedIn){
     exampleUser.userName = auth.user.userName;
@@ -67,18 +67,37 @@ export default function Profile() {
 
   //for modal
   const [openEdit, setOpenEdit] = React.useState(false);
-  const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => setOpenEdit(false);
+  const handleOpenEdit = () => {
+    setFormData({
+      firstName: exampleUser.firstName,
+      lastName: exampleUser.lastName
+    })
+    setOpenEdit(true)
+  };
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+    setFormData({
+      firstName: exampleUser.firstName,
+      lastName: exampleUser.lastName
+    })
+  } 
 
   const [openDelete, setOpenDelete] = React.useState(false);
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
 
 
-  const [formData, setFormData] = useState({
-    firstName: exampleUser.firstName,
-    lastName: exampleUser.lastName,
-  });
+  const [formData, setFormData] = useState("");
+
+  useEffect(() => {
+    if(auth.loggedIn){
+      setFormData({
+        firstName: auth.user.firstName,
+        lastName: auth.user.lastName,
+      })
+    }
+  }, [])
+
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
