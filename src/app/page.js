@@ -28,7 +28,7 @@ export default function SplashScreen() {
   useEffect(() => {
     const loadImage = async () => {
       const img = new Image();
-      img.src = './hckgavj2l7871.webp';
+      img.src = './image.webp';
       img.onload = () => {
         setImageLoaded(true);
         if (auth.loggedIn) {
