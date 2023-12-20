@@ -280,7 +280,7 @@ return(
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
             
-            <Tab label="Additional Properties" style={{ color: '#000000', indicatorColor:"maroon" }}/>
+            <Tab label="Additional Props" style={{ color: '#000000', indicatorColor:"maroon" }}/>
             
             <Tab label="Data Points" style={{ color: '#000000', indicatorColor:"maroon" }}/>
         </Tabs>

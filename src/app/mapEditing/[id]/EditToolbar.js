@@ -227,8 +227,8 @@ function EditToolbar(props) {
           Map Saved 
         </Alert>
 
-        <IconButton onClick={handleSaveAttributes}>
-          <SaveIcon sx={{ fontSize: "40pt" , color: store.hasAnyTransactions() ? 'black' : 'green'}} />
+        <IconButton onClick={handleSaveAttributes}  >
+          <SaveIcon sx={{ fontSize: "40pt" , color: !store.hasAnyTransactions()? 'grey': 'black'}} />
         </IconButton>
 
         {/* <Alert
